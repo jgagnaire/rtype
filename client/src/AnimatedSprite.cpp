@@ -1,8 +1,11 @@
-#include "AnimatedSprite.hh"
 #include <iostream>
+#include "AnimatedSprite.hh"
 
 AnimatedSprite::AnimatedSprite():
     _current(0) {}
+
+AnimatedSprite::~AnimatedSprite()
+{}
 
 bool AnimatedSprite::load(const std::string &path, int width)
 {
@@ -17,6 +20,8 @@ bool AnimatedSprite::load(const std::string &path, int width)
         _sprites.push_back(sf::Sprite(_texture,
                     sf::IntRect(i * width, 0, width, height)));
     }
+    _position.x = 0;
+    _position.y = 0;
     return (true);
 }
 
@@ -25,7 +30,7 @@ void        AnimatedSprite::setPosition(const sf::Vector2f &pos)
     _position = pos;
 }
 
-sf::Sprite  &AnimatedSprite::draw()
+void    AnimatedSprite::update()
 {
     int mill = _clock.getElapsedTime().asMilliseconds();
     if (mill > 30)
@@ -34,5 +39,10 @@ sf::Sprite  &AnimatedSprite::draw()
         _clock.restart();
     }
     _sprites[_current].setPosition(_position);
-    return (_sprites[_current]);
+}
+
+void    AnimatedSprite::draw(sf::RenderTarget &target,
+        sf::RenderStates states) const
+{
+    target.draw(_sprites[_current], states);
 }
