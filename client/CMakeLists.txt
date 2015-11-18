@@ -11,6 +11,9 @@ file(GLOB_RECURSE client_HEADERS "inc/*.h")
 
 add_executable(client_rtype ${client_SOURCES} ${client_HEADERS})
 
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
+find_package(SFML 2 REQUIRED system window graphics network audio)
+
 target_compile_features(client_rtype PRIVATE cxx_range_for)
 
 set_target_properties(client_rtype PROPERTIES OUTPUT_NAME "client_rtype")
@@ -23,4 +26,4 @@ else()
     set(CMAKE_EXE_LINKER_FLAGS, "${CMAKE_EXE_LINKER_FLAGS} -lpthread")
 endif (MSVC)
 
-target_link_libraries(client_rtype ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries(client_rtype ${CMAKE_THREAD_LIBS_INIT} ${SFML_LIBRARIES})
