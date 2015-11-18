@@ -15,7 +15,7 @@ class IUdpSocket
         virtual std::size_t     send(const void *buf, std::size_t size,
                 const std::string &ip, unsigned short int port) = 0;
         virtual std::size_t receive(void *buf, std::size_t size,
-                const std::string &ip, unsigned short &port) = 0;
+                std::string &ip, unsigned short &port) = 0;
 };
 
 #endif /* ifndef IUDPSOCKET_HH_ */

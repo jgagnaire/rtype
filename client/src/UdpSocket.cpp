@@ -26,8 +26,7 @@ std::size_t     UdpSocket::receive(void *buf, std::size_t size,
         std::string &ip, unsigned short &port)
 {
     sf::IpAddress   ipa;
-    std::size_t readed;
-
+    std::size_t     readed;
 
     _socket.receive(buf, size, readed, ipa, port);
     ip = ipa.toString();
