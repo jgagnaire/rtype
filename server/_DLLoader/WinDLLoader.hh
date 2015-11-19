@@ -9,13 +9,12 @@ template <typename PLUGIN>
 class WinDLLoader : public ADLLoader<PLUGIN>
 {
 public:
-	WinDLLoader() {}
 	WinDLLoader(std::string const &);
 	virtual ~WinDLLoader();
-	virtual PLUGIN *getInstance();
 	virtual void loadLib(std::string const &);
 
 private:
+	WinDLLoader() {}
 	HINSTANCE handle;
 };
 
