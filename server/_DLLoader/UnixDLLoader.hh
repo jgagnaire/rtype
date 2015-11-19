@@ -12,9 +12,7 @@ class UnixDLLoader : public ADLLoader<PLUGIN>
 public:
 	UnixDLLoader()
 		: ADLLoader(), handle(0) {}
-	UnixDLLoader(std::string const &);
 	virtual ~UnixDLLoader();
-	virtual PLUGIN *getInstance();
 	virtual void loadLib(std::string const &);
 
 private:
