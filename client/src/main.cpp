@@ -1,6 +1,8 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include "AnimatedSprite.hh"
+#include "Compenent.hh"
+#include "Entity.hh"
 
 int main()
 {
