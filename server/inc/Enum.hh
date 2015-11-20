@@ -10,6 +10,11 @@ namespace Enum
       DEAD,
     };
 
+  enum	io_flag {
+    RD_TO_WR = 0,
+    WR_TO_RD,
+  };
+
   enum  Flag {
     NONE = 0,
     READ = 1,
