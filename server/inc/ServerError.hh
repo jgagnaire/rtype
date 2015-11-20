@@ -2,6 +2,7 @@
 # define SERVERERROR_H_
 
 # include <exception>
+# include <stdexcept>
 # include <sstream>
 # include <string>
 
@@ -16,6 +17,36 @@ enum eErrorType
 	ESOCKEVENTSELECT,
 	EMONITORFAILED,
   };
+
+class ThreadException : public std::runtime_error
+{
+public:
+  ThreadException(const char *msg) :
+    runtime_error(msg) {}
+  ThreadException(const std::string &msg) :
+    runtime_error(msg) {}
+  virtual ~ThreadException() throw() {}
+};
+
+class MutexException : public std::runtime_error
+{
+public:
+  MutexException(const char *msg):
+    runtime_error(msg) {}
+  MutexException(const std::string &msg):
+    runtime_error(msg) {}
+  virtual ~MutexException() throw() {}
+};
+
+class FifoException : public std::runtime_error
+{
+public:
+  FifoException(const char *msg):
+    runtime_error(msg) {}
+  FifoException(const std::string &msg):
+    runtime_error(msg) {}
+  virtual ~FifoException() throw() {}
+};
 
 class ServerError : public std::exception
 {

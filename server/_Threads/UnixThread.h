@@ -1,7 +1,7 @@
 #pragma once
 # include <signal.h>
 # include <unistd.h>
-# include "Exceptions.h"
+# include <pthread.h>
 # include "IThread.h"
 
 template <typename RET_VAL, typename ARG>
@@ -13,7 +13,7 @@ private:
 	void		*_arg;
 public:
   UnixThread()
-    : _state(NONE), _func(0), _arg(0) { }
+    : _state(Enum::NIL), _func(0), _arg(0) { }
 
   virtual ~UnixThread() { }
 
@@ -34,7 +34,7 @@ public:
     _arg = arg;
     if (::pthread_create(&_thread, 0, start, this) == -1)
       throw ThreadException("Cannot create thread");
-    _state = RUNNING;
+    _state = Enum::RUNNING;
   }
 
   virtual void	join()
@@ -43,7 +43,7 @@ public:
 
     if (::pthread_join(_thread, &ret_val) == -1)
       throw ThreadException("Cannot join thread");
-    _state = DEAD;
+    _state = Enum::DEAD;
     return (ret_val);
   }
 
@@ -51,7 +51,7 @@ public:
   {
     if (::pthread_kill(_thread, sig) == -1)
       throw ThreadException("Cannot kill thread");
-    _state = DEAD;
+    _state = Enum::DEAD;
   }
 
   virtual void	loadFunc(RET_VAL(*p)(ARG))
