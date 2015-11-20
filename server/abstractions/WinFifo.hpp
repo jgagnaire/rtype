@@ -130,9 +130,9 @@ public:
 
   virtual const std::string &getSecondName() const { return (_s2); }
 
-  virtual FILE_HANDLE	getFdIn() const { return (_fdin); }
+  virtual HANDLE	getFdIn() const { return (_fdin); }
 
-  virtual FILE_HANDLE	getFdOut() const { return (_fdout); }
+  virtual HANDLE	getFdOut() const { return (_fdout); }
 };
 
 
