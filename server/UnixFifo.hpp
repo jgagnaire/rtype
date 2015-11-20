@@ -9,14 +9,30 @@
 # include "ServerError.hh"
 # include "IFifo.hh"
 
-template <typename PUT, typename GET = PUT, typename FILE_HANDLE = int>
-class UnixFifo : public IFifo<PUT, GET, FILE_HANDLE> {
+template <typename PUT, typename GET = PUT>
+class UnixFifo : public IFifo<PUT, GET, int> {
 private:
-  int	_fdin;
-  int	_fdout;
+  int		_fdin;
+  int		_fdout;
   std::string	_s1;
   std::string	_s2;
 
+  void	createUnixFifo(Enum::io_flag f) {
+    if (f == Enum::RD_TO_WR)
+      {
+	if ((!_s1.empty()) && ((_fdin = ::open(_s1.c_str(), O_RDONLY)) == -1))
+	    throw (FifoException("open failed"));
+	if ((!_s2.empty()) && ((_fdout = ::open(_s2.c_str(), O_WRONLY)) == -1))
+	    throw (FifoException("open failed"));
+      }
+    else
+      {
+	if ((!_s1.empty()) && ((_fdout = ::open(_s1.c_str(), O_WRONLY)) == -1))
+	  throw (FifoException("open failed"));
+	if ((!_s2.empty()) && ((_fdin = ::open(_s2.c_str(), O_RDONLY)) == -1))
+	  throw (FifoException("open failed"));
+      }
+  }
 public:
   UnixFifo() {
     _s1.clear();
@@ -26,10 +42,10 @@ public:
   }
 
   virtual ~UnixFifo() {
-    closeUnixFifo();
+    closeFifo();
   }
 
-  UnixFifo	&operator=(const UnixFifo<GET, PUT, FILE_HANDLE> &com) {
+  UnixFifo	&operator=(const UnixFifo<GET, PUT> &com) {
     _fdin = com.getFdIn();
     _fdout = com.getFdOut();
     _s1 = com.getFirstName();
@@ -41,7 +57,7 @@ public:
 
   const std::string &getSecondName() const { return (_s2); }
 
-  UnixFifo(const UnixFifo<GET, PUT, FILE_HANDLE> &com) {
+  UnixFifo(const UnixFifo<GET, PUT> &com) {
     _fdin = com._fdin;
     _fdout = com._fdout;
     _s1 = com._s1;
@@ -58,7 +74,7 @@ public:
     _fdout = 0;
   }
 
-  virtual void	closeUnixFifo() {
+  virtual void	closeFifo() {
     if (_fdin != 0)
       close(_fdin);
     if (_fdout != 0)
@@ -69,7 +85,8 @@ public:
   }
 
   virtual void	communicationBetween(const std::string &s1,
-				     const std::string &s2) {
+				     const std::string &s2,
+				     Enum::io_flag f) {
     _s1 = s1;
     _s2 = s2;
     if (!_s1.empty())
@@ -78,6 +95,7 @@ public:
     if (!_s2.empty())
       if (::mkfifo(_s2.c_str(), 0666) && EEXIST != errno)
 	throw (FifoException("mkfifo failed"));
+    createUnixFifo(f);
   }
 
   void	removeUnixFifo() {
@@ -89,26 +107,9 @@ public:
     _s2.clear();
   }
 
-  virtual void	createUnixFifo(Enum::io_flag f) {
-    if (f == Enum::RD_TO_WR)
-      {
-	if ((!_s1.empty()) && ((_fdin = ::open(_s1.c_str(), O_RDONLY)) == -1))
-	    throw (FifoException("open failed"));
-	if ((!_s2.empty()) && ((_fdout = ::open(_s2.c_str(), O_WRONLY)) == -1))
-	    throw (FifoException("open failed"));
-      }
-    else
-      {
-	if ((!_s1.empty()) && ((_fdout = ::open(_s1.c_str(), O_WRONLY)) == -1))
-	  throw (FifoException("open failed"));
-	if ((!_s2.empty()) && ((_fdin = ::open(_s2.c_str(), O_RDONLY)) == -1))
-	  throw (FifoException("open failed"));
-      }
-  }
+  virtual int	getFdIn() const { return (_fdin); }
 
-  virtual FILE_HANDLE	getFdIn() const { return (_fdin); }
-
-  virtual FILE_HANDLE	getFdOut() const { return (_fdout); }
+  virtual int	getFdOut() const { return (_fdout); }
 
   virtual bool	        operator>>(const PUT &s) {
     int		ret;
@@ -126,14 +127,31 @@ public:
   }
 };
 
-template <typename FILE_HANDLE>
-class UnixFifo<std::string, std::string, FILE_HANDLE> :
-  public IFifo<std::string, std::string, FILE_HANDLE> {
+template <>
+class UnixFifo<std::string, std::string> :
+  public IFifo<std::string, std::string, int> {
 private:
-  int	_fdin;
-  int	_fdout;
+  int		_fdin;
+  int		_fdout;
   std::string	_s1;
   std::string	_s2;
+
+  void	createUnixFifo(Enum::io_flag f) {
+    if (f == Enum::RD_TO_WR)
+      {
+	if ((!_s1.empty()) && ((_fdin = ::open(_s1.c_str(), O_RDONLY)) == -1))
+	    throw (FifoException("open failed"));
+	if ((!_s2.empty()) && ((_fdout = ::open(_s2.c_str(), O_WRONLY)) == -1))
+	    throw (FifoException("open failed"));
+      }
+    else
+      {
+	if ((!_s1.empty()) && ((_fdout = ::open(_s1.c_str(), O_WRONLY)) == -1))
+	  throw (FifoException("open failed"));
+	if ((!_s2.empty()) && ((_fdin = ::open(_s2.c_str(), O_RDONLY)) == -1))
+	  throw (FifoException("open failed"));
+      }
+  }
 public:
 
   UnixFifo() {
@@ -144,7 +162,7 @@ public:
   }
 
   ~UnixFifo() {
-    closeUnixFifo();
+    closeFifo();
   }
 
   UnixFifo	&operator=(const UnixFifo<std::string, std::string> &com) {
@@ -163,25 +181,20 @@ public:
 
   virtual void	closeFds() {
     if (_fdin != 0)
-      close(_fdin);
+      ::close(_fdin);
     if (_fdout != 0)
-      close(_fdout);
+      ::close(_fdout);
     _fdin = 0;
     _fdout = 0;
   }
 
-  virtual void	closeUnixFifo() {
-    if (_fdin != 0)
-      close(_fdin);
-    if (_fdout != 0)
-      close(_fdout);
-    _fdin = 0;
-    _fdout = 0;
+  virtual void	closeFifo() {
+    closeFds();
     removeUnixFifo();
   }
 
   virtual void	communicationBetween(const std::string &s1,
-				     const std::string &s2) {
+				     const std::string &s2, Enum::io_flag f) {
     _s1 = s1;
     _s2 = s2;
     if (!_s1.empty())
@@ -190,6 +203,7 @@ public:
     if (!_s2.empty())
       if (mkfifo(_s2.c_str(), 0666) && EEXIST != errno)
 	throw (FifoException("mkfifo failed"));
+    createUnixFifo(f);
   }
 
   void	removeUnixFifo() {
@@ -201,26 +215,9 @@ public:
     _s2.clear();
   }
 
-  virtual void	createUnixFifo(Enum::io_flag f) {
-    if (f == Enum::RD_TO_WR)
-      {
-	if ((!_s1.empty()) && ((_fdin = ::open(_s1.c_str(), O_RDONLY)) == -1))
-	    throw (FifoException("open failed"));
-	if ((!_s2.empty()) && ((_fdout = ::open(_s2.c_str(), O_WRONLY)) == -1))
-	    throw (FifoException("open failed"));
-      }
-    else
-      {
-	if ((!_s1.empty()) && ((_fdout = ::open(_s1.c_str(), O_WRONLY)) == -1))
-	  throw (FifoException("open failed"));
-	if ((!_s2.empty()) && ((_fdin = ::open(_s2.c_str(), O_RDONLY)) == -1))
-	  throw (FifoException("open failed"));
-      }
-  }
+  virtual int	getFdIn() const { return (_fdin); }
 
-  virtual FILE_HANDLE	getFdIn() const { return (_fdin); }
-
-  virtual FILE_HANDLE	getFdOut() const { return (_fdout); }
+  virtual int	getFdOut() const { return (_fdout); }
 
   virtual bool	operator>>(const std::string &s) {
     int		ret;
