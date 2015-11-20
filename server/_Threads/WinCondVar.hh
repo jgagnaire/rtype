@@ -7,8 +7,7 @@
 class WinCondVar : public ICondVar {
 public:
   WinCondVar();
-  virtual ~WinCondVar() {
-  }
+  virtual ~WinCondVar();
   virtual void wait(void);
   virtual void signal(void);
   virtual void broadcast(void);

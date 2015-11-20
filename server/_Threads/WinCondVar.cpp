@@ -1,8 +1,8 @@
 #include "WinCondVar.hh"
 
 WinCondVar::WinCondVar() {
-  InitializeCriticalSection(&cs);
-  InitializeConditionalVariable(&cv);
+  ::InitializeCriticalSection(&cs);
+  ::InitializeConditionVariable(&cv);
 }
 
 WinCondVar::~WinCondVar() { ::WakeAllConditionVariable(&cv); }
