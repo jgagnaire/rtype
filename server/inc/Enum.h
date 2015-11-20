@@ -3,6 +3,14 @@
 
 namespace Enum
 {
+
+  enum	ThreadState
+  {
+    NONE = 0,
+    RUNNING,
+    DEAD,
+  };
+
   enum  Flag {
     NONE = 0,
     READ = 1,
@@ -76,7 +84,7 @@ namespace Enum
     PATH_LENGTH = 20,
     REGISTER_MAX = 12,
     REGISTER_MIN = 4,
-    MAX_TIME = 20,
+    MAX_TIME = 10,
     CALL_TIME = 10,
   };
 };

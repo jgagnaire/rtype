@@ -13,14 +13,9 @@ public:
   bool	accountLoginFct(UserManager<T> *) const;  
   bool	accountRegisterFct(UserManager<T> *) const;
   bool	disconnectionFct(UserManager<T> *) const;
-  bool	contactAddFct(UserManager<T> *) const;
-  bool	contactDeleteFct(UserManager<T> *) const;
 
   bool	        pong(UserManager<T> *) const;
   int		newConnection(UserManager<T> *) const;
   int		closeConnection(UserManager<T> *) const;
   virtual int	newData(UserManager<T> *);
-
-private:
-  std::map<Enum::ClientQueries, proto_fptr>	proto_map;
 };
