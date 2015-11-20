@@ -1,8 +1,11 @@
 #pragma once
+# include <string>
 # include <windows.h>
+# include "IFifo.hh"
+# include "ServerError.hh"
 
-template <typename PUT, typename GET = PUT, typename FILE_HANDLE = int>
-class WinFifo : public IFifo<PUT, GET, FILE_HANDLE> {
+template <typename PUT, typename GET = PUT>
+class WinFifo : public IFifo<PUT, GET, HANDLE> {
 private:
   HANDLE	_fdin;
   HANDLE	_fdout;
@@ -18,10 +21,10 @@ private:
 				       PIPE_TYPE_BYTE |
 				       PIPE_WAIT,
 				       1,
-				       255, //TODO, magic number;
-				       255, //TODO, magic number;
-				       INIFINITE,
-				       0)) == NULL)
+				       255,
+				       255,
+				       INFINITE,
+				       0)) == 0)
 	  throw (FifoException("open failed"));
 	if ((_fdout = ::CreateNamedPipe(_s2.c_str(),
 					PIPE_ACCESS_OUTBOUND,
@@ -29,10 +32,10 @@ private:
 					PIPE_TYPE_BYTE |
 					PIPE_WAIT,
 					1,
-					255, //TODO, magic number;
-					255, //TODO, magic number;
-					INIFINITE,
-					0)) == NULL)
+					255,
+					255,
+					INFINITE,
+					0)) == 0)
 	  throw (FifoException("open failed"));
       }
     else
@@ -43,10 +46,10 @@ private:
 					PIPE_TYPE_BYTE |
 					PIPE_WAIT,
 					1,
-					255, //TODO, magic number;
-					255, //TODO, magic number;
-					INIFINITE,
-					0)) == NULL)
+					255,
+					255,
+					INFINITE,
+					0)) == 0)
 	  throw (FifoException("open failed"));
 	if ((_fdin = ::CreateNamedPipe(_s2.c_str(),
 				       PIPE_ACCESS_OUTBOUND,
@@ -54,17 +57,17 @@ private:
 				       PIPE_TYPE_BYTE |
 				       PIPE_WAIT,
 				       1,
-				       255, //TODO, magic number;
-				       255, //TODO, magic number;
-				       INIFINITE,
-				       0)) == NULL)
+				       255,
+				       255,
+				       INFINITE,
+				       0)) == 0)
 	  throw (FifoException("open failed"));
       }
   }
 
 public:
-  WinFifo() {
-    CreateDirectory(".\\pipe\\", NULL);
+	WinFifo() {
+    CreateDirectory(".\\pipe\\", 0);
     _s1 += ".\\pipe\\";
     _s2 += ".\\pipe\\";
     _fdin = 0;
@@ -72,7 +75,7 @@ public:
   }
 
   virtual ~WinFifo() {
-    closeUnixFifo();
+    closeFifo();
   }
 
   virtual void	closeFds() {
@@ -130,15 +133,14 @@ public:
 
   virtual const std::string &getSecondName() const { return (_s2); }
 
-  virtual FILE_HANDLE	getFdIn() const { return (_fdin); }
+  virtual HANDLE	getFdIn() const { return (_fdin); }
 
-  virtual FILE_HANDLE	getFdOut() const { return (_fdout); }
+  virtual HANDLE	getFdOut() const { return (_fdout); }
 };
 
 
 template <>
-class WinFifo :
-  public IFifo<std::string, std::string, HANDLE> {
+class WinFifo<std::string, std::string> : public IFifo<std::string, std::string, HANDLE> {
 private:
   HANDLE	_fdin;
   HANDLE	_fdout;
@@ -154,9 +156,9 @@ private:
 				       PIPE_TYPE_BYTE |
 				       PIPE_WAIT,
 				       1,
-				       255, //TODO, magic number;
-				       255, //TODO, magic number;
-				       INIFINITE,
+				       255,
+				       255,
+				       INFINITE,
 				       0)) == NULL)
 	  throw (FifoException("open failed"));
 	if ((_fdout = ::CreateNamedPipe(_s2.c_str(),
@@ -165,9 +167,9 @@ private:
 					PIPE_TYPE_BYTE |
 					PIPE_WAIT,
 					1,
-					255, //TODO, magic number;
-					255, //TODO, magic number;
-					INIFINITE,
+					255,
+					255,
+					INFINITE,
 					0)) == NULL)
 	  throw (FifoException("open failed"));
       }
@@ -179,10 +181,10 @@ private:
 					PIPE_TYPE_BYTE |
 					PIPE_WAIT,
 					1,
-					255, //TODO, magic number;
-					255, //TODO, magic number;
-					INIFINITE,
-					0)) == NULL)
+					255,
+					255,
+					INFINITE,
+					0)) == 0)
 	  throw (FifoException("open failed"));
 	if ((_fdin = ::CreateNamedPipe(_s2.c_str(),
 				       PIPE_ACCESS_OUTBOUND,
@@ -190,17 +192,17 @@ private:
 				       PIPE_TYPE_BYTE |
 				       PIPE_WAIT,
 				       1,
-				       255, //TODO, magic number;
-				       255, //TODO, magic number;
-				       INIFINITE,
-				       0)) == NULL)
+				       255,
+				       255,
+				       INFINITE,
+				       0)) == 0)
 	  throw (FifoException("open failed"));
       }
   }
 
 public:
   WinFifo() {
-    CreateDirectory(".\\pipe\\", NULL);
+    CreateDirectory(".\\pipe\\", 0);
     _s1 += ".\\pipe\\";
     _s2 += ".\\pipe\\";
     _fdin = 0;
@@ -208,7 +210,7 @@ public:
   }
 
   virtual ~WinFifo() {
-    closeUnixFifo();
+    closeFifo();
   }
 
   virtual void	closeFds() {
@@ -220,18 +222,18 @@ public:
     _fdout = 0;
   }
 
-  virtual void	closeFifo() {
-    closeFds()
-    removeUnixFifo();
-  }
-  
   void	removeWinFifo() {
     if (_s1 != ".\\pipe\\")
       ::DeleteFile(_s1.c_str());
-    if (!_s2 != ".\\pipe\\")
+    if (_s2 != ".\\pipe\\")
       ::DeleteFile(_s2.c_str());
     _s1 += ".\\pipe\\";
     _s2 += ".\\pipe\\";
+  }
+
+  virtual void	closeFifo() {
+	closeFds();
+	removeWinFifo();
   }
 
   virtual void	communicationBetween(const std::string &s1,
