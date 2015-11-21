@@ -10,7 +10,7 @@ typedef struct s_UdpHeader
     uint16_t    size;
     uint16_t    query;
     uint64_t    id;
-} UdpHeader;
+} __attribute__((packed)) UdpHeader;
 
 class UdpPacket : public IPacket
 {
