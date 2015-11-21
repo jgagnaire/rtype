@@ -3,14 +3,9 @@
 
 # include <list>
 # include <cstdint>
-# include "UdpSocket.hh"
-# include "TcpSocket.hh"
-
-namespace NetworkState
-{
-    char tcp = 1;
-    char udp = 2;
-}
+# include "IPacket.hh"
+# include "IUdpSocket.hh"
+# include "ITcpSocket.hh"
 
 class NetworkManager
 {
@@ -18,15 +13,14 @@ class NetworkManager
         NetworkManager();
         virtual ~NetworkManager();
 
-        void    send(const UdpPacket &packet);
-        void    receive();
-        UdpPacket  getPacket();
+        void            receive();
+        void            send(const IPacket &packet);
+        IPacket         &getPacket();
 
     private:
-        std::list<UdpPacket>          _udpPacketList;
-        UdpSocket                     _udp;
-        TcpSocket                     _tcp;
-        char                          _state;
+        std::list<IPacket*>         _PacketList;
+        IUdpSocket                  &_udp;
+        ITcpSocket                  &_tcp;
 };
 
 #endif /* ifndef NETWORKMANAGER_HH_ */

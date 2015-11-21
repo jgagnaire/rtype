@@ -1,9 +1,9 @@
 #ifndef UDPSOCKET_HH_
 # define UDPSOCKET_HH_
 
-# include <cstdint>
 # include <SFML/Network.hpp>
 # include "IUdpSocket.hh"
+# include "IPacket.hh"
 
 typedef struct s_UdpHeader
 {
@@ -12,27 +12,30 @@ typedef struct s_UdpHeader
     uint64_t    id;
 } UdpHeader;
 
-class UdpPacket
+class UdpPacket : public IPacket
 {
     public:
-        UdpHeader   &getHeader();
+        UdpPacket() {}
+        virtual ~UdpPacket() {}
 
-        uint16_t    getSize() const;
-        uint16_t    getQuery() const;
-        uint64_t    getID() const;
-        void        *getData() const;
+        virtual uint16_t    getSize() const;
+        virtual uint16_t    getQuery() const;
+        virtual void        *getData() const;
 
-        void        setSize(uint16_t size);
-        void        setQuery(uint16_t query);
-        void        setID(uint64_t id);
-        void        setData(void *data);
+        virtual void        setSize(uint16_t size);
+        virtual void        setQuery(uint16_t query);
+        virtual void        setData(void *data);
+
+        UdpHeader           &getHeader();
+        const UdpHeader     &getHeader() const;
+        virtual uint64_t    getID() const;
+        virtual void        setID(uint64_t id);
 
     private:
         UdpHeader   _header;
-        void        *_data;
 };
 
-class UdpSocket : IUdpSocket
+class UdpSocket : public IUdpSocket
 {
     public:
         UdpSocket();

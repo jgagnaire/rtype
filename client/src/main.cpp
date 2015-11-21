@@ -1,28 +1,17 @@
 #include <iostream>
-#include <SFML/Graphics.hpp>
-#include "AnimatedSprite.hh"
-#include "Compenent.hh"
-#include "Entity.hh"
+#include "NetworkManager.hh"
+#include "UdpSocket.hh"
+#include "TcpSocket.hh"
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-    AnimatedSprite   arbok;
+    NetworkManager nm;
+    UdpPacket tosend;
 
-    arbok.load("arbok.png", 87);
-    while (window.isOpen())
-    {
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
-        window.clear();
-        arbok.update();
-        window.draw(arbok);
-        window.display();
-    }
-
+    tosend.setID(1);
+    tosend.setData(const_cast<char*>("coucou"));
+    tosend.setSize(6);
+    tosend.setQuery(2);
+    nm.send(tosend);
     return 0;
 }
