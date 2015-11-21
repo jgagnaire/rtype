@@ -7,6 +7,8 @@
 
 typedef struct s_UdpHeader : public Header
 {
+    uint16_t    size;
+    uint16_t    query;
     uint64_t    id;
 } __attribute__((packed)) UdpHeader;
 

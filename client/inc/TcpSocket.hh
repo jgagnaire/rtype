@@ -7,6 +7,8 @@
 
 typedef struct s_TcpHeader : public Header
 {
+    uint16_t    size;
+    uint16_t    query;
 } TcpHeader;
 
 class TcpPacket : public IPacket

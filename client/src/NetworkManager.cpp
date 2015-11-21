@@ -1,3 +1,5 @@
+#include <iostream>
+#include <limits.h>
 #include <cstring>
 #include "NetworkManager.hh"
 #include "UdpSocket.hh"
@@ -25,9 +27,9 @@ void    NetworkManager::send(const IPacket &packet)
     char *buf = 0;
 
     if ((tcpPacket = dynamic_cast<const TcpPacket*>(tmp)))
-        totalSize += sizeof(tcpPacket->getHeader());
+        totalSize += sizeof(TcpHeader);
     else if ((udpPacket = dynamic_cast<const UdpPacket*>(tmp)))
-        totalSize += sizeof(udpPacket->getHeader());
+        totalSize += sizeof(UdpHeader);
     buf = new char[totalSize];
     std::memcpy(buf, &(tmp->getHeader()),
             totalSize - tmp->getSize());
@@ -37,4 +39,56 @@ void    NetworkManager::send(const IPacket &packet)
         _tcp.send(buf, totalSize);
     else if (udpPacket)
         _udp.send(buf, totalSize, "127.0.0.1", 4445);
+}
+
+void        NetworkManager::receiveUdp()
+{
+    UdpPacket *packet = new UdpPacket();
+    std::string ip;
+    unsigned short port;
+    char *buf = new char[std::numeric_limits<unsigned short>::max()];
+    char *tmp;
+
+    std::size_t readed = _udp.receive(buf,
+            std::numeric_limits<unsigned short>::max(),
+            ip, port);
+    if (readed != 0)
+    {
+        static_cast<UdpHeader&>(packet->getHeader()) = *reinterpret_cast<UdpHeader*>(buf);
+        if (packet->getSize() > 0)
+        {
+            tmp = new char[packet->getSize()];
+            std::memcpy(tmp, buf + sizeof(UdpHeader), packet->getSize());
+            packet->setData(tmp);
+        }
+        else
+            packet->setData(0);
+        _packets.push_back(packet);
+    }
+    else
+        delete packet;
+    delete[] buf;
+}
+
+void        NetworkManager::receiveTcp()
+{
+}
+
+IPacket     *NetworkManager::getPacket()
+{
+    IPacket *tmp = 0;
+
+
+    if (_packets.empty())
+    {
+        this->receiveUdp();
+        this->receiveTcp();
+    }
+    if (_packets.empty() == false)
+    {
+        tmp = _packets.front();
+        _packets.pop_front();
+        return tmp;
+    }
+    return 0;
 }

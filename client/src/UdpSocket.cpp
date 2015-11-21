@@ -8,6 +8,7 @@ UdpSocket::~UdpSocket()
 
 bool    UdpSocket::bind(unsigned short int port)
 {
+    _socket.setBlocking(false);
     return (_socket.bind(port) == sf::Socket::Done);
 }
 

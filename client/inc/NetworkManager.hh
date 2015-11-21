@@ -13,12 +13,14 @@ class NetworkManager
         NetworkManager();
         virtual ~NetworkManager();
 
-        void            receive();
         void            send(const IPacket &packet);
-        IPacket         &getPacket();
+        IPacket         *getPacket();
 
     private:
-        std::list<IPacket*>         _PacketList;
+        void            receiveUdp();
+        void            receiveTcp();
+
+        std::list<IPacket*>         _packets;
         IUdpSocket                  &_udp;
         ITcpSocket                  &_tcp;
 };

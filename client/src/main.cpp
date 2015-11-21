@@ -9,29 +9,42 @@ int main(int ac, char **av)
     UdpPacket tosend;
     TcpPacket tosend2;
 
-    if (ac == 1)
+    tosend.setID(1);
+    tosend.setData(const_cast<char*>("coucou"));
+    tosend.setSize(6);
+    tosend.setQuery(2);
+    tosend2.setData(const_cast<char*>("salut"));
+    tosend2.setSize(5);
+    tosend2.setQuery(3);
+    while (1)
     {
-        std::cout << "choose 1: Udp, 2: Tcp" << std::endl;
-        return (0);
-    }
-    if (av[1][0] == '1')
-    {
-        std::cout << "Sending a udp packet like this {6, 2, 1, \"coucou\"}"
-            << " 127.0.0.1 4445" << std::endl;
-        tosend.setID(1);
-        tosend.setData(const_cast<char*>("coucou"));
-        tosend.setSize(6);
-        tosend.setQuery(2);
         nm.send(tosend);
-    }
-    else if (av[1][0] == '2')
-    {
-        std::cout << "Connect and Sending a tcp packet like this {6, 2, \"coucou\"}"
-            << " 127.0.0.1 4443" << std::endl;
-        tosend2.setData(const_cast<char*>("coucou"));
-        tosend2.setSize(6);
-        tosend2.setQuery(2);
         nm.send(tosend2);
+        IPacket *tmp = nm.getPacket();
+        UdpPacket *udp = 0;
+        UdpPacket *tcp = 0;
+        if ((udp = dynamic_cast<UdpPacket*>(tmp)))
+        {
+            std::cout << "Udp Packet" << std::endl
+                << "Id " << udp->getID()
+                << " query " << udp->getQuery()
+                << " size " << udp->getSize()
+                << " data [";
+            std::cout.flush();
+            std::cout.write(reinterpret_cast<char*>(udp->getData()), udp->getSize());
+            std::cout << "]" << std::endl;
+        }
+        else if ((tmp = dynamic_cast<TcpPacket*>(tmp)))
+        {
+            std::cout << "Tcp Packet" << std::endl
+                << "Id " << udp->getID()
+                << " query " << udp->getQuery()
+                << " size " << udp->getSize()
+                << " data [";
+            std::cout.flush();
+            std::cout.write(reinterpret_cast<char*>(udp->getData()), udp->getSize());
+            std::cout << "]" << std::endl;
+        }
     }
     return 0;
 }

@@ -5,8 +5,6 @@
 
 typedef struct s_header
 {
-    uint16_t    size;
-    uint16_t    query;
 } Header;
 
 class IPacket
