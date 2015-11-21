@@ -5,10 +5,8 @@
 # include "ITcpSocket.hh"
 # include "IPacket.hh"
 
-typedef struct s_TcpHeader
+typedef struct s_TcpHeader : public Header
 {
-    uint16_t    size;
-    uint16_t    query;
 } TcpHeader;
 
 class TcpPacket : public IPacket
@@ -25,8 +23,8 @@ class TcpPacket : public IPacket
         virtual void        setQuery(uint16_t query);
         virtual void        setData(void *data);
 
-        TcpHeader           &getHeader();
-        const TcpHeader     &getHeader() const;
+        virtual Header           &getHeader();
+        virtual const Header     &getHeader() const;
 
     private:
         TcpHeader   _header;

@@ -33,12 +33,12 @@ std::size_t     UdpSocket::receive(void *buf, std::size_t size,
     return (readed);
 }
 
-UdpHeader   &UdpPacket::getHeader()
+Header   &UdpPacket::getHeader()
 {
      return _header;
 }
 
-const UdpHeader   &UdpPacket::getHeader() const
+const Header   &UdpPacket::getHeader() const
 {
      return _header;
 }

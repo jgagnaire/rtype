@@ -21,29 +21,20 @@ void    NetworkManager::send(const IPacket &packet)
     const IPacket *tmp = &packet;
     const TcpPacket *tcpPacket = 0;
     const UdpPacket *udpPacket = 0;
+    std::size_t totalSize = tmp->getSize();
+    char *buf = 0;
 
     if ((tcpPacket = dynamic_cast<const TcpPacket*>(tmp)))
-    {
-        std::size_t totalSize = sizeof(tcpPacket->getHeader())
-                                + tcpPacket->getSize();
-        char *buf = new char[totalSize];
-        std::memcpy(buf, &(tcpPacket->getHeader()),
-                totalSize - tcpPacket->getSize());
-        std::memcpy(buf + sizeof(tcpPacket->getHeader()),
-                tcpPacket->getData(),
-                tcpPacket->getSize());
-        _tcp.send(buf, totalSize);
-    }
+        totalSize += sizeof(tcpPacket->getHeader());
     else if ((udpPacket = dynamic_cast<const UdpPacket*>(tmp)))
-    {
-        std::size_t totalSize = sizeof(udpPacket->getHeader())
-                                + udpPacket->getSize();
-        char *buf = new char[totalSize];
-        std::memcpy(buf, &(udpPacket->getHeader()),
-                sizeof(udpPacket->getHeader()));
-        std::memcpy(buf + sizeof(udpPacket->getHeader()),
-                udpPacket->getData(),
-                udpPacket->getSize());
+        totalSize += sizeof(udpPacket->getHeader());
+    buf = new char[totalSize];
+    std::memcpy(buf, &(tmp->getHeader()),
+            totalSize - tmp->getSize());
+    std::memcpy(buf + totalSize - tmp->getSize(),
+            tmp->getData(), tmp->getSize());
+    if (tcpPacket)
+        _tcp.send(buf, totalSize);
+    else if (udpPacket)
         _udp.send(buf, totalSize, "127.0.0.1", 4445);
-    }
 }

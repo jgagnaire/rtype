@@ -5,10 +5,8 @@
 # include "IUdpSocket.hh"
 # include "IPacket.hh"
 
-typedef struct s_UdpHeader
+typedef struct s_UdpHeader : public Header
 {
-    uint16_t    size;
-    uint16_t    query;
     uint64_t    id;
 } __attribute__((packed)) UdpHeader;
 
@@ -26,10 +24,10 @@ class UdpPacket : public IPacket
         virtual void        setQuery(uint16_t query);
         virtual void        setData(void *data);
 
-        UdpHeader           &getHeader();
-        const UdpHeader     &getHeader() const;
-        virtual uint64_t    getID() const;
-        virtual void        setID(uint64_t id);
+        virtual Header           &getHeader();
+        virtual const Header     &getHeader() const;
+        virtual uint64_t        getID() const;
+        virtual void            setID(uint64_t id);
 
     private:
         UdpHeader   _header;

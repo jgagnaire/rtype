@@ -26,12 +26,12 @@ std::size_t     TcpSocket::receive(void *buf, std::size_t size)
     return (readed);
 }
 
-TcpHeader   &TcpPacket::getHeader()
+Header   &TcpPacket::getHeader()
 {
      return _header;
 }
 
-const TcpHeader   &TcpPacket::getHeader() const
+const Header   &TcpPacket::getHeader() const
 {
      return _header;
 }
