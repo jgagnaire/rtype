@@ -1,8 +1,36 @@
 #ifndef UDPSOCKET_HH_
 # define UDPSOCKET_HH_
 
+# include <cstdint>
 # include <SFML/Network.hpp>
 # include "IUdpSocket.hh"
+
+typedef struct s_UdpHeader
+{
+    uint16_t    size;
+    uint16_t    query;
+    uint64_t    id;
+} UdpHeader;
+
+class UdpPacket
+{
+    public:
+        UdpHeader   &getHeader();
+
+        uint16_t    getSize() const;
+        uint16_t    getQuery() const;
+        uint64_t    getID() const;
+        void        *getData() const;
+
+        void        setSize(uint16_t size);
+        void        setQuery(uint16_t query);
+        void        setID(uint64_t id);
+        void        setData(void *data);
+
+    private:
+        UdpHeader   _header;
+        void        *_data;
+};
 
 class UdpSocket : IUdpSocket
 {

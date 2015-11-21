@@ -32,3 +32,48 @@ std::size_t     UdpSocket::receive(void *buf, std::size_t size,
     ip = ipa.toString();
     return (readed);
 }
+
+UdpPacket::getHeader()
+{
+     return _header;
+}
+
+uint16_t    UdpPacket::getSize() const
+{
+    return _header.size;
+}
+
+uint16_t    UdpPacket::getQuery() const
+{
+    return _header.query;
+}
+
+uint64_t    UdpPacket::getID() const
+{
+    return _header.id;
+}
+
+void        *UdpPacket::getData() const
+{
+    return _data;
+}
+
+void        UdpPacket::setSize(uint16_t size)
+{
+    _header.size = size;
+}
+
+void        UdpPacket::setQuery(uint16_t query)
+{
+    _header.query = query;
+}
+
+void        UdpPacket::setID(uint64_t id)
+{
+     _header.id = id;
+}
+
+void        UdpPacket::setData(void *data)
+{
+    _data = data;
+}
