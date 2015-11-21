@@ -9,6 +9,7 @@ TcpSocket::~TcpSocket()
 bool            TcpSocket::connect(const std::string &ip,
         unsigned short int port)
 {
+    _socket.setBlocking(false);
     return (_socket.connect(ip, port) == sf::Socket::Done);
 }
 

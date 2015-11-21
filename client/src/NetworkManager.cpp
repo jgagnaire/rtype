@@ -52,7 +52,7 @@ void        NetworkManager::receiveUdp()
     std::size_t readed = _udp.receive(buf,
             std::numeric_limits<unsigned short>::max(),
             ip, port);
-    if (readed != 0)
+    if (readed)
     {
         static_cast<UdpHeader&>(packet->getHeader()) = *reinterpret_cast<UdpHeader*>(buf);
         if (packet->getSize() > 0)
@@ -72,6 +72,23 @@ void        NetworkManager::receiveUdp()
 
 void        NetworkManager::receiveTcp()
 {
+    TcpPacket *packet = new TcpPacket();
+    char *buf = 0;
+
+    std::size_t readed = _tcp.receive(&(packet->getHeader()),
+            sizeof(TcpHeader));
+    if (readed)
+    {
+        if (packet->getSize())
+        {
+            buf = new char[packet->getSize()];
+            readed = _tcp.receive(buf, packet->getSize());
+        }
+        packet->setData(buf);
+        _packets.push_back(packet);
+    }
+    else
+        delete packet;
 }
 
 IPacket     *NetworkManager::getPacket()
