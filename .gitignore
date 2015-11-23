@@ -7,6 +7,8 @@
 *Makefile
 *.sln
 *CMakeFiles
+*.sdf
+*.v12.suo
 *~
 *.ycm_extra_conf.py
 *.ycm_extra_conf.pyc

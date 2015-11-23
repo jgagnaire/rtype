@@ -3,6 +3,11 @@
 
 namespace Enum
 {
+
+    enum ProtocolIndex {
+        TCP_INDEX = 0,
+        UDP_INDEX
+    };
   enum	ThreadState
     {
       NIL = 0,
@@ -15,10 +20,11 @@ namespace Enum
     WR_TO_RD,
   };
 
-  enum Protocol {
-    TCP = 1,
-    UDP
-  };
+    enum Protocol {
+        TCP = 1,
+        UDP = 2,
+        BOTH_PROTO = 4
+    };
 
   enum  Flag {
     NONE = 0,

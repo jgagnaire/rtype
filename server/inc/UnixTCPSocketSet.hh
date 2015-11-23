@@ -6,4 +6,4 @@ public:
   UnixTCPSocketSet();
   virtual IServerSocket<int> *absAcceptNewClient();
   virtual ~UnixTCPSocketSet() {}
-}
+};
