@@ -5,6 +5,8 @@
 #include "Graphics/Window.hh"
 #include "Graphics/Event.hh"
 #include "Scenes/IntroScene.hh"
+#include "Entity/Entity.hh"
+#include "Compenent/Compenent.hh"
 
 int main(int ac, char **av)
 {
@@ -15,6 +17,16 @@ int main(int ac, char **av)
             << "2 : Graphics" << std::endl;
         return 0;
     }
+    Entity e;
+
+    e.manager.add<int>("Bites", 42);
+    e.manager.add<int>("Couilles", 21);
+    e.manager.add<int>("Chatte", 84);
+    e.manager.add<std::string>("Bites", "j'aime les queues");
+    
+    e.manager.getAll<int>();
+
+    
     if (av[1][0] == '1')
     {
         NetworkManager nm;

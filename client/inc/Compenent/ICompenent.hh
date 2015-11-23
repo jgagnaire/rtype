@@ -2,15 +2,18 @@
 # define ICOMPENENT_H_
 
 #include <string>
-#include <Time.hpp>
 
 class ICompenent
 {
 public:
-  ICompenent(const std::string& type, const std::string& name);
-  virtual ~ICompenent();
+  ICompenent(const std::string& type, const std::string& name) : _type(type), _name(name)
+  {}
+  
+  virtual ~ICompenent()
+  {
+  }
 
-  inline std::string typename(void) const {
+  inline std::string getType(void) const {
     return (_type);
   }
 
