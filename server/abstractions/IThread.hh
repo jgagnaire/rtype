@@ -13,5 +13,5 @@ public:
     virtual void create(ARG arg) = 0;
     virtual void join() = 0;
     virtual void loadFunc(RET_VAL(*p)(ARG)) = 0;
-    virtual Enum::ThreadState	state() const = 0;
+    virtual Enum::ThreadState state() const = 0;
 };

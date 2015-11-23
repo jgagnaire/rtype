@@ -44,7 +44,7 @@ public:
     }
 
     virtual void startAll() {
-        for (int i = 0; i < _threads.size(); ++i) { _threads[i]->create(_args[i]); }
+        for (size_t i = 0; i < _threads.size(); ++i) { _threads[i]->create(_args[i]); }
     }
 
 private:

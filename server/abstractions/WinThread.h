@@ -1,7 +1,7 @@
 #pragma once
 # include <windows.h>
 # include "IThread.hh"
-# include "Exceptions.h"
+# include "ServerError.hh"
 
 template <typename RET_VAL, typename ARG>
 class WinThread : public IThread<RET_VAL, ARG>
@@ -21,16 +21,16 @@ public:
   static void	*start(LPVOID arg)
   {
     WinThread<RET_VAL, ARG>   *t;
-    void	                  *tmp;
+    ARG tmp;
 
     t = static_cast<WinThread<RET_VAL, ARG> *>(arg);
     tmp = t->_arg;
-    t->_func(*tmp);
+    t->_func(tmp);
     t->terminateThread();
     return (NULL);
   }
 
-  virtual void	create(ARG *arg)
+  virtual void	create(ARG arg)
   {
     _arg = arg;
     if (!(_thread = ::CreateThread(0, 0,
@@ -44,7 +44,7 @@ public:
   {
     if (::WaitForSingleObject(_thread, INFINITE) == WAIT_FAILED)
       throw ThreadException("Cannot join thread");
-    _state = DEAD;
+    _state = Enum::DEAD;
   }
 
   virtual void	loadFunc(RET_VAL(*p)(ARG))
