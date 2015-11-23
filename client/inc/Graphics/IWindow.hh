@@ -3,6 +3,7 @@
 
 # include <string>
 # include "Graphics/IEvent.hh"
+# include "Graphics/IDrawable.hh"
 
 class IWindow
 {
@@ -14,6 +15,7 @@ class IWindow
         virtual void    close() = 0;
         virtual void    clear() = 0;
         virtual void    display() = 0;
+        virtual void    draw(IDrawable &) = 0;
         virtual bool    getEvent(IEvent &) = 0;
 };
 

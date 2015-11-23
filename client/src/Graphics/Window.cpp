@@ -33,3 +33,12 @@ bool  Window::getEvent(IEvent &event)
 
     return _window.pollEvent(*e);
 }
+
+void  Window::draw(IDrawable &drawable)
+{
+    for (auto &x : drawable.getBuffer())
+    {
+        const sf::Drawable *d = static_cast<const sf::Drawable *>(x);
+        _window.draw(*d);
+    }
+}

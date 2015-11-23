@@ -14,6 +14,7 @@ class Window : public IWindow
         virtual void    close();
         virtual void    clear();
         virtual void    display();
+        virtual void    draw(IDrawable &);
         virtual bool    getEvent(IEvent &);
 
     private:

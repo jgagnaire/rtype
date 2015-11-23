@@ -7,6 +7,7 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/inc/)
 
 file(GLOB_RECURSE client_SOURCES "src/Graphics/*.cpp")
+file(GLOB_RECURSE client_SOURCES "src/Scene/*.cpp")
 file(GLOB_RECURSE client_SOURCES "src/*.cpp")
 file(GLOB_RECURSE client_HEADERS "inc/*.hh")
 file(GLOB_RECURSE client_HEADERS "inc/Entity/*.hh")

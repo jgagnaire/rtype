@@ -4,13 +4,14 @@
 #include "TcpSocket.hh"
 #include "Graphics/Window.hh"
 #include "Graphics/Event.hh"
+#include "Scenes/IntroScene.hh"
 
 int main(int ac, char **av)
 {
     if (ac == 1)
     {
         std::cout << "Please put a argument : " << std::endl
-            << "1 : Network"
+            << "1 : Network" << std::endl
             << "2 : Graphics" << std::endl;
         return 0;
     }
@@ -63,6 +64,7 @@ int main(int ac, char **av)
     else if (av[1][0] == '2')
     {
         IWindow *win = new Window();
+        IntroScene  scene;
         while (win->isOpen())
         {
             IEvent *e = new Event();
@@ -75,6 +77,8 @@ int main(int ac, char **av)
             }
             delete e;
             win->clear();
+            scene.update();
+            win->draw(scene);
             win->display();
         }
         delete win;
