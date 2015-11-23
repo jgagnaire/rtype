@@ -2,8 +2,9 @@
 # define EVENT_HH_
 
 # include <Graphics/Window.hh>
+# include "IEvent.hh"
 
-class Event
+class Event : public IEvent
 {
     public:
         Event() {}

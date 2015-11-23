@@ -7,12 +7,14 @@ void    *Event::getBuffer()
 
 bool     Event::isAccepted() const
 {
-    return sf::Keyboard::isKeyPressed(sf::Keyboard::Return);
+    return _event.type == sf::Event::KeyReleased &&
+        _event.key.code == sf::Keyboard::Return;
 }
 
 bool     Event::isRefused() const
 {
-    return sf::Keyboard::isKeyPressed(sf::Keyboard::Escape);
+    return _event.type == sf::Event::KeyReleased &&
+       _event.key.code == sf::Keyboard::Escape;
 }
 
 bool     Event::isCloseWindow() const

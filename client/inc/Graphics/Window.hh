@@ -11,6 +11,7 @@ class Window : public IWindow
         virtual ~Window();
 
         virtual bool    isOpen() const;
+        virtual void    close();
         virtual bool    getEvent(IEvent &);
 
     private:

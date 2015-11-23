@@ -7,6 +7,11 @@ Window::Window():
 Window::~Window()
 {}
 
+void    Window::close()
+{
+    _window.close();
+}
+
 bool    Window::isOpen() const
 {
     return _window.isOpen();

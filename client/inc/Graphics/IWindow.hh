@@ -11,6 +11,7 @@ class IWindow
         virtual ~IWindow() {}
 
         virtual bool    isOpen() const = 0;
+        virtual void    close() = 0;
         virtual bool    getEvent(IEvent &) = 0;
 };
 
