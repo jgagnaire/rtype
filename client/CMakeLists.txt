@@ -6,10 +6,12 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/inc/)
 
+file(GLOB_RECURSE client_SOURCES "src/Graphics/*.cpp")
 file(GLOB_RECURSE client_SOURCES "src/*.cpp")
 file(GLOB_RECURSE client_HEADERS "inc/*.hh")
 file(GLOB_RECURSE client_HEADERS "inc/Entity/*.hh")
 file(GLOB_RECURSE client_HEADERS "inc/Compenent/*.hh")
+file(GLOB_RECURSE client_HEADERS "inc/Graphics/*.hh")
 
 add_executable(client_rtype ${client_SOURCES} ${client_HEADERS})
 
