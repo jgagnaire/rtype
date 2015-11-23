@@ -50,16 +50,16 @@ public:
   ~NetworkManager() {}
 
   void	launch() {
-	  for (;;) {
+    for (;;) {
       for (auto cli = cl_list.begin(); cli != cl_list.end();) {
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-		  while (!(*cli)->sendStructEmpty()) {
-			  if (!(*cli)->writeOnMe()) {
-				  deleteClient(cli);
-				  break;
-			  }
+	while (!(*cli)->sendStructEmpty()) {
+	  if (!(*cli)->writeOnMe()) {
+	    deleteClient(cli);
+	    break;
+	  }
 
-		  }
+	}
 #else
 	if (!(*cli)->sendStructEmpty()) {
 	  this->network_monitor->setObserver((*cli)->getServerSocket(),

@@ -3,36 +3,9 @@
 
 # include <list>
 # include <cstdint>
-# include "UdpSocket.hh"
-# include "TcpSocket.hh"
-
-namespace NetworkState
-{
-    char tcp = 1;
-    char udp = 2;
-}
-
-class Packet
-{
-    public:
-        Packet();
-        virtual ~Packet();
-
-        void            setPacketSize(uint16_t packetSize);
-        void            setQuery(uint16_t query);
-        void            setData(void *data, std::size_t size);
-
-        uint16_t        getPacketSize() const;
-        uint16_t        getQuery() const;
-        void            *getData() const;
-        std::size_t     getDataSize() const;
-
-    private:
-        uint16_t        _packetSize;
-        uint16_t        _query;
-        void            *_data;
-        std::size_t     _dataSize;
-};
+# include "IPacket.hh"
+# include "IUdpSocket.hh"
+# include "ITcpSocket.hh"
 
 class NetworkManager
 {
@@ -40,15 +13,16 @@ class NetworkManager
         NetworkManager();
         virtual ~NetworkManager();
 
-        void    send(const Packet &packet);
-        void    receive();
-        Packet  getPacket();
+        void            send(const IPacket &packet);
+        IPacket         *getPacket();
 
     private:
-        std::list<Packet>             _packetList;
-        UdpSocket                     _udp;
-        TcpSocket                     _tcp;
-        char                          _state;
+        void            receiveUdp();
+        void            receiveTcp();
+
+        std::list<IPacket*>         _packets;
+        IUdpSocket                  &_udp;
+        ITcpSocket                  &_tcp;
 };
 
 #endif /* ifndef NETWORKMANAGER_HH_ */

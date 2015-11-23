@@ -2,23 +2,26 @@
 
 template<typename T>
 AccountController<T>::AccountController(std::list<UserManager<T> *> &cli)
-  : AController<T>(cli) {
-  this->proto_map[Enum::ACCOUNT_LOGIN] = &AccountController<T>::accountLoginFct;
-  this->proto_map[Enum::ACCOUNT_REGISTER] = &AccountController<T>::accountRegisterFct;
-  this->proto_map[Enum::DISCONNECTION] = &AccountController<T>::disconnectionFct;
-  this->proto_map[Enum::CONTACT_ADD] = &AccountController<T>::contactAddFct;
-  this->proto_map[Enum::CONTACT_DELETION] = &AccountController<T>::contactDeleteFct;
-  this->proto_map[Enum::STATUS] = &AccountController<T>::changeStatus;
-  this->proto_map[Enum::PONG] = &AccountController<T>::pong;
-}
+  : AController<T>(cli) {}
 
 template<typename T>
 int	AccountController<T>::newData(UserManager<T> *cli) {
-  cli->checkCall();
   cli->fillPacketStruct();
-  if (proto_map.find(cli->numQuery()) == proto_map.end())
+  switch (cli->numQuery()) {
+  case Enum::ACCOUNT_LOGIN:
+    return (static_cast<int>(accountLoginFct(cli)));
+  case Enum::ACCOUNT_REGISTER:
+    return (static_cast<int>(accountRegisterFct(cli)));
+  case Enum::DISCONNECTION:
+    return (static_cast<int>(disconnectionFct(cli)));
+  case Enum::STATUS:
+    return (static_cast<int>(changeStatus(cli)));
+  case Enum::PONG:
+    return (static_cast<int>(pong(cli)));
+  default:
     return (-1);
-  return (static_cast<int>((this->*proto_map[cli->numQuery()])(cli)));
+  }
+  return (-1);
 }
 
 template<typename T>
@@ -106,39 +109,6 @@ bool	AccountController<T>::disconnectionFct(UserManager<T> *cl) const {
 
   if (!cl->isLogged())
     return (false);
-  cl->fromFirstUser();
-  while (!s.empty()) {
-    s = cl->getFriendName();
-    UserManager<T> *tmp_cl = this->findUserByName(s);
-    if (tmp_cl) {
-      cl_str = cl->getName() + ":1";
-      tmp_cl->writeStruct({static_cast<uint16_t>(cl_str.size()),
-	    Enum::CHANGE_STATUS});
-      tmp_cl->writeMsg(cl_str);
-    }
-  }
-  UserManager<T> * tmp_cl = this->findUserByName(cl->getCallUser());
-  if (tmp_cl) {
-    if (static_cast<int>(tmp_cl->getCallQuery()) &
-	static_cast<int>(Enum::AUDIO_CALL_INIT)) {
-      tmp_cl->writeStruct({ static_cast<uint16_t>(cl->getName().size()),
-	    Enum::USER_HANG_UP });
-      tmp_cl->writeMsg(cl->getName());
-    }
-    if (static_cast<int>(tmp_cl->getCallQuery()) &
-	static_cast<int>(Enum::VIDEO_CALL_INIT)) {
-      tmp_cl->writeStruct({ static_cast<uint16_t>(cl->getName().size()),
-	    Enum::USER_VIDEO_HANG_UP });
-      tmp_cl->writeMsg(cl->getName());
-    }
-    tmp_cl->callWith("", Enum::NONE_QUERY);
-  }
-  for (auto it = cl->call_list.begin(); it != cl->call_list.end();) {
-    if (this->findUserByName(it->name))
-      cl->refuseCall(it);
-    cl->call_list.erase(it++);
-    ++it;
-  }
   cl->disconnect();
   return (true);
 }
@@ -147,44 +117,6 @@ template<typename T>
 int    AccountController<T>::closeConnection(UserManager<T> *cl) const {
   disconnectionFct(cl);
   return (0);
-}
-
-template<typename T>
-bool	AccountController<T>::contactAddFct(UserManager<T> *cl) const {
-  Enum::ServerAnswers sa = cl->addUserAsFriend();
-  std::string cl_str;
-  std::string tmp_cl_str;
-
-  cl->writeStruct({ 0, sa });
-  if (sa == Enum::OK) {
-    UserManager<T> * tmp_cl = this->findUserByName(cl->getPacketData());
-    if (tmp_cl) {
-	  cl_str = cl->getName() + ":" + static_cast<char>(cl->getStatus() + 48);
-	  tmp_cl_str = tmp_cl->getName() + ":" + static_cast<char>(tmp_cl->getStatus() + 48);
-	  tmp_cl->writeStruct({static_cast<uint16_t>(cl->getName().size()),
-		Enum::USER_ADDED});
-	  tmp_cl->writeMsg(cl->getName());
-	  tmp_cl->writeStruct({ static_cast<uint16_t>(cl_str.size()),
-		Enum::CHANGE_STATUS });
-	  tmp_cl->writeMsg(cl_str);
-	  cl->writeStruct({ static_cast<uint16_t>(tmp_cl_str.size()),
-		Enum::CHANGE_STATUS });
-	  cl->writeMsg(tmp_cl_str);
-    }
-  }
-  return (true);
-}
-
-template<typename T>
-bool	AccountController<T>::contactDeleteFct(UserManager<T> *cl) const {
-  UserManager<T> * tmp_cl = this->findUserByName(cl->getPacketData());
-  cl->writeStruct({ 0, cl->deleteUserAsFriend() });
-  if (tmp_cl) {
-    tmp_cl->writeStruct({static_cast<uint16_t>(cl->getName().size()),
-					       Enum::USER_DELETED});
-    tmp_cl->writeMsg(cl->getName());
-  }
-  return (true);
 }
 
 #if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
