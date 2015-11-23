@@ -1,21 +1,19 @@
 #pragma once
 # include <windows.h>
-# include "IThread.h"
+# include "IThread.hh"
 # include "Exceptions.h"
-
-typedef void	*(*thread_func)(void *);
 
 template <typename RET_VAL, typename ARG>
 class WinThread : public IThread<RET_VAL, ARG>
 {
 private:
 	HANDLE		_thread;
-	ThreadState _state;
+	Enum::ThreadState _state;
 	thread_func	_func;
 	void		*_arg;
 public:
   WinThread()
-    : _state(NONE), _func(0), _arg(0) { }
+    : _state(Enum::NIL), _func(0), _arg(0) { }
 
   virtual ~WinThread() { }
 
@@ -38,7 +36,7 @@ public:
 				   reinterpret_cast<LPTHREAD_START_ROUTINE>(&start),
 				   this, 0, 0)))
       throw ThreadException("Cannot create thread");
-    _state = RUNNING;
+    _state = Enum::RUNNING;
   }
 
   virtual void	join()
@@ -48,20 +46,12 @@ public:
     _state = DEAD;
   }
 
-  virtual void	kill(int exit_code = 0)
-  {
-    if (::TerminateThread(_thread, exit_code) == 0)
-      throw ThreadException("Cannot kill thread");
-    _state = DEAD;
-  }
-
-  virtual IThread	&loadFunc(RET_VAL(*p)(ARG))
+  virtual void	loadFunc(RET_VAL(*p)(ARG))
   {
     _func = reinterpret_cast<thread_func>(p);
-    return (*this);
   }
 
-  ThreadState	state() const
+  Enum::ThreadState	state() const
   {
     return (_state);
   }

@@ -15,6 +15,11 @@ namespace Enum
     WR_TO_RD,
   };
 
+  enum Protocol {
+    TCP = 1,
+    UDP
+  };
+
   enum  Flag {
     NONE = 0,
     READ = 1,
