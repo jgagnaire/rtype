@@ -2,15 +2,15 @@
 # include <signal.h>
 # include <unistd.h>
 # include <pthread.h>
-# include "IThread.h"
+# include "IThread.hh"
 
 template <typename RET_VAL, typename ARG>
 class UnixThread : public IThread<RET_VAL, ARG> {
 private:
-	pthread_t	_thread;
-	ThreadState	_state;
-	thread_func	_func;
-	void		*_arg;
+	pthread_t	        _thread;
+	Enum::ThreadState	_state;
+	thread_func	        _func;
+	void		        *_arg;
 public:
   UnixThread()
     : _state(Enum::NIL), _func(0), _arg(0) { }
@@ -47,19 +47,12 @@ public:
     return (ret_val);
   }
 
-  virtual void	kill(int sig)
-  {
-    if (::pthread_kill(_thread, sig) == -1)
-      throw ThreadException("Cannot kill thread");
-    _state = Enum::DEAD;
-  }
-
   virtual void	loadFunc(RET_VAL(*p)(ARG))
   {
     _func = reinterpret_cast<thread_func>(p);
   }
 
-  ThreadState	state() const
+  Enum::ThreadState	state() const
   {
     return (_state);
   }
