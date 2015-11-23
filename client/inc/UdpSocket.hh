@@ -3,8 +3,39 @@
 
 # include <SFML/Network.hpp>
 # include "IUdpSocket.hh"
+# include "IPacket.hh"
 
-class UdpSocket : IUdpSocket
+typedef struct s_UdpHeader : public Header
+{
+    uint16_t    size;
+    uint16_t    query;
+    uint64_t    id;
+} __attribute__((packed)) UdpHeader;
+
+class UdpPacket : public IPacket
+{
+    public:
+        UdpPacket() {}
+        virtual ~UdpPacket() {}
+
+        virtual uint16_t    getSize() const;
+        virtual uint16_t    getQuery() const;
+        virtual void        *getData() const;
+
+        virtual void        setSize(uint16_t size);
+        virtual void        setQuery(uint16_t query);
+        virtual void        setData(void *data);
+
+        virtual Header           &getHeader();
+        virtual const Header     &getHeader() const;
+        virtual uint64_t        getID() const;
+        virtual void            setID(uint64_t id);
+
+    private:
+        UdpHeader   _header;
+};
+
+class UdpSocket : public IUdpSocket
 {
     public:
         UdpSocket();

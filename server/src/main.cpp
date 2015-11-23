@@ -12,15 +12,15 @@ int main(int, char **av)
 {
   try {
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-    	  CreateDirectory("./server/.database", NULL);
-	  NetworkManager<SOCKET, AController<SOCKET> > netmgr(av[1]);
-	  netmgr.triggerConnection(&AController<SOCKET>::newConnection);
-	  netmgr.triggerNewData(&AController<SOCKET>::newData);
-	  netmgr.triggerClose(&AController<SOCKET>::closeConnection);
-	  netmgr.triggerTimeout(&AController<SOCKET>::timeout);
-	  netmgr.triggerAObserve(&AController<SOCKET>::timeout);
-	  netmgr << new AccountController<SOCKET>(netmgr.getClientList());
-	  netmgr << new ConversationController<SOCKET>(netmgr.getClientList());
+	CreateDirectory("./server/.database", NULL);
+	NetworkManager<SOCKET, AController<SOCKET> > netmgr(av[1]);
+	netmgr.triggerConnection(&AController<SOCKET>::newConnection);
+	netmgr.triggerNewData(&AController<SOCKET>::newData);
+	netmgr.triggerClose(&AController<SOCKET>::closeConnection);
+	netmgr.triggerTimeout(&AController<SOCKET>::timeout);
+	netmgr.triggerAObserve(&AController<SOCKET>::timeout);
+	netmgr << new AccountController<SOCKET>(netmgr.getClientList());
+	netmgr << new ConversationController<SOCKET>(netmgr.getClientList());
 #else
 
 	  mkdir("./server/.database", 0755);

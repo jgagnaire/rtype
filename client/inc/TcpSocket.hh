@@ -3,6 +3,34 @@
 
 # include <SFML/Network.hpp>
 # include "ITcpSocket.hh"
+# include "IPacket.hh"
+
+typedef struct s_TcpHeader : public Header
+{
+    uint16_t    size;
+    uint16_t    query;
+} TcpHeader;
+
+class TcpPacket : public IPacket
+{
+    public:
+        TcpPacket() {}
+        virtual ~TcpPacket() {}
+
+        virtual uint16_t    getSize() const;
+        virtual uint16_t    getQuery() const;
+        virtual void        *getData() const;
+
+        virtual void        setSize(uint16_t size);
+        virtual void        setQuery(uint16_t query);
+        virtual void        setData(void *data);
+
+        virtual Header           &getHeader();
+        virtual const Header     &getHeader() const;
+
+    private:
+        TcpHeader   _header;
+};
 
 class TcpSocket : public ITcpSocket
 {

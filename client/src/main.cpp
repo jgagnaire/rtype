@@ -1,28 +1,52 @@
 #include <iostream>
-#include <SFML/Graphics.hpp>
-#include "AnimatedSprite.hh"
-#include "Compenent.hh"
-#include "Entity.hh"
+#include "NetworkManager.hh"
+#include "UdpSocket.hh"
+#include "TcpSocket.hh"
 
-int main()
+int main(int ac, char **av)
 {
-    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-    AnimatedSprite   arbok;
+    NetworkManager nm;
+    UdpPacket tosend;
+    TcpPacket tosend2;
 
-    arbok.load("arbok.png", 87);
-    while (window.isOpen())
+    tosend.setID(1);
+    tosend.setData(const_cast<char*>("coucou"));
+    tosend.setSize(6);
+    tosend.setQuery(2);
+
+    tosend2.setData(const_cast<char*>("salut"));
+    tosend2.setSize(5);
+    tosend2.setQuery(3);
+    nm.send(tosend);
+    nm.send(tosend2);
+    while (1)
     {
-        sf::Event event;
-        while (window.pollEvent(event))
+        IPacket *tmp = nm.getPacket();
+        UdpPacket *udp = 0;
+        TcpPacket *tcp = 0;
+        if ((udp = dynamic_cast<UdpPacket*>(tmp)))
         {
-            if (event.type == sf::Event::Closed)
-                window.close();
+            std::cout << "Udp Packet" << std::endl
+                << "Id " << udp->getID()
+                << " query " << udp->getQuery()
+                << " size " << udp->getSize()
+                << " data [";
+            std::cout.flush();
+            std::cout.write(reinterpret_cast<char*>(udp->getData()), udp->getSize());
+            std::cout << "]" << std::endl;
+            nm.send(tosend);
         }
-        window.clear();
-        arbok.update();
-        window.draw(arbok);
-        window.display();
+        else if ((tcp = dynamic_cast<TcpPacket*>(tmp)))
+        {
+            std::cout << "Tcp Packet" << std::endl
+                << "query " << tcp->getQuery()
+                << " size " << tcp->getSize()
+                << " data [";
+            std::cout.flush();
+            std::cout.write(reinterpret_cast<char*>(tcp->getData()), tcp->getSize());
+            std::cout << "]" << std::endl;
+            nm.send(tosend2);
+        }
     }
-
     return 0;
 }

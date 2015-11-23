@@ -1,4 +1,0 @@
-Revoir tout le protocol Udp par ce que y a des datas (x,y/audio)
-Udp => ping pong inutile
-delete les relised
-c'est le serveur qui envoi la position
