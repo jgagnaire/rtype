@@ -7,14 +7,12 @@ void    *Event::getBuffer()
 
 bool     Event::isAccepted() const
 {
-    return _event.type == sf::Event::KeyPressed &&
-        _event.key.code == sf::Keyboard::Return;
+    return sf::Keyboard::isKeyPressed(sf::Keyboard::Return);
 }
 
 bool     Event::isRefused() const
 {
-    return _event.type == sf::Event::KeyPressed &&
-        _event.key.code == sf::Keyboard::Escape;
+    return sf::Keyboard::isKeyPressed(sf::Keyboard::Escape);
 }
 
 bool     Event::isCloseWindow() const
@@ -24,36 +22,30 @@ bool     Event::isCloseWindow() const
 
 bool     Event::isFire() const
 {
-    return _event.type == sf::Event::KeyPressed &&
-        _event.key.code == sf::Keyboard::Space;
+    return sf::Keyboard::isKeyPressed(sf::Keyboard::Space);
 }
 
 bool     Event::isRocket() const
 {
-    return _event.type == sf::Event::KeyPressed &&
-        _event.key.code == sf::Keyboard::V;
+    return sf::Keyboard::isKeyPressed(sf::Keyboard::V);
 }
 
 bool     Event::isLeft() const
 {
-    return _event.type == sf::Event::KeyPressed &&
-        _event.key.code == sf::Keyboard::Left;
+    return sf::Keyboard::isKeyPressed(sf::Keyboard::Left);
 }
 
 bool     Event::isRight() const
 {
-    return _event.type == sf::Event::KeyPressed &&
-        _event.key.code == sf::Keyboard::Right;
+    return sf::Keyboard::isKeyPressed(sf::Keyboard::Right);
 }
 
 bool     Event::isUp() const
 {
-    return _event.type == sf::Event::KeyPressed &&
-        _event.key.code == sf::Keyboard::Up;
+    return sf::Keyboard::isKeyPressed(sf::Keyboard::Up);
 }
 
 bool     Event::isDown() const
 {
-    return _event.type == sf::Event::KeyPressed &&
-        _event.key.code == sf::Keyboard::Down;
+    return sf::Keyboard::isKeyPressed(sf::Keyboard::Down);
 }
