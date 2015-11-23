@@ -3,10 +3,9 @@
 
 class AudioCall
 {
+public:
   AudioCall();
-  ~AucioCall();
-
-
+  ~AudioCall();
 };
 
-#endif // !AUDIOCAL_HH_
+#endif //!AUDIOCALL_HH_
