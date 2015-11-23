@@ -6,8 +6,8 @@
 #include "Enum.hh"
 #include "IThreadPool.hh"
 
-template <typename RET_VAL, typename ARGS>
-class ThreadPool : public IThreadPool<ARGS> {
+template <typename RET_VAL, typename ARG>
+class ThreadPool : public IThreadPool<RET_VAL, ARG> {
 public:
     ThreadPool() {}
 
@@ -16,7 +16,7 @@ public:
     virtual size_t getIdleThreadNumber() const {
         size_t i = 0;
         for (auto it = _threads.begin(); it != _threads.end(); ++it) {
-            i = ((*it)->state() == Enum::RUNNING);
+            i += ((*it)->state() == Enum::RUNNING);
         }
         return (i);
     }
@@ -26,8 +26,8 @@ public:
             _threads[id]->join();
     }
 
-    virtual size_t newThread(ARGS arg, thread_func f) {
-        IThread<RET_VAL, ARGS>  *thr = Thread::create<RET_VAL, ARGS>();
+    virtual size_t add(RET_VAL(*f)(ARG), ARG arg) {
+        IThread<RET_VAL, ARG>  *thr = Thread::create<RET_VAL, ARG>();
         thr->loadFunc(f);
         _threads.push_back(thr);
         _args.push_back(arg);
@@ -43,13 +43,13 @@ public:
             _threads[id]->create(_args[id]);
     }
 
-    virtual void startAll(size_t id) {
+    virtual void startAll() {
         for (int i = 0; i < _threads.size(); ++i) { _threads[i]->create(_args[i]); }
     }
 
 private:
-    std::vector<IThread<RET_VAL, ARGS> *>   _threads;
-    std::vector<ARGS>                       _args;
+    std::vector<IThread<RET_VAL, ARG> *>   _threads;
+    std::vector<ARG>                       _args;
 };
 
 

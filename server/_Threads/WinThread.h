@@ -7,10 +7,11 @@ template <typename RET_VAL, typename ARG>
 class WinThread : public IThread<RET_VAL, ARG>
 {
 private:
-	HANDLE		_thread;
-	Enum::ThreadState _state;
-	thread_func	_func;
-	void		*_arg;
+	HANDLE		                                  _thread;
+	Enum::ThreadState                             _state;
+    typename IThread<RET_VAL, ARG>::thread_func	  _func;
+    ARG 		                                  _arg;
+
 public:
   WinThread()
     : _state(Enum::NIL), _func(0), _arg(0) { }
@@ -19,17 +20,17 @@ public:
 
   static void	*start(LPVOID arg)
   {
-    WinThread<RET_VAL, ARG>	*t;
-    void	*ret;
-    void	*tmp;
+    WinThread<RET_VAL, ARG>   *t;
+    void	                  *tmp;
 
     t = static_cast<WinThread<RET_VAL, ARG> *>(arg);
     tmp = t->_arg;
-    ret = t->_func(tmp);
-    return (ret);
+    t->_func(*tmp);
+    t->terminateThread();
+    return (NULL);
   }
 
-  virtual void	create(void *arg)
+  virtual void	create(ARG *arg)
   {
     _arg = arg;
     if (!(_thread = ::CreateThread(0, 0,
@@ -48,11 +49,15 @@ public:
 
   virtual void	loadFunc(RET_VAL(*p)(ARG))
   {
-    _func = reinterpret_cast<thread_func>(p);
+    _func = reinterpret_cast<typename IThread<RET_VAL, ARG>::thread_func>(p);
   }
 
-  Enum::ThreadState	state() const
+  virtual Enum::ThreadState	state() const
   {
     return (_state);
   }
+
+    void terminateThread() {
+      _state = Enum::DEAD;
+    }
 };
