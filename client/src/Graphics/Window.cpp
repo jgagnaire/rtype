@@ -1,4 +1,5 @@
 #include "Graphics/Window.hh"
+#include "Graphics/ADrawable.hh"
 
 Window::Window():
     _window(sf::VideoMode::getDesktopMode(), "Hair tip")
@@ -34,11 +35,14 @@ bool  Window::getEvent(IEvent &event)
     return _window.pollEvent(*e);
 }
 
-void  Window::draw(IDrawable &drawable)
+void  Window::draw(Entity &e)
 {
-    for (auto &x : drawable.getBuffer())
+    std::vector<ADrawable*> vec = e.manager.getAll<ADrawable*>();
+
+    for (std::vector<ADrawable*>::iterator it = vec.begin();
+            it != vec.end(); ++it)
     {
-        const sf::Drawable *d = static_cast<const sf::Drawable *>(x);
+        const sf::Drawable *d = static_cast<const sf::Drawable *>((*it)->getBuffer());
         _window.draw(*d);
     }
 }
