@@ -74,6 +74,8 @@ int main(int ac, char **av)
                     std::cout << "I Accept" << std::endl;
             }
             delete e;
+            win->clear();
+            win->display();
         }
         delete win;
     }

@@ -1,7 +1,7 @@
 #ifndef WINDOW_HH_
 #define WINDOW_HH_
 
-# include <SFML/Window.hpp>
+# include <SFML/Graphics.hpp>
 # include "Graphics/IWindow.hh"
 
 class Window : public IWindow
@@ -12,10 +12,12 @@ class Window : public IWindow
 
         virtual bool    isOpen() const;
         virtual void    close();
+        virtual void    clear();
+        virtual void    display();
         virtual bool    getEvent(IEvent &);
 
     private:
-        sf::Window              _window;
+        sf::RenderWindow       _window;
 };
 
 #endif /* ifndef WINDOW_HH_ */

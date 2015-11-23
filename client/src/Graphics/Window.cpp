@@ -12,6 +12,16 @@ void    Window::close()
     _window.close();
 }
 
+void    Window::clear()
+{
+    _window.clear();
+}
+
+void    Window::display()
+{
+     _window.display();
+}
+
 bool    Window::isOpen() const
 {
     return _window.isOpen();
