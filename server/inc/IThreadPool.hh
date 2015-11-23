@@ -2,7 +2,7 @@
 #include "Thread.h"
 
 template<typename T>
-class AThreadPool {
+class IThreadPool {
   virtual int	startAll() = 0;
   virtual bool	start(T thread_id) = 0;
   virtual bool	waitAll() = 0;
