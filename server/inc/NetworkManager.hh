@@ -4,17 +4,19 @@
 # include <cstdlib>
 # include <list>
 # include <vector>
-# include "UserManager.h"
-# include "Enum.h"
+# include "UserManager.hh"
+# include "Enum.hh"
 
 # if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-#  include "WinServerMonitor.h"
-#  include "WinServerSocket.h"
-#  include "WinSocketSet.h"
+#  include "WinServerMonitor.hh"
+#  include "WinServerSocket.hh"
+#  include "WinTCPSocketSet.hh"
+#  include "WinUDPSocketSet.hh"
 # else
-#  include "UnixServerMonitor.h"
-#  include "UnixServerSocket.h"
-#  include "UnixSocketSet.h"
+#  include "UnixServerMonitor.hh"
+#  include "UnixServerSocket.hh"
+#  include "UnixTCPSocketSet.hh"
+#  include "UnixUDPSocketSet.hh"
 # endif
 
 template <typename SCK, typename CONTROLLER>
@@ -29,7 +31,7 @@ class NetworkManager
 private:
   std::vector<monitor_ptr> monitor_action;
 public:
-  NetworkManager(char *port) : newConnection(NULL), closeConnection(NULL),
+  NetworkManager(char *port, Enum::Protocol p = Enum::TCP) : newConnection(NULL), closeConnection(NULL),
 			       timeout(NULL), aobs(NULL) {
     monitor_action.push_back(&NetworkManager::readAction);
     monitor_action.push_back(&NetworkManager::writeAction);
@@ -39,12 +41,18 @@ public:
 
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
     this->network_monitor = new WinServerMonitor();
-    this->srvset = new WinSocketSet(!port ? 6660 : std::atoi(port));
+    if (static_cast<int>(Enum::Enum::TCP) & static_cast<int>(p))
+      this->srvset[Enum::TCP_INDEX] = new WinTCPSocketSet(!port ? 1119 : std::atoi(port));
+    if (static_cast<int>(Enum::Enum::UDP}) & static_cast<int>(p))
+      this->srvset[Enum::UDP_INDEX] = new WinUDPSocketSet(!port ? 1725 : std::atoi(port));
 #else
     this->network_monitor = new UnixServerMonitor();
-    this->srvset = new UnixSocketSet(!port ? 6660 : std::atoi(port));
+    if (static_cast<int>(Enum::Enum::TCP) & static_cast<int>(p))
+      this->srvset[Enum::TCP_INDEX] = new UnixTCPSocketSet(!port ? 1119 : std::atoi(port));
+    if (static_cast<int>(Enum::Enum::UDP) & static_cast<int>(p))
+      this->srvset[Enum::UDP_INDEX] = new UnixUDPSocketSet(!port ? 1725 : std::atoi(port));
 #endif
-    this->network_monitor->addFd(dynamic_cast<IServerSocket<SCK>*>(this->srvset),
+    this->network_monitor->addFd(dynamic_cast<IServerSocket<SCK>*>(this->srvset[Enum::TCP_INDEX]),
 				 static_cast<Enum::Flag>(Enum::ACCEPT));
   }
   ~NetworkManager() {}
@@ -89,9 +97,9 @@ public:
   }
 
   void	checkObserver() {
-    if (this->network_monitor->isObserved(dynamic_cast<IServerSocket<SCK>*>(this->srvset),
+    if (this->network_monitor->isObserved(dynamic_cast<IServerSocket<SCK>*>(this->srvset[Enum::TCP_INDEX]),
 					  Enum::ACCEPT)) {
-      IServerSocket<SCK>	*tmp = this->srvset->absAcceptNewClient();
+      IServerSocket<SCK>	*tmp = this->srvset[Enum::TCP_INDEX]->absAcceptNewClient();
 
       if (!tmp)
 	return ;
@@ -187,7 +195,7 @@ private:
   inline bool	connectAction(UserManager<SCK> *) { return (true); }
 
   IServerMonitor<SCK>		*network_monitor;
-  ISocketSet<SCK>		*srvset;
+  ISocketSet<SCK>		*srvset[2];
   std::list<UserManager<SCK> *>	cl_list;
   std::list<CONTROLLER *>	controllers;
 
