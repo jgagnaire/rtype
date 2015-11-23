@@ -4,7 +4,8 @@
 #include "TcpSocket.hh"
 #include "Graphics/Window.hh"
 #include "Graphics/Event.hh"
-#include "Scenes/IntroScene.hh"
+#include "Entity/Entity.hh"
+#include "Component/Component.hh"
 
 int main(int ac, char **av)
 {
@@ -15,6 +16,14 @@ int main(int ac, char **av)
             << "2 : Graphics" << std::endl;
         return 0;
     }
+    Entity e;
+
+    e.manager.add<int>("Bites", 42);
+    e.manager.add<int>("Couilles", 21);
+    e.manager.add<int>("Chatte", 84);
+    e.manager.add<std::string>("Bites", "j'aime les queues");
+    e.manager.getAll<int>();
+
     if (av[1][0] == '1')
     {
         NetworkManager nm;
@@ -64,7 +73,6 @@ int main(int ac, char **av)
     else if (av[1][0] == '2')
     {
         IWindow *win = new Window();
-        IntroScene  scene;
         while (win->isOpen())
         {
             IEvent *e = new Event();
@@ -77,8 +85,6 @@ int main(int ac, char **av)
             }
             delete e;
             win->clear();
-            scene.update();
-            win->draw(scene);
             win->display();
         }
         delete win;
