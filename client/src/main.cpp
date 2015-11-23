@@ -5,7 +5,7 @@
 #include "Graphics/Window.hh"
 #include "Graphics/Event.hh"
 #include "Entity/Entity.hh"
-#include "Compenent/Compenent.hh"
+#include "Component/Component.hh"
 
 int main(int ac, char **av)
 {

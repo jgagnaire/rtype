@@ -3,13 +3,13 @@
 
 #include <string>
 
-class ICompenent
+class IComponent
 {
 public:
-  ICompenent(const std::string& type, const std::string& name) : _type(type), _name(name)
+  IComponent(const std::string& type, const std::string& name) : _type(type), _name(name)
   {}
   
-  virtual ~ICompenent()
+  virtual ~IComponent()
   {
   }
 

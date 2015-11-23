@@ -1,19 +1,19 @@
 #ifndef COMPENENT_H_
 # define COMPENENT_H_
 
-#include "Compenent/ICompenent.hh"
+#include "Component/IComponent.hh"
 #include <typeinfo>
 
 template<typename Type>
-class Compenent : public ICompenent
+class Component : public IComponent
 {
 public:
-  Compenent(const std::string& name, Type value) : ICompenent(typeid(Type).name(), name) 
+  Component(const std::string& name, Type value) : IComponent(typeid(Type).name(), name) 
   {
     _value = new Type(value);
   }
   
-  virtual ~Compenent() {}
+  virtual ~Component() {}
 
   inline void	setValue(Type &value) {
     _value = value;

@@ -1,7 +1,7 @@
 #ifndef ENTITY_H_
 # define ENTITY_H_
 
-#include "Entity/CompenentManager.hh"
+#include "Entity/ComponentManager.hh"
 
 class Entity
 {
@@ -11,7 +11,7 @@ public:
 
   void			update() {}
 
-  CompenentManager	manager;
+  ComponentManager	manager;
 };
 
 #endif //ENTITY_H_
