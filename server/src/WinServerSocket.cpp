@@ -31,12 +31,13 @@ int WinServerSocket::absReadFromClient(char *&to_fill, unsigned size, std::strin
 	DWORD read_size = 0;
 	DWORD flags = 0;
 	sockaddr_in from;
+	int from_size = sizeof(from);
 
 	wsabuf.buf = new char[size];
 	wsabuf.len = size;
 	if ((::WSARecvFrom(this->sock, &wsabuf, 1, &read_size,
-		&flags, reinterpret_cast<struct sockaddr *>(&from), sizeof(from),
-					   NULL, NULL) == SOCKET_ERROR)
+		&flags, reinterpret_cast<struct sockaddr *>(&from), &from_size,
+					   0, 0) == SOCKET_ERROR)
 		&& (WSAGetLastError() != WSAEINTR))
 	  {
 	    delete wsabuf.buf;
@@ -65,7 +66,7 @@ bool WinServerSocket::absWriteOnClient(char *to_write, size_t size,
 		to = new sockaddr_in;
 		to->sin_family = AF_INET;
 		to->sin_port = ::htons(static_cast<uint16_t>(std::stoi(port)));
-		::inet_aton(ip.c_str(), reinterpret_cast<in_addr *>(&to->sin_addr.s_addr));
+		::inet_pton(AF_INET, ip.c_str(), reinterpret_cast<in_addr *>(&to->sin_addr.s_addr));
 	}
 	wsabuf.len = size;
 	wsabuf.buf = new char[size];

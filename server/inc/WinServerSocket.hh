@@ -2,9 +2,11 @@
 # define WINSERVERSOCKET_H_
 
 # include <winsock2.h>
+# include <Ws2tcpip.h>
 # include <iostream>
 # include <cstring>
 # include <string>
+# include <cstdint>
 # include "IServerSocket.hh"
 # include "ServerError.hh"
 

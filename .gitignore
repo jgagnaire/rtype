@@ -29,3 +29,5 @@ server_rtype.exe
 *.obj
 *.log
 *.tlog
+*.pdb
+*.DS_Store*.opensdf

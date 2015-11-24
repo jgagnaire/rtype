@@ -15,16 +15,16 @@ bool            TcpSocket::connect(const std::string &ip,
 
 std::size_t     TcpSocket::send(const void *buf, std::size_t size)
 {
-    std::size_t sended;
-    _socket.send(buf, size, sended);
-    return (sended);
+    std::size_t sent;
+    _socket.send(buf, size, sent);
+    return (sent);
 }
 
 std::size_t     TcpSocket::receive(void *buf, std::size_t size)
 {
-    std::size_t readed;
-    _socket.receive(buf, size, readed);
-    return (readed);
+    std::size_t read;
+    _socket.receive(buf, size, read);
+    return (read);
 }
 
 Header   &TcpPacket::getHeader()
