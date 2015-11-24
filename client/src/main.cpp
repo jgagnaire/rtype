@@ -27,12 +27,17 @@ int main(int ac, char **av)
 
     AnimatedSprite  title;
     title.load("client/res/menu/rtype-title_835.png", true);
-    title.setPosition(sf::Vector2f(542, 50));
+    title.setPosition(sf::Vector2f(542, 100));
     e.manager.add<ADrawable*>("tmp1", &title);
+
+    AnimatedSprite  arrow;
+    arrow.load("client/res/menu/arrow_334.png");
+    arrow.setPosition(sf::Vector2f(1500, 900));
+    e.manager.add<ADrawable*>("tmp2", &arrow);
 
     AnimatedSprite  background;
     background.load("client/res/menu/background_1920.png");
-    e.manager.add<ADrawable*>("tmp2", &background);
+    e.manager.add<ADrawable*>("tmp3", &background);
 
     if (av[1][0] == '1')
     {
