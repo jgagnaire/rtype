@@ -1,8 +1,7 @@
 #include <iostream>
-#include "AccountController.h"
-#include "ConversationController.h"
-#include "NetworkManager.h"
-#include "ServerError.h"
+#include "AccountController.hh"
+#include "NetworkManager.hh"
+#include "ServerError.hh"
 
 #if !(defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64))
 # include <sys/stat.h>
@@ -19,10 +18,8 @@ int main(int, char **av)
 	netmgr.triggerClose(&AController<SOCKET>::closeConnection);
 	netmgr.triggerTimeout(&AController<SOCKET>::timeout);
 	netmgr.triggerAObserve(&AController<SOCKET>::timeout);
-	netmgr << new AccountController<SOCKET>(netmgr.getClientList());
-	netmgr << new ConversationController<SOCKET>(netmgr.getClientList());
+	netmgr.addController(new AccountController<SOCKET>(netmgr.getClientList()));
 #else
-
 	  mkdir("./server/.database", 0755);
 	  NetworkManager<int, AController<int> > netmgr(av[1]);
 	  netmgr.triggerConnection(&AController<int>::newConnection);
@@ -30,8 +27,7 @@ int main(int, char **av)
 	  netmgr.triggerClose(&AController<int>::closeConnection);
 	  netmgr.triggerTimeout(&AController<int>::timeout);
 	  netmgr.triggerAObserve(&AController<int>::timeout);
-	  netmgr << new AccountController<int>(netmgr.getClientList());
-	  netmgr << new ConversationController<int>(netmgr.getClientList());
+	  netmgr.addController(new AccountController<int>(netmgr.getClientList()));
 #endif
 	netmgr.launch();
   }

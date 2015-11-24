@@ -3,7 +3,7 @@
 
 class UnixTCPSocketSet : public UnixSocketSet {
 public:
-  UnixTCPSocketSet();
+  UnixTCPSocketSet(unsigned short);
   virtual IServerSocket<int> *absAcceptNewClient();
   virtual ~UnixTCPSocketSet() {}
 };

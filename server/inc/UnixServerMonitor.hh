@@ -4,9 +4,9 @@
 # include <sys/types.h>
 # include <unistd.h>
 # include <signal.h>
-# include "UnixServerSocket.h"
-# include "IServerMonitor.h"
-# include "Enum.h"
+# include "UnixServerSocket.hh"
+# include "IServerMonitor.hh"
+# include "Enum.hh"
 
 class UnixServerMonitor : public IServerMonitor<int> {
 public:

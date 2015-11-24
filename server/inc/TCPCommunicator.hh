@@ -3,32 +3,51 @@
 
 # include "ACommunicator.hh"
 
+# if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+#  include "WinServerMonitor.hh"
+#  include "WinTCPSocketSet.hh"
+# else
+#  include "UnixServerMonitor.hh"
+#  include "UnixTCPSocketSet.hh"
+# endif
+
 template <typename USER, typename CONTROLLER,
         typename MONITOR, typename SCK>
-class TCPCommunicator : public ICommunicator<USER, CONTROLLER, MONITOR, SCK> {
+class TCPCommunicator : public ACommunicator<USER, CONTROLLER, MONITOR, SCK> {
 private:
-    ISocketSet<SCK>		    *srvset;
     typedef bool	(TCPCommunicator::*monitor_ptr)(USER *);
     std::vector<monitor_ptr> monitor_action;
 public:
-    TCPCommunicator() {
+    TCPCommunicator(char *port) {
         monitor_action.push_back(&TCPCommunicator::readAction);
         monitor_action.push_back(&TCPCommunicator::writeAction);
         monitor_action.push_back(&TCPCommunicator::acceptAction);
         monitor_action.push_back(&TCPCommunicator::connectAction);
         monitor_action.push_back(&TCPCommunicator::closeAction);
-    }
-    virtual void	launch() {
-        for (;;) {
-            for (auto cli = cl_list.begin(); cli != cl_list.end();) {
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-                while (!(*cli)->sendStructEmpty()) {
-	 if (!(*cli)->writeOnMe()) {
-	    deleteClient(cli);
-	    break;
-	  }
+        this->srvset = new WinTCPSocketSet(!port ? 1119 : std::atoi(port));
+        this->network_monitor = new WinServerMonitor();
+#else
+        this->srvset = new UnixTCPSocketSet(!port ? 1119 : std::atoi(port));
+        this->network_monitor = new UnixServerMonitor();
+#endif
+        this->network_monitor->addFd(dynamic_cast<IServerSocket<SCK>*>(this->srvset),
+                                     static_cast<Enum::Flag>(Enum::ACCEPT));
+    }
 
-	}
+    virtual ~TCPCommunicator() {}
+
+    virtual void	launch(std::list<USER*> *clients) {
+      this->cl_list = clients;
+      for (;;) {
+	for (auto cli = this->cl_list->begin(); cli != this->cl_list->end();) {
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+	  while (!(*cli)->sendStructEmpty()) {
+	    if (!(*cli)->writeOnMe()) {
+	      deleteClient(cli);
+	      break;
+	    }
+	  }
 #else
     if (!(*cli)->sendStructEmpty()) {
         this->network_monitor->setObserver((*cli)->getServerSocket(),
@@ -38,51 +57,51 @@ public:
     }
 #endif
                 ++cli;
-            }
-            this->network_monitor->setTimeval(1, 0);
-            if ((this->network_monitor->observerFds() == 0) &&
-                (timeout))
-                timeoutAction();
-            else
-                checkObserver();
-        }
+	}
+	this->network_monitor->setTimeval(1, 0);
+	if ((this->network_monitor->observerFds() == 0) &&
+	    (this->timeout))
+	  this->timeoutAction();
+	else
+	  this->checkObserver();
+      }
     }
-};
 
-void	deleteClient(typename std::list<USER *>::iterator &cli) {
+  void	deleteClient(typename std::list<USER *>::iterator &cli) {
     this->network_monitor->closeFd((*cli)->getServerSocket());
-    ((controllers.front())->*closeConnection)(*cli);
+    ((this->controllers.front())->*(this->closeConnection))(*cli);
     delete *cli;
     *cli = NULL;
-    cl_list.erase(cli);
-}
+    this->cl_list->erase(cli);
+  }
 
-void	checkObserver() {
+  void	checkObserver() {
     if (this->network_monitor->isObserved(dynamic_cast<IServerSocket<SCK>*>(this->srvset),
                                           Enum::ACCEPT)) {
-        IServerSocket<SCK>	*tmp = this->srvset->absAcceptNewClient();
+      IServerSocket<SCK>	*tmp = this->srvset->absAcceptNewClient();
 
-        if (!tmp)
-            return ;
-        cl_list.push_back(new UserManager<SCK>(tmp));
-        if (newConnection)
-            for (auto it = controllers.begin(); it != controllers.end(); ++it)
-                ((*it)->*newConnection)(cl_list.back());
-        this->network_monitor->addFd(dynamic_cast<IServerSocket<SCK>*>(cl_list.back()->getServerSocket()),
-                                     static_cast<Enum::Flag>(Enum::READ | Enum::WRITE | Enum::CLOSE));
-        return ;
+      if (!tmp)
+	return ;
+      this->cl_list->push_back(new UserManager<SCK>(tmp));
+      if (this->newConnection)
+	for (auto it = this->controllers.begin(); it != this->controllers.end(); ++it)
+	  ((*it)->*(this->newConnection))(this->cl_list->back());
+      this->network_monitor->addFd(dynamic_cast<IServerSocket<SCK>*>(this->cl_list->back()->getServerSocket()),
+				   static_cast<Enum::Flag>(Enum::READ | Enum::WRITE | Enum::CLOSE));
+      return ;
     }
-    for (auto cli = cl_list.begin(); cli != cl_list.end(); ++cli) {
-        for (int f = 0; (1 << f) <= Enum::CLOSE; ++f) {
-            if (this->network_monitor->isObserved((*cli)->getServerSocket(),
-                                                  static_cast<Enum::Flag>(1 << f))) {
-                if (!(this->*monitor_action[f])(*cli))
-                    return (deleteClient(cli));
-            }
-        }
+    for (auto cli = this->cl_list->begin(); cli != this->cl_list->end(); ++cli) {
+      for (int f = 0; (1 << f) <= Enum::CLOSE; ++f) {
+	if (this->network_monitor->isObserved((*cli)->getServerSocket(),
+					      static_cast<Enum::Flag>(1 << f))) {
+	  if (!(this->*(this->monitor_action)[f])(*cli))
+	    return (this->deleteClient(cli));
+	}
+      }
     }
-    if (aobs)
-        afterObserveAction();
-}
+    if (this->aobs)
+      this->afterObserveAction();
+  }
+};
 
 #endif

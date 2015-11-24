@@ -1,5 +1,5 @@
 #include <algorithm>
-#include "UserManager.h"
+#include "UserManager.hh"
 
 template<typename T>
 const std::string UserManager<T>::database_dir = "./server/.database/.%_data";

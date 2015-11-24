@@ -17,3 +17,4 @@ serveur_rtype
 client/cmake_install.cmake
 server/cmake_install.cmake
 cmake_install.cmake
+.idea/

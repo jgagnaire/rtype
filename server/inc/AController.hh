@@ -1,9 +1,9 @@
 #pragma once
 # include <list>
 # include <time.h>
-# include "Enum.h"
-# include "UserManager.h"
-# include "IServerMonitor.h"
+# include "Enum.hh"
+# include "UserManager.hh"
+# include "IServerMonitor.hh"
 
 template<typename T>
 class AController {

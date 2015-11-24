@@ -6,8 +6,8 @@
 # include <unistd.h>
 # include <errno.h>
 # include <netdb.h>
-# include "IServerSocket.h"
-# include "ServerError.h"
+# include "IServerSocket.hh"
+# include "ServerError.hh"
 
 class UnixServerSocket : public IServerSocket<int>
 {

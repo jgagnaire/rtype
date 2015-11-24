@@ -1,11 +1,11 @@
 #pragma once
-# include "AController.h"
+# include "AController.hh"
 
 template<typename T>
 class AccountController : public AController<T> {
 public:
   typedef bool	(AccountController<T>::*proto_fptr)(UserManager<T> *) const;
-  AccountController(std::list<UserManager<T> *> &);
+  AccountController(std::list<UserManager<T> *> *);
 
   virtual ~AccountController() {}
 

@@ -11,17 +11,14 @@
 # include <iostream>
 # include <time.h>
 # include <list>
-# include "Enum.h"
-# include "Packet.h"
-# include "IServerSocket.h"
+# include "Enum.hh"
+# include "Packet.hh"
+# include "IServerSocket.hh"
 # if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined (_WIN64)
-#  include "WinServerSocket.h"
+#  include "WinServerSocket.hh"
 # else
-#  include "UnixServerSocket.h"
+#  include "UnixServerSocket.hh"
 # endif
-
-template <typename T>
-class UserManager;
 
 template <typename T>
 class UserManager
