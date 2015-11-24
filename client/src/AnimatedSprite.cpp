@@ -2,7 +2,10 @@
 #include "AnimatedSprite.hh"
 
 AnimatedSprite::AnimatedSprite():
-    _current(0) {}
+    _current(0)
+{
+    _buffer = this;
+}
 
 AnimatedSprite::~AnimatedSprite()
 {}

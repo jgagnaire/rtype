@@ -6,6 +6,7 @@
 #include "Graphics/Event.hh"
 #include "Entity/Entity.hh"
 #include "Component/Component.hh"
+#include "AnimatedSprite.hh"
 
 int main(int ac, char **av)
 {
@@ -22,7 +23,9 @@ int main(int ac, char **av)
     e.manager.add<int>("Couilles", 21);
     e.manager.add<int>("Chatte", 84);
     e.manager.add<std::string>("Bites", "j'aime les queues");
-    e.manager.getAll<int>();
+    AnimatedSprite  arbok;
+    arbok.load("arbok.png", 87);
+    e.manager.add<ADrawable*>("body", &arbok);
 
     if (av[1][0] == '1')
     {
@@ -75,16 +78,17 @@ int main(int ac, char **av)
         IWindow *win = new Window();
         while (win->isOpen())
         {
-            IEvent *e = new Event();
-            while (win->getEvent(*e))
+            IEvent *event = new Event();
+            while (win->getEvent(*event))
             {
-                if (e->isCloseWindow())
+                if (event->isCloseWindow())
                     win->close();
-                if (e->isAccepted())
+                if (event->isAccepted())
                     std::cout << "I Accept" << std::endl;
             }
-            delete e;
+            delete event;
             win->clear();
+            win->draw(e);
             win->display();
         }
         delete win;
