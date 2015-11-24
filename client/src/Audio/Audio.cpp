@@ -12,6 +12,7 @@ Audio::~Audio()
 void	Audio::startThread(Audio *obj)
 {
   obj->startAudio();
+  
 }
 
 void	Audio::startAudio()
