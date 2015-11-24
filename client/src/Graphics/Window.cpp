@@ -3,7 +3,7 @@
 #include "Graphics/AView.hh"
 
 Window::Window():
-    _window(sf::VideoMode(1280, 720), "Hair tip")
+    _window(sf::VideoMode(1280, 720), "Pede")
 {}
 
 Window::~Window()
