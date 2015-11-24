@@ -44,7 +44,7 @@ void    AnimatedSprite::update()
 {
     if (_sprites.empty())
         return ;
-    int mill = _clock.getElapsedTime().asMilliseconds();
+    unsigned int mill = _clock.getElapsedTime().asMilliseconds();
     if (mill > 1000 / _frameBySec)
     {
         if (_random)
@@ -62,4 +62,9 @@ void    AnimatedSprite::draw(sf::RenderTarget &target,
     if (_sprites.empty())
         return ;
     target.draw(_sprites[_current], states);
+}
+
+const sf::Vector2f &AnimatedSprite::getPosition() const
+{
+    return _position;
 }

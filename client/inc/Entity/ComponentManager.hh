@@ -2,6 +2,7 @@
 # define COMPENENTMANAGER_H_
 
 #include "Component/Component.hh"
+#include "Entity/ManagerException.hh"
 #include <unordered_map>
 #include <vector>
 #include <iostream>
@@ -22,6 +23,8 @@ class ComponentManager
                     tmp = new Component<Type>(name, value);
                     compenents[name] = tmp;
                 }
+                else
+                    throw ComponentManagerException("Component already exist");
             }
 
         template<typename Type>
@@ -32,6 +35,8 @@ class ComponentManager
                     if (compenents[name]->getType() == typeid(Type).name())
                         static_cast<Component<Type>*>(compenents[name])->setValue(value);
                 }
+                else
+                    throw ComponentManagerException("Component doesn't exist");
             }
 
         template<typename Type>
@@ -42,6 +47,7 @@ class ComponentManager
                     if (compenents[name]->getType() == typeid(Type).name())
                         return (static_cast<Component<Type>*>(compenents[name])->getValue());
                 }
+                throw ComponentManagerException("No such component to get");
             }
 
         template<typename Type>

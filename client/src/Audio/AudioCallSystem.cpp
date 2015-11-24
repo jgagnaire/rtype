@@ -32,6 +32,8 @@ void AudioCallSystem::addPacket(sf::SoundBuffer *buffer)
 
 bool AudioCallSystem::in(UdpPacket &packet)
 {
+	static_cast<void>(packet);
+	return true; //Temporary
 }
 
 UdpPacket *AudioCallSystem::out()
