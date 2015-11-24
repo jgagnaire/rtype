@@ -1,7 +1,9 @@
 #include "Graphics/Window.hh"
+#include "Graphics/ADrawable.hh"
+#include "Graphics/AView.hh"
 
 Window::Window():
-    _window(sf::VideoMode::getDesktopMode(), "Hair tip")
+    _window(sf::VideoMode(1280, 720), "Hair tip")
 {}
 
 Window::~Window()
@@ -34,11 +36,15 @@ bool  Window::getEvent(IEvent &event)
     return _window.pollEvent(*e);
 }
 
-void  Window::draw(IDrawable &drawable)
+void  Window::draw(Entity &e)
 {
-    for (auto &x : drawable.getBuffer())
+    std::vector<ADrawable*> vec = e.manager.getAll<ADrawable*>();
+
+    _window.setView(*(static_cast<const sf::View*>(e.manager.get<AView*>("view")->getBuffer())));
+    for (std::vector<ADrawable*>::iterator it = vec.begin();
+            it != vec.end(); ++it)
     {
-        const sf::Drawable *d = static_cast<const sf::Drawable *>(x);
+        const sf::Drawable *d = static_cast<const sf::Drawable *>((*it)->getBuffer());
         _window.draw(*d);
     }
 }

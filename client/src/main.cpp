@@ -1,13 +1,18 @@
 #include <iostream>
+#include <cstdint>
 #include "NetworkManager.hh"
 #include "UdpSocket.hh"
 #include "TcpSocket.hh"
 #include "Graphics/Window.hh"
 #include "Graphics/Event.hh"
-#include "Scenes/IntroScene.hh"
+#include "Entity/Entity.hh"
+#include "Component/Component.hh"
+#include "AnimatedSprite.hh"
+#include "Graphics/View.hh"
 
 int main(int ac, char **av)
 {
+    std::srand(std::time(0));
     if (ac == 1)
     {
         std::cout << "Please put a argument : " << std::endl
@@ -15,6 +20,20 @@ int main(int ac, char **av)
             << "2 : Graphics" << std::endl;
         return 0;
     }
+    Entity e;
+
+    View            view;
+    e.manager.add<AView*>("view", &view);
+
+    AnimatedSprite  title;
+    title.load("client/res/menu/rtype-title_835.png", true);
+    title.setPosition(sf::Vector2f(542, 50));
+    e.manager.add<ADrawable*>("tmp1", &title);
+
+    AnimatedSprite  background;
+    background.load("client/res/menu/background_1920.png");
+    e.manager.add<ADrawable*>("tmp2", &background);
+
     if (av[1][0] == '1')
     {
         NetworkManager nm;
@@ -64,21 +83,23 @@ int main(int ac, char **av)
     else if (av[1][0] == '2')
     {
         IWindow *win = new Window();
-        IntroScene  scene;
         while (win->isOpen())
         {
-            IEvent *e = new Event();
-            while (win->getEvent(*e))
+            IEvent *event = new Event();
+            while (win->getEvent(*event))
             {
-                if (e->isCloseWindow())
+                if (event->isCloseWindow())
                     win->close();
-                if (e->isAccepted())
+                if (event->isAccepted())
                     std::cout << "I Accept" << std::endl;
             }
-            delete e;
+            delete event;
             win->clear();
-            scene.update();
-            win->draw(scene);
+            for (auto x : e.manager.getAll<ADrawable*>())
+            {
+                 x->update();
+            }
+            win->draw(e);
             win->display();
         }
         delete win;
