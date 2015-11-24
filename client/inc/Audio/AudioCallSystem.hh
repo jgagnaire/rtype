@@ -1,5 +1,5 @@
-#ifndef AUDIOCALL_HH_
-# define AUDIOCALL_HH_
+#ifndef AUDIOCALLSYSTEM_HH_
+# define AUDIOCALLSYSTEM_HH_
 
 #include <list>
 #include <SFML/Audio.hpp>
@@ -7,11 +7,11 @@
 #include "Audio.hh"
 #include "Recorder.hh"
 
-class AudioCall
+class AudioCallSystem
 {
 public:
-  AudioCall();
-  ~AudioCall();
+  AudioCallSystem();
+  ~AudioCallSystem();
   bool in(UdpPacket &packet);
   UdpPacket *out();
 
@@ -22,4 +22,4 @@ private:
   std::list <UdpPacket *> _packets;
 };
 
-#endif //!AUDIOCALL_HH_
+#endif //!AUDIOCALLSYSTEM_HH_
