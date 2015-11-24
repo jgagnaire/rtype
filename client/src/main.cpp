@@ -8,6 +8,7 @@
 #include "Entity/Entity.hh"
 #include "Component/Component.hh"
 #include "AnimatedSprite.hh"
+#include "Graphics/View.hh"
 
 int main(int ac, char **av)
 {
@@ -21,13 +22,17 @@ int main(int ac, char **av)
     }
     Entity e;
 
-    e.manager.add<int>("Bites", 42);
-    e.manager.add<int>("Couilles", 21);
-    e.manager.add<int>("Chatte", 84);
-    e.manager.add<std::string>("Bites", "j'aime les queues");
-    AnimatedSprite  arbok;
-    arbok.load("client/res/menu/rtype-title.png", 835, true);
-    e.manager.add<ADrawable*>("body", &arbok);
+    View            view;
+    e.manager.add<AView*>("view", &view);
+
+    AnimatedSprite  title;
+    title.load("client/res/menu/rtype-title_835.png", true);
+    title.setPosition(sf::Vector2f(542, 50));
+    e.manager.add<ADrawable*>("tmp1", &title);
+
+    AnimatedSprite  background;
+    background.load("client/res/menu/background_1920.png");
+    e.manager.add<ADrawable*>("tmp2", &background);
 
     if (av[1][0] == '1')
     {
@@ -90,7 +95,10 @@ int main(int ac, char **av)
             }
             delete event;
             win->clear();
-            e.manager.get<ADrawable*>("body")->update();
+            for (auto x : e.manager.getAll<ADrawable*>())
+            {
+                 x->update();
+            }
             win->draw(e);
             win->display();
         }

@@ -11,9 +11,12 @@ AnimatedSprite::AnimatedSprite():
 AnimatedSprite::~AnimatedSprite()
 {}
 
-bool AnimatedSprite::load(const std::string &path, int width,
+bool AnimatedSprite::load(const std::string &path,
         bool random, unsigned frameBySec)
 {
+    if (path.find("_") == std::string::npos)
+        return false;
+    unsigned width = std::atoi(&(path.c_str()[path.find("_") + 1]));
     _frameBySec = frameBySec;
     _random = random;
     if (_texture.loadFromFile(path) == false)

@@ -9,7 +9,7 @@ class AnimatedSprite : public sf::Drawable, public ADrawable
         AnimatedSprite();
         virtual ~AnimatedSprite();
 
-        bool            load(const std::string &path, int width,
+        bool            load(const std::string &path,
                 bool random = false, unsigned frameBySec = 10);
         virtual void    update();
         void            setPosition(const sf::Vector2f &pos);
