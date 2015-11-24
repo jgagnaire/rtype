@@ -50,9 +50,10 @@ int main(int ac, char **av)
         e.manager.add<ADrawable*>("text" + std::to_string(i), vec[i]);
     }
 
+    Entity back;
     AnimatedSprite  background;
     background.load("client/res/menu/background_1920.png");
-    e.manager.add<ADrawable*>("tmp3", &background);
+    back.manager.add<ADrawable*>("tmp3", &background);
 
     if (av[1][0] == '1')
     {
@@ -119,6 +120,7 @@ int main(int ac, char **av)
             {
                  x->update();
             }
+            win->draw(back);
             win->draw(e);
             win->display();
         }
