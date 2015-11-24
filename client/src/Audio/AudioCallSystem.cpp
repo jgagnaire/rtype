@@ -1,15 +1,15 @@
-#include "AudioCall.hh"
+#include "AudioCallSystem.hh"
 
-AudioCall::AudioCall()
+AudioCallSystem::AudioCallSystem()
 {
   this->start();
 }
 
-AudioCall::~AudioCall()
+AudioCallSystem::~AudioCallSystem()
 {
 }
 
-void AudioCall::start()
+void AudioCallSystem::start()
 {
   sf::SoundBuffer *buffer;
   Recorder recorder;
@@ -25,16 +25,16 @@ void AudioCall::start()
     }
 }
 
-void AudioCall::addPacket(sf::SoundBuffer *buffer)
+void AudioCallSystem::addPacket(sf::SoundBuffer *buffer)
 {
 
 }
 
-bool AudioCall::in(UdpPacket &packet)
+bool AudioCallSystem::in(UdpPacket &packet)
 {
 }
 
-UdpPacket *AudioCall::out()
+UdpPacket *AudioCallSystem::out()
 {
   UdpPacket *tmp;
 
