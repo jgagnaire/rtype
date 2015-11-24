@@ -1,5 +1,5 @@
 #pragma once
-#include "WinSocketSet.h"
+#include "WinSocketSet.hh"
 
 class WinUDPSocketSet : public WinSocketSet {
 protected:
@@ -7,4 +7,4 @@ protected:
 public:
         WinUDPSocketSet(unsigned short);
 	virtual ~WinUDPSocketSet() {}
-}
+};

@@ -1,5 +1,5 @@
 #include "WinMutex.hh"
-#include "Exceptions.hh"
+#include "ServerError.hh"
 
 WinMutex::WinMutex() { }
 

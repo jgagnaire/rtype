@@ -5,8 +5,8 @@
 # include <iostream>
 # include <cstring>
 # include <string>
-# include "IServerSocket.h"
-# include "ServerError.h"
+# include "IServerSocket.hh"
+# include "ServerError.hh"
 
 # pragma comment(lib, "ws2_32.lib")
 

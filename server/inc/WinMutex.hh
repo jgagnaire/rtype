@@ -1,6 +1,6 @@
 #pragma once
 #include <windows.h>
-#include "IMutex.h"
+#include "IMutex.hh"
 
 class WinMutex : public IMutex {
 public:
