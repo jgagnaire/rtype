@@ -9,6 +9,7 @@
 #include "Component/Component.hh"
 #include "AnimatedSprite.hh"
 #include "Graphics/View.hh"
+#include "Graphics/Text.hh"
 
 int main(int ac, char **av)
 {
@@ -34,6 +35,15 @@ int main(int ac, char **av)
     arrow.load("client/res/menu/arrow_334.png");
     arrow.setPosition(sf::Vector2f(1500, 900));
     e.manager.add<ADrawable*>("tmp2", &arrow);
+
+    std::vector<Text>       vec;
+
+    vec.push_back(Text("Play Online"));
+    vec.push_back(Text("Play Offline"));
+    vec.push_back(Text("Settings"));
+    vec.push_back(Text("Quit"));
+    for (std::size_t i = 0; i < vec.size(); ++i)
+        e.manager.add<ADrawable*>("text" + std::to_string(i), &(vec[i]));
 
     AnimatedSprite  background;
     background.load("client/res/menu/background_1920.png");

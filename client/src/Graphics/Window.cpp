@@ -45,6 +45,7 @@ void  Window::draw(Entity &e)
             it != vec.end(); ++it)
     {
         const sf::Drawable *d = static_cast<const sf::Drawable *>((*it)->getBuffer());
-        _window.draw(*d);
+        if (d)
+            _window.draw(*d);
     }
 }
