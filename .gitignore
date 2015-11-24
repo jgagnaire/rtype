@@ -18,3 +18,7 @@ server/cmake_install.cmake
 cmake_install.cmake
 .idea/
 server_rtype
+*.pdb
+*.obj
+*.log
+*.tlog
