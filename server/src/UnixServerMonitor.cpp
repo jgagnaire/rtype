@@ -1,6 +1,6 @@
 #include <iostream>
-#include "UnixServerMonitor.h"
-#include "ServerError.h"
+#include "UnixServerMonitor.hh"
+#include "ServerError.hh"
 
 UnixServerMonitor::UnixServerMonitor() {
   fds.clear();

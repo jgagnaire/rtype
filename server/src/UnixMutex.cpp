@@ -1,14 +1,14 @@
-#include "UnixMutex.h"
-#include "Exceptions.h"
+#include "UnixMutex.hh"
+#include "ServerError.hh"
 
 UnixMutex::UnixMutex()
 {
-	::pthread_mutex_init(&_mutex, 0);
+  ::pthread_mutex_init(&_mutex, 0);
 }
 
 UnixMutex::~UnixMutex()
 {
-	::pthread_mutex_destroy(&_mutex);
+  ::pthread_mutex_destroy(&_mutex);
 }
 
 void	UnixMutex::lock(void)

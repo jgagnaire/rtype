@@ -1,4 +1,4 @@
-#include "Packet.h"
+#include "Packet.hh"
 
 Packet::Packet() :  _wr_buff(NULL) {
   clearAll();

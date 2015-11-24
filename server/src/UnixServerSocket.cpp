@@ -1,7 +1,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include "UnixServerSocket.h"
+#include "UnixServerSocket.hh"
 
 UnixServerSocket::UnixServerSocket()
   : sockfd(-1), addr(0)

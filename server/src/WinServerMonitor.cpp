@@ -1,5 +1,5 @@
-#include "WinServerMonitor.h"
-#include "ServerError.h"
+#include "WinServerMonitor.hh"
+#include "ServerError.hh"
 
 WinServerMonitor::WinServerMonitor()
 	:_max_fd(0), _timeout(WSA_INFINITE)

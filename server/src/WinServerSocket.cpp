@@ -1,4 +1,4 @@
-#include "WinServerSocket.h"
+#include "WinServerSocket.hh"
 
 WinServerSocket::WinServerSocket()
 	: addr(0)
