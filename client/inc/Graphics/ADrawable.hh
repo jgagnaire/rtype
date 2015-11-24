@@ -1,7 +1,5 @@
-#ifndef IDRAWABLE_HH_
-# define IDRAWABLE_HH_
-
-# include <vector>
+#ifndef ADRAWABLE_HH_
+# define ADRAWABLE_HH_
 
 class ADrawable
 {
@@ -20,4 +18,4 @@ class ADrawable
         const void  *_buffer;
 };
 
-#endif /* ifndef IDRAWABLE_HH_ */
+#endif /* ifndef ADRAWABLE_HH_ */

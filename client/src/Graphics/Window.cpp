@@ -1,8 +1,9 @@
 #include "Graphics/Window.hh"
 #include "Graphics/ADrawable.hh"
+#include "Graphics/AView.hh"
 
 Window::Window():
-    _window(sf::VideoMode::getDesktopMode(), "Hair tip")
+    _window(sf::VideoMode(1280, 720), "Pede")
 {}
 
 Window::~Window()
@@ -39,10 +40,12 @@ void  Window::draw(Entity &e)
 {
     std::vector<ADrawable*> vec = e.manager.getAll<ADrawable*>();
 
+    _window.setView(*(static_cast<const sf::View*>(e.manager.get<AView*>("view")->getBuffer())));
     for (std::vector<ADrawable*>::iterator it = vec.begin();
             it != vec.end(); ++it)
     {
         const sf::Drawable *d = static_cast<const sf::Drawable *>((*it)->getBuffer());
-        _window.draw(*d);
+        if (d)
+            _window.draw(*d);
     }
 }

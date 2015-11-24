@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdint>
 #include "NetworkManager.hh"
 #include "UdpSocket.hh"
 #include "TcpSocket.hh"
@@ -6,9 +7,13 @@
 #include "Graphics/Event.hh"
 #include "Entity/Entity.hh"
 #include "Component/Component.hh"
+#include "AnimatedSprite.hh"
+#include "Graphics/View.hh"
+#include "Graphics/Text.hh"
 
 int main(int ac, char **av)
 {
+    std::srand(std::time(0));
     if (ac == 1)
     {
         std::cout << "Please put a argument : " << std::endl
@@ -18,11 +23,36 @@ int main(int ac, char **av)
     }
     Entity e;
 
-    e.manager.add<int>("Bites", 42);
-    e.manager.add<int>("Couilles", 21);
-    e.manager.add<int>("Chatte", 84);
-    e.manager.add<std::string>("Bites", "j'aime les queues");
-    e.manager.getAll<int>();
+    View            view;
+    e.manager.add<AView*>("view", &view);
+
+    AnimatedSprite  title;
+    title.load("client/res/menu/rtype-title_835.png", true);
+    title.setPosition(sf::Vector2f(542, 100));
+    e.manager.add<ADrawable*>("tmp1", &title);
+
+    AnimatedSprite  arrow;
+    arrow.load("client/res/menu/arrow_334.png");
+    arrow.setPosition(sf::Vector2f(1500, 900));
+    e.manager.add<ADrawable*>("tmp2", &arrow);
+
+    std::vector<Text*>       vec;
+
+    vec.push_back(new Text("Play Online"));
+    vec.push_back(new Text("Play Offline"));
+    vec.push_back(new Text("Settings"));
+    vec.push_back(new Text("Quit"));
+    vec.push_back(new Text("Quit2"));
+    for (std::size_t i = 0; i < vec.size(); ++i)
+    {
+        vec[i]->setCenter();
+        vec[i]->setY(400 + i * 100);
+        e.manager.add<ADrawable*>("text" + std::to_string(i), vec[i]);
+    }
+
+    AnimatedSprite  background;
+    background.load("client/res/menu/background_1920.png");
+    e.manager.add<ADrawable*>("tmp3", &background);
 
     if (av[1][0] == '1')
     {
@@ -75,16 +105,21 @@ int main(int ac, char **av)
         IWindow *win = new Window();
         while (win->isOpen())
         {
-            IEvent *e = new Event();
-            while (win->getEvent(*e))
+            IEvent *event = new Event();
+            while (win->getEvent(*event))
             {
-                if (e->isCloseWindow())
+                if (event->isCloseWindow())
                     win->close();
-                if (e->isAccepted())
+                if (event->isAccepted())
                     std::cout << "I Accept" << std::endl;
             }
-            delete e;
+            delete event;
             win->clear();
+            for (auto x : e.manager.getAll<ADrawable*>())
+            {
+                 x->update();
+            }
+            win->draw(e);
             win->display();
         }
         delete win;
