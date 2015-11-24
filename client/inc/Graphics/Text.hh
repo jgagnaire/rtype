@@ -35,12 +35,12 @@ class Text : public ADrawable
 
         void            setPosition(const std::size_t x, const std::size_t y)
         {
-             _text.setPosition(x, y);
+			_text.setPosition(static_cast<float>(x), static_cast<float>(y));
         }
 
         void            setY(const std::size_t y)
         {
-             _text.setPosition(_text.getPosition().x, y);
+			_text.setPosition(static_cast<float>(_text.getPosition().x), static_cast<float>(y));
         }
 
     private:

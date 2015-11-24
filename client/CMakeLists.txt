@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../)
 set(CMAKE_BUILD_TYPE Debug)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/inc/ ${CMAKE_CURRENT_SOURCE_DIR}/inc/Audio)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/inc ${CMAKE_CURRENT_SOURCE_DIR}/inc/Audio)
 
 file(GLOB_RECURSE client_SOURCES "src/Graphics/*.cpp")
 file(GLOB_RECURSE client_SOURCES "src/Scene/*.cpp")
@@ -27,7 +27,8 @@ target_compile_features(client_rtype PRIVATE cxx_range_for)
 set_target_properties(client_rtype PROPERTIES OUTPUT_NAME "client_rtype")
 
 if (MSVC)
-    set_target_properties(client_rtype PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+	include_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/)
+	set_target_properties(client_rtype PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
     set_target_properties(client_rtype PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR})
     set_target_properties(client_rtype PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR})
 else()
