@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdint>
 #include "NetworkManager.hh"
 #include "UdpSocket.hh"
 #include "TcpSocket.hh"
@@ -10,6 +11,7 @@
 
 int main(int ac, char **av)
 {
+    std::srand(std::time(0));
     if (ac == 1)
     {
         std::cout << "Please put a argument : " << std::endl
@@ -24,7 +26,7 @@ int main(int ac, char **av)
     e.manager.add<int>("Chatte", 84);
     e.manager.add<std::string>("Bites", "j'aime les queues");
     AnimatedSprite  arbok;
-    arbok.load("arbok.png", 87);
+    arbok.load("client/res/menu/rtype-title.png", 835, true);
     e.manager.add<ADrawable*>("body", &arbok);
 
     if (av[1][0] == '1')
@@ -88,6 +90,7 @@ int main(int ac, char **av)
             }
             delete event;
             win->clear();
+            e.manager.get<ADrawable*>("body")->update();
             win->draw(e);
             win->display();
         }

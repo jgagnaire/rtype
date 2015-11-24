@@ -1,8 +1,9 @@
 #include <iostream>
+#include <cstdlib>
 #include "AnimatedSprite.hh"
 
 AnimatedSprite::AnimatedSprite():
-    _current(0)
+    _current(0), _random(false)
 {
     _buffer = this;
 }
@@ -10,8 +11,11 @@ AnimatedSprite::AnimatedSprite():
 AnimatedSprite::~AnimatedSprite()
 {}
 
-bool AnimatedSprite::load(const std::string &path, int width)
+bool AnimatedSprite::load(const std::string &path, int width,
+        bool random, unsigned frameBySec)
 {
+    _frameBySec = frameBySec;
+    _random = random;
     if (_texture.loadFromFile(path) == false)
         return (false);
     _texture.setSmooth(true);
@@ -36,9 +40,12 @@ void        AnimatedSprite::setPosition(const sf::Vector2f &pos)
 void    AnimatedSprite::update()
 {
     int mill = _clock.getElapsedTime().asMilliseconds();
-    if (mill > 30)
+    if (mill > 1000 / _frameBySec)
     {
-        _current = (_current + mill / 30) % _sprites.size();
+        if (_random)
+            _current = std::rand() % _sprites.size();
+        else
+            _current = (_current + mill / (1000 / _frameBySec)) % _sprites.size();
         _clock.restart();
     }
     _sprites[_current].setPosition(_position);
