@@ -31,7 +31,7 @@ int main(int ac, char **av)
     e.manager.add<ADrawable*>("tmp1", &title);
 
     AnimatedSprite  background;
-    background.load("client/res/menu/background_1920.png");
+    background.load("client/res/menu/background_1921.png");
     e.manager.add<ADrawable*>("tmp2", &background);
 
     if (av[1][0] == '1')
