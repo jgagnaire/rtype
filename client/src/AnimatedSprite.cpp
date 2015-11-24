@@ -44,7 +44,7 @@ void    AnimatedSprite::update()
 {
     if (_sprites.empty())
         return ;
-    int mill = _clock.getElapsedTime().asMilliseconds();
+    unsigned int mill = _clock.getElapsedTime().asMilliseconds();
     if (mill > 1000 / _frameBySec)
     {
         if (_random)

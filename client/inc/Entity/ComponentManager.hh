@@ -42,6 +42,7 @@ class ComponentManager
                     if (compenents[name]->getType() == typeid(Type).name())
                         return (static_cast<Component<Type>*>(compenents[name])->getValue());
                 }
+				throw;
             }
 
         template<typename Type>

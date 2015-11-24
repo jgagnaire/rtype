@@ -13,7 +13,7 @@
 
 int main(int ac, char **av)
 {
-    std::srand(std::time(0));
+    std::srand(static_cast<unsigned int>(std::time(0)));
     if (ac == 1)
     {
         std::cout << "Please put a argument : " << std::endl
