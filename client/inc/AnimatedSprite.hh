@@ -13,6 +13,7 @@ class AnimatedSprite : public sf::Drawable, public ADrawable
                 bool random = false, unsigned frameBySec = 10);
         virtual void    update();
         void            setPosition(const sf::Vector2f &pos);
+        const sf::Vector2f &getPosition() const;
         virtual void    draw(sf::RenderTarget &target,
                 sf::RenderStates states) const;
 

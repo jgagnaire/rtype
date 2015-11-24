@@ -63,3 +63,8 @@ void    AnimatedSprite::draw(sf::RenderTarget &target,
         return ;
     target.draw(_sprites[_current], states);
 }
+
+const sf::Vector2f &AnimatedSprite::getPosition() const
+{
+    return _position;
+}
