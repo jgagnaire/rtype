@@ -36,14 +36,19 @@ int main(int ac, char **av)
     arrow.setPosition(sf::Vector2f(1500, 900));
     e.manager.add<ADrawable*>("tmp2", &arrow);
 
-    std::vector<Text>       vec;
+    std::vector<Text*>       vec;
 
-    vec.push_back(Text("Play Online"));
-    vec.push_back(Text("Play Offline"));
-    vec.push_back(Text("Settings"));
-    vec.push_back(Text("Quit"));
+    vec.push_back(new Text("Play Online"));
+    vec.push_back(new Text("Play Offline"));
+    vec.push_back(new Text("Settings"));
+    vec.push_back(new Text("Quit"));
+    vec.push_back(new Text("Quit2"));
     for (std::size_t i = 0; i < vec.size(); ++i)
-        e.manager.add<ADrawable*>("text" + std::to_string(i), &(vec[i]));
+    {
+        vec[i]->setCenter();
+        vec[i]->setY(400 + i * 100);
+        e.manager.add<ADrawable*>("text" + std::to_string(i), vec[i]);
+    }
 
     AnimatedSprite  background;
     background.load("client/res/menu/background_1920.png");
