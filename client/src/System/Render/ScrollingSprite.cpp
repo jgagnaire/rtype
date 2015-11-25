@@ -26,11 +26,12 @@ void    ScrollingSprite::update()
     unsigned int mill = _clock.getElapsedTime().asMilliseconds();
     if (mill > 1000 / _frameBySec)
     {
-        _left += mill / (1000 / _frameBySec);
-        if (_left > _texture.getSize().x)
-            _left -= _texture.getSize().x;
+        _left += (mill / (1000 / _frameBySec)) * _speed;
+        if (_left + 1920 > _texture.getSize().x)
+            _left -= _texture.getSize().x - 1920;
         _sprite.setTextureRect(sf::IntRect(_left,
                     0, 1920, 1080));
+        _clock.restart();
     }
 }
 

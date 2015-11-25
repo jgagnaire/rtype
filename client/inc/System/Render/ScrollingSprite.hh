@@ -12,7 +12,7 @@ class ScrollingSprite : public sf::Drawable, public ADrawable
 
         bool    load(const std::string &path,
                 unsigned scrollingSpeed = 10,
-                unsigned frameBySec = 10);
+                unsigned frameBySec = 24);
         virtual void    update();
         virtual void    draw(sf::RenderTarget &target,
                 sf::RenderStates states) const;
