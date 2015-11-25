@@ -7,7 +7,9 @@
 #include "System/Render/Event.hh"
 #include "Entity/Entity.hh"
 #include "Component/Component.hh"
+
 #include "System/Render/MenuScene.hh"
+#include "System/Render/StageScene.hh"
 
 int main(int ac, char **av)
 {
@@ -71,7 +73,8 @@ int main(int ac, char **av)
         Window w;
         IWindow &win = w;
         int     current = 0;
-        MenuScene   ms;
+//        MenuScene   s;
+        StageScene  s;
 
         while (win.isOpen())
         {
@@ -85,8 +88,8 @@ int main(int ac, char **av)
                     std::cout << "I Accept" << std::endl;
             }
             win.clear();
-            ms.update();
-            for (auto x : ms.getEntities())
+            s.update();
+            for (auto x : s.getEntities())
                 win.draw(*x);
             win.display();
         }
