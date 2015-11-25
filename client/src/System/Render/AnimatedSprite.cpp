@@ -1,6 +1,6 @@
 #include <iostream>
 #include <cstdlib>
-#include "AnimatedSprite.hh"
+#include "System/Render/AnimatedSprite.hh"
 
 AnimatedSprite::AnimatedSprite():
     _current(0), _random(false)

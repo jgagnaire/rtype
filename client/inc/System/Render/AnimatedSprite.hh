@@ -1,7 +1,7 @@
 #include <string>
 #include <vector>
 #include <SFML/Graphics.hpp>
-#include "Graphics/ADrawable.hh"
+#include "System/Render/ADrawable.hh"
 
 class AnimatedSprite : public sf::Drawable, public ADrawable
 {
