@@ -5,9 +5,10 @@
 #include "UdpSocket.hh"
 #include "TcpSocket.hh"
 
-NetworkManager::NetworkManager(const std::string &ip, unsigned short port):
+NetworkManager::NetworkManager(const std::string &ip, unsigned short port,
+        const std::string &udpIp, unsigned short udpPort):
     _udp(*new UdpSocket()), _tcp(*new TcpSocket()),
-    _tcpIp(ip), _tcpPort(port)
+    _tcpIp(ip), _tcpPort(port), _udpIp(udpIp), _udpPort(udpPort)
 {
     _tcp.connect(ip, port);
     _udp.bind(4444);
@@ -39,7 +40,7 @@ void    NetworkManager::send(const IPacket &packet)
     if (tcpPacket)
         _tcp.send(buf, totalSize);
     else if (udpPacket)
-        _udp.send(buf, totalSize, "127.0.0.1", 4445);
+        _udp.send(buf, totalSize, _udpIp, _udpPort);
 }
 
 void        NetworkManager::receiveUdp()

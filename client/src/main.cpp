@@ -51,9 +51,10 @@ int main(int ac, char **av)
     e.manager.add<ADrawable*>("selector", &selector);
 
 
-    if (ac > 3 && av[1][0] == '1')
+    if (ac > 5 && av[1][0] == '1')
     {
-        NetworkManager nm(av[2], std::atoi(av[3]));
+        NetworkManager nm(av[2], std::atoi(av[3]),
+                av[4], std::atoi(av[5]));
         UdpPacket tosend;
         TcpPacket tosend2;
 
