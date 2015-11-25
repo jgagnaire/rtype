@@ -23,28 +23,17 @@ bool AudioBuffer::canPlay()
 
 void AudioBuffer::play()
 {
-  static int i = 0;
   sf::SoundBuffer *tmp;
 
   if (!(tmp = this->getBuffer()))
     return ;
-  if (i % 2 == 0)
-    {
-      this->_sound.resetBuffer();
-      this->_sound.setBuffer(*tmp);
-      this->_sound.play();
-    }
-  else
-    {
-      this->_sound2.resetBuffer();
-      this->_sound2.setBuffer(*tmp);
-      this->_sound2.play();
-    }
+  this->_sound.resetBuffer();
+  this->_sound.setBuffer(*tmp);
+  this->_sound.play();
   this->_clock.restart();
   _bufferTime = tmp->getDuration();
   if (this->_toDelete)
     delete this->_toDelete;
   this->_toDelete = tmp;
   this->popBuffer();
-  ++i;
 }
