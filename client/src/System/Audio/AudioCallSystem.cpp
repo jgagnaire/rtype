@@ -22,7 +22,6 @@ void AudioCallSystem::start()
       if ((buffer = recorder.getBuffer()))
 	{
 	  this->addPacket(buffer);
-	  in(out());
 	}
     }
 }
@@ -41,7 +40,7 @@ void AudioCallSystem::addPacket(sf::SoundBuffer *buffer)
   std::copy(tmpData, tmpData + buffer->getSampleCount() * 2, data);
   tmp->setData(data);
   _packets.push_back(tmp);
-delete buffer;
+  delete buffer;
 }
 
 bool AudioCallSystem::in(UdpPacket *packet)
@@ -51,7 +50,7 @@ bool AudioCallSystem::in(UdpPacket *packet)
   short int *tmpData;
 
   if (!packet)
-  return false;
+    return false;
   tmpData = (short int *)(packet->getData());
   data = new short int[packet->getSize()];
   std::copy(tmpData, tmpData + packet->getSize(), data);
