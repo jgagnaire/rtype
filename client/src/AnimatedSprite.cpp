@@ -47,16 +47,19 @@ void    AnimatedSprite::update()
 {
     if (_sprites.empty())
         return ;
-    unsigned int mill = _clock.getElapsedTime().asMilliseconds();
-    if (mill > 1000 / _frameBySec)
+    if (_sprites.size() > 0)
     {
-        if (_random)
-            _current = std::rand() % _sprites.size();
-        else
-            _current = (_current + mill / (1000 / _frameBySec)) % _sprites.size();
-        _clock.restart();
+        unsigned int mill = _clock.getElapsedTime().asMilliseconds();
+        if (mill > 1000 / _frameBySec)
+        {
+            if (_random)
+                _current = std::rand() % _sprites.size();
+            else
+                _current = (_current + mill / (1000 / _frameBySec)) % _sprites.size();
+            _clock.restart();
+        }
+        _sprites[_current].setPosition(_position);
     }
-    _sprites[_current].setPosition(_position);
 }
 
 void    AnimatedSprite::draw(sf::RenderTarget &target,
