@@ -17,7 +17,7 @@ int main(int ac, char **av)
     if (ac == 1)
     {
         std::cout << "Please put a argument : " << std::endl
-            << "1 : Network" << std::endl
+            << "1 : Network [sever_ip]" << std::endl
             << "2 : Graphics" << std::endl;
         return 0;
     }
@@ -51,9 +51,9 @@ int main(int ac, char **av)
     e.manager.add<ADrawable*>("selector", &selector);
 
 
-    if (ac > 5 && av[1][0] == '1')
+    if (ac > 2 && av[1][0] == '1')
     {
-        NetworkManager nm(av[2], av[3]);
+        NetworkManager nm(av[2], av[2]);
         UdpPacket tosend;
         TcpPacket tosend2;
 
