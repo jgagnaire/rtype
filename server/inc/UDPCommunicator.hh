@@ -28,9 +28,13 @@ public:
                                      static_cast<Enum::Flag>(Enum::READ | Enum::WRITE));
     }
 
-    virtual void launch(std::list<USER*> *) {
+    virtual void launch(std::list<USER*> *cl) {
+        this->cl_list = cl;
 
     }
+
+    virtual bool	writeAction(USER *) { return (true); }
+    virtual bool	readAction(USER *cli) { return (true); }
 };
 
 

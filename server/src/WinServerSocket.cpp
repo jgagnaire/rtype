@@ -25,7 +25,7 @@ WinServerSocket::~WinServerSocket()
 	::closesocket(this->sock);
 }
 
-int WinServerSocket::absReadFromClient(char *&to_fill, unsigned size, std::string *ip) const
+int WinServerSocket::absReadFromClient(char *&to_fill, unsigned size, std::string * const ip) const
 {
 	WSABUF wsabuf = { 0 };
 	DWORD read_size = 0;

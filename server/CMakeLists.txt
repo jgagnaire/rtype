@@ -6,7 +6,7 @@ set(CMAKE_BUILD_TYPE Debug)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/inc/)
 
-set(server_SOURCES ${server_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/src/AccountController.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/UserManager.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/Packet.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/ServerError.cpp)
+set(server_SOURCES ${server_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/src/AccountController.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/UserManager.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/ServerError.cpp)
 set(server_HEADERS ${server_HEADERS} ${CMAKE_CURRENT_SOURCE_DIR}/inc/AccountController.hh ${CMAKE_CURRENT_SOURCE_DIR}/inc/AController.hh ${CMAKE_CURRENT_SOURCE_DIR}/inc/UserManager.hh ${CMAKE_CURRENT_SOURCE_DIR}/inc/ConversationController.hh ${CMAKE_CURRENT_SOURCE_DIR}/inc/Enum.hh ${CMAKE_CURRENT_SOURCE_DIR}/inc/IServerMonitor.hh ${CMAKE_CURRENT_SOURCE_DIR}/inc/IServerSocket.hh ${CMAKE_CURRENT_SOURCE_DIR}/inc/ISocketSet.hh ${CMAKE_CURRENT_SOURCE_DIR}/inc/NetworkManager.hh ${CMAKE_CURRENT_SOURCE_DIR}/inc/Packet.hh ${CMAKE_CURRENT_SOURCE_DIR}/inc/ServerError.hh ${CMAKE_CURRENT_SOURCE_DIR}/inc/ACommunicator.hh ${CMAKE_CURRENT_SOURCE_DIR}/inc/IThreadPool.hh ${CMAKE_CURRENT_SOURCE_DIR}/inc/ThreadPool.hh ${CMAKE_CURRENT_SOURCE_DIR}/inc/IThread.hh ${CMAKE_CURRENT_SOURCE_DIR}/inc/ThreadFactory.hh)
 
 if (CMAKE_SYSTEM_NAME STREQUAL Windows)
