@@ -14,13 +14,16 @@ AnimatedSprite::~AnimatedSprite()
 bool AnimatedSprite::load(const std::string &path,
         bool random, unsigned frameBySec)
 {
-    if (path.find("_") == std::string::npos)
-        return false;
-    unsigned width = std::atoi(&(path.c_str()[path.find("_") + 1]));
-    _frameBySec = frameBySec;
-    _random = random;
+    unsigned width = 0;
+
     if (_texture.loadFromFile(path) == false)
         return (false);
+    if (path.find("_") == std::string::npos)
+        width = _texture.getSize().x;
+    else
+        width = std::atoi(&(path.c_str()[path.find("_") + 1]));
+    _frameBySec = frameBySec;
+    _random = random;
     _texture.setSmooth(true);
     int nbFrame = _texture.getSize().x / width;
     int height = _texture.getSize().y;
