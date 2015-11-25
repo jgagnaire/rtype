@@ -24,7 +24,7 @@ template<typename T>
 bool			UserManager<T>::isLogged() const { return (stream.is_open()); }
 
 template<typename T>
-void	UserManager<T>::writeStruct(const ::ComData &comdata) {
+void	UserManager<T>::writeStruct(const ::TCPDataHeader &comdata) {
   packet.stockOnBuff(comdata);
 }
 
@@ -92,7 +92,7 @@ bool	UserManager<T>::emptyData() const {
 
 template<typename T>
 Enum::ClientQueries	UserManager<T>::numQuery() const {
-  return (static_cast<Enum::ClientQueries>(tmp_packet.com.query));
+  return (static_cast<Enum::ClientQueries>(tmp_packet.header.query));
 }
 
 template<typename T>
@@ -154,7 +154,7 @@ Enum::ServerAnswers	UserManager<T>::newUser() {
   std::string tok[2];
 
   if (stream.is_open())
-    return (Enum::EALREADY_LOGGED); // TODO, not really this error !
+    return (Enum::EALREADY_LOGGED);
   std::getline(is, tok[0], ':');
   std::getline(is, tok[1], ':');
   if (alreadyExist(tok))

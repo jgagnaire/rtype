@@ -18,7 +18,7 @@ public:
 	WinServerSocket();
 	WinServerSocket(SOCKET, sockaddr_in *);
 	virtual ~WinServerSocket();
-	virtual int absReadFromClient(char *&, unsigned, std::string *) const;
+	virtual int absReadFromClient(char *&, unsigned, std::string * const) const;
 	virtual bool absWriteOnClient(char *, size_t, const std::string &, const std::string &) const;
 	virtual std::string   getIP() const;
 private:
