@@ -23,7 +23,7 @@ namespace Enum
     enum Protocol {
         TCP = 1,
         UDP = 2,
-        BOTH_PROTO = 4
+        BOTH_PROTO = 3
     };
 
   enum  Flag {
