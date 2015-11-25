@@ -53,8 +53,7 @@ int main(int ac, char **av)
 
     if (ac > 5 && av[1][0] == '1')
     {
-        NetworkManager nm(av[2], std::atoi(av[3]),
-                av[4], std::atoi(av[5]));
+        NetworkManager nm(av[2], av[3]);
         UdpPacket tosend;
         TcpPacket tosend2;
 
