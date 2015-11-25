@@ -1,7 +1,7 @@
 #ifndef EVENT_HH_
 # define EVENT_HH_
 
-# include <Graphics/Window.hh>
+# include <System/Render/Window.hh>
 # include "IEvent.hh"
 
 class Event : public IEvent

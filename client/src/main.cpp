@@ -3,13 +3,13 @@
 #include "NetworkManager.hh"
 #include "UdpSocket.hh"
 #include "TcpSocket.hh"
-#include "Graphics/Window.hh"
-#include "Graphics/Event.hh"
+#include "System/Render/Window.hh"
+#include "System/Render/Event.hh"
 #include "Entity/Entity.hh"
 #include "Component/Component.hh"
-#include "AnimatedSprite.hh"
-#include "Graphics/View.hh"
-#include "Graphics/Text.hh"
+#include "System/Render/AnimatedSprite.hh"
+#include "System/Render/View.hh"
+#include "System/Render/Text.hh"
 
 int main(int ac, char **av)
 {
@@ -21,16 +21,7 @@ int main(int ac, char **av)
             << "2 : Graphics" << std::endl;
         return 0;
     }
-    Entity back;
     Entity e;
-
-    View            view;
-    back.manager.add<AView*>("view", &view);
-
-    AnimatedSprite  title;
-    title.load("client/res/menu/rtype-title_835.png", true);
-    title.setPosition(sf::Vector2f(542, 100));
-    e.manager.add<ADrawable*>("tmp1", &title);
 
     AnimatedSprite  arrow;
     arrow.load("client/res/menu/arrow_334.png");
@@ -59,10 +50,6 @@ int main(int ac, char **av)
     selector.setPosition(sf::Vector2f(735, 375));
     e.manager.add<ADrawable*>("selector", &selector);
 
-
-    AnimatedSprite  background;
-    background.load("client/res/menu/background_1920.png");
-    back.manager.add<ADrawable*>("tmp3", &background);
 
     if (ac > 3 && av[1][0] == '1')
     {
@@ -142,7 +129,6 @@ int main(int ac, char **av)
             {
                  x->update();
             }
-            win->draw(back);
             win->draw(e);
             win->display();
         }
