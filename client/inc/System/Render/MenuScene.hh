@@ -15,7 +15,6 @@ class MenuScene : public Scene
             _entities.push_back(&_background);
             _entities.push_back(&_gui);
 
-
             _backgroundSprite.load("client/res/menu/background_1920.png");
             _background.manager.add<AView*>("view", &_backgroundView);
             _background.manager.add<ADrawable*>("background", &_backgroundSprite);
