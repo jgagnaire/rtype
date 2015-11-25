@@ -87,7 +87,7 @@ public:
 	for (auto it = this->controllers.begin(); it != this->controllers.end(); ++it)
 	  ((*it)->*(this->newConnection))(this->cl_list->back());
       this->network_monitor->addFd(dynamic_cast<IServerSocket<SCK>*>(this->cl_list->back()->getServerSocket()),
-				   static_cast<Enum::Flag>(Enum::READ | Enum::WRITE | Enum::CLOSE));
+				   static_cast<Enum::Flag>(Enum::READ | Enum::CLOSE));
       return ;
     }
     for (auto cli = this->cl_list->begin(); cli != this->cl_list->end(); ++cli) {
@@ -102,6 +102,15 @@ public:
     if (this->aobs)
       this->afterObserveAction();
   }
+
+    virtual bool	closeAction(USER *cli) {
+        if (closeConnection != NULL) {
+            for (auto it = controllers.begin(); it != controllers.end(); ++it) {
+                ((*it)->*closeConnection)(cli);
+            }
+        }
+        return (false);
+    }
 };
 
 #endif

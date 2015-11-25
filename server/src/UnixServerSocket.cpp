@@ -26,7 +26,7 @@ std::string	UnixServerSocket::getIP() const {
   return (std::string(inet_ntoa(addr->sin_addr)));
 }
 
-int UnixServerSocket::absReadFromClient(char *&to_fill, unsigned size, std::string *ip) const
+int UnixServerSocket::absReadFromClient(char *&to_fill, unsigned size, std::string * const ip) const
 {
   char *buf = new char [size];
   int  ret;
