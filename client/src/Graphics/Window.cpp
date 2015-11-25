@@ -1,6 +1,6 @@
-#include "Graphics/Window.hh"
-#include "Graphics/ADrawable.hh"
-#include "Graphics/AView.hh"
+#include "System/Render/Window.hh"
+#include "System/Render/ADrawable.hh"
+#include "System/Render/AView.hh"
 
 Window::Window():
     _window(sf::VideoMode(1280, 720), "Pede")

@@ -2,7 +2,7 @@
 #define WINDOW_HH_
 
 # include <SFML/Graphics.hpp>
-# include "Graphics/IWindow.hh"
+# include "System/Render/IWindow.hh"
 
 class Window : public IWindow
 {
