@@ -102,15 +102,6 @@ public:
     if (this->aobs)
       this->afterObserveAction();
   }
-
-    virtual bool	closeAction(USER *cli) {
-        if (closeConnection != NULL) {
-            for (auto it = controllers.begin(); it != controllers.end(); ++it) {
-                ((*it)->*closeConnection)(cli);
-            }
-        }
-        return (false);
-    }
 };
 
 #endif

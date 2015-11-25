@@ -55,7 +55,14 @@ protected:
     virtual inline bool	connectAction(USER *) { return (true); }
     virtual inline bool	writeAction(USER *) { return (true); }
     virtual inline bool	readAction(USER *) { return (true); }
-    virtual inline bool	closeAction(USER *cli) { return (true); }
+    virtual bool	    closeAction(USER *cli) {
+        if (closeConnection != NULL) {
+            for (auto it = controllers.begin(); it != controllers.end(); ++it) {
+                ((*it)->*closeConnection)(cli);
+            }
+        }
+        return (false);
+    }
 };
 
 #endif
