@@ -1,3 +1,6 @@
+#ifndef ANIMATEDSPRITE_HH_VTLZOWBQ
+#define ANIMATEDSPRITE_HH_VTLZOWBQ
+
 #include <string>
 #include <vector>
 #include <SFML/Graphics.hpp>
@@ -27,3 +30,5 @@ class AnimatedSprite : public sf::Drawable, public ADrawable
         bool                            _random;
         unsigned                        _frameBySec;
 };
+
+#endif /* end of include guard: ANIMATEDSPRITE_HH_VTLZOWBQ */
