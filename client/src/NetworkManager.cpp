@@ -5,10 +5,11 @@
 #include "UdpSocket.hh"
 #include "TcpSocket.hh"
 
-NetworkManager::NetworkManager():
-    _udp(*new UdpSocket()), _tcp(*new TcpSocket())
+NetworkManager::NetworkManager(const std::string &ip, unsigned short port):
+    _udp(*new UdpSocket()), _tcp(*new TcpSocket()),
+    _tcpIp(ip), _tcpPort(port)
 {
-    _tcp.connect("127.0.0.1", 4443);
+    _tcp.connect(ip, port);
     _udp.bind(4444);
 }
 

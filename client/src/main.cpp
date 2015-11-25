@@ -64,9 +64,9 @@ int main(int ac, char **av)
     background.load("client/res/menu/background_1920.png");
     back.manager.add<ADrawable*>("tmp3", &background);
 
-    if (av[1][0] == '1')
+    if (ac > 3 && av[1][0] == '1')
     {
-        NetworkManager nm;
+        NetworkManager nm(av[2], std::atoi(av[3]));
         UdpPacket tosend;
         TcpPacket tosend2;
 
