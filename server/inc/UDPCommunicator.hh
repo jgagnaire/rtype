@@ -29,7 +29,7 @@ public:
     }
 
     virtual void launch(std::list<USER*> *cl) {
-        cl_list = cl;
+        this->cl_list = cl;
 
     }
 
