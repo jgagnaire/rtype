@@ -1,8 +1,8 @@
-#include "AccountController.h"
+#include "AccountController.hh"
 
 template<typename T>
-AccountController<T>::AccountController(std::list<UserManager<T> *> &cli)
-  : AController<T>(cli) {}
+AccountController<T>::AccountController(std::list<UserManager<T> *> *cli)
+  : AController<T>(*cli) {}
 
 template<typename T>
 int	AccountController<T>::newData(UserManager<T> *cli) {

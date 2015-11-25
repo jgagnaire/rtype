@@ -9,8 +9,8 @@ class IServerSocket
 {
  public:
   virtual ~IServerSocket() {}
-  virtual int	absReadFromClient(char *&, unsigned) const = 0;
-  virtual bool absWriteOnClient(char *, size_t) const = 0;
+  virtual int	absReadFromClient(char *&, unsigned, std::string * const = NULL) const = 0;
+  virtual bool absWriteOnClient(char *, size_t, const std::string & = "", const std::string & = "") const = 0;
   virtual T getSocket() const = 0;
   virtual std::string   getIP() const = 0;
 protected:

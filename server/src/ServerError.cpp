@@ -1,4 +1,4 @@
-#include "ServerError.h"
+#include "ServerError.hh"
 
 ServerError::ServerError(eErrorType e)
 {

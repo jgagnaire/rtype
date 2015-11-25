@@ -4,9 +4,9 @@
 #include <iostream>
 #include <list>
 #include <vector>
-#include "WinServerSocket.h"
-#include "IServerMonitor.h"
-#include "Enum.h"
+#include "WinServerSocket.hh"
+#include "IServerMonitor.hh"
+#include "Enum.hh"
 
 class WinServerMonitor : public IServerMonitor<SOCKET> {
 public:

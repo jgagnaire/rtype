@@ -1,6 +1,6 @@
 #pragma once
-# include "IServerSocket.h"
-# include "Enum.h"
+# include "IServerSocket.hh"
+# include "Enum.hh"
 
 template <typename T>
 class IServerMonitor {

@@ -2,11 +2,13 @@
 # define WINSERVERSOCKET_H_
 
 # include <winsock2.h>
+# include <Ws2tcpip.h>
 # include <iostream>
 # include <cstring>
 # include <string>
-# include "IServerSocket.h"
-# include "ServerError.h"
+# include <cstdint>
+# include "IServerSocket.hh"
+# include "ServerError.hh"
 
 # pragma comment(lib, "ws2_32.lib")
 
@@ -16,8 +18,8 @@ public:
 	WinServerSocket();
 	WinServerSocket(SOCKET, sockaddr_in *);
 	virtual ~WinServerSocket();
-	virtual int absReadFromClient(char *&, unsigned) const;
-	virtual bool absWriteOnClient(char *, size_t) const;
+	virtual int absReadFromClient(char *&, unsigned, std::string * const) const;
+	virtual bool absWriteOnClient(char *, size_t, const std::string &, const std::string &) const;
 	virtual std::string   getIP() const;
 private:
 	WSADATA wsaData;

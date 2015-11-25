@@ -10,7 +10,15 @@ typedef struct s_UdpHeader : public Header
     uint16_t    size;
     uint16_t    query;
     uint64_t    id;
-} __attribute__((packed)) UdpHeader;
+}
+
+# if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+#  pragma pack(push, 1)
+UdpHeader;
+#  pragma pack(pop)
+# else
+__attribute__((__packed__)) UdpHeader;
+# endif
 
 class UdpPacket : public IPacket
 {

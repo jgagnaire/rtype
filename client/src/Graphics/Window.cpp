@@ -40,11 +40,15 @@ void  Window::draw(Entity &e)
 {
     std::vector<ADrawable*> vec = e.manager.getAll<ADrawable*>();
 
-    _window.setView(*(static_cast<const sf::View*>(e.manager.get<AView*>("view")->getBuffer())));
+    try {
+        _window.setView(*(static_cast<const sf::View*>(e.manager.get<AView*>("view")->getBuffer())));
+    } catch (const ComponentManagerException &)
+    {}
     for (std::vector<ADrawable*>::iterator it = vec.begin();
             it != vec.end(); ++it)
     {
         const sf::Drawable *d = static_cast<const sf::Drawable *>((*it)->getBuffer());
-        _window.draw(*d);
+        if (d)
+            _window.draw(*d);
     }
 }

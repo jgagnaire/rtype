@@ -1,4 +1,4 @@
-#include "WinSocketSet.h"
+#include "WinSocketSet.hh"
 
 WinSocketSet::WinSocketSet(unsigned short port) {
 	absInitSocket(port);

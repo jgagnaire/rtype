@@ -2,9 +2,9 @@
 
 #include <winsock2.h>
 #include <windows.h>
-#include <WinServerSocket.h>
-#include <ISocketSet.h>
-#include "ServerError.h"
+#include "WinServerSocket.hh"
+#include "ISocketSet.hh"
+#include "ServerError.hh"
 
 class WinSocketSet : public WinServerSocket, public ISocketSet<SOCKET>  {
 protected:
