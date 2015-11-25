@@ -14,13 +14,16 @@ AnimatedSprite::~AnimatedSprite()
 bool AnimatedSprite::load(const std::string &path,
         bool random, unsigned frameBySec)
 {
-    if (path.find("_") == std::string::npos)
-        return false;
-    unsigned width = std::atoi(&(path.c_str()[path.find("_") + 1]));
-    _frameBySec = frameBySec;
-    _random = random;
+    unsigned width = 0;
+
     if (_texture.loadFromFile(path) == false)
         return (false);
+    if (path.find("_") == std::string::npos)
+        width = _texture.getSize().x;
+    else
+        width = std::atoi(&(path.c_str()[path.find("_") + 1]));
+    _frameBySec = frameBySec;
+    _random = random;
     _texture.setSmooth(true);
     int nbFrame = _texture.getSize().x / width;
     int height = _texture.getSize().y;
@@ -44,16 +47,19 @@ void    AnimatedSprite::update()
 {
     if (_sprites.empty())
         return ;
-    unsigned int mill = _clock.getElapsedTime().asMilliseconds();
-    if (mill > 1000 / _frameBySec)
+    if (_sprites.size() > 0)
     {
-        if (_random)
-            _current = std::rand() % _sprites.size();
-        else
-            _current = (_current + mill / (1000 / _frameBySec)) % _sprites.size();
-        _clock.restart();
+        unsigned int mill = _clock.getElapsedTime().asMilliseconds();
+        if (mill > 1000 / _frameBySec)
+        {
+            if (_random)
+                _current = std::rand() % _sprites.size();
+            else
+                _current = (_current + mill / (1000 / _frameBySec)) % _sprites.size();
+            _clock.restart();
+        }
+        _sprites[_current].setPosition(_position);
     }
-    _sprites[_current].setPosition(_position);
 }
 
 void    AnimatedSprite::draw(sf::RenderTarget &target,
