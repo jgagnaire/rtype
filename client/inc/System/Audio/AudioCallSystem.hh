@@ -12,7 +12,7 @@ class AudioCallSystem
 public:
   AudioCallSystem();
   ~AudioCallSystem();
-  bool in(UdpPacket &packet);
+  bool in(UdpPacket *packet);
   UdpPacket *out();
 
 private:

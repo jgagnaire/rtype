@@ -7,20 +7,21 @@ set(CMAKE_BUILD_TYPE Debug)
 
 file(GLOB_RECURSE client_SOURCES "src/Graphics/*.cpp")
 file(GLOB_RECURSE client_SOURCES "src/Scene/*.cpp")
-file(GLOB_RECURSE client_SOURCES "src/Audio/*.cpp")
+file(GLOB_RECURSE client_SOURCES "src/System/Audio/*.cpp")
 file(GLOB_RECURSE client_SOURCES "src/*.cpp")
-file(GLOB_RECURSE client_HEADERS "inc/Audio/*.hh")
 file(GLOB_RECURSE client_HEADERS "inc/*.hh")
+file(GLOB_RECURSE client_HEADERS "inc/System/Audio/*.hh")
 file(GLOB_RECURSE client_HEADERS "inc/Entity/*.hh")
+file(GLOB_RECURSE client_HEADERS "inc/System/*.hh")
 file(GLOB_RECURSE client_HEADERS "inc/Compenent/*.hh")
 file(GLOB_RECURSE client_HEADERS "inc/Graphics/*.hh")
 
 add_executable(client_rtype ${client_SOURCES} ${client_HEADERS})
 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/inc ${CMAKE_CURRENT_SOURCE_DIR}/inc/System/Audio)
+
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
 find_package(SFML 2 REQUIRED system window graphics network audio)
-
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/inc ${CMAKE_CURRENT_SOURCE_DIR}/inc/Audio)
 
 target_compile_features(client_rtype PRIVATE cxx_range_for)
 
