@@ -1,9 +1,9 @@
 #include <iostream>
 #include <limits.h>
 #include <cstring>
-#include "NetworkManager.hh"
-#include "UdpSocket.hh"
-#include "TcpSocket.hh"
+#include "Network/NetworkManager.hh"
+#include "Network/UdpSocket.hh"
+#include "Network/TcpSocket.hh"
 
 NetworkManager::NetworkManager(const std::string &ip,
         const std::string &udpIp):
