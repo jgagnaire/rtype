@@ -70,10 +70,13 @@ namespace Enum
         EALREADY_LOGGED = 501,
         EUSER_EXIST = 502,
         EREGISTER_FORMAT = 503,
+        EALREADY_ON_ROOM = 504,
         ENOT_LOGGED = 505,
+        ENOT_IN_ROOM = 506,
         EIMAGE_NO_EXIST = 507,
-        EIMAGE_NOT_FINISHED = 508,
-        ENO_IMAGE_TREATMENT = 509,
+        EIMAGE_KO = 508,
+        ENO_AVAILABLE_ROOM = 509,
+        EROOM_NO_EXIST = 510
     };
 
     enum ServerInfo {

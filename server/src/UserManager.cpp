@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <GameManager.hh>
 #include "UserManager.hh"
 
 template<typename T>
@@ -226,7 +227,7 @@ Enum::TCPServerAnswers UserManager<T>::startUpload() {
     if (!stream.is_open())
         return (Enum::ENOT_LOGGED);
     if (image_stream.is_open())
-        return (Enum::EIMAGE_NOT_FINISHED);
+        return (Enum::EIMAGE_KO);
     image_stream.open(std::string(UserManager<T>::database_dir).replace(Enum::PATH_LENGTH,
                                                                         1, name + "_image"),
                       std::fstream::trunc | std::fstream::out);
@@ -237,7 +238,7 @@ Enum::TCPServerAnswers     UserManager<T>::uploadImage() {
     if (!stream.is_open())
         return (Enum::ENOT_LOGGED);
     if (!image_stream.is_open())
-        return (Enum::ENO_IMAGE_TREATMENT);
+        return (Enum::EIMAGE_KO);
     image_stream.clear();
     image_stream << getPacketData() << std::flush;
     return (Enum::OK);
@@ -248,7 +249,7 @@ Enum::TCPServerAnswers     UserManager<T>::endOfUploading() {
     if (!stream.is_open())
         return (Enum::ENOT_LOGGED);
     if (!image_stream.is_open())
-        return (Enum::ENO_IMAGE_TREATMENT);
+        return (Enum::EIMAGE_KO);
     image_stream.close();
     return (Enum::OK);
 }
@@ -258,7 +259,7 @@ Enum::TCPServerAnswers     UserManager<T>::deleteImage() {
     if (!stream.is_open())
         return (Enum::ENOT_LOGGED);
     if (image_stream.is_open())
-        return (Enum::EIMAGE_NOT_FINISHED);
+        return (Enum::EIMAGE_KO);
     image_stream.open(std::string(UserManager<T>::database_dir).replace(Enum::PATH_LENGTH,
                                                                         1, name + "_image"),
                       std::fstream::trunc);
@@ -277,8 +278,84 @@ Enum::TCPServerAnswers     UserManager<T>::deleteImage() {
 
 template <typename T>
 Enum::TCPServerAnswers     UserManager<T>::retrieveImage() { // TODO, implements
+    if (!stream.is_open())
+        return (Enum::ENOT_LOGGED);
     return (Enum::OK);
 }
+
+template <typename T>
+Enum::TCPServerAnswers      UserManager<T>::joinRandomRoom() { //TODO, implements
+    if (!stream.is_open())
+        return (Enum::ENOT_LOGGED);
+    return (Enum::OK);
+}
+
+template <typename T>
+Enum::TCPServerAnswers      UserManager<T>::joinNamedRoom() {
+    std::string             game_name = getPacketData();
+    GameManager<T>             &gm = GameManager<T>::instance();
+
+    if (!stream.is_open())
+        return (Enum::ENOT_LOGGED);
+    if (!gameroom.empty())
+        return (Enum::EALREADY_ON_ROOM);
+    if (gm.roomIsFull(game_name))
+        return (Enum::ENO_AVAILABLE_ROOM);
+    else if (!gm.joinRoom(game_name, this))
+        return (Enum::EROOM_NO_EXIST);
+    gameroom = game_name;
+    return (Enum::OK);
+}
+
+template <typename T>
+Enum::TCPServerAnswers      UserManager<T>::createGameRoom() {
+    std::string             game_name = getPacketData();
+    GameManager<T>             &gm = GameManager<T>::instance();
+
+    if (!stream.is_open())
+        return (Enum::ENOT_LOGGED);
+    if (!gameroom.empty())
+        return (Enum::EALREADY_ON_ROOM);
+    if (game_name.empty())
+        game_name = "qweqwe"; //TODO, for the moment
+    gameroom = game_name;
+    gm.createRoom(game_name, this);
+    return (Enum::OK);
+}
+
+template <typename T>
+Enum::TCPServerAnswers      UserManager<T>::leaveRoom() {
+    GameManager<T>             &gm = GameManager<T>::instance();
+
+    if (!stream.is_open())
+        return (Enum::ENOT_LOGGED);
+    if (gameroom.empty())
+        return (Enum::ENOT_IN_ROOM);
+    gm.deleteUser(this);
+    gameroom.clear();
+    return (Enum::OK);
+}
+
+template <typename T>
+Enum::TCPServerAnswers      UserManager<T>::ready() {
+    if (!stream.is_open())
+        return (Enum::ENOT_LOGGED);
+    if (gameroom.empty())
+        return (Enum::ENOT_IN_ROOM);
+    return (Enum::OK);
+}
+
+template <typename T>
+Enum::TCPServerAnswers      UserManager<T>::notReady() {
+    if (!stream.is_open())
+        return (Enum::ENOT_LOGGED);
+    if (gameroom.empty())
+        return (Enum::ENOT_IN_ROOM);
+    return (Enum::OK);
+}
+
+template <typename T>
+const std::string      &UserManager<T>::getGameroomName() const { return (gameroom); }
 
 #if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined (_WIN64)
 template class UserManager<SOCKET>;

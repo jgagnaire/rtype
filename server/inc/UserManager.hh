@@ -51,6 +51,7 @@ public:
     bool					deleteUserWith(const std::string &s,
                                            std::fstream &file,
                                            std::string &stock);
+    const std::string       &getGameroomName() const;
 
     Enum::TCPServerAnswers		verifyUser();
     Enum::TCPServerAnswers	    newUser();
@@ -59,6 +60,13 @@ public:
     Enum::TCPServerAnswers      endOfUploading();
     Enum::TCPServerAnswers      deleteImage();
     Enum::TCPServerAnswers      retrieveImage();
+
+    Enum::TCPServerAnswers      joinRandomRoom();
+    Enum::TCPServerAnswers      joinNamedRoom();
+    Enum::TCPServerAnswers      createGameRoom();
+    Enum::TCPServerAnswers      leaveRoom();
+    Enum::TCPServerAnswers      ready();
+    Enum::TCPServerAnswers      notReady();
 
 
 private:
@@ -71,6 +79,7 @@ private:
     bool									ping;
     Packet<TCPDataHeader>					packet;
     Packet<TCPDataHeader>::PacketStruct		tmp_packet;
+    std::string                             gameroom;
 
     bool					hasBadFormat(std::string *) const;
     bool					alreadyExist(std::string *);
