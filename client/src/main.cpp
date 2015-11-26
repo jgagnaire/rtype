@@ -1,8 +1,8 @@
 #include <iostream>
 #include <cstdint>
-#include "NetworkManager.hh"
-#include "UdpSocket.hh"
-#include "TcpSocket.hh"
+#include "Network/NetworkManager.hh"
+#include "Network/UdpSocket.hh"
+#include "Network/TcpSocket.hh"
 #include "System/Render/Window.hh"
 #include "System/Render/Event.hh"
 #include "Entity/Entity.hh"
