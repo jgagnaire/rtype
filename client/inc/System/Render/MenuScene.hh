@@ -22,9 +22,9 @@ class MenuScene : public Scene
             _b1.manager.add<AView*>("view", &_v1);
             _s1.load("client/res/menu/menu.png");
             _b1.manager.add<ADrawable*>("s1", &_s1);
-            _s2.load("client/res/menu/background-star-1.png", 3);
+            _s2.load("client/res/menu/background-star-2.png", 3);
             _b2.manager.add<ADrawable*>("s2", &_s2);
-            _s3.load("client/res/menu/background-star-2.png", 1);
+            _s3.load("client/res/menu/background-star-1.png", 1);
             _b3.manager.add<ADrawable*>("s3", &_s3);
             _s4.load("client/res/menu/moon.png", 5);
             _b4.manager.add<ADrawable*>("s4", &_s4);
