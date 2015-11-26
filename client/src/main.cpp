@@ -73,8 +73,8 @@ int main(int ac, char **av)
         Window w;
         IWindow &win = w;
         int     current = 0;
-//        MenuScene   s;
-        StageScene  s;
+        MenuScene   s;
+//        StageScene  s;
 
         while (win.isOpen())
         {
