@@ -5,19 +5,22 @@
 # include "IUdpSocket.hh"
 # include "IPacket.hh"
 
+# if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+#  pragma pack(1)
 struct UdpHeader : public Header
 {
     uint16_t    size;
     uint16_t    query;
     uint64_t    id;
-}
-
-# if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-#  pragma pack(push, 1)
-;
-#  pragma pack(pop)
+};
+#  pragma pack()
 # else
-__attribute__((__packed__));
+struct UdpHeader : public Header
+{
+	uint16_t    size;
+	uint16_t    query;
+	uint64_t    id;
+}__attribute__((__packed__));
 # endif
 
 class UdpPacket : public IPacket
