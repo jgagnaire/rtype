@@ -22,6 +22,7 @@ private:
         char                                buff[512]; // TODO, magic number
     };
 
+    UDPData                 _data;
     Packet<UDPDataHeader>   _packet;
 public:
     UDPCommunicator(char *port) {
@@ -37,31 +38,37 @@ public:
     }
 
     virtual void launch(std::list<USER*> *cl) {
+        this->cl_list = cl;
         for (;;) {
+            const char  *buff;
+            std::string ip;
+
             this->network_monitor->observerFds();
             if (this->network_monitor->isObserved(dynamic_cast<IServerSocket<SCK> *>(this->srvset),
-                                                  Enum::READ))
-                this->readAction(cl->back()); //TODO, not cl->back();
+                                                  Enum::READ)) {
+                size_t ret = _packet.getPacket(dynamic_cast<IServerSocket<SCK>*>(this->srvset), &ip, true);
+                buff = _packet.getBuffer();
+                std::cout << ret << " " << sizeof(UDPData) << std::endl;
+                std::copy(buff, buff + ret, reinterpret_cast<char *>(&_data));
+                this->readAction(this->findUserByIP(ip));
+                _packet.clearAll();
+            }
         }
 
     }
 
     virtual bool	readAction(USER *cli) {
-        UDPData     data;
-        const char *buff;
-        std::string p;
-
-        size_t ret = _packet.getPacket(dynamic_cast<IServerSocket<SCK>*>(this->srvset), &p, true);
-        buff = _packet.getBuffer();
-        std::cout << ret << " " << sizeof(UDPData) << std::endl;
-        std::copy(buff, buff + ret, reinterpret_cast<char *>(&data));
-         std::cout << "packet recu part " << p << " " << data.buff << std::endl; //write 1726
-        std::cout << &buff[16] << std::endl;
-        _packet.clearAll();
         if (!cli)
             return (true);
-
         return (true);
+    }
+
+    USER            *findUserByIP(const std::string &ip) {
+        for (auto it = this->cl_list->begin(); it != this->cl_list->end(); ++it) {
+            if ((*it)->getIP() == ip)
+                return (*it);
+        }
+        return (0);
     }
 };
 

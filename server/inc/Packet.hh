@@ -53,7 +53,6 @@ private:
         _get_pack.data.insert(_get_pack.data.size(), str, ret);
         _str_ret += ret;
       }
-      std::cout << "fini" << std::endl;
       return (ret);
     }
 public:
