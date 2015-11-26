@@ -87,7 +87,7 @@ public:
 	for (auto it = this->controllers.begin(); it != this->controllers.end(); ++it)
 	  ((*it)->*(this->newConnection))(this->cl_list->back());
       this->network_monitor->addFd(dynamic_cast<IServerSocket<SCK>*>(this->cl_list->back()->getServerSocket()),
-				   static_cast<Enum::Flag>(Enum::READ | Enum::WRITE | Enum::CLOSE));
+				   static_cast<Enum::Flag>(Enum::READ | Enum::CLOSE));
       return ;
     }
     for (auto cli = this->cl_list->begin(); cli != this->cl_list->end(); ++cli) {
@@ -102,6 +102,47 @@ public:
     if (this->aobs)
       this->afterObserveAction();
   }
+
+    virtual bool            readAction(UserManager<SCK> *cli) {
+        int         n;
+
+        cli->readFromMe();
+        if (cli->emptyData())
+            return (false);
+        if (!cli->IsFilled())
+            return (true);
+        for (auto it = this->controllers.begin(); it != this->controllers.end(); ++it) {
+            if ((n = ((*it)->*(this->newData))(cli)) == 1)
+            {
+                cli->clearData();
+                this->network_monitor->setObserver(cli->getServerSocket(),
+                                                   static_cast<Enum::Flag>(Enum::WRITE |
+                                                                           Enum::READ |
+                                                                           Enum::CLOSE));
+                return (true);
+            }
+            else if (n == 0)
+                return (false);
+        }
+        cli->clearData();
+        return (true);
+    }
+
+    virtual bool          writeAction(UserManager<SCK> *cli) {
+        if (cli->sendStructEmpty()) {
+            this->network_monitor->setObserver(cli->getServerSocket(),
+                                               static_cast<Enum::Flag>(Enum::READ | Enum::CLOSE));
+            return true;
+        }
+        if (!cli->writeOnMe())
+            return (false);
+        if (cli->sendStructEmpty()) {
+            this->network_monitor->setObserver(cli->getServerSocket(),
+                                               static_cast<Enum::Flag>(Enum::READ | Enum::CLOSE));
+        }
+        return (true);
+    }
+
 };
 
 #endif

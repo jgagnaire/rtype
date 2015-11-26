@@ -54,6 +54,7 @@ int  UnixServerMonitor::observerFds() {
     setObserver((*it)->fd, (*it)->flag);
   }
   do {
+    errno = 0;
     ret = select(fd_nbr + 1, &readfds, &writefds, NULL, timeout);
   }
   while (errno == EINTR && ret == -1);
@@ -129,8 +130,8 @@ bool  UnixServerMonitor::isObserved(IServerSocket<int> *sock, Enum::Flag socket_
   for (std::list<select_info *>::iterator it = fds.begin(); it != fds.end(); ++it)
     if ((*it)->fd == fd)
       {
-	s = *it;
-	break ;
+	    s = *it;
+	    break ;
       }
   if (s->flag & socket_flag) {
     if (socket_flag == Enum::WRITE)

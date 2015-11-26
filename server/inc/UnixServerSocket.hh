@@ -15,8 +15,8 @@ public:
   UnixServerSocket();
   UnixServerSocket(int, sockaddr_in *);
   virtual ~UnixServerSocket();
-  virtual int absReadFromClient(char *&, unsigned) const;
-  virtual bool absWriteOnClient(char *, size_t) const;
+  virtual int absReadFromClient(char *&, unsigned, std::string * const) const;
+  virtual bool absWriteOnClient(char *, size_t, const std::string &, const std::string &) const;
   virtual std::string   getIP() const;
 private:
   int sockfd;

@@ -10,7 +10,7 @@
 class NetworkManager
 {
     public:
-        NetworkManager();
+        NetworkManager(const std::string &ip, const std::string &udpIp);
         virtual ~NetworkManager();
 
         void            send(const IPacket &packet);
@@ -23,6 +23,8 @@ class NetworkManager
         std::list<IPacket*>         _packets;
         IUdpSocket                  &_udp;
         ITcpSocket                  &_tcp;
+        std::string                 _tcpIp;
+        std::string                 _udpIp;
 };
 
 #endif /* ifndef NETWORKMANAGER_HH_ */

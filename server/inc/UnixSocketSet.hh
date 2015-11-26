@@ -8,7 +8,7 @@
 
 class UnixSocketSet : public ISocketSet<int>, public UnixServerSocket {
 protected:
-  virtual void absInitSocket(unsigned short);
+    virtual void absInitSocket(unsigned short) {};
 public:
   UnixSocketSet(unsigned short);
   virtual ~UnixSocketSet() {}

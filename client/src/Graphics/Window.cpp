@@ -1,6 +1,6 @@
-#include "Graphics/Window.hh"
-#include "Graphics/ADrawable.hh"
-#include "Graphics/AView.hh"
+#include "System/Render/Window.hh"
+#include "System/Render/ADrawable.hh"
+#include "System/Render/AView.hh"
 
 Window::Window():
     _window(sf::VideoMode(1280, 720), "Pede")
@@ -40,8 +40,10 @@ void  Window::draw(Entity &e)
 {
     std::vector<ADrawable*> vec = e.manager.getAll<ADrawable*>();
 
-    if (&(e.manager.get<AView*>("view")))
+    try {
         _window.setView(*(static_cast<const sf::View*>(e.manager.get<AView*>("view")->getBuffer())));
+    } catch (const ComponentManagerException &)
+    {}
     for (std::vector<ADrawable*>::iterator it = vec.begin();
             it != vec.end(); ++it)
     {

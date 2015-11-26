@@ -2,7 +2,7 @@
 # define IWINDOW_HH_
 
 # include <string>
-# include "Graphics/IEvent.hh"
+# include "System/Render/IEvent.hh"
 # include "Entity/Entity.hh"
 
 class IWindow

@@ -39,7 +39,6 @@ private:
   std::string _name;
   std::list <sf::SoundBuffer *> _buffers;
   sf::Sound _sound;
-  sf::Sound _sound2;
   sf::Clock _clock;
   sf::Time	    _bufferTime;
   sf::SoundBuffer *_toDelete;

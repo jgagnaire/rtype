@@ -28,30 +28,30 @@ class NetworkManager
 private:
   std::list<UserManager<SCK> *>	            cl_list;
   IThreadPool<void, std::vector<void *> >     *com_thread;
-  ACommunicator<UserManager<SCK>, CONTROLLER,
-		IServerMonitor<SCK>, SCK>   *com[2];
+  ACommunicator<UserManager<SCK>, CONTROLLER, IServerMonitor<SCK>, SCK>   *com[2];
   std::vector<void *>                         arg;
 public:
   typedef int   (CONTROLLER::*trigger)(UserManager<SCK> *) const;
   typedef int   (CONTROLLER::*triggerNew)(UserManager<SCK> *);
   typedef void  (CONTROLLER::*Timeout)(std::list<UserManager<SCK> *> &, IServerMonitor<SCK> *) const;
   typedef void  (CONTROLLER::*AfterObserve)(std::list<UserManager<SCK> *> &, IServerMonitor<SCK> *) const;
+
     NetworkManager(char *port, Enum::Protocol p = Enum::TCP) {
       com_thread = new ThreadPool<void, std::vector<void *> >();
-      if (static_cast<int>(Enum::TCP_INDEX) & static_cast<int>(p)) {
-	arg.push_back(this);
-	com[Enum::TCP_INDEX] = new TCPCommunicator<UserManager<SCK>, CONTROLLER,
-						   IServerMonitor<SCK>, SCK>(port);
-	arg.push_back(com[Enum::TCP_INDEX]);
-	com_thread->add(&ACommunicator<UserManager<SCK>, CONTROLLER, IServerMonitor<SCK>, SCK>::_launch, arg);
+      if (static_cast<int>(Enum::TCP) & static_cast<int>(p)) {
+	    arg.push_back(this);
+	    com[Enum::TCP_INDEX] = new TCPCommunicator<UserManager<SCK>, CONTROLLER,
+		                        				   IServerMonitor<SCK>, SCK>(port);
+	    arg.push_back(com[Enum::TCP_INDEX]);
+	    com_thread->add(&ACommunicator<UserManager<SCK>, CONTROLLER, IServerMonitor<SCK>, SCK>::_launch, arg);
       }
       if (static_cast<int>(Enum::UDP) & static_cast<int>(p)) {
-	arg.clear();
-	arg.push_back(this);
-	com[Enum::UDP_INDEX] = new UDPCommunicator<UserManager<SCK>, CONTROLLER,
-						   IServerMonitor<SCK>, SCK>(port);
-	arg.push_back(com[Enum::UDP_INDEX]);
-	com_thread->add(&ACommunicator<UserManager<SCK>, CONTROLLER, IServerMonitor<SCK>, SCK>::_launch, arg);
+	    arg.clear();
+	    arg.push_back(this);
+	    com[Enum::UDP_INDEX] = new UDPCommunicator<UserManager<SCK>, CONTROLLER,
+		                        				   IServerMonitor<SCK>, SCK>(port);
+	    arg.push_back(com[Enum::UDP_INDEX]);
+	    com_thread->add(&ACommunicator<UserManager<SCK>, CONTROLLER, IServerMonitor<SCK>, SCK>::_launch, arg);
       }
     }
 

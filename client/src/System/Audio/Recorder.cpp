@@ -1,5 +1,13 @@
 #include "Recorder.hh"
 
+Recorder::Recorder() : SoundRecorder()
+{
+  sf::Time interval;
+
+  interval = sf::milliseconds(500);
+  this->setProcessingInterval(interval);
+}
+
 sf::SoundBuffer *Recorder::getBuffer()
 {
   sf::SoundBuffer *tmp;

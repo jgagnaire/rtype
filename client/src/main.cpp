@@ -3,13 +3,13 @@
 #include "NetworkManager.hh"
 #include "UdpSocket.hh"
 #include "TcpSocket.hh"
-#include "Graphics/Window.hh"
-#include "Graphics/Event.hh"
+#include "System/Render/Window.hh"
+#include "System/Render/Event.hh"
 #include "Entity/Entity.hh"
 #include "Component/Component.hh"
-#include "AnimatedSprite.hh"
-#include "Graphics/View.hh"
-#include "Graphics/Text.hh"
+
+#include "System/Render/MenuScene.hh"
+#include "System/Render/StageScene.hh"
 
 int main(int ac, char **av)
 {
@@ -17,47 +17,14 @@ int main(int ac, char **av)
     if (ac == 1)
     {
         std::cout << "Please put a argument : " << std::endl
-            << "1 : Network" << std::endl
+            << "1 : Network [sever_ip]" << std::endl
             << "2 : Graphics" << std::endl;
         return 0;
     }
-    Entity e;
 
-    View            view;
-    e.manager.add<AView*>("view", &view);
-
-    AnimatedSprite  title;
-    title.load("client/res/menu/rtype-title_835.png", true);
-    title.setPosition(sf::Vector2f(542, 100));
-    e.manager.add<ADrawable*>("tmp1", &title);
-
-    AnimatedSprite  arrow;
-    arrow.load("client/res/menu/arrow_334.png");
-    arrow.setPosition(sf::Vector2f(1500, 900));
-    e.manager.add<ADrawable*>("tmp2", &arrow);
-
-    std::vector<Text*>       vec;
-
-    vec.push_back(new Text("Play Online"));
-    vec.push_back(new Text("Play Offline"));
-    vec.push_back(new Text("Settings"));
-    vec.push_back(new Text("Quit"));
-    vec.push_back(new Text("Quit2"));
-    for (std::size_t i = 0; i < vec.size(); ++i)
+    if (ac > 2 && av[1][0] == '1')
     {
-        vec[i]->setCenter();
-        vec[i]->setY(400 + i * 100);
-        e.manager.add<ADrawable*>("text" + std::to_string(i), vec[i]);
-    }
-
-    Entity back;
-    AnimatedSprite  background;
-    background.load("client/res/menu/background_1920.png");
-    back.manager.add<ADrawable*>("tmp3", &background);
-
-    if (av[1][0] == '1')
-    {
-        NetworkManager nm;
+        NetworkManager nm(av[2], av[2]);
         UdpPacket tosend;
         TcpPacket tosend2;
 
@@ -103,28 +70,29 @@ int main(int ac, char **av)
     }
     else if (av[1][0] == '2')
     {
-        IWindow *win = new Window();
-        while (win->isOpen())
+        Window w;
+        IWindow &win = w;
+        int     current = 0;
+//        MenuScene   s;
+        StageScene  s;
+
+        while (win.isOpen())
         {
-            IEvent *event = new Event();
-            while (win->getEvent(*event))
+            Event e;
+            IEvent &event = e;
+            while (win.getEvent(event))
             {
-                if (event->isCloseWindow())
-                    win->close();
-                if (event->isAccepted())
+                if (event.isCloseWindow())
+                    win.close();
+                if (event.isAccepted())
                     std::cout << "I Accept" << std::endl;
             }
-            delete event;
-            win->clear();
-            for (auto x : e.manager.getAll<ADrawable*>())
-            {
-                 x->update();
-            }
-            win->draw(back);
-            win->draw(e);
-            win->display();
+            win.clear();
+            s.update();
+            for (auto x : s.getEntities())
+                win.draw(*x);
+            win.display();
         }
-        delete win;
     }
     return 0;
 }
