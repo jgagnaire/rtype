@@ -13,6 +13,8 @@
 
 int main(int ac, char **av)
 {
+    std::cout << "sizeof(UdpHeader) " << sizeof(UdpHeader) << std::endl;
+    std::cout << "sizeof(TcpHeader) " << sizeof(TcpHeader) << std::endl;
     std::srand(static_cast<unsigned int>(std::time(0)));
     if (ac == 1)
     {
