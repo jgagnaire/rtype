@@ -20,6 +20,7 @@ public:
     void                    deleteUser(UserManager<SCK> *);
     bool                    joinRoom(const std::string &, UserManager<SCK> *);
     bool                    roomIsFull(const std::string &);
+    const std::list<Game<SCK> *>        &getGames() const;
 
 private:
     GameManager() {}

@@ -69,6 +69,8 @@ bool        GameManager<SCK>::roomIsFull(const std::string &name) {
     return (game->players.size() == 4);
 }
 
+template <typename SCK>
+const std::list<Game<SCK> *>        &GameManager<SCK>::getGames() const { return (_games); }
 
 #if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined (_WIN64)
 template class GameManager<SOCKET>;

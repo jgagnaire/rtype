@@ -287,6 +287,7 @@ template <typename T>
 Enum::TCPServerAnswers      UserManager<T>::joinRandomRoom() { //TODO, implements
     if (!stream.is_open())
         return (Enum::ENOT_LOGGED);
+    is_ready = false;
     return (Enum::OK);
 }
 
@@ -304,13 +305,15 @@ Enum::TCPServerAnswers      UserManager<T>::joinNamedRoom() {
     else if (!gm.joinRoom(game_name, this))
         return (Enum::EROOM_NO_EXIST);
     gameroom = game_name;
+    status = Enum::GAME_ROOM;
+    is_ready = false;
     return (Enum::OK);
 }
 
 template <typename T>
 Enum::TCPServerAnswers      UserManager<T>::createGameRoom() {
     std::string             game_name = getPacketData();
-    GameManager<T>             &gm = GameManager<T>::instance();
+    GameManager<T>          &gm = GameManager<T>::instance();
 
     if (!stream.is_open())
         return (Enum::ENOT_LOGGED);
@@ -318,8 +321,10 @@ Enum::TCPServerAnswers      UserManager<T>::createGameRoom() {
         return (Enum::EALREADY_ON_ROOM);
     if (game_name.empty())
         game_name = "qweqwe"; //TODO, for the moment
+    is_ready = false;
     gameroom = game_name;
     gm.createRoom(game_name, this);
+    status = Enum::GAME_ROOM;
     return (Enum::OK);
 }
 
@@ -333,6 +338,7 @@ Enum::TCPServerAnswers      UserManager<T>::leaveRoom() {
         return (Enum::ENOT_IN_ROOM);
     gm.deleteUser(this);
     gameroom.clear();
+    status = Enum::LOBBY;
     return (Enum::OK);
 }
 
@@ -342,6 +348,7 @@ Enum::TCPServerAnswers      UserManager<T>::ready() {
         return (Enum::ENOT_LOGGED);
     if (gameroom.empty())
         return (Enum::ENOT_IN_ROOM);
+    is_ready = true;
     return (Enum::OK);
 }
 
@@ -351,8 +358,24 @@ Enum::TCPServerAnswers      UserManager<T>::notReady() {
         return (Enum::ENOT_LOGGED);
     if (gameroom.empty())
         return (Enum::ENOT_IN_ROOM);
+    is_ready = false;
     return (Enum::OK);
 }
+
+template <typename T>
+Enum::TCPServerAnswers      UserManager<T>::getRoomList() {
+    if (!stream.is_open())
+        return (Enum::ENOT_LOGGED);
+    if (!gameroom.empty())
+        return (Enum::EALREADY_ON_ROOM);
+    return (Enum::OK);
+}
+
+template <typename T>
+bool                    UserManager<T>::isReady() const { return (is_ready); }
+
+template <typename T>
+Enum::UserStatus        UserManager<T>::getStatus() const { return (status); }
 
 template <typename T>
 const std::string      &UserManager<T>::getGameroomName() const { return (gameroom); }

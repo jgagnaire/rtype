@@ -52,6 +52,8 @@ public:
                                            std::fstream &file,
                                            std::string &stock);
     const std::string       &getGameroomName() const;
+    bool                    isReady() const;
+    Enum::UserStatus        getStatus() const;
 
     Enum::TCPServerAnswers		verifyUser();
     Enum::TCPServerAnswers	    newUser();
@@ -67,6 +69,8 @@ public:
     Enum::TCPServerAnswers      leaveRoom();
     Enum::TCPServerAnswers      ready();
     Enum::TCPServerAnswers      notReady();
+    Enum::TCPServerAnswers      getRoomList();
+
 
 
 private:
@@ -80,6 +84,7 @@ private:
     Packet<TCPDataHeader>					packet;
     Packet<TCPDataHeader>::PacketStruct		tmp_packet;
     std::string                             gameroom;
+    bool                                    is_ready;
 
     bool					hasBadFormat(std::string *) const;
     bool					alreadyExist(std::string *);
