@@ -1,6 +1,7 @@
 #include <iostream>
 #include "AccountController.hh"
 #include "NetworkManager.hh"
+#include "GameController.hh"
 #include "Enum.hh"
 #include "ServerError.hh"
 
@@ -28,7 +29,8 @@ int main(int, char **av)
 	  netmgr.triggerClose(&AController<int>::closeConnection);
 	  netmgr.triggerTimeout(&AController<int>::timeout);
 	  netmgr.triggerAObserve(&AController<int>::timeout);
-	  netmgr.addController(new AccountController<int>(netmgr.getClientList()));
+	  netmgr.addController(new GameController<int>(netmgr.getClientList()));
+      netmgr.addController(new AccountController<int>(netmgr.getClientList()));
 #endif
 	netmgr.launch();
   }

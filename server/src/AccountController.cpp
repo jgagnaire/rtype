@@ -90,7 +90,7 @@ bool	AccountController<T>::disconnectionFct(UserManager<T> *cl) const {
     if (!cl->isLogged())
         return (false);
     cl->disconnect();
-    return (true);
+    return (false);
 }
 
 template<typename T>

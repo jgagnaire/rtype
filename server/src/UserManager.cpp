@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <sys/timeb.h>
 #include <GameManager.hh>
 #include "UserManager.hh"
 
@@ -112,7 +113,6 @@ Enum::TCPServerAnswers	UserManager<T>::verifyUser() {
 
 template<typename T>
 std::string	UserManager<T>::getFriendName() {
-    std::istringstream	is;
     std::string	s;
 
     if (!stream.is_open())
@@ -186,6 +186,9 @@ template<typename T>
 bool	UserManager<T>::getPing() const { return (ping); }
 
 template<typename T>
+void    UserManager<T>::inGame() { status = Enum::GAME; }
+
+template<typename T>
 void	UserManager<T>::disconnect() {
     if (!stream.is_open())
         return ;
@@ -233,6 +236,7 @@ Enum::TCPServerAnswers UserManager<T>::startUpload() {
                       std::fstream::trunc | std::fstream::out);
     return (Enum::OK);
 }
+
 template <typename T>
 Enum::TCPServerAnswers     UserManager<T>::uploadImage() {
     if (!stream.is_open())
@@ -242,6 +246,11 @@ Enum::TCPServerAnswers     UserManager<T>::uploadImage() {
     image_stream.clear();
     image_stream << getPacketData() << std::flush;
     return (Enum::OK);
+}
+
+template <typename T>
+void    UserManager<T>::setUdpPacketStruct(const Packet<UDPDataHeader>::PacketStruct &p) {
+    udp_packet = p;
 }
 
 template <typename T>
@@ -311,6 +320,24 @@ Enum::TCPServerAnswers      UserManager<T>::joinNamedRoom() {
 }
 
 template <typename T>
+std::string     UserManager<T>::generateRoomName() {
+    struct timeb    tp;
+    static const char alphanum[] =
+            "0123456789"
+                    "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                    "abcdefghijklmnopqrstuvwxyz";
+
+    ftime(&tp);
+    std::string s;
+    std::srand(static_cast<unsigned int>((tp.millitm + tp.time * 1000)
+                                         * Enum::MAX_ROOM_NAME_NB));
+    for (int i = 0; i < Enum::MAX_ROOM_NAME_NB; ++i)
+        s.push_back(alphanum[std::rand() % (sizeof(alphanum) - 1)]);
+    return s;
+
+}
+
+template <typename T>
 Enum::TCPServerAnswers      UserManager<T>::createGameRoom() {
     std::string             game_name = getPacketData();
     GameManager<T>          &gm = GameManager<T>::instance();
@@ -320,7 +347,7 @@ Enum::TCPServerAnswers      UserManager<T>::createGameRoom() {
     if (!gameroom.empty())
         return (Enum::EALREADY_ON_ROOM);
     if (game_name.empty())
-        game_name = "qweqwe"; //TODO, for the moment
+        game_name = generateRoomName();
     is_ready = false;
     gameroom = game_name;
     gm.createRoom(game_name, this);

@@ -3,6 +3,7 @@
 
 template<typename T>
 class GameController : public AController<T> {
+public:
     GameController(std::list<UserManager<T> *> *);
 
     virtual         ~GameController() {}

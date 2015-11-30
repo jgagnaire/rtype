@@ -91,6 +91,9 @@ namespace Enum
         REGISTER_MAX = 12,
         REGISTER_MIN = 4,
         MAX_TIME = 10,
+        MAX_PLAYER = 4,
+        MAX_ROOM_NAME_NB = 16,
+        MAX_BUFFER_LENGTH = 512,
     };
 };
 

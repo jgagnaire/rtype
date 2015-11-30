@@ -54,6 +54,8 @@ public:
     const std::string       &getGameroomName() const;
     bool                    isReady() const;
     Enum::UserStatus        getStatus() const;
+    void                    inGame();
+    void                    setUdpPacketStruct(const Packet<UDPDataHeader>::PacketStruct &);
 
     Enum::TCPServerAnswers		verifyUser();
     Enum::TCPServerAnswers	    newUser();
@@ -83,11 +85,13 @@ private:
     bool									ping;
     Packet<TCPDataHeader>					packet;
     Packet<TCPDataHeader>::PacketStruct		tmp_packet;
+    Packet<UDPDataHeader>::PacketStruct		udp_packet;
     std::string                             gameroom;
     bool                                    is_ready;
 
     bool					hasBadFormat(std::string *) const;
     bool					alreadyExist(std::string *);
+    std::string             generateRoomName();
 
 };
 

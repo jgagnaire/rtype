@@ -70,6 +70,19 @@ bool        GameManager<SCK>::roomIsFull(const std::string &name) {
 }
 
 template <typename SCK>
+bool        GameManager<SCK>::isAllReady(const std::string &roomname) {
+    Game<SCK> *g = getGameByName(roomname);
+
+    if (!g)
+        return (false);
+    for (auto it = g->players.begin(); it != g->players.end(); ++it) {
+        if (!(*it)->isReady())
+            return (false);
+    }
+    return (true);
+}
+
+template <typename SCK>
 const std::list<Game<SCK> *>        &GameManager<SCK>::getGames() const { return (_games); }
 
 #if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined (_WIN64)

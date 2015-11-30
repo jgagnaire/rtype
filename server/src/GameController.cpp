@@ -29,13 +29,15 @@ int	            GameController<T>::newData(UserManager<T> *cl) {
 
 template <typename T>
 bool            GameController<T>::joinRandomRoom(UserManager<T> *cl) const { //TODO, refractor
-    GameManager<T>             &g = GameManager<T>::instance();
-    Enum::TCPServerAnswers  sa = cl->joinRandomRoom();
-    Game<T>                    *game;
+    GameManager<T>              &g = GameManager<T>::instance();
+    Enum::TCPServerAnswers      sa = cl->joinRandomRoom();
+    Game<T>                     *game;
 
     cl->writeStruct({0, sa});
     if (sa == Enum::OK) {
         game = g.getGameByName(cl->getGameroomName());
+        if (!game)
+            return (true);
         for (auto it = game->players.begin(); it != game->players.end(); ++it) {
             cl->writeStruct({static_cast<uint16_t>((*it)->getName().size()),
                              Enum::PLAYER_JOIN});
@@ -50,13 +52,15 @@ bool            GameController<T>::joinRandomRoom(UserManager<T> *cl) const { //
 
 template <typename T>
 bool            GameController<T>::joinNamedRoom(UserManager<T> *cl) const {
-    GameManager<T>             &g = GameManager<T>::instance();
-    Enum::TCPServerAnswers  sa = cl->joinNamedRoom();
-    Game<T>                    *game;
+    GameManager<T>              &g = GameManager<T>::instance();
+    Enum::TCPServerAnswers      sa = cl->joinNamedRoom();
+    Game<T>                     *game;
 
     cl->writeStruct({0, sa});
     if (sa == Enum::OK) {
         game = g.getGameByName(cl->getGameroomName());
+        if (!game)
+            return (true);
         for (auto it = game->players.begin(); it != game->players.end(); ++it) {
             cl->writeStruct({static_cast<uint16_t>((*it)->getName().size()),
                              Enum::PLAYER_JOIN});
@@ -81,13 +85,17 @@ bool            GameController<T>::leaveRoom(UserManager<T> *cl) const {
     Enum::TCPServerAnswers      sa = cl->leaveRoom();
     Game<T>                     *game;
 
+    game = g.getGameByName(cl->getGameroomName());
     cl->writeStruct({0, sa});
     if (sa == Enum::OK) {
-        game = g.getGameByName(cl->getGameroomName());
+        if (!game)
+            return (true);
         for (auto it = game->players.begin(); it != game->players.end(); ++it) {
-            (*it)->writeStruct({static_cast<uint16_t>(cl->getName().size()),
-                                Enum::PLAYER_LEFT});
-            (*it)->writeMsg(cl->getName());
+            if ((*it)->getName() != cl->getName()) {
+                (*it)->writeStruct({static_cast<uint16_t>(cl->getName().size()),
+                                    Enum::PLAYER_LEFT});
+                (*it)->writeMsg(cl->getName());
+            }
         }
     }
     return (true);
@@ -95,7 +103,18 @@ bool            GameController<T>::leaveRoom(UserManager<T> *cl) const {
 
 template <typename T>
 bool            GameController<T>::ready(UserManager<T> *cl) const {
+    GameManager<T>              &g = GameManager<T>::instance();
+    Game<T>                     *game;
     cl->writeStruct({0, cl->ready()});
+
+    if (g.isAllReady(cl->getGameroomName())) {
+        game = g.getGameByName(cl->getGameroomName());
+        if (!game)
+            for (auto it = game->players.begin(); it != game->players.end(); ++it) {
+                (*it)->inGame();
+                (*it)->writeStruct({0, Enum::GAME_START});
+            }
+    }
     return (true);
 }
 
@@ -119,7 +138,7 @@ bool            GameController<T>::getRoomList(UserManager<T> *cl) const {
             tmp.clear();
             os.clear();
             os.str("");
-            os <<  (4 - (*it)->players.size());
+            os <<  (Enum::MAX_PLAYER - (*it)->players.size());
             tmp = (*it)->name + ":" + os.str();
             cl->writeStruct({static_cast<uint16_t>(tmp.size()),
                              Enum::GAME_NAME});
@@ -128,3 +147,9 @@ bool            GameController<T>::getRoomList(UserManager<T> *cl) const {
     }
     return (true);
 }
+
+#if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+template class GameController<SOCKET>;
+#else
+template class GameController<int>;
+#endif
