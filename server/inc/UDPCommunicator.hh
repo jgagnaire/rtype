@@ -70,7 +70,7 @@ public:
             return (true);
         cli->setUdpPacketStruct(_pack);
         for (auto it = this->controllers.begin(); it != this->controllers.end(); ++it) {
-            if ((n = ((*it)->*(this->newData))(cli)) == 1)
+            if (((*it)->*(this->newData))(cli) == 1)
                 return true;
         }
         return (true);
@@ -84,6 +84,5 @@ public:
         return (0);
     }
 };
-
 
 #endif

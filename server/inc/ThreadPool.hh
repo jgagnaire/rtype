@@ -2,55 +2,74 @@
 #define RTYPE_THREADPOOL_H
 
 #include <vector>
+#include <utility>
 #include "ThreadFactory.hh"
 #include "Enum.hh"
 #include "IThreadPool.hh"
 
 template <typename RET_VAL, typename ARG>
 class ThreadPool : public IThreadPool<RET_VAL, ARG> {
+private:
+    static  size_t                              _id;
 public:
-    ThreadPool() {}
+    ThreadPool() {
+        _id = 0;
+    }
 
     virtual ~ThreadPool() {}
 
     virtual size_t getIdleThreadNumber() const {
         size_t i = 0;
         for (auto it = _threads.begin(); it != _threads.end(); ++it) {
-            i += ((*it)->state() != Enum::RUNNING);
+            i += (it->first.second->state() == Enum::NIL);
         }
         return (i);
     }
 
     virtual void joinThread(size_t id) {
-        if (id < _threads.size())
-            _threads[id]->join();
+        for (auto it = _threads.begin(); it != _threads.end();) {
+            if (it->first.first == id) {
+                it->first.second->join();
+                _threads.erase(it++);
+                return ;
+            }
+        }
     }
 
     virtual size_t add(RET_VAL(*f)(ARG), ARG arg) {
         IThread<RET_VAL, ARG>  *thr = ThreadFactory::create<RET_VAL, ARG>();
         thr->loadFunc(f);
-        _threads.push_back(thr);
-        _args.push_back(arg);
-        return (_threads.size() - 1);
+        _threads.push_back(std::make_pair(std::make_pair(_id, thr), arg));
+        return (_id++ - 1);
     }
 
     virtual void joinAll() {
-        for (auto it = _threads.begin(); it != _threads.end(); ++it) { (*it)->join(); }
+        for (auto it = _threads.begin(); it != _threads.end();) {
+            it->first.second->join();
+            _threads.erase(it++);
+        }
     }
 
     virtual void startThread(size_t id) {
-        if (id < _threads.size())
-            _threads[id]->create(_args[id]);
+        for (auto it = _threads.begin(); it != _threads.end(); ++it) {
+            if (it->first.first == id &&
+                it->first.second->state() != Enum::RUNNING)
+                it->first.second->create(it->second);
+        }
     }
 
     virtual void startAll() {
-        for (size_t i = 0; i < _threads.size(); ++i) { _threads[i]->create(_args[i]); }
+        for (auto it = _threads.begin(); it != _threads.end(); ++it) {
+            if (it->first.second->state() != Enum::RUNNING)
+                it->first.second->create(it->second);
+        }
     }
 
-private:
-    std::vector<IThread<RET_VAL, ARG> *>   _threads;
-    std::vector<ARG>                       _args;
+    std::size_t     threadNb() { return (_threads.size()); }
+    std::vector<std::pair<std::pair<int, IThread<RET_VAL, ARG> *>, ARG >> _threads;
 };
 
+template <typename RET_VAL, typename ARG>
+size_t  ThreadPool<RET_VAL, ARG>::_id = 0;
 
 #endif //RTYPE_THREADPOOL_H

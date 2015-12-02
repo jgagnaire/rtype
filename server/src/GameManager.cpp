@@ -70,6 +70,20 @@ bool        GameManager<SCK>::roomIsFull(const std::string &name) {
 }
 
 template <typename SCK>
+void        GameManager<SCK>::launchGame(const std::string &game_name) {
+    Game<SCK>    *game = getGameByName(game_name);
+
+    if (game) {
+        _threadpool.add(&GameManager::createGame, game);
+    }
+}
+
+template <typename SCK>
+void        GameManager<SCK>::createGame(Game<SCK> *) {
+
+}
+
+template <typename SCK>
 bool        GameManager<SCK>::isAllReady(const std::string &roomname) {
     Game<SCK> *g = getGameByName(roomname);
 

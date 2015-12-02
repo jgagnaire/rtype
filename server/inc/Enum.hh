@@ -93,6 +93,7 @@ namespace Enum
         MAX_TIME = 10,
         MAX_PLAYER = 4,
         MAX_ROOM_NAME_NB = 16,
+        MAX_GAME = 8,
         MAX_BUFFER_LENGTH = 512,
     };
 };

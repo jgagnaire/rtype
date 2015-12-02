@@ -109,7 +109,7 @@ bool            GameController<T>::ready(UserManager<T> *cl) const {
 
     if (g.isAllReady(cl->getGameroomName())) {
         game = g.getGameByName(cl->getGameroomName());
-        if (!game)
+        if (game)
             for (auto it = game->players.begin(); it != game->players.end(); ++it) {
                 (*it)->inGame();
                 (*it)->writeStruct({0, Enum::GAME_START});
