@@ -4,6 +4,7 @@
 # include "IServerSocket.hh"
 # include "ACommunicator.hh"
 # include "Packet.hh"
+# include "Enum.hh"
 
 # if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
 #  include "WinUDPSocketSet.hh"
@@ -18,11 +19,13 @@ template <typename USER, typename CONTROLLER,
 class UDPCommunicator : public ACommunicator<USER, CONTROLLER, MONITOR, SCK> {
 private:
     struct                  UDPData {
-        UDPDataHeader                       packet;
-        char                                buff[512]; // TODO, magic number
+        UDPDataHeader       packet;
+        char                buff[Enum::MAX_BUFFER_LENGTH];
     };
 
+    UDPData                 _data;
     Packet<UDPDataHeader>   _packet;
+    Packet<UDPDataHeader>::PacketStruct _pack;
 public:
     UDPCommunicator(char *port) {
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
@@ -33,37 +36,53 @@ public:
         this->network_monitor = new UnixServerMonitor();
 #endif
         this->network_monitor->addFd(dynamic_cast<IServerSocket<SCK>*>(this->srvset),
-                                     static_cast<Enum::Flag>(Enum::READ));
+                                     Enum::READ);
     }
 
     virtual void launch(std::list<USER*> *cl) {
+        this->cl_list = cl;
         for (;;) {
+            const char  *buff;
+            std::string ip;
+
             this->network_monitor->observerFds();
             if (this->network_monitor->isObserved(dynamic_cast<IServerSocket<SCK> *>(this->srvset),
-                                                  Enum::READ))
-                this->readAction(cl->back()); //TODO, not cl->back();
+                                                  Enum::READ)) {
+                size_t ret = _packet.getPacket(dynamic_cast<IServerSocket<SCK>*>(this->srvset),
+                                               &ip, true);
+                buff = _packet.getBuffer();
+                std::cout << ret << " " << sizeof(UDPData) << std::endl;
+                std::copy(buff, buff + ret, reinterpret_cast<char *>(&_data));
+
+                _pack.header = _data.packet;
+                _pack.data = _data.buff;
+                this->readAction(this->findUserByIP(ip));
+                _packet.clearAll();
+            }
         }
 
     }
 
     virtual bool	readAction(USER *cli) {
-        UDPData     data;
-        const char *buff;
-        std::string p;
+        int         n;
 
-        size_t ret = _packet.getPacket(dynamic_cast<IServerSocket<SCK>*>(this->srvset), &p, true);
-        buff = _packet.getBuffer();
-        std::cout << ret << " " << sizeof(UDPData) << std::endl;
-        std::copy(buff, buff + ret, reinterpret_cast<char *>(&data));
-         std::cout << "packet recu part " << p << " " << data.buff << std::endl; //write 1726
-        std::cout << &buff[16] << std::endl;
-        _packet.clearAll();
         if (!cli)
             return (true);
-
+        cli->setUdpPacketStruct(_pack);
+        for (auto it = this->controllers.begin(); it != this->controllers.end(); ++it) {
+            if (((*it)->*(this->newData))(cli) == 1)
+                return true;
+        }
         return (true);
     }
-};
 
+    USER            *findUserByIP(const std::string &ip) {
+        for (auto it = this->cl_list->begin(); it != this->cl_list->end(); ++it) {
+            if ((*it)->getIP() == ip)
+                return (*it);
+        }
+        return (0);
+    }
+};
 
 #endif

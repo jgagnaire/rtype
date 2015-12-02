@@ -4,7 +4,7 @@
 #include <list>
 #include <thread>
 #include <SFML/Audio.hpp>
-#include "UdpSocket.hh"
+#include "Network/UdpSocket.hh"
 #include "Audio.hh"
 #include "Recorder.hh"
 

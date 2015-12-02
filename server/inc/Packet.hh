@@ -10,17 +10,20 @@ struct TCPDataHeader {
     uint16_t query;
 };
 
+# if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+#  pragma pack(1)
 struct UDPDataHeader {
     uint16_t packet_size;
     uint16_t query;
     uint64_t id;
-}
-# if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-#  pragma pack(push, 1)
-;
-#  pragma pack(pop)
+};
+#  pragma pack()
 # else
-__attribute__((__packed__));
+struct UDPDataHeader {
+	uint16_t packet_size;
+	uint16_t query;
+	uint64_t id;
+}__attribute__((__packed__));
 # endif
 
 template <typename T>
@@ -53,7 +56,6 @@ private:
         _get_pack.data.insert(_get_pack.data.size(), str, ret);
         _str_ret += ret;
       }
-      std::cout << "fini" << std::endl;
       return (ret);
     }
 public:
