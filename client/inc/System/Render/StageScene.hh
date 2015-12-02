@@ -19,9 +19,9 @@ class StageScene : public Scene
             _b2.manager.add<ADrawable*>("background", &_s2);
             _b3.manager.add<ADrawable*>("background", &_s3);
 
-            _s1.load("client/res/stages/stage1/background.png", 1);
-            _s2.load("client/res/stages/stage1/middle.png", 2);
-            _s3.load("client/res/stages/stage1/top.png", 3);
+            _s1.load("client/res/stages/stage1/background_7680.png", 1);
+            _s2.load("client/res/stages/stage1/middle_7680.png", 2);
+            _s3.load("client/res/stages/stage1/top_7680.png", 3);
         }
 
         virtual ~StageScene()
