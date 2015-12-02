@@ -2,6 +2,8 @@
 # define ISYSTEM_HH_
 
 #include <chrono>
+#include <vector>
+#include "Event/EventAggregator.hh"
 
 class ISystem
 {
@@ -14,7 +16,7 @@ public:
   virtual bool handle(REvent e) = 0;
   virtual std::vector<REvent> broadcast(void) = 0;
 protected:
-  std::vector<Revent> 
+  std::vector<REvent> _eventList;
 };
 
 #endif //ISYSTEM_HH_
