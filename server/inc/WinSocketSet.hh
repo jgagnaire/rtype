@@ -8,7 +8,7 @@
 
 class WinSocketSet : public WinServerSocket, public ISocketSet<SOCKET>  {
 protected:
-  virtual void absInitSocket(unsigned short);
+  virtual void absInitSocket(unsigned short) {};
 public:
   WinSocketSet(unsigned short);
   virtual ~WinSocketSet() {}

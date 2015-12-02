@@ -10,17 +10,20 @@ struct TCPDataHeader {
     uint16_t query;
 };
 
+# if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+#  pragma pack(1)
 struct UDPDataHeader {
     uint16_t packet_size;
     uint16_t query;
     uint64_t id;
-}
-# if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-#  pragma pack(push, 1)
-;
-#  pragma pack(pop)
+};
+#  pragma pack()
 # else
-__attribute__((__packed__));
+struct UDPDataHeader {
+	uint16_t packet_size;
+	uint16_t query;
+	uint64_t id;
+}__attribute__((__packed__));
 # endif
 
 template <typename T>
@@ -39,13 +42,13 @@ private:
     size_t			            _str_ret;
 
     template <typename SCK>
-    void		getMsg(const SCK s, std::string * const p) {
+    size_t		getMsg(const SCK s, std::string * const p) {
       size_t	ret;
       char	    *str = NULL;
 
       if (_get_pack.header.packet_size == 0) {
         _get_pack.data = "";
-        return ;
+        return (0);
       }
       if (!(ret = s->absReadFromClient(str, _get_pack.header.packet_size - _str_ret, p)))
         clearAll();
@@ -53,6 +56,7 @@ private:
         _get_pack.data.insert(_get_pack.data.size(), str, ret);
         _str_ret += ret;
       }
+      return (ret);
     }
 public:
       Packet() :  _wr_buff(NULL) { clearAll(); }
@@ -62,23 +66,27 @@ public:
       bool     packetEmpty() const { return (_rd_buff.empty()); }
 
       template <typename SCK>
-      void		getPacket(const SCK s, std::string * const p = NULL) {
+      size_t		getPacket(const SCK s, std::string * const p = NULL, bool max_read = false) {
         size_t	ret;
         char    *str = NULL;
+        size_t  max_val = sizeof(T) + 512; // TODO, magic number;
 
-        if (_comdata_ret == sizeof(T))
+        if (!max_read)
+          max_val = sizeof(T);
+        if (_comdata_ret == max_val)
           return getMsg(s, p);
-        if (!(ret = s->absReadFromClient(str, sizeof(T) - _comdata_ret, p)))
+        if (!(ret = s->absReadFromClient(str, max_val - _comdata_ret, p)))
           clearAll();
         if (ret) {
           _rd_buff.insert(_comdata_ret, str, ret);
           if (_comdata_ret == 0)
             _get_pack.data.clear();
           _comdata_ret += ret;
-          if (_comdata_ret == sizeof(T))
+          if (_comdata_ret == max_val)
   	        deserialize(_rd_buff.c_str());
         }
         delete [] str;
+        return (ret);
       }
 
       const PacketStruct    retrievePacket() const { return _get_pack; }
@@ -111,7 +119,7 @@ public:
       bool                  isFilled() const { return _str_ret == _get_pack.header.packet_size; }
       bool                  HasSendPacket() const { return (!_send_pack.empty()); }
       bool                  sendPackEmpty() const { return (_send_pack.empty()); }
-
+      const char            *getBuffer() const { return (_rd_buff.c_str()); }
 
       void                  clearAll() {
         _rd_buff.clear();

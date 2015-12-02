@@ -38,70 +38,111 @@ public:
     virtual ~TCPCommunicator() {}
 
     virtual void	launch(std::list<USER*> *clients) {
-      this->cl_list = clients;
-      for (;;) {
-	for (auto cli = this->cl_list->begin(); cli != this->cl_list->end();) {
+        this->cl_list = clients;
+        for (;;) {
+            for (auto cli = this->cl_list->begin(); cli != this->cl_list->end();) {
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-	  while (!(*cli)->sendStructEmpty()) {
+                while (!(*cli)->sendStructEmpty()) {
 	    if (!(*cli)->writeOnMe()) {
 	      deleteClient(cli);
 	      break;
 	    }
 	  }
 #else
-    if (!(*cli)->sendStructEmpty()) {
-        this->network_monitor->setObserver((*cli)->getServerSocket(),
-                                           static_cast<Enum::Flag>(Enum::READ |
-                                                                   Enum::WRITE |
-                                                                   Enum::CLOSE));
-    }
+                if (!(*cli)->sendStructEmpty()) {
+                    this->network_monitor->setObserver((*cli)->getServerSocket(),
+                                                       static_cast<Enum::Flag>(Enum::READ |
+                                                                               Enum::WRITE |
+                                                                               Enum::CLOSE));
+                }
 #endif
                 ++cli;
-	}
-	this->network_monitor->setTimeval(1, 0);
-	if ((this->network_monitor->observerFds() == 0) &&
-	    (this->timeout))
-	  this->timeoutAction();
-	else
-	  this->checkObserver();
-      }
+            }
+            this->network_monitor->setTimeval(1, 0);
+            if ((this->network_monitor->observerFds() == 0) &&
+                (this->timeout))
+                this->timeoutAction();
+            else
+                this->checkObserver();
+        }
     }
 
-  void	deleteClient(typename std::list<USER *>::iterator &cli) {
-    this->network_monitor->closeFd((*cli)->getServerSocket());
-    ((this->controllers.front())->*(this->closeConnection))(*cli);
-    delete *cli;
-    *cli = NULL;
-    this->cl_list->erase(cli);
-  }
-
-  void	checkObserver() {
-    if (this->network_monitor->isObserved(dynamic_cast<IServerSocket<SCK>*>(this->srvset),
-                                          Enum::ACCEPT)) {
-      IServerSocket<SCK>	*tmp = this->srvset->absAcceptNewClient();
-
-      if (!tmp)
-	return ;
-      this->cl_list->push_back(new UserManager<SCK>(tmp));
-      if (this->newConnection)
-	for (auto it = this->controllers.begin(); it != this->controllers.end(); ++it)
-	  ((*it)->*(this->newConnection))(this->cl_list->back());
-      this->network_monitor->addFd(dynamic_cast<IServerSocket<SCK>*>(this->cl_list->back()->getServerSocket()),
-				   static_cast<Enum::Flag>(Enum::READ | Enum::CLOSE));
-      return ;
+    void	deleteClient(typename std::list<USER *>::iterator &cli) {
+        this->network_monitor->closeFd((*cli)->getServerSocket());
+        ((this->controllers.front())->*(this->closeConnection))(*cli);
+        delete *cli;
+        *cli = NULL;
+        this->cl_list->erase(cli);
     }
-    for (auto cli = this->cl_list->begin(); cli != this->cl_list->end(); ++cli) {
-      for (int f = 0; (1 << f) <= Enum::CLOSE; ++f) {
-	if (this->network_monitor->isObserved((*cli)->getServerSocket(),
-					      static_cast<Enum::Flag>(1 << f))) {
-	  if (!(this->*(this->monitor_action)[f])(*cli))
-	    return (this->deleteClient(cli));
-	}
-      }
+
+    void	checkObserver() {
+        if (this->network_monitor->isObserved(dynamic_cast<IServerSocket<SCK>*>(this->srvset),
+                                              Enum::ACCEPT)) {
+            IServerSocket<SCK>	*tmp = this->srvset->absAcceptNewClient();
+
+            if (!tmp)
+                return ;
+            this->cl_list->push_back(new UserManager<SCK>(tmp));
+            if (this->newConnection)
+                for (auto it = this->controllers.begin(); it != this->controllers.end(); ++it)
+                    ((*it)->*(this->newConnection))(this->cl_list->back());
+            this->network_monitor->addFd(dynamic_cast<IServerSocket<SCK>*>(this->cl_list->back()->getServerSocket()),
+                                         static_cast<Enum::Flag>(Enum::READ | Enum::CLOSE));
+            return ;
+        }
+        for (auto cli = this->cl_list->begin(); cli != this->cl_list->end(); ++cli) {
+            for (int f = 0; (1 << f) <= Enum::CLOSE; ++f) {
+                if (this->network_monitor->isObserved((*cli)->getServerSocket(),
+                                                      static_cast<Enum::Flag>(1 << f))) {
+                    if (!(this->*(this->monitor_action)[f])(*cli))
+                        return (this->deleteClient(cli));
+                }
+            }
+        }
+        if (this->aobs)
+            this->afterObserveAction();
     }
-    if (this->aobs)
-      this->afterObserveAction();
-  }
+
+    virtual bool            readAction(UserManager<SCK> *cli) {
+        int         n;
+
+        cli->readFromMe();
+        if (cli->emptyData())
+            return (false);
+        if (!cli->IsFilled())
+            return (true);
+        for (auto it = this->controllers.begin(); it != this->controllers.end(); ++it) {
+            if ((n = ((*it)->*(this->newData))(cli)) == 1)
+            {
+                cli->clearData();
+                this->network_monitor->setObserver(cli->getServerSocket(),
+                                                   static_cast<Enum::Flag>(Enum::WRITE |
+                                                                           Enum::READ |
+                                                                           Enum::CLOSE));
+                return (true);
+            }
+            else if (n == 0)
+                return (false);
+        }
+        cli->clearData();
+        return (true);
+    }
+
+    virtual bool          writeAction(UserManager<SCK> *cli) {
+        if (cli->sendStructEmpty()) {
+            this->network_monitor->setObserver(cli->getServerSocket(),
+                                               static_cast<Enum::Flag>(Enum::READ | Enum::CLOSE));
+            return true;
+        }
+        if (!cli->writeOnMe())
+            return (false);
+        if (cli->sendStructEmpty()) {
+            this->network_monitor->setObserver(cli->getServerSocket(),
+                                               static_cast<Enum::Flag>(Enum::READ | Enum::CLOSE));
+        }
+        return (true);
+    }
+
 };
 
 #endif

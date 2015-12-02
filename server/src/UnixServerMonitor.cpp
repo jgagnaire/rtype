@@ -54,6 +54,7 @@ int  UnixServerMonitor::observerFds() {
     setObserver((*it)->fd, (*it)->flag);
   }
   do {
+    errno = 0;
     ret = select(fd_nbr + 1, &readfds, &writefds, NULL, timeout);
   }
   while (errno == EINTR && ret == -1);

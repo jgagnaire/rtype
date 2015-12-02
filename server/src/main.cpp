@@ -1,6 +1,8 @@
 #include <iostream>
 #include "AccountController.hh"
 #include "NetworkManager.hh"
+#include "GameController.hh"
+#include "Enum.hh"
 #include "ServerError.hh"
 
 #if !(defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64))
@@ -21,13 +23,14 @@ int main(int, char **av)
 	netmgr.addController(new AccountController<SOCKET>(netmgr.getClientList()));
 #else
 	  mkdir("./server/.database", 0755);
-	  NetworkManager<int, AController<int> > netmgr(av[1]);
+	  NetworkManager<int, AController<int> > netmgr(av[1], Enum::BOTH_PROTO);
 	  netmgr.triggerConnection(&AController<int>::newConnection);
 	  netmgr.triggerNewData(&AController<int>::newData);
 	  netmgr.triggerClose(&AController<int>::closeConnection);
 	  netmgr.triggerTimeout(&AController<int>::timeout);
 	  netmgr.triggerAObserve(&AController<int>::timeout);
-	  netmgr.addController(new AccountController<int>(netmgr.getClientList()));
+	  netmgr.addController(new GameController<int>(netmgr.getClientList()));
+      netmgr.addController(new AccountController<int>(netmgr.getClientList()));
 #endif
 	netmgr.launch();
   }

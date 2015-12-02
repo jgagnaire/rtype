@@ -23,90 +23,75 @@
 template <typename T>
 class UserManager
 {
- public:
-  UserManager(IServerSocket<T> *sck);
-  ~UserManager();
+public:
+    UserManager(IServerSocket<T> *sck);
+    ~UserManager();
 
-  struct				Call {
-    time_t				time;
-    Enum::ClientQueries	audio_type;
-    std::string			name;
-    UserManager			*cl;
-  };
+    bool					IsFilled() const;
+    void					clearData();
+    void					readFromMe();
 
-  bool					IsFilled() const;
-  void					clearData();
-  void					readFromMe();
+    bool		        	isLogged() const;
+    bool					emptyData() const;
+    Enum::ClientQueries		numQuery() const;
+    void					setPing(bool p = true);
+    bool					getPing() const;
+    std::string				getFriendName();
+    std::string				getPacketData() const;
+    const std::string		&getName() const;
+    std::string				getIP() const;
+    bool					sendStructEmpty() const;
+    void					writeStruct(const ::TCPDataHeader &);
+    void					writeMsg(const std::string &);
+    bool 					writeOnMe();
+    IServerSocket<T>		*getServerSocket();
+    void					disconnect();
+    void		        	fillPacketStruct();
+    void					sendPing();
+    bool					deleteUserWith(const std::string &s,
+                                           std::fstream &file,
+                                           std::string &stock);
+    const std::string       &getGameroomName() const;
+    bool                    isReady() const;
+    Enum::UserStatus        getStatus() const;
+    void                    inGame();
+    void                    setUdpPacketStruct(const Packet<UDPDataHeader>::PacketStruct &);
 
-  bool		        	isLogged() const;
-  bool					emptyData() const;
-  void					retrieveMessage();
-  Enum::UserStatus      getStatus() const;
-  Enum::ClientQueries	numQuery() const;
-  void					setPing(bool p = true);
-  bool					getPing() const;
-  std::string			getFriendName();
-  std::string			getPacketData() const;
-  void					fromFirstUser();
-  Enum::ServerAnswers	deleteUserAsFriend();
-  Enum::ServerAnswers	verifyUser();
-  Enum::ServerAnswers	newUser();
-  Enum::ServerAnswers	addUserAsFriend();
-  Enum::ServerAnswers   userExist();
-  Enum::ServerAnswers   changeStatus();
-  const std::string		&getName() const;
-  std::string			getIP() const;
-  bool					sendStructEmpty() const;
-  void					writeStruct(const ::TCPDataHeader &);
-  void					writeMsg(const std::string &);
-  bool 					writeOnMe();
-  IServerSocket<T>		*getServerSocket();
-  void					disconnect();
-  void					stockMessage(const std::string &);
-  void		        	fillPacketStruct();
-  void					sendPing();
-  void					checkCall();
-  void					addOnCallList(const std::string &,
-				      	UserManager *cl,
-				      	Enum::ClientQueries);
-  bool					deleteCallByName(const std::string &);
-  void					callWith(const std::string &, Enum::ClientQueries);
-  const std::string		&getCallUser() const;
-  Enum::ClientQueries	getCallQuery() const;
-  bool					deleteUserWith(const std::string &s,
-				       					std::fstream &file,
-				       					std::string &stock);
-  std::list<Call>		call_list;
+    Enum::TCPServerAnswers		verifyUser();
+    Enum::TCPServerAnswers	    newUser();
+    Enum::TCPServerAnswers      startUpload();
+    Enum::TCPServerAnswers      uploadImage();
+    Enum::TCPServerAnswers      endOfUploading();
+    Enum::TCPServerAnswers      deleteImage();
+    Enum::TCPServerAnswers      retrieveImage();
 
-  void					refuseCall(typename std::list<Call>::iterator &it) const {
-    if (it->cl) {
-      if (it->audio_type == Enum::AUDIO_CALL_INIT)
-	it->cl->writeStruct({static_cast<uint16_t>(it->name.size()),
-	      Enum::REJECT_AUDIO});
-      else
-	it->cl->writeStruct({static_cast<uint16_t>(it->name.size()),
-	      Enum::REJECT_VIDEO});
-      it->cl->writeMsg(name);
-    }
-  }
+    Enum::TCPServerAnswers      joinRandomRoom();
+    Enum::TCPServerAnswers      joinNamedRoom();
+    Enum::TCPServerAnswers      createGameRoom();
+    Enum::TCPServerAnswers      leaveRoom();
+    Enum::TCPServerAnswers      ready();
+    Enum::TCPServerAnswers      notReady();
+    Enum::TCPServerAnswers      getRoomList();
+
+
 
 private:
-  IServerSocket<T>						*sock;
-  std::string							name;
-  Enum::UserStatus						status;
-  std::fstream							stream;
-  static const std::string				database_dir;
-  bool									ping;
-  Packet<TCPDataHeader>					packet;
-  Packet<TCPDataHeader>::PacketStruct	tmp_packet;
-  std::string							call_with;
-  Enum::ClientQueries					call_query;
+    IServerSocket<T>						*sock;
+    Enum::UserStatus                        status;
+    std::string								name;
+    std::fstream							stream;
+    std::fstream                            image_stream;
+    static const std::string				database_dir;
+    bool									ping;
+    Packet<TCPDataHeader>					packet;
+    Packet<TCPDataHeader>::PacketStruct		tmp_packet;
+    Packet<UDPDataHeader>::PacketStruct		udp_packet;
+    std::string                             gameroom;
+    bool                                    is_ready;
 
-  bool			hasBadFormat(std::string *) const;
-  bool			alreadyExist(std::string *);
-  bool			friendAlreadyExist();
-  bool		    friendMatch(const std::string &, std::fstream &);
-  bool		    contactExist();
+    bool					hasBadFormat(std::string *) const;
+    bool					alreadyExist(std::string *);
+    std::string             generateRoomName();
 
 };
 

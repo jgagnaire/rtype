@@ -1,8 +1,7 @@
 #include "WinUDPSocketSet.hh"
 
 WinUDPSocketSet::WinUDPSocketSet(unsigned short port)
-  : WinSocketSet(port)
-{}
+  : WinSocketSet(port) { this->absInitSocket(port); }
 
 void	WinUDPSocketSet::absInitSocket(unsigned short port) {
   SOCKET sock = 1;

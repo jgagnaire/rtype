@@ -10,13 +10,13 @@ class Scene
         virtual ~Scene() {}
 
         virtual void update() = 0;
-        virtual std::vector<Entity&>    getEntities()
+        virtual std::vector<Entity*>    getEntities()
         {
             return _entities;
         }
 
     protected:
-        std::vector<Entity&>            _entities;
+        std::vector<Entity*>            _entities;
 };
 
 #endif /* ifndef SCENE_HH_ */
