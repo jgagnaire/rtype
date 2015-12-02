@@ -9,6 +9,7 @@ class Recorder : public sf::SoundRecorder
 {
 public:
   Recorder();
+  virtual ~Recorder();
   sf::SoundBuffer *getBuffer();
 
 private:

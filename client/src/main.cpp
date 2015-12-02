@@ -11,8 +11,12 @@
 #include "System/Render/MenuScene.hh"
 #include "System/Render/StageScene.hh"
 
+#include "AudioCallSystem.hh"
+
 int main(int ac, char **av)
 {
+  AudioCallSystem audioCallSystem;
+
     std::srand(static_cast<unsigned int>(std::time(0)));
     if (ac == 1)
     {

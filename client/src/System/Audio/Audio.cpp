@@ -2,17 +2,21 @@
 
 Audio::Audio()
 {
+  this->_exit = false;
   _thread = 0;
 }
 
 Audio::~Audio()
 {
+  this->_exit = true;
+  this->_thread->join();
+  _clients.clear();
+  delete this->_thread;
 }
 
 void	Audio::startThread(Audio *obj)
 {
-  obj->startAudio();
-  
+  obj->startAudio();  
 }
 
 void	Audio::startAudio()
@@ -25,7 +29,7 @@ void	Audio::startAudio()
       _thread = new std::thread(&Audio::startThread, this);
       return ;
     }
-  while (1)
+  while (!_exit)
     {
       for (it = this->_clients.begin(); it != this->_clients.end(); ++it)
 	{

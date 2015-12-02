@@ -3,11 +3,22 @@
 
 AudioCallSystem::AudioCallSystem()
 {
+  this->_exit = false;
+  this->_thread = 0;
   this->start();
 }
 
 AudioCallSystem::~AudioCallSystem()
 {
+  this->_exit = true;
+  this->_thread->join();
+  this->_packets.clear();
+  delete this->_thread;
+}
+
+void	AudioCallSystem::startThread(AudioCallSystem *obj)
+{
+  obj->start();  
 }
 
 void AudioCallSystem::start()
@@ -15,15 +26,22 @@ void AudioCallSystem::start()
   sf::SoundBuffer *buffer;
   Recorder recorder;
 
+  if (!_thread)
+    {
+      _thread = new std::thread(&AudioCallSystem::startThread, this);
+      return ;
+    }
   _audio.startAudio();
   recorder.start();
-  while (sf::SoundBufferRecorder::isAvailable())
+  while (sf::SoundBufferRecorder::isAvailable() && !_exit)
     {
       if ((buffer = recorder.getBuffer()))
 	{
 	  this->addPacket(buffer);
+	  in(out());
 	}
     }
+  recorder.stop();
 }
 
 void AudioCallSystem::addPacket(sf::SoundBuffer *buffer)

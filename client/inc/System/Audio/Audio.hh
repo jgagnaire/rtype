@@ -22,6 +22,7 @@ private:
   AudioBuffer *addClient(const std::string &);
   std::list <AudioBuffer *> _clients;
   std::thread	*_thread;
+  bool		_exit;
 };
 
 #endif // !AUDIO_HH_

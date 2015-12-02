@@ -2,6 +2,7 @@
 
 AudioBuffer::~AudioBuffer()
 {
+  this->_buffers.clear();
 }
 
 sf::SoundBuffer *AudioBuffer::getBuffer()

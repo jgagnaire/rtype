@@ -8,6 +8,11 @@ Recorder::Recorder() : SoundRecorder()
   this->setProcessingInterval(interval);
 }
 
+Recorder::~Recorder()
+{
+  this->_buffers.clear();
+}
+
 sf::SoundBuffer *Recorder::getBuffer()
 {
   sf::SoundBuffer *tmp;
