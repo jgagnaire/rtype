@@ -11,11 +11,12 @@ RenderSystem::RenderSystem()
     _eventList.push_back(Key_Right);
     _eventList.push_back(Key_Enter);
     _current = &_menu;
+    _window = new Window();
 }
 
 RenderSystem::~RenderSystem()
 {
-
+    delete _window;
 }
 
 void RenderSystem::update(IClock &e)
@@ -37,6 +38,11 @@ bool RenderSystem::handle(REvent)
 std::vector<REvent> RenderSystem::broadcast(void)
 {
     return _eventList;
+}
+
+IWindow         *RenderSystem::getWindow() const
+{
+     return _window;
 }
 
 #endif /* end of include guard: RENDERSYSTEM_CPP_ZPTSKFN8 */
