@@ -25,7 +25,7 @@ public:
         monitor_action.push_back(&TCPCommunicator::connectAction);
         monitor_action.push_back(&TCPCommunicator::closeAction);
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        this->srvset = new WinTCPSocketSet(static_cast<unsigned short>(!port ? 1119 : std::atoi(port)));
+        this->srvset = new WinTCPSocketSet(!port ? 1119 : std::atoi(port));
         this->network_monitor = new WinServerMonitor();
 #else
         this->srvset = new UnixTCPSocketSet(!port ? 1119 : std::atoi(port));
