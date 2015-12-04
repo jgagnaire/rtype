@@ -123,7 +123,7 @@ void AudioCallSystem::addPacket(sf::SoundBuffer *buffer)
   short int *data;
   const short int *tmpData;
 
-  tmp->setSize(buffer->getSampleCount() * 2);
+  tmp->setSize(static_cast<uint16_t>(buffer->getSampleCount() * 2));
   data = new short int[tmp->getSize()];
   tmp->setQuery(502);
   tmpData = buffer->getSamples();

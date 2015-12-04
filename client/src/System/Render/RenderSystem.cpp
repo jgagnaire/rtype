@@ -11,19 +11,20 @@ RenderSystem::RenderSystem()
     _eventList.push_back(Key_Right);
     _eventList.push_back(Key_Enter);
     _current = &_menu;
+    _window = new Window();
 }
 
 RenderSystem::~RenderSystem()
 {
-
+    delete _window;
 }
 
-void RenderSystem::update(std::chrono::steady_clock e)
+void RenderSystem::update(IClock &e)
 {
-    std::chrono::time_point<std::chrono::steady_clock> now = e.now();
-    double duration = (now - _last).count() * 1000;
-    _current->update(duration);
-    _last = now;
+    _current->update(e.getElapsedTimeMilli());
+    e.restart();
+    for (auto x : _current->getEntities())
+        _window->draw(*x);
 }
 
 IPacket *RenderSystem::out()
@@ -39,6 +40,11 @@ bool RenderSystem::handle(REvent)
 std::vector<REvent> RenderSystem::broadcast(void)
 {
     return _eventList;
+}
+
+IWindow         *RenderSystem::getWindow() const
+{
+    return _window;
 }
 
 #endif /* end of include guard: RENDERSYSTEM_CPP_ZPTSKFN8 */

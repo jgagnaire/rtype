@@ -1,0 +1,13 @@
+
+-> bonus
+	- couleur et forme des projectiles
+	- angle de portée de l'arme
+	- bouclier temporaire (= timer qui se décrémente)
+	- invicibilité temporaire (= timer qui se décrémente)
+	- vitesse de défilement ralentie (pour tout le monde)
+	- force + niveaux de force
+
+-> direction de tir de base
+	- 1 projectile rectiligne
+
+-> astéroïdes

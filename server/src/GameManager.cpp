@@ -102,7 +102,7 @@ const std::list<Game<SCK> *>        &GameManager<SCK>::getGames() const { return
 
 #if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined (_WIN64)
 template class GameManager<SOCKET>;
-template class Game<SOCKET>;
+template struct Game<SOCKET>;
 #else
 template class GameManager<int>;
 template class Game<int>;
