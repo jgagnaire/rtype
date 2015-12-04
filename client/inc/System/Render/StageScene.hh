@@ -24,7 +24,7 @@ class StageScene : public Scene
             _s1.load("client/res/stages/stage1/background_7680.png", 1);
             _s2.load("client/res/stages/stage1/middle_7680.png", 2);
             _s3.load("client/res/stages/stage1/top_7680.png", 3);
-            _ship.load("client/res/ship/player-ship_106.png", true);
+            _ship.load("client/res/ship/player-ship-blue_107.png", true);
         }
 
         virtual ~StageScene()
