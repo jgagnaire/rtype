@@ -23,6 +23,8 @@ void RenderSystem::update(IClock &e)
 {
     _current->update(e.getElapsedTimeMilli());
     e.restart();
+    for (auto x : _current->getEntities())
+        _window->draw(*x);
 }
 
 IPacket *RenderSystem::out()
@@ -42,7 +44,7 @@ std::vector<REvent> RenderSystem::broadcast(void)
 
 IWindow         *RenderSystem::getWindow() const
 {
-     return _window;
+    return _window;
 }
 
 #endif /* end of include guard: RENDERSYSTEM_CPP_ZPTSKFN8 */
