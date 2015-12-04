@@ -72,7 +72,7 @@ type for compenents \"" + name + "\" is : " + compenents[name]->getType());
 	{
 	  if (it->second->getType() == typeid(Type).name())
 	    {
-	      delete *it;
+	      compenents.erase(it->first);
 	      return true;
 	    }
 	}
