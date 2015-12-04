@@ -23,3 +23,14 @@ sf::SoundBuffer *Recorder::getBuffer()
   this->_buffers.pop_front();
   return (tmp);
 }
+
+bool Recorder::onProcessSamples(const sf::Int16* samples, std::size_t sampleCount)
+{
+  sf::SoundBuffer *tmp;
+
+  tmp = new sf::SoundBuffer();
+  tmp->loadFromSamples(samples, sampleCount, 2, sampleCount);    
+  // _buffers.push_back(tmp);
+  this->_obj->addPacket(tmp);
+  return true;
+}

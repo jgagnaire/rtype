@@ -47,7 +47,9 @@ void AudioCallSystem::startRecord()
   while (!_exit)
     {
       if (!_packets.empty())
-      in(out());
+	{
+	  in(out());
+	}
     }
 }
 
@@ -73,7 +75,7 @@ void	AudioCallSystem::startPlay()
 		break ;
 	      }
 	  }
-      if (tmp && (*it)->manager.get<sf::Clock *>("clock")->getElapsedTime().asMicroseconds() >=
+      if (tmp && *it && (*it)->manager.get<sf::Clock *>("clock")->getElapsedTime().asMicroseconds() >=
 	  (*it)->manager.get<sf::Time *>("time")->asMicroseconds())
 	{
 	  this->_sound.stop();
@@ -90,6 +92,7 @@ void	AudioCallSystem::startPlay()
 
 void AudioCallSystem::addBuffer(sf::SoundBuffer *buffer, const std::string &name)
 {
+  static unsigned int	id = 0;
   Entity	*tmp;
   std::vector <Entity *>::iterator it;
 
@@ -99,20 +102,22 @@ void AudioCallSystem::addBuffer(sf::SoundBuffer *buffer, const std::string &name
 	break ;
     }
   if (it != this->_users.end())
-    (*it)->manager.add<sf::SoundBuffer *>("", buffer);
+    (*it)->manager.add<sf::SoundBuffer *>(std::to_string(id), buffer);
   else
     {
       tmp = new Entity;
       tmp->manager.add<std::string>("name", name);
       tmp->manager.add<sf::Clock *>("clock", new sf::Clock);
       tmp->manager.add<sf::Time *>("time", new sf::Time);
-      tmp->manager.add<sf::SoundBuffer *>("", buffer);
+      tmp->manager.add<sf::SoundBuffer *>(std::to_string(id), buffer);
       this->_users.push_back(tmp);
     }
+  ++id;
 }
 
 void AudioCallSystem::addPacket(sf::SoundBuffer *buffer)
 {
+  _mutex.lock();
   std::string pseudo = "lol";
   UdpPacket *tmp = new UdpPacket();
   short int *data;
@@ -126,6 +131,7 @@ void AudioCallSystem::addPacket(sf::SoundBuffer *buffer)
   tmp->setData(data);
   _packets.push_back(tmp);
   delete buffer;
+  _mutex.unlock();
 }
 
 bool AudioCallSystem::in(UdpPacket *packet)
@@ -140,9 +146,7 @@ bool AudioCallSystem::in(UdpPacket *packet)
   data = new short int[packet->getSize()];
   std::copy(tmpData, tmpData + packet->getSize(), data);
   buffer->loadFromSamples(data, packet->getSize() / 2, 2, packet->getSize() / 2);
-  _mutex.lock();
   this->addBuffer(buffer, "toto");
-  _mutex.unlock();
   return true;
 }
 

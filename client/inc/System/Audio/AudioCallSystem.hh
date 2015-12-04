@@ -32,9 +32,10 @@ private:
   std::list <UdpPacket *> _packets;
   std::thread	*_recorderThread;
   std::thread	*_playerThread;
-std::mutex	_mutex;
-Recorder	*recorder;
+  std::mutex	_mutex;
+  Recorder	*recorder;
   sf::Sound _sound;
+  sf::Clock _clock;
 };
 
 #endif //!AUDIOCALLSYSTEM_HH_

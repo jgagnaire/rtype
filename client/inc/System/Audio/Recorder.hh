@@ -16,16 +16,8 @@ public:
   sf::SoundBuffer *getBuffer();
 
 private:
-  virtual bool onProcessSamples(const sf::Int16* samples, std::size_t sampleCount)
-  {
-    sf::SoundBuffer *tmp;
 
-    tmp = new sf::SoundBuffer();
-    tmp->loadFromSamples(samples, sampleCount, 2, sampleCount);    
-    _buffers.push_back(tmp);
-    return true;
-  }
-
+  virtual bool onProcessSamples(const sf::Int16* samples, std::size_t sampleCount);
   std::list <sf::SoundBuffer *> _buffers;
   AudioCallSystem *_obj;
 };
