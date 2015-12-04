@@ -2,6 +2,8 @@
 # define AGGREGATOR_HH_
 
 #include <unordered_map>
+#include <System/Render/IWindow.hh>
+#include <System/Render/Window.hh>
 #include "System/ISystem.hh"
 
 enum REvent
@@ -19,13 +21,15 @@ class ISystem;
 class EventAggregator
 {
 private:
-  std::unordered_map<ISystem*, std::vector<REvent> > _systemList;
+  IWindow						*win;
+  std::unordered_map<ISystem*, std::vector<REvent> >	_systemList;
 public:
-  EventAggregator() {}
+  EventAggregator(IWindow *w) : win(w) {}
   ~EventAggregator() {}
   void send(REvent);
   void add(REvent, ISystem*);
   void update(void);
+  inline IWindow *getWin() { return win; }
 };
 
 #endif // AGGREGATOR_HH_
