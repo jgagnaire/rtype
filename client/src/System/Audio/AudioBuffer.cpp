@@ -3,6 +3,7 @@
 AudioBuffer::~AudioBuffer()
 {
   this->_buffers.clear();
+  this->_sound.stop();
 }
 
 sf::SoundBuffer *AudioBuffer::getBuffer()
@@ -28,6 +29,7 @@ void AudioBuffer::play()
 
   if (!(tmp = this->getBuffer()))
     return ;
+  this->_sound.stop();
   this->_sound.resetBuffer();
   this->_sound.setBuffer(*tmp);
   this->_sound.play();
