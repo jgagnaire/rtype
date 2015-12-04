@@ -12,7 +12,7 @@ class RenderSystem : public ISystem
         RenderSystem();
         virtual ~RenderSystem();
 
-        virtual void update(std::chrono::steady_clock&);
+        virtual void update(IClock&);
         virtual IPacket *out();
         virtual bool handle(REvent e);
         virtual std::vector<REvent> broadcast(void);

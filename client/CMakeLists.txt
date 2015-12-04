@@ -7,6 +7,7 @@ set(CMAKE_BUILD_TYPE Debug)
 
 file(GLOB_RECURSE client_SOURCES "src/Graphics/*.cpp")
 file(GLOB_RECURSE client_SOURCES "src/Scene/*.cpp")
+file(GLOB_RECURSE client_SOURCES "src/Utility/*.cpp")
 file(GLOB_RECURSE client_SOURCES "src/System/Audio/*.cpp")
 file(GLOB_RECURSE client_SOURCES "src/System/Event/*.cpp")
 file(GLOB_RECURSE client_SOURCES "src/*.cpp")
@@ -17,6 +18,7 @@ file(GLOB_RECURSE client_HEADERS "inc/System/*.hh")
 file(GLOB_RECURSE client_HEADERS "inc/Compenent/*.hh")
 file(GLOB_RECURSE client_HEADERS "inc/System/Event/*.hh")
 file(GLOB_RECURSE client_HEADERS "inc/Graphics/*.hh")
+file(GLOB_RECURSE client_HEADERS "inc/Utility/*.hh")
 
 add_executable(client_rtype ${client_SOURCES} ${client_HEADERS})
 
