@@ -64,8 +64,6 @@ public:
     }
 
     virtual bool	readAction(USER *cli) {
-        int         n;
-
         if (!cli)
             return (true);
         cli->setUdpPacketStruct(_pack);
