@@ -7,7 +7,6 @@ UnixUDPSocketSet::UnixUDPSocketSet(unsigned short port)
 
 void	UnixUDPSocketSet::absInitSocket(unsigned short port) {
   int sockfd;
-  protoent *p;
   sockaddr_in srv_addr = { 0, 0, 0, 0 };
   int	tmp = 1;
 
