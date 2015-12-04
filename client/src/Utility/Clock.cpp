@@ -8,7 +8,7 @@ Clock::~Clock()
 
 std::size_t     Clock::getElapsedTimeMicro() const
 {
-    return _clock.getElapsedTime().asMicroseconds();
+    return static_cast<std::size_t>(_clock.getElapsedTime().asMicroseconds());
 }
 
 std::size_t     Clock::getElapsedTimeMilli() const
