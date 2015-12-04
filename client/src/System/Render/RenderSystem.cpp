@@ -18,7 +18,7 @@ RenderSystem::~RenderSystem()
 
 }
 
-void RenderSystem::update(std::chrono::steady_clock e)
+void RenderSystem::update(std::chrono::steady_clock &e)
 {
     std::chrono::time_point<std::chrono::steady_clock> now = e.now();
     double duration = (now - _last).count() * 1000;
