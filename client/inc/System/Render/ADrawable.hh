@@ -1,13 +1,15 @@
 #ifndef ADRAWABLE_HH_
 # define ADRAWABLE_HH_
 
+# include <cstddef>
+
 class ADrawable
 {
     public:
         ADrawable() {}
         virtual ~ADrawable() {}
 
-        virtual void    update() = 0;
+        virtual void    update(std::size_t) = 0;
 
         virtual const void  *getBuffer() const
         {

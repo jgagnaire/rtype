@@ -41,10 +41,10 @@ class MenuScene : public Scene
             _selector.setPosition(sf::Vector2f(735, 375));
             _gui.manager.add<ADrawable*>("selector", &_selector);
 
-            _textVec.push_back(new Text("Play Online"));
-            _textVec.push_back(new Text("Play Offline"));
-            _textVec.push_back(new Text("Settings"));
-            _textVec.push_back(new Text("Quit"));
+            _textVec.push_back(new Text("Play Online", 0xd12323ff));
+            _textVec.push_back(new Text("Play Offline", 0xd12323ff));
+            _textVec.push_back(new Text("Settings", 0xd12323ff));
+            _textVec.push_back(new Text("Quit", 0xd12323ff));
             for (std::size_t i = 0; i < _textVec.size(); ++i)
             {
                 _textVec[i]->setCenter();
@@ -59,15 +59,15 @@ class MenuScene : public Scene
                 delete x;
         }
 
-        virtual void update()
+        virtual void update(int duration)
         {
-            _selector.update();
-            _arrow.update();
-            _title.update();
-            _s1.update();
-            _s2.update();
-            _s3.update();
-            _s4.update();
+            _selector.update(duration);
+            _arrow.update(duration);
+            _title.update(duration);
+            _s1.update(duration);
+            _s2.update(duration);
+            _s3.update(duration);
+            _s4.update(duration);
         }
     private:
         Entity              _b1;

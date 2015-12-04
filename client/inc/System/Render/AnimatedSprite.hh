@@ -14,7 +14,7 @@ class AnimatedSprite : public sf::Drawable, public ADrawable
 
         bool            load(const std::string &path,
                 bool random = false, unsigned frameBySec = 10);
-        virtual void    update();
+        virtual void    update(std::size_t);
         void            setPosition(const sf::Vector2f &pos);
         const sf::Vector2f &getPosition() const;
         virtual void    draw(sf::RenderTarget &target,
@@ -23,12 +23,12 @@ class AnimatedSprite : public sf::Drawable, public ADrawable
     private:
         std::vector<sf::Sprite>         _sprites;
         sf::Texture                     _texture;
-        sf::Clock                       _clock;
         sf::Vector2f                    _position;
         int                             _current;
         int                             _width;
         bool                            _random;
         unsigned                        _frameBySec;
+        std::size_t                     _save;
 };
 
 #endif /* end of include guard: ANIMATEDSPRITE_HH_VTLZOWBQ */

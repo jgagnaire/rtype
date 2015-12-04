@@ -33,9 +33,10 @@ public:
   virtual void	create(ARG arg)
   {
     _arg = arg;
-    if (!(_thread = ::CreateThread(0, 0,
-				   reinterpret_cast<LPTHREAD_START_ROUTINE>(&start),
-				   this, 0, 0)))
+	_thread = ::CreateThread(0, 0,
+							reinterpret_cast<LPTHREAD_START_ROUTINE>(&start),
+							this, 0, 0);
+    if (!_thread)
       throw ThreadException("Cannot create thread");
     _state = Enum::RUNNING;
   }

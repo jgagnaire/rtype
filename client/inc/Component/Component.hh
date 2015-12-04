@@ -8,11 +8,11 @@ template<typename Type>
 class Component : public IComponent
 {
 public:
-  Component(const std::string& name, Type value) : IComponent(typeid(Type).name(), name) 
+  Component(const std::string& name, Type value) : IComponent(typeid(Type).name(), name)
   {
     _value = new Type(value);
   }
-  
+
   virtual ~Component() {}
 
   inline void	setValue(Type &value) {
@@ -23,7 +23,7 @@ public:
     return (*_value);
   }
 
-  virtual void update(sf::Time) {}
+  virtual void update(std::chrono::steady_clock) {}
 private:
   Type *_value;
 };
