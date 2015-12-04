@@ -58,6 +58,7 @@ bool        GameManager<SCK>::joinRoom(const std::string &name, UserManager<SCK>
     if (!game)
         return false;
     game->players.push_back(u);
+    return true;
 }
 
 template <typename SCK>
