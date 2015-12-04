@@ -37,7 +37,6 @@ void	AudioCallSystem::startThreadPlay(AudioCallSystem *obj)
 
 void AudioCallSystem::startRecord()
 {
-  sf::SoundBuffer *buffer;
   Recorder recorder(this);
 
   if (!_recorderThread)
@@ -77,7 +76,13 @@ void	AudioCallSystem::startPlay()
       if (tmp && (*it)->manager.get<sf::Clock *>("clock")->getElapsedTime().asMicroseconds() >=
 	  (*it)->manager.get<sf::Time *>("time")->asMicroseconds())
 	{
-	  
+	  this->_sound.stop();
+	  this->_sound.resetBuffer();
+	  this->_sound.setBuffer(*tmp);
+	  this->_sound.play();
+	  (*it)->manager.get<sf::Clock *>("clock")->restart();
+	  *((*it)->manager.get<sf::Time *>("time")) = tmp->getDuration();
+	  (*it)->manager.remove<sf::SoundBuffer *>();
 	}
       _mutex.unlock();
     }

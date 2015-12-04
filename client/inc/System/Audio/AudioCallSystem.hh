@@ -34,6 +34,7 @@ private:
   std::thread	*_playerThread;
 std::mutex	_mutex;
 Recorder	*recorder;
+  sf::Sound _sound;
 };
 
 #endif //!AUDIOCALLSYSTEM_HH_

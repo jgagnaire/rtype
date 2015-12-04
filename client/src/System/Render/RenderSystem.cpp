@@ -31,7 +31,7 @@ IPacket *RenderSystem::out()
     return 0;
 }
 
-bool RenderSystem::handle(REvent e)
+bool RenderSystem::handle(REvent)
 {
     return true;
 }
