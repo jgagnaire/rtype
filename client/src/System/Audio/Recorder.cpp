@@ -1,9 +1,10 @@
 #include "Recorder.hh"
 
-Recorder::Recorder() : SoundRecorder()
+Recorder::Recorder(AudioCallSystem *obj) : SoundRecorder()
 {
   sf::Time interval;
 
+  this->_obj = obj;
   interval = sf::milliseconds(500);
   this->setProcessingInterval(interval);
 }
