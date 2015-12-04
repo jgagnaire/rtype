@@ -12,6 +12,7 @@
 #include "System/Render/StageScene.hh"
 
 #include "AudioCallSystem.hh"
+#include <chrono>
 
 int main(int ac, char **av)
 {
@@ -76,9 +77,12 @@ int main(int ac, char **av)
     {
         Window w;
         IWindow &win = w;
-        MenuScene   s;
-        //StageScene  s;
+        //MenuScene   s;
+        StageScene  s;
 
+        std::chrono::steady_clock clo;
+        std::chrono::time_point<std::chrono::steady_clock> last = clo.now();
+        std::chrono::time_point<std::chrono::steady_clock> now = clo.now();
         while (win.isOpen())
         {
             Event e;
@@ -91,7 +95,12 @@ int main(int ac, char **av)
                     std::cout << "I Accept" << std::endl;
             }
             win.clear();
-            s.update();
+            now = clo.now();
+            double duration;
+            std::chrono::duration<double> t = now - last;
+            duration = t.count() * 1000;
+            s.update(duration);
+            last = now;
             for (auto x : s.getEntities())
                 win.draw(*x);
             win.display();

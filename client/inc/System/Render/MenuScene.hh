@@ -59,15 +59,15 @@ class MenuScene : public Scene
                 delete x;
         }
 
-        virtual void update()
+        virtual void update(int duration)
         {
-            _selector.update();
-            _arrow.update();
-            _title.update();
-            _s1.update();
-            _s2.update();
-            _s3.update();
-            _s4.update();
+            _selector.update(duration);
+            _arrow.update(duration);
+            _title.update(duration);
+            _s1.update(duration);
+            _s2.update(duration);
+            _s3.update(duration);
+            _s4.update(duration);
         }
     private:
         Entity              _b1;

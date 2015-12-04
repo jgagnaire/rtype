@@ -22,7 +22,7 @@ class Text : public ADrawable
         virtual ~Text() {
         }
 
-        virtual void    update()
+        virtual void    update(std::size_t)
         {
 
         }

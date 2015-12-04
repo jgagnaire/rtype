@@ -1,7 +1,7 @@
 #include "System/Render/ScrollingSprite.hh"
 
 ScrollingSprite::ScrollingSprite():
-    _left(0)
+    _left(0), _save(0)
 {
     _buffer = this;
 }
@@ -21,17 +21,17 @@ bool    ScrollingSprite::load(const std::string &path,
     return true;
 }
 
-void    ScrollingSprite::update()
+void    ScrollingSprite::update(std::size_t duration)
 {
-    unsigned int mill = _clock.getElapsedTime().asMilliseconds();
-    if (mill > 1000 / _frameBySec)
+    _save += duration;
+    if (_save > 1000 / _frameBySec)
     {
-        _left += (mill / (1000 / _frameBySec)) * _speed;
+        _left += (_save / (1000 / _frameBySec)) * _speed;
         if (_left + 1920 > _texture.getSize().x)
             _left -= _texture.getSize().x - 1920;
         _sprite.setTextureRect(sf::IntRect(_left,
                     0, 1920, 1080));
-        _clock.restart();
+        _save = 0;
     }
 }
 
