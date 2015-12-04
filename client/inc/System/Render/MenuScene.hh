@@ -41,10 +41,10 @@ class MenuScene : public Scene
             _selector.setPosition(sf::Vector2f(735, 375));
             _gui.manager.add<ADrawable*>("selector", &_selector);
 
-            _textVec.push_back(new Text("Play Online"));
-            _textVec.push_back(new Text("Play Offline"));
-            _textVec.push_back(new Text("Settings"));
-            _textVec.push_back(new Text("Quit"));
+            _textVec.push_back(new Text("Play Online", 0xd12323ff));
+            _textVec.push_back(new Text("Play Offline", 0xd12323ff));
+            _textVec.push_back(new Text("Settings", 0xd12323ff));
+            _textVec.push_back(new Text("Quit", 0xd12323ff));
             for (std::size_t i = 0; i < _textVec.size(); ++i)
             {
                 _textVec[i]->setCenter();

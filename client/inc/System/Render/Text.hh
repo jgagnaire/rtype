@@ -7,13 +7,13 @@
 class Text : public ADrawable
 {
     public:
-        Text(const std::string &text) {
+        Text(const std::string &text, uint32_t colorCode = 0xffffffff) {
             _buffer = 0;
             if (_font.loadFromFile("client/res/pixel-font.ttf"))
             {
                 _text.setFont(_font);
                 _text.setString(text);
-                _text.setColor(sf::Color::Red);
+                _text.setColor(sf::Color(colorCode));
                 _text.setStyle(sf::Text::Regular);
                 _text.setCharacterSize(50);
                 _buffer = &_text;
