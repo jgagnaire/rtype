@@ -29,7 +29,7 @@ private:
 public:
     UDPCommunicator(char *port) {
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-        this->srvset = new WinUDPSocketSet(!port ? 1725 : std::atoi(port));
+        this->srvset = new WinUDPSocketSet(static_cast<unsigned short>(!port ? 1725 : std::atoi(port)));
         this->network_monitor = new WinServerMonitor();
 #else
         this->srvset = new UnixUDPSocketSet(!port ? 1725 : std::atoi(port));
