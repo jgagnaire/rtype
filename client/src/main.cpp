@@ -76,7 +76,6 @@ int main(int ac, char **av)
     {
         Window w;
         IWindow &win = w;
-        int     current = 0;
         //MenuScene   s;
         StageScene  s;
 
