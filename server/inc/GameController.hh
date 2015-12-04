@@ -17,4 +17,3 @@ public:
     bool            notReady(UserManager<T> *) const;
     virtual int	    newData(UserManager<T> *);
 };
-
