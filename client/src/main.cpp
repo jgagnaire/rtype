@@ -16,7 +16,7 @@
 
 int main(int ac, char **av)
 {
-  AudioCallSystem audioCallSystem;
+  //AudioCallSystem audioCallSystem;
 
     std::srand(static_cast<unsigned int>(std::time(0)));
     if (ac == 1)
