@@ -37,7 +37,6 @@ void	AudioCallSystem::startThreadPlay(AudioCallSystem *obj)
 
 void AudioCallSystem::startRecord()
 {
-  sf::SoundBuffer *buffer;
   Recorder recorder(this);
 
   if (!_recorderThread)
