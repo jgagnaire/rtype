@@ -9,7 +9,7 @@ RenderSystem::RenderSystem()
     _eventList.push_back(Key_Down);
     _eventList.push_back(Key_Left);
     _eventList.push_back(Key_Right);
-    _eventList.push_back(Key_Enter);
+    _eventList.push_back(Key_Select);
     _current = &_menu;
     _window = new Window();
 }

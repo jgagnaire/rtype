@@ -7,9 +7,10 @@
 #include "System/Render/Event.hh"
 #include "Entity/Entity.hh"
 #include "Component/Component.hh"
-
+#include "Utility/SystemManager.hh"
 #include "System/Render/MenuScene.hh"
 #include "System/Render/StageScene.hh"
+#include "System/Event/EventAggregator.hh"
 
 #include "AudioCallSystem.hh"
 #include "Utility/Clock.hh"
@@ -81,17 +82,8 @@ int main(int ac, char **av)
         StageScene  s;
 
         Clock clo;
-        while (win.isOpen())
+        while (win.getEvent() != Key_Close)
         {
-            Event e;
-            IEvent &event = e;
-            while (win.getEvent(event))
-            {
-                if (event.isCloseWindow())
-                    win.close();
-                if (event.isAccepted())
-                    std::cout << "I Accept" << std::endl;
-            }
             win.clear();
             s.update(clo.getElapsedTimeMilli());
             clo.restart();

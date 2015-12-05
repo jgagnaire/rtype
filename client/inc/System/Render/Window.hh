@@ -15,7 +15,7 @@ class Window : public IWindow
         virtual void    clear();
         virtual void    display();
         virtual void    draw(Entity &);
-        virtual bool    getEvent(IEvent &);
+        virtual REvent    getEvent();
 
     private:
         sf::RenderWindow       _window;

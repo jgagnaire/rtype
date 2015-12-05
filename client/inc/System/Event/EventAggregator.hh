@@ -2,21 +2,24 @@
 # define AGGREGATOR_HH_
 
 #include <unordered_map>
-#include <System/Render/IWindow.hh>
-#include <System/Render/Window.hh>
-#include "System/ISystem.hh"
 
 enum REvent
   {
+    noEvent = -1,
     Key_Up,
     Key_Down,
     Key_Left,
     Key_Right,
-    Key_Space,
-    Key_Enter
+    Key_Fire,
+    Key_Charge,
+    Key_Change,
+    Key_Select,
+    Key_Back,
+    Key_Close
   };
 
 class ISystem;
+class IWindow;
 
 class EventAggregator
 {

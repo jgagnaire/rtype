@@ -4,7 +4,7 @@
 #include "System/ISystem.hh"
 #include "System/Render/RenderSystem.hh"
 #include "System/Event/EventAggregator.hh"
-#include "System/Utility/Clock.hh"
+#include "Utility/Clock.hh"
 
 class SystemManager
 {
@@ -13,23 +13,23 @@ public:
   {
     ISystem *render = new RenderSystem();
     systemList["render"] = render;
-    ea = new EventAggregator(render.getWindow());
+    ea = new EventAggregator(static_cast<RenderSystem*>(render)->getWindow());
     clk = new Clock();
   }
   
   void gameLoop()
   {
-    while (ea.getWin()->isOpen())
+    while (ea->getWin()->isOpen())
       {
 	for (auto x : systemList)
 	  {
-	    x->second->update(this->clk);
+	    x.second->update(*this->clk);
 	  }
       }
   }
   
 private:
-  std::unordered_map<ISystem*> systemList;
+  std::unordered_map<std::string, ISystem*> systemList;
   EventAggregator	*ea;
   IClock		*clk;
 };
