@@ -15,6 +15,8 @@
 #include "AudioCallSystem.hh"
 #include "Utility/Clock.hh"
 
+#include "Utility/SystemManager.hh"
+
 int main(int ac, char **av)
 {
   //AudioCallSystem audioCallSystem;
@@ -91,6 +93,12 @@ int main(int ac, char **av)
                 win.draw(*x);
             win.display();
         }
+    }
+    else if (av[1][0] == '3')
+    {
+        SystemManager   sm;
+
+        sm.gameLoop();
     }
     return 0;
 }
