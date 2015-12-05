@@ -58,6 +58,7 @@ void	AudioCallSystem::startPlay()
 {
   std::vector <Entity *>::iterator it;
   sf::SoundBuffer *tmp;
+  sf::Sound *sound;
 
   if (!_playerThread)
     {
@@ -80,10 +81,11 @@ void	AudioCallSystem::startPlay()
       if (tmp && *it && (*it)->manager.get<sf::Clock *>("clock")->getElapsedTime().asMicroseconds() >=
 	  (*it)->manager.get<sf::Time *>("time")->asMicroseconds())
 	{
-	  this->_sound.stop();
-	  this->_sound.resetBuffer();
-	  this->_sound.setBuffer(*tmp);
-	  this->_sound.play();
+	  sound = (*it)->manager.get<sf::Sound *>("sound");
+	  sound->stop();
+	  sound->resetBuffer();
+	  sound->setBuffer(*tmp);
+	  sound->play();
 	  if (this->toDelete)
 	    delete this->toDelete;
 	  this->toDelete = tmp;
@@ -114,6 +116,7 @@ void AudioCallSystem::addBuffer(sf::SoundBuffer *buffer, const std::string &name
       tmp->manager.add<std::string>("name", name);
       tmp->manager.add<sf::Clock *>("clock", new sf::Clock);
       tmp->manager.add<sf::Time *>("time", new sf::Time);
+      tmp->manager.add<sf::Sound *>("sound", new sf::Sound);
       tmp->manager.add<sf::SoundBuffer *>(std::to_string(id), buffer);
       this->_users.push_back(tmp);
     }

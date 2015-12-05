@@ -38,7 +38,6 @@ private:
   sf::Clock			_clock;
   sf::SoundBuffer		*toDelete;
   bool				_exit;
-  sf::Sound			_sound;
 };
 
 #endif //!AUDIOCALLSYSTEM_HH_
