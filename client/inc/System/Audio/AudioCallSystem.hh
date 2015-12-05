@@ -8,7 +8,6 @@
 #include "Network/UdpSocket.hh"
 #include "Entity/Entity.hh"
 #include "Recorder.hh"
-#include "AudioBuffer.hh"
 
 class Recorder;
 
@@ -32,9 +31,10 @@ private:
   std::list <UdpPacket *> _packets;
   std::thread	*_recorderThread;
   std::thread	*_playerThread;
-std::mutex	_mutex;
-Recorder	*recorder;
+  std::mutex	_mutex;
+  Recorder	*recorder;
   sf::Sound _sound;
+  sf::Clock _clock;
 };
 
 #endif //!AUDIOCALLSYSTEM_HH_
