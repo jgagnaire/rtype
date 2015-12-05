@@ -60,9 +60,9 @@ public:
     void	triggerConnection(trigger connection) { com[Enum::TCP_INDEX]->triggerConnection(connection); }
 
     void	triggerNewData(triggerNew data) {
-        if (com[Enum::TCP])
+        if (com[Enum::TCP_INDEX])
             com[Enum::TCP_INDEX]->triggerNewData(data);
-        if (com[Enum::UDP])
+        if (com[Enum::UDP_INDEX])
             com[Enum::UDP_INDEX]->triggerNewData(data);
     }
 
