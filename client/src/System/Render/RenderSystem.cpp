@@ -10,6 +10,7 @@ RenderSystem::RenderSystem()
     _eventList.push_back(Key_Left);
     _eventList.push_back(Key_Right);
     _eventList.push_back(Key_Select);
+    _eventList.push_back(Key_Close);
     _current = &_menu;
     _window = new Window();
 }
