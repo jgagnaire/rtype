@@ -21,10 +21,12 @@ RenderSystem::~RenderSystem()
 
 void RenderSystem::update(IClock &e)
 {
+    _window->clear();
     _current->update(e.getElapsedTimeMilli());
     e.restart();
     for (auto x : _current->getEntities())
         _window->draw(*x);
+    _window->display();
 }
 
 IPacket *RenderSystem::out()
@@ -32,8 +34,16 @@ IPacket *RenderSystem::out()
     return 0;
 }
 
-bool RenderSystem::handle(REvent)
+bool RenderSystem::handle(REvent e)
 {
+    switch (e)
+    {
+        case Key_Close:
+            _window->close();
+            break;
+        default:
+            ;
+    }
     return true;
 }
 

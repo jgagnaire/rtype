@@ -16,8 +16,8 @@ class RenderSystem : public ISystem
         virtual IPacket			*out();
         virtual bool			handle(REvent e);
         virtual std::vector<REvent>	broadcast(void);
-  virtual REvent			getEvent(void) { return noEvent; }
-        inline IWindow			*getWindow() const;
+        virtual REvent			getEvent(void) { return noEvent; }
+        IWindow			*getWindow() const;
 
     private:
         std::chrono::time_point<std::chrono::steady_clock>  _last;
