@@ -7,13 +7,15 @@
 # include "Enum.hh"
 
 # if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-#  define init_memory(x, y) ZeroMemory(x, y);
+
 #  include "WinUDPSocketSet.hh"
 #  include "WinServerMonitor.hh"
+#  define init_memory(x, y) ZeroMemory((x), (y));
 # else
-#  define init_memory(x, y) bzero(x, y);
+#  include <strings.h>
 #  include "UnixUDPSocketSet.hh"
 #  include "UnixServerMonitor.hh"
+#  define init_memory(x, y) bzero((x), (y));
 # endif
 
 template <typename USER, typename CONTROLLER,

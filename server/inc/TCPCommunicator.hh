@@ -71,7 +71,7 @@ public:
         this->network_monitor->closeFd((*cli)->getServerSocket());
         ((this->controllers.front())->*(this->closeConnection))(*cli);
         delete *cli;
-        *cli = NULL;
+        *cli = 0;
         this->cl_list->erase(cli);
     }
 
