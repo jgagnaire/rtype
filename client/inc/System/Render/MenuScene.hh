@@ -11,7 +11,8 @@
 class MenuScene : public Scene
 {
     public:
-        MenuScene()
+        MenuScene():
+            _current(0)
         {
             _entities.push_back(&_b1);
             _entities.push_back(&_b2);
@@ -59,6 +60,31 @@ class MenuScene : public Scene
                 delete x;
         }
 
+        virtual void handle(REvent e)
+        {
+            switch (e)
+            {
+                case Key_Up:
+                    if (_current > 0)
+                    {
+                        _selector.setPosition(_selector.getPosition() + sf::Vector2f(0, -100));
+                        --_current;
+                    }
+                    break;
+                case Key_Down:
+                    if (_current  + 1 < _textVec.size())
+                    {
+                        _selector.setPosition(_selector.getPosition() + sf::Vector2f(0, 100));
+                        ++_current;
+                    }
+                    break;
+                case Key_Select:
+                    break;
+                default:
+                    ;
+            }
+        }
+
         virtual void update(int duration)
         {
             _selector.update(duration);
@@ -69,6 +95,7 @@ class MenuScene : public Scene
             _s3.update(duration);
             _s4.update(duration);
         }
+
     private:
         Entity              _b1;
         Entity              _b2;
@@ -86,6 +113,8 @@ class MenuScene : public Scene
         AnimatedSprite      _arrow;
         AnimatedSprite      _selector;
         std::vector<Text*>  _textVec;
+
+        std::size_t         _current;
 };
 
 #endif /* ifndef MENUSCENE_HH_ */

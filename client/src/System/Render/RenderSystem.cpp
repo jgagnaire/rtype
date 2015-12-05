@@ -43,6 +43,7 @@ bool RenderSystem::handle(REvent e)
             _window->close();
             break;
         default:
+            _current->handle(e);
             ;
     }
     return true;

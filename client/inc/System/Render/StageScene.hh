@@ -32,6 +32,11 @@ class StageScene : public Scene
 
         }
 
+        virtual void    handle(REvent)
+        {
+
+        }
+
         virtual void    update(int duration)
         {
             _s1.update(duration);
