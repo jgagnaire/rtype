@@ -78,24 +78,6 @@ int main(int ac, char **av)
     }
     else if (av[1][0] == '2')
     {
-        Window w;
-        IWindow &win = w;
-        MenuScene   s;
-        //StageScene  s;
-
-        Clock clo;
-        while (win.getEvent() != Key_Close)
-        {
-            win.clear();
-            s.update(clo.getElapsedTimeMilli());
-            clo.restart();
-            for (auto x : s.getEntities())
-                win.draw(*x);
-            win.display();
-        }
-    }
-    else if (av[1][0] == '3')
-    {
         SystemManager   sm;
 
         sm.gameLoop();

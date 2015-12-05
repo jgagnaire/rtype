@@ -79,6 +79,11 @@ class MenuScene : public Scene
                     }
                     break;
                 case Key_Select:
+                    switch (_current)
+                    {
+                        default:
+                            ;
+                    }
                     break;
                 default:
                     ;
