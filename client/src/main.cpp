@@ -78,8 +78,8 @@ int main(int ac, char **av)
     {
         Window w;
         IWindow &win = w;
-        //MenuScene   s;
-        StageScene  s;
+        MenuScene   s;
+        //StageScene  s;
 
         Clock clo;
         while (win.getEvent() != Key_Close)
