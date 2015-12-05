@@ -4,6 +4,7 @@
 AudioCallSystem::AudioCallSystem()
 {
   this->_exit = false;
+  this->toDelete = 0;
   this->_recorderThread = 0;
   this->_playerThread = 0;
   recorder = new Recorder(this);
@@ -56,7 +57,7 @@ void AudioCallSystem::startRecord()
 void	AudioCallSystem::startPlay()
 {
   std::vector <Entity *>::iterator it;
-  sf::SoundBuffer *tmp = 0;
+  sf::SoundBuffer *tmp;
 
   if (!_playerThread)
     {
@@ -65,6 +66,7 @@ void	AudioCallSystem::startPlay()
     }
   while (!_exit)
     {
+      tmp = 0;
       _mutex.lock();
       if (!this->_users.empty())
 	for (it = this->_users.begin(); it != this->_users.end(); ++it)
@@ -82,6 +84,9 @@ void	AudioCallSystem::startPlay()
 	  this->_sound.resetBuffer();
 	  this->_sound.setBuffer(*tmp);
 	  this->_sound.play();
+	  if (this->toDelete)
+	    delete this->toDelete;
+	  this->toDelete = tmp;
 	  (*it)->manager.get<sf::Clock *>("clock")->restart();
 	  *((*it)->manager.get<sf::Time *>("time")) = tmp->getDuration();
 	  (*it)->manager.remove<sf::SoundBuffer *>();
@@ -117,8 +122,6 @@ void AudioCallSystem::addBuffer(sf::SoundBuffer *buffer, const std::string &name
 
 void AudioCallSystem::addPacket(sf::SoundBuffer *buffer)
 {
-  _mutex.lock();
-  std::string pseudo = "lol";
   UdpPacket *tmp = new UdpPacket();
   short int *data;
   const short int *tmpData;
@@ -131,7 +134,6 @@ void AudioCallSystem::addPacket(sf::SoundBuffer *buffer)
   tmp->setData(data);
   _packets.push_back(tmp);
   delete buffer;
-  _mutex.unlock();
 }
 
 bool AudioCallSystem::in(UdpPacket *packet)
@@ -146,7 +148,9 @@ bool AudioCallSystem::in(UdpPacket *packet)
   data = new short int[packet->getSize()];
   std::copy(tmpData, tmpData + packet->getSize(), data);
   buffer->loadFromSamples(data, packet->getSize() / 2, 2, packet->getSize() / 2);
+  _mutex.lock();
   this->addBuffer(buffer, "toto");
+  _mutex.unlock();
   return true;
 }
 

@@ -13,12 +13,10 @@ class Recorder : public sf::SoundRecorder
 public:
   Recorder(AudioCallSystem *obj);
   ~Recorder();
-  sf::SoundBuffer *getBuffer();
 
 private:
 
   virtual bool onProcessSamples(const sf::Int16* samples, std::size_t sampleCount);
-  std::list <sf::SoundBuffer *> _buffers;
   AudioCallSystem *_obj;
 };
 
