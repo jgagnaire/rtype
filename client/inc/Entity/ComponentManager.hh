@@ -38,6 +38,13 @@ class ComponentManager
     else
       throw ComponentManagerException("Component doesn't exist");
   }
+
+  const std::string&	getType(const std::string& name)
+  {
+    if (compenents.find(name) != compenents.end())
+      return (compenents[name]->getType());
+    throw ComponentManagerException("No such component to get : [invalid name]");
+  }
   
   template<typename Type>
   Type &get(const std::string& name)
