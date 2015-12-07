@@ -104,12 +104,15 @@ bool            GameController<T>::leaveRoom(UserManager<T> *cl) const {
 template <typename T>
 bool            GameController<T>::ready(UserManager<T> *cl) const {
     GameManager<T>              &g = GameManager<T>::instance();
-    Game<T>                     *game;
-    cl->writeStruct({0, cl->ready()});
+    Game<T>                     *game = g.getGameByName(cl->getGameroomName());
 
-    if (g.isAllReady(cl->getGameroomName())) {
-        game = g.getGameByName(cl->getGameroomName());
-        if (game) {
+    cl->writeStruct({0, cl->ready()});
+    if (g.isPlaying(cl->getGameroomName())) {
+        cl->inGame();
+        cl->writeStruct({0, Enum::GAME_START});
+    }
+    else if (g.isAllReady(cl->getGameroomName())) {
+        if (game && game->players.size() > 1) {
             for (auto it = game->players.begin(); it != game->players.end(); ++it) {
                 (*it)->inGame();
                 (*it)->writeStruct({0, Enum::GAME_START});

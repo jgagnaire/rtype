@@ -7,15 +7,16 @@
 
 template <typename SCK>
 struct Game { // TODO, fill it !
-    std::string                 name;
-    std::list<UserManager<SCK> *>                players;
+    std::string                                 name;
+    std::list<UserManager<SCK> *>               players;
+    std::size_t                                 refresh = Enum::REFRESH_TIME;
+    bool                                        is_playing = false;
 };
 
 template <typename SCK>
 class GameManager {
 public:
     static  GameManager             &instance();
-    static  GameManager             *game_manager;
     Game<SCK>                       *getGameByName(const std::string &);
     void                            createRoom(const std::string &, UserManager<SCK> *);
     void                            deleteUser(UserManager<SCK> *);
@@ -25,8 +26,10 @@ public:
     const std::list<Game<SCK> *>    &getGames() const;
     void                            launchGame(const std::string &);
     static void                     createGame(Game<SCK> *);
+    bool                            isPlaying(const std::string &);
 
 private:
+    static  GameManager             *game_manager;
     GameManager() {}
     ~GameManager() {}
     std::list<Game<SCK> *>                  _games;

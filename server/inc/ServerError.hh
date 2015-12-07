@@ -18,6 +18,16 @@ enum eErrorType
 	EMONITORFAILED,
   };
 
+class JSONException : public std::runtime_error
+{
+public:
+  JSONException(const char *msg) :
+    runtime_error(msg) {}
+  JSONException(const std::string &msg) :
+    runtime_error(msg) {}
+  virtual ~JSONException() throw() {}
+};
+
 class ThreadException : public std::runtime_error
 {
 public:
