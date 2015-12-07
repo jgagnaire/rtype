@@ -26,7 +26,7 @@ void	EventAggregator::update()
     std::vector<REvent> tmp;
     REvent              e;
 
-    while ((e = this->win->getEvent()) != noEvent)
+    if ((e = this->win->getEvent()) != noEvent)
         this->send(e);
     for (auto x = _systemList.begin(); x != _systemList.end(); ++x)
     {
