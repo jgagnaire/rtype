@@ -15,6 +15,7 @@
 client_rtype
 client_rtype.exe
 client/cmake_install.cmake
+client/res/psd
 server/cmake_install.cmake
 cmake_install.cmake
 .idea/
