@@ -7,15 +7,19 @@
 #include "System/Render/Event.hh"
 #include "Entity/Entity.hh"
 #include "Component/Component.hh"
-
+#include "Utility/SystemManager.hh"
 #include "System/Render/MenuScene.hh"
 #include "System/Render/StageScene.hh"
+#include "System/Event/EventAggregator.hh"
 
 #include "AudioCallSystem.hh"
+#include "Utility/Clock.hh"
+
+#include "Utility/SystemManager.hh"
 
 int main(int ac, char **av)
 {
-  AudioCallSystem audioCallSystem;
+  //AudioCallSystem audioCallSystem;
 
     std::srand(static_cast<unsigned int>(std::time(0)));
     if (ac == 1)
@@ -74,28 +78,9 @@ int main(int ac, char **av)
     }
     else if (av[1][0] == '2')
     {
-        Window w;
-        IWindow &win = w;
-        //MenuScene   s;
-        StageScene  s;
+        SystemManager   sm;
 
-        while (win.isOpen())
-        {
-            Event e;
-            IEvent &event = e;
-            while (win.getEvent(event))
-            {
-                if (event.isCloseWindow())
-                    win.close();
-                if (event.isAccepted())
-                    std::cout << "I Accept" << std::endl;
-            }
-            win.clear();
-            s.update();
-            for (auto x : s.getEntities())
-                win.draw(*x);
-            win.display();
-        }
+        sm.gameLoop();
     }
     return 0;
 }

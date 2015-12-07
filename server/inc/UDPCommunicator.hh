@@ -7,11 +7,15 @@
 # include "Enum.hh"
 
 # if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+
 #  include "WinUDPSocketSet.hh"
 #  include "WinServerMonitor.hh"
+#  define init_memory(x, y) ZeroMemory((x), (y));
 # else
+#  include <strings.h>
 #  include "UnixUDPSocketSet.hh"
 #  include "UnixServerMonitor.hh"
+#  define init_memory(x, y) bzero((x), (y));
 # endif
 
 template <typename USER, typename CONTROLLER,
@@ -37,7 +41,10 @@ public:
 #endif
         this->network_monitor->addFd(dynamic_cast<IServerSocket<SCK>*>(this->srvset),
                                      Enum::READ);
+	::init_memory(&this->_data.buff[0], Enum::MAX_BUFFER_LENGTH);
     }
+
+    virtual ~UDPCommunicator() {}
 
     virtual void launch(std::list<USER*> *cl) {
         this->cl_list = cl;

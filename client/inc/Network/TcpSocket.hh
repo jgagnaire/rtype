@@ -13,20 +13,20 @@ struct TcpHeader : public Header
 
 class TcpPacket : public IPacket
 {
-    public:
-        TcpPacket() {}
-        virtual ~TcpPacket() {}
+public:
+	TcpPacket() {}
+	virtual ~TcpPacket() {}
 
-        virtual uint16_t    getSize() const;
-        virtual uint16_t    getQuery() const;
-        virtual void        *getData() const;
+	inline virtual uint16_t    getSize() const { return this->_header.size; }
+	inline virtual uint16_t    getQuery() const { return this->_header.query; }
+	inline virtual void        *getData() const { return this->_data; }
 
-        virtual void        setSize(uint16_t size);
-        virtual void        setQuery(uint16_t query);
-        virtual void        setData(void *data);
+	inline virtual void        setSize(uint16_t size) { this->_header.size = size; }
+	inline virtual void        setQuery(uint16_t query) { this->_header.query = query; }
+	inline virtual void        setData(void *data) { this->_data = data; }
 
-        virtual Header           &getHeader();
-        virtual const Header     &getHeader() const;
+	inline virtual Header           &getHeader() { return this->_header; }
+	inline virtual const Header     &getHeader() const { return this->_header; }
 
     private:
         TcpHeader   _header;
@@ -35,8 +35,8 @@ class TcpPacket : public IPacket
 class TcpSocket : public ITcpSocket
 {
     public:
-        TcpSocket();
-        ~TcpSocket();
+		TcpSocket() {}
+		virtual ~TcpSocket() {}
 
         virtual bool            connect(const std::string &ip,
                 unsigned short int port);

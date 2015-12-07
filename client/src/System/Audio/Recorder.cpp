@@ -1,24 +1,21 @@
 #include "Recorder.hh"
 
-Recorder::Recorder() : SoundRecorder()
+Recorder::Recorder(AudioCallSystem *obj) : SoundRecorder()
 {
-  sf::Time interval;
-
-  interval = sf::milliseconds(500);
-  this->setProcessingInterval(interval);
+  this->_obj = obj;
+  this->setProcessingInterval(sf::milliseconds(500));
 }
 
 Recorder::~Recorder()
 {
-  this->_buffers.clear();
 }
 
-sf::SoundBuffer *Recorder::getBuffer()
+bool Recorder::onProcessSamples(const sf::Int16* samples, std::size_t sampleCount)
 {
   sf::SoundBuffer *tmp;
-  if (this->_buffers.empty())
-    return (0);
-  tmp = this->_buffers.front();
-  this->_buffers.pop_front();
-  return (tmp);
+
+  tmp = new sf::SoundBuffer();
+  tmp->loadFromSamples(samples, sampleCount, 2, sampleCount);    
+  this->_obj->addPacket(tmp);
+  return true;
 }

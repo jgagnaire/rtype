@@ -3,7 +3,7 @@
 #include "System/Render/AnimatedSprite.hh"
 
 AnimatedSprite::AnimatedSprite():
-    _current(0), _random(false)
+    _current(0), _random(false), _save(0)
 {
     _buffer = this;
 }
@@ -43,20 +43,20 @@ void        AnimatedSprite::setPosition(const sf::Vector2f &pos)
     _position = pos;
 }
 
-void    AnimatedSprite::update()
+void    AnimatedSprite::update(std::size_t duration)
 {
     if (_sprites.empty())
         return ;
     if (_sprites.size() > 0)
     {
-        unsigned int mill = _clock.getElapsedTime().asMilliseconds();
-        if (mill > 1000 / _frameBySec)
+        _save += duration;
+        if (_save > 1000 / _frameBySec)
         {
             if (_random)
                 _current = std::rand() % _sprites.size();
             else
-                _current = (_current + mill / (1000 / _frameBySec)) % _sprites.size();
-            _clock.restart();
+                _current = (_current + _save / (1000 / _frameBySec)) % _sprites.size();
+            _save = 0;
         }
         _sprites[_current].setPosition(_position);
     }

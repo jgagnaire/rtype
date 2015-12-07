@@ -66,7 +66,7 @@ public:
     }
 
     std::size_t     threadNb() { return (_threads.size()); }
-    std::vector<std::pair<std::pair<int, IThread<RET_VAL, ARG> *>, ARG >> _threads;
+    std::vector<std::pair<std::pair<size_t, IThread<RET_VAL, ARG> *>, ARG >> _threads;
 };
 
 template <typename RET_VAL, typename ARG>

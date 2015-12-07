@@ -10,7 +10,8 @@ WinMutex::~WinMutex()
 
 void	WinMutex::lock(void)
 {
-	if (!(_mutex = ::CreateMutex(0, TRUE, 0)))
+	_mutex = ::CreateMutex(0, TRUE, 0);
+	if (!_mutex)
 		throw MutexException("Lock failed");
 }
 

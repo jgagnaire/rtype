@@ -4,6 +4,7 @@
 # include <string>
 # include "System/Render/IEvent.hh"
 # include "Entity/Entity.hh"
+# include "System/Event/EventAggregator.hh"
 
 class IWindow
 {
@@ -16,7 +17,7 @@ class IWindow
         virtual void    clear() = 0;
         virtual void    display() = 0;
         virtual void    draw(Entity &e) = 0;
-        virtual bool    getEvent(IEvent &) = 0;
+        virtual REvent    getEvent() = 0;
 };
 
 #endif /* ifndef IWINDOW_HH_ */

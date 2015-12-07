@@ -23,7 +23,7 @@ template<typename T>
 bool	UserManager<T>::isLogged() const { return (stream.is_open()); }
 
 template<typename T>
-void	UserManager<T>::writeStruct(const ::TCPDataHeader &comdata) {
+void	UserManager<T>::writeStruct(const TCPDataHeader &comdata) {
     packet.stockOnBuff(comdata);
 }
 

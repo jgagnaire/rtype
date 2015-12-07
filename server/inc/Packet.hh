@@ -69,7 +69,7 @@ public:
       size_t		getPacket(const SCK s, std::string * const p = NULL, bool max_read = false) {
         size_t	ret;
         char    *str = NULL;
-        size_t  max_val = sizeof(T) + 512; // TODO, magic number;
+        std::size_t  max_val = sizeof(T) + 512; // TODO, magic number;
 
         if (!max_read)
           max_val = sizeof(T);
@@ -97,9 +97,9 @@ public:
 
         _wr_buff = new char [sizeof(T) + _send_pack.front().data.size()];
         std::copy(com, com + sizeof(T), _wr_buff);
-        for (size_t i = 0;  i < sizeof(T); ++i)
+        for (std::size_t i = 0;  i < sizeof(T); ++i)
           _wr_buff[i] = com[i];
-        for (size_t i = 0;  i < _send_pack.front().data.size(); ++i)
+        for (std::size_t i = 0;  i < _send_pack.front().data.size(); ++i)
           _wr_buff[sizeof(T) + i] = str[i];
       }
 

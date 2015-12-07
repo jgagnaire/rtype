@@ -21,7 +21,7 @@ void    Window::clear()
 
 void    Window::display()
 {
-     _window.display();
+    _window.display();
 }
 
 bool    Window::isOpen() const
@@ -29,11 +29,48 @@ bool    Window::isOpen() const
     return _window.isOpen();
 }
 
-bool  Window::getEvent(IEvent &event)
+REvent  Window::getEvent()
 {
-    sf::Event *e = static_cast<sf::Event*>(event.getBuffer());
+    sf::Event e;
 
-    return _window.pollEvent(*e);
+    if (_window.pollEvent(e))
+    {
+        if (e.type == sf::Event::KeyPressed)
+        {
+            switch(e.key.code) {
+                case sf::Keyboard::S :
+                    return (Key_Fire);
+                case sf::Keyboard::Space :
+                    return (Key_Charge);
+                case sf::Keyboard::Left :
+                    return (Key_Left);
+                case sf::Keyboard::Right :
+                    return (Key_Right);
+                case sf::Keyboard::Up :
+                    return (Key_Up);
+                case sf::Keyboard::Down :
+                    return (Key_Down);
+                default:
+                    return (noEvent);
+            }
+        }
+        else if (e.type == sf::Event::KeyReleased)
+        {
+            switch(e.key.code) {
+                case sf::Keyboard::Tab :
+                    return (Key_Change);
+                case sf::Keyboard::Return :
+                    return (Key_Select);
+                case sf::Keyboard::BackSpace :
+                    return (Key_Back);
+                default:
+                    return (noEvent);
+            }
+        }
+        else if (e.type == sf::Event::Closed)
+            return (Key_Close);
+    }
+    return (noEvent);
 }
 
 void  Window::draw(Entity &e)
