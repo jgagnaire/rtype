@@ -32,5 +32,6 @@ void	EventAggregator::update()
     {
         if ((tmp = x->first->broadcast()) != x->second)
             x->second = tmp;
+        this->send(x->first->getEvent());
     }
 }

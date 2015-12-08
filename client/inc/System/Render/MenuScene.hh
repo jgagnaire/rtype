@@ -60,7 +60,7 @@ class MenuScene : public Scene
                 delete x;
         }
 
-        virtual void handle(REvent e)
+        virtual void handle(REvent e, REvent &send)
         {
             switch (e)
             {
@@ -81,6 +81,8 @@ class MenuScene : public Scene
                 case Key_Select:
                     switch (_current)
                     {
+                        case 3:
+                            send = Key_Close;
                         default:
                             ;
                     }

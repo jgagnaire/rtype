@@ -43,11 +43,23 @@ bool RenderSystem::handle(REvent e)
             _window->close();
             break;
         default:
-            _current->handle(e);
+            _current->handle(e, _event);
             ;
     }
     return true;
 }
+
+REvent              RenderSystem::getEvent()
+{
+    REvent          tmp = noEvent;
+
+    if (_event != noEvent)
+    {
+        tmp = _event;
+        _event = noEvent;
+    }
+    return tmp;
+};
 
 std::vector<REvent> RenderSystem::broadcast(void)
 {

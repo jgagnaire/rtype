@@ -56,7 +56,7 @@ REvent  Window::getEvent()
         _block = false;
     if (_menuMode && _block)
     {
-        if (_clock.getElapsedTimeMilli() > 100)
+        if (_clock.getElapsedTimeMilli() > 75)
         {
             _block = false;
             _clock.restart();

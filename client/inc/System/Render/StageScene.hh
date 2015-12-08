@@ -32,7 +32,7 @@ class StageScene : public Scene
 
         }
 
-        virtual void    handle(REvent)
+        virtual void    handle(REvent, REvent&)
         {
 
         }
