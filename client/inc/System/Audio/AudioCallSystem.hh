@@ -36,7 +36,6 @@ private:
   std::thread			*_playerThread;
   std::mutex			_mutex;
   sf::Clock			_clock;
-  sf::SoundBuffer		*toDelete;
   bool				_exit;
 };
 

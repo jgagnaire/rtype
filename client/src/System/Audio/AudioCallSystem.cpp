@@ -4,7 +4,6 @@
 AudioCallSystem::AudioCallSystem()
 {
   this->_exit = false;
-  this->toDelete = 0;
   this->_recorderThread = 0;
   this->_playerThread = 0;
   recorder = new Recorder(this);
