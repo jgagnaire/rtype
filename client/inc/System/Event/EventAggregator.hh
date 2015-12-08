@@ -16,7 +16,8 @@ enum REvent
     Key_Change,
     Key_Select,
     Key_Back,
-    Key_Close
+    Key_Close,
+    E_PlayOffline
 };
 
 class ISystem;

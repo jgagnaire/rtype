@@ -11,6 +11,7 @@ RenderSystem::RenderSystem()
     _eventList.push_back(Key_Right);
     _eventList.push_back(Key_Select);
     _eventList.push_back(Key_Close);
+    _eventList.push_back(E_PlayOffline);
     _current = &_menu;
     _window = new Window();
 }
@@ -42,9 +43,11 @@ bool RenderSystem::handle(REvent e)
         case Key_Close:
             _window->close();
             break;
+        case E_PlayOffline:
+            _current = &_stage;
+            break;
         default:
             _current->handle(e, _event);
-            ;
     }
     return true;
 }

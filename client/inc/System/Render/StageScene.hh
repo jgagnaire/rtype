@@ -3,6 +3,7 @@
 
 # include "System/Render/Scene.hh"
 # include "System/Render/ScrollingSprite.hh"
+# include "System/Render/AnimatedSprite.hh"
 # include "System/Render/View.hh"
 
 class StageScene : public Scene
@@ -15,11 +16,11 @@ class StageScene : public Scene
             _entities.push_back(&_b3);
             _entities.push_back(&_gui);
 
-            _b1.manager.add("view", &_view);
-            _b1.manager.add("background", &_s1);
-            _b2.manager.add("background", &_s2);
-            _b3.manager.add("background", &_s3);
-            _gui.manager.add("ship", &_ship);
+            _b1.manager.add<AView*>("view", &_view);
+            _b1.manager.add<ADrawable*>("background", &_s1);
+            _b2.manager.add<ADrawable*>("background", &_s2);
+            _b3.manager.add<ADrawable*>("background", &_s3);
+            _gui.manager.add<ADrawable*>("ship", &_ship);
 
             _s1.load("client/res/stages/stage1/background_7680.png", 1);
             _s2.load("client/res/stages/stage1/middle_7680.png", 2);

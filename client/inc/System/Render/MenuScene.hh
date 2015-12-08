@@ -81,10 +81,16 @@ class MenuScene : public Scene
                 case Key_Select:
                     switch (_current)
                     {
+                        case 0:
+                            break ;
+                        case 1:
+                            send = E_PlayOffline;
+                            break ;
+                        case 2:
+                            break ;
                         case 3:
                             send = Key_Close;
-                        default:
-                            ;
+                            break ;
                     }
                     break;
                 default:
