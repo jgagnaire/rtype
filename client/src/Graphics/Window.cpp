@@ -3,9 +3,11 @@
 #include "System/Render/AView.hh"
 
 Window::Window():
-    _window(sf::VideoMode(1280, 720), "Pede"),
+    _window(sf::VideoMode(1920, 1080), "Pede"),
     _menuMode(true), _block(false)
-{}
+{
+    _window.setVerticalSyncEnabled(true);
+}
 
 Window::~Window()
 {}
@@ -118,4 +120,9 @@ void  Window::draw(Entity &e)
         if (d)
             _window.draw(*d);
     }
+}
+
+void        Window::setMenuMode(bool m)
+{
+    _menuMode = m;
 }

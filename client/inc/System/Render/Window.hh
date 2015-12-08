@@ -16,6 +16,7 @@ class Window : public IWindow
         virtual void        clear();
         virtual void        display();
         virtual void        draw(Entity &);
+        virtual void        setMenuMode(bool);
         virtual REvent      getEvent();
 
     private:

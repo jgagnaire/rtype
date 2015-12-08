@@ -11,8 +11,8 @@
 class MenuScene : public Scene
 {
     public:
-        MenuScene():
-            _current(0)
+        MenuScene(IWindow &win):
+            Scene(win), _current(0)
         {
             _entities.push_back(&_b1);
             _entities.push_back(&_b2);
@@ -100,6 +100,7 @@ class MenuScene : public Scene
 
         virtual void update(int duration)
         {
+            _win.setMenuMode(true);
             _selector.update(duration);
             _arrow.update(duration);
             _title.update(duration);

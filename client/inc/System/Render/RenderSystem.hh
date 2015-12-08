@@ -22,8 +22,8 @@ class RenderSystem : public ISystem
     private:
         std::chrono::time_point<std::chrono::steady_clock>  _last;
         Scene                                               *_current;
-        MenuScene                                           _menu;
-        StageScene                                          _stage;
+        MenuScene                                           *_menu;
+        StageScene                                          *_stage;
         IWindow                                             *_window;
         REvent                                              _event;
 };

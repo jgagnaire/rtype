@@ -17,6 +17,7 @@ class IWindow
         virtual void    clear() = 0;
         virtual void    display() = 0;
         virtual void    draw(Entity &e) = 0;
+        virtual void    setMenuMode(bool) = 0;
         virtual REvent    getEvent() = 0;
 };
 

@@ -7,7 +7,9 @@
 class Scene
 {
     public:
-        Scene() {}
+        Scene(IWindow &win):
+            _win(win)
+        {}
         virtual ~Scene() {}
 
         virtual void update(int) = 0;
@@ -20,6 +22,7 @@ class Scene
 
     protected:
         std::vector<Entity*>            _entities;
+        IWindow                         &_win;
 };
 
 #endif /* ifndef SCENE_HH_ */

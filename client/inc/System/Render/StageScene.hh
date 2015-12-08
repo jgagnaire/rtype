@@ -9,12 +9,13 @@
 class StageScene : public Scene
 {
     public:
-        StageScene()
+        StageScene(IWindow &win):
+            Scene(win), _direction(noEvent)
         {
             _entities.push_back(&_b1);
             _entities.push_back(&_b2);
-            _entities.push_back(&_b3);
             _entities.push_back(&_gui);
+            _entities.push_back(&_b3);
 
             _b1.manager.add<AView*>("view", &_view);
             _b1.manager.add<ADrawable*>("background", &_s1);
@@ -33,16 +34,50 @@ class StageScene : public Scene
 
         }
 
-        virtual void    handle(REvent, REvent&)
+        virtual void    handle(REvent e, REvent&)
         {
-
+            switch (e)
+            {
+                case Key_Up:
+                case Key_Down:
+                case Key_Left:
+                case Key_Right:
+                    _direction = e;
+                default:
+                    ;
+            }
         }
 
         virtual void    update(int duration)
         {
+            _win.setMenuMode(false);
+            int move = duration * 0.75;
             _s1.update(duration);
             _s2.update(duration);
             _s3.update(duration);
+            switch (_direction)
+            {
+                case Key_Up:
+                    _ship.setPosition(_ship.getPosition() +
+                            sf::Vector2f(0, -move));
+                    break;
+                case Key_Down:
+                    _ship.setPosition(_ship.getPosition() +
+                            sf::Vector2f(0, move));
+                    break;
+                case Key_Left:
+                    _ship.setPosition(_ship.getPosition() +
+                            sf::Vector2f(-move, 0));
+                    break;
+                case Key_Right:
+                    _ship.setPosition(_ship.getPosition() +
+                            sf::Vector2f(move, 0));
+                    break;
+                default:
+                    ;
+            }
+            if (_direction != noEvent)
+                _direction = noEvent;
             _ship.update(duration);
         }
 
@@ -57,6 +92,8 @@ class StageScene : public Scene
         ScrollingSprite _s2;
         ScrollingSprite _s3;
         AnimatedSprite  _ship;
+
+        REvent          _direction;
 };
 
 
