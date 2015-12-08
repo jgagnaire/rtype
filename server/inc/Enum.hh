@@ -9,6 +9,14 @@ namespace Enum
         GAME
     };
 
+  enum JSON {
+    NO_VAL = 0,
+    IS_HASH,
+    IS_STRING,
+    IS_TAB,
+    IS_NUM,
+  };
+
     enum ProtocolIndex {
         TCP_INDEX = 0,
         UDP_INDEX
@@ -91,10 +99,14 @@ namespace Enum
         REGISTER_MAX = 12,
         REGISTER_MIN = 4,
         MAX_TIME = 10,
+        MAX_BUFFER_LENGTH = 512,
+    };
+
+    enum GameInfo {
         MAX_PLAYER = 4,
         MAX_ROOM_NAME_NB = 16,
         MAX_GAME = 8,
-        MAX_BUFFER_LENGTH = 512,
+        REFRESH_TIME = 1000,
     };
 };
 

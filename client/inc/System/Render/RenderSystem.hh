@@ -12,19 +12,20 @@ class RenderSystem : public ISystem
         RenderSystem();
         virtual ~RenderSystem();
 
-        virtual void			update(IClock&);
-        virtual IPacket			*out();
-        virtual bool			handle(REvent e);
-        virtual std::vector<REvent>	broadcast(void);
-        virtual REvent			getEvent(void) { return noEvent; }
-        IWindow			*getWindow() const;
+        virtual void                update(IClock&);
+        virtual IPacket             *out();
+        virtual bool                handle(REvent e);
+        virtual std::vector<REvent> broadcast(void);
+        virtual REvent              getEvent(void);
+        IWindow                     *getWindow() const;
 
     private:
         std::chrono::time_point<std::chrono::steady_clock>  _last;
         Scene                                               *_current;
-        MenuScene                                           _menu;
-        StageScene                                          _stage;
+        MenuScene                                           *_menu;
+        StageScene                                          *_stage;
         IWindow                                             *_window;
+        REvent                                              _event;
 };
 
 #endif /* end of include guard: RENDERSYSTEM_HH_C8GDRQJ2 */

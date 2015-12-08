@@ -75,6 +75,7 @@ void        GameManager<SCK>::launchGame(const std::string &game_name) {
     Game<SCK>    *game = getGameByName(game_name);
 
     if (game) {
+        game->is_playing = true;
         _threadpool.add(&GameManager::createGame, game);
     }
 }
@@ -82,6 +83,13 @@ void        GameManager<SCK>::launchGame(const std::string &game_name) {
 template <typename SCK>
 void        GameManager<SCK>::createGame(Game<SCK> *) {
 
+}
+
+template <typename SCK>
+bool        GameManager<SCK>::isPlaying(const std::string &roomname) {
+    Game<SCK> *g = getGameByName(roomname);
+
+    return (!g && g->is_playing);
 }
 
 template <typename SCK>

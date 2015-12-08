@@ -16,16 +16,22 @@ void	EventAggregator::add(REvent e, ISystem* s)
         _systemList[s].push_back(e);
 }
 
+void    EventAggregator::add(ISystem *s)
+{
+    _systemList[s] = s->broadcast();
+}
+
 void	EventAggregator::update()
 {
     std::vector<REvent> tmp;
     REvent              e;
 
-    while ((e = this->getWin()->getEvent()) != noEvent)
+    if ((e = this->win->getEvent()) != noEvent)
         this->send(e);
     for (auto x = _systemList.begin(); x != _systemList.end(); ++x)
     {
         if ((tmp = x->first->broadcast()) != x->second)
             x->second = tmp;
+        this->send(x->first->getEvent());
     }
 }

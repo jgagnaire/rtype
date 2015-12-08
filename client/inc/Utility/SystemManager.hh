@@ -15,6 +15,7 @@ class SystemManager
             systemList["render"] = render;
             ea = new EventAggregator(static_cast<RenderSystem*>(render)->getWindow());
             clk = new Clock();
+            ea->add(render);
         }
 
         void gameLoop()

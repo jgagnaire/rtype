@@ -10,13 +10,19 @@ RenderSystem::RenderSystem()
     _eventList.push_back(Key_Left);
     _eventList.push_back(Key_Right);
     _eventList.push_back(Key_Select);
-    _current = &_menu;
+    _eventList.push_back(Key_Close);
+    _eventList.push_back(E_PlayOffline);
     _window = new Window();
+    _menu = new MenuScene(*_window);
+    _stage = new StageScene(*_window);
+    _current = _menu;
 }
 
 RenderSystem::~RenderSystem()
 {
     delete _window;
+    delete _menu;
+    delete _stage;
 }
 
 void RenderSystem::update(IClock &e)
@@ -41,11 +47,26 @@ bool RenderSystem::handle(REvent e)
         case Key_Close:
             _window->close();
             break;
+        case E_PlayOffline:
+            _current = _stage;
+            break;
         default:
-            ;
+            _current->handle(e, _event);
     }
     return true;
 }
+
+REvent              RenderSystem::getEvent()
+{
+    REvent          tmp = noEvent;
+
+    if (_event != noEvent)
+    {
+        tmp = _event;
+        _event = noEvent;
+    }
+    return tmp;
+};
 
 std::vector<REvent> RenderSystem::broadcast(void)
 {

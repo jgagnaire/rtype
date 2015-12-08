@@ -14,11 +14,11 @@ public:
   {
   }
 
-  inline std::string getType(void) const {
+  inline const std::string& getType(void) const {
     return (_type);
   }
 
-  inline std::string getName(void) const {
+  inline const std::string& getName(void) const {
     return (_name);
   }
 

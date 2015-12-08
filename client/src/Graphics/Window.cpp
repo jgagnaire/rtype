@@ -3,8 +3,11 @@
 #include "System/Render/AView.hh"
 
 Window::Window():
-    _window(sf::VideoMode(1280, 720), "Pede")
-{}
+    _window(sf::VideoMode(1920, 1080), "Pede"),
+    _menuMode(true), _block(false)
+{
+    _window.setVerticalSyncEnabled(true);
+}
 
 Window::~Window()
 {}
@@ -35,26 +38,9 @@ REvent  Window::getEvent()
 
     if (_window.pollEvent(e))
     {
-        if (e.type == sf::Event::KeyPressed)
-        {
-            switch(e.key.code) {
-                case sf::Keyboard::S :
-                    return (Key_Fire);
-                case sf::Keyboard::Space :
-                    return (Key_Charge);
-                case sf::Keyboard::Left :
-                    return (Key_Left);
-                case sf::Keyboard::Right :
-                    return (Key_Right);
-                case sf::Keyboard::Up :
-                    return (Key_Up);
-                case sf::Keyboard::Down :
-                    return (Key_Down);
-                default:
-                    return (noEvent);
-            }
-        }
-        else if (e.type == sf::Event::KeyReleased)
+        if (e.type == sf::Event::Closed)
+            return (Key_Close);
+        if (e.type == sf::Event::KeyReleased)
         {
             switch(e.key.code) {
                 case sf::Keyboard::Tab :
@@ -67,8 +53,54 @@ REvent  Window::getEvent()
                     return (noEvent);
             }
         }
-        else if (e.type == sf::Event::Closed)
-            return (Key_Close);
+    }
+    if (_menuMode == false)
+        _block = false;
+    if (_menuMode && _block)
+    {
+        if (_clock.getElapsedTimeMilli() > 75)
+        {
+            _block = false;
+            _clock.restart();
+        }
+        return (noEvent);
+    }
+    else if (_menuMode)
+        _block = true;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+        return (Key_Down);
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+        return (Key_Up);
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+        return (Key_Left);
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+        return (Key_Right);
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+        return (Key_Fire);
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+        return (Key_Charge);
+    if (sf::Joystick::isConnected(0))
+    {
+        float x, y, z, r;
+        x = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
+        y = sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
+        z = sf::Joystick::getAxisPosition(0, sf::Joystick::Z);
+        r = sf::Joystick::getAxisPosition(0, sf::Joystick::R);
+        float &dir = ((x > 0 ? x : -x) > (y > 0 ? y : -y) ? x : y);
+        if (sf::Joystick::isButtonPressed(0, 1))
+            return (Key_Charge);
+        if (z > -90.0)
+            return (Key_Change);
+        if (r > -90.0)
+            return (Key_Fire);
+        if (&dir == &x && x > 25)
+            return (Key_Right);
+        else if (&dir == &x && x < -25)
+            return (Key_Left);
+        else if (&dir == &y && y > 25)
+            return (Key_Down);
+        else if (&dir == &y && y < -25)
+            return (Key_Up);
     }
     return (noEvent);
 }
@@ -88,4 +120,9 @@ void  Window::draw(Entity &e)
         if (d)
             _window.draw(*d);
     }
+}
+
+void        Window::setMenuMode(bool m)
+{
+    _menuMode = m;
 }
