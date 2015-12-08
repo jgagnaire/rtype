@@ -72,26 +72,32 @@ void	AudioCallSystem::startPlay()
       if (!this->_users.empty())
 	for (it = this->_users.begin(); it != this->_users.end(); ++it)
 	  {
-	    if (!((*it)->manager.getAll<sf::SoundBuffer *>().empty()))
+	    if ((*it)->manager.get<sf::Clock *>("clock")->getElapsedTime().asMicroseconds() >=
+		(*it)->manager.get<sf::Time *>("time")->asMicroseconds())
 	      {
-		tmp = (*it)->manager.getAll<sf::SoundBuffer *>().front();
-		break ;
+		try {
+		  delete (*it)->manager.get<sf::SoundBuffer *>("toDelete");
+		  (*it)->manager.remove<sf::SoundBuffer *>("toDelete");
+		}
+		catch (...) {}
+		if (!((*it)->manager.getAll<sf::SoundBuffer *>().empty()))
+		  {
+		    tmp = (*it)->manager.getAll<sf::SoundBuffer *>().front();
+		    break ;
+		  }
 	      }
 	  }
-      if (tmp && *it && (*it)->manager.get<sf::Clock *>("clock")->getElapsedTime().asMicroseconds() >=
-	  (*it)->manager.get<sf::Time *>("time")->asMicroseconds())
+      if (tmp && *it)
 	{
 	  sound = (*it)->manager.get<sf::Sound *>("sound");
 	  sound->stop();
 	  sound->resetBuffer();
 	  sound->setBuffer(*tmp);
 	  sound->play();
-	  if (this->toDelete)
-	    delete this->toDelete;
-	  this->toDelete = tmp;
 	  (*it)->manager.get<sf::Clock *>("clock")->restart();
 	  *((*it)->manager.get<sf::Time *>("time")) = tmp->getDuration();
 	  (*it)->manager.remove<sf::SoundBuffer *>();
+	  (*it)->manager.add<sf::SoundBuffer *>("toDelete", tmp);
 	}
       _mutex.unlock();
     }
