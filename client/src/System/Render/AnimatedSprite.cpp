@@ -35,6 +35,8 @@ bool AnimatedSprite::load(const std::string &path,
     }
     _position.x = 0;
     _position.y = 0;
+    _width = width;
+    _height = _texture.getSize().y;
     return (true);
 }
 
@@ -45,10 +47,10 @@ void        AnimatedSprite::setPosition(const sf::Vector2f &pos)
         _position.x = 0;
     if (_position.y < 0)
         _position.y = 0;
-    if (_position.x + _sprites[0].getGlobalBounds().width > 1920)
-        _position.x = 1920 - _sprites[0].getGlobalBounds().width;
-    if (_position.y + _sprites[0].getGlobalBounds().height > 1080)
-        _position.y = 1080 - _sprites[0].getGlobalBounds().height;
+    if (_position.x + _width > 1920)
+        _position.x = 1920 - _width;
+    if (_position.y + _height > 1080)
+        _position.y = 1080 - _height;
 }
 
 void    AnimatedSprite::update(std::size_t duration)

@@ -26,6 +26,7 @@ class AnimatedSprite : public sf::Drawable, public ADrawable
         sf::Vector2f                    _position;
         int                             _current;
         int                             _width;
+        int                             _height;
         bool                            _random;
         unsigned                        _frameBySec;
         std::size_t                     _save;
