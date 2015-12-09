@@ -6,19 +6,21 @@
 
 enum REvent
 {
-    noEvent = -1,
-    Key_Up,
-    Key_Down,
-    Key_Left,
-    Key_Right,
-    Key_Fire,
-    Key_Charge,
-    Key_Change,
+    noEvent = 0,
+    Key_Up = 1,
+    Key_Down = 2,
+    Key_Left = 4,
+    Key_Right = 8,
+    Key_Fire = 16,
+    Key_Charge = 32,
+    Key_Change = 64,
     Key_Select,
     Key_Back,
     Key_Close,
     E_PlayOffline
 };
+
+typedef uint64_t REvents;
 
 class ISystem;
 class IWindow;
@@ -31,7 +33,7 @@ class EventAggregator
     public:
         EventAggregator(IWindow *w) : win(w) {}
         ~EventAggregator() {}
-        void send(REvent);
+        void send(REvents);
         void add(REvent, ISystem*);
         void add(ISystem*);
         void update(void);

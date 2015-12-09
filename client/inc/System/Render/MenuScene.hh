@@ -60,7 +60,7 @@ class MenuScene : public Scene
                 delete x;
         }
 
-        virtual void handle(REvent e, REvent &send)
+        virtual void handle(REvents e, REvents &send)
         {
             switch (e)
             {

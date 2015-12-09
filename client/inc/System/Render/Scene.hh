@@ -13,7 +13,7 @@ class Scene
         virtual ~Scene() {}
 
         virtual void update(int) = 0;
-        virtual void handle(REvent, REvent&) = 0;
+        virtual void handle(REvents, REvents&) = 0;
 
         virtual std::vector<Entity*>    getEntities()
         {

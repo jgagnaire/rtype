@@ -40,7 +40,7 @@ IPacket *RenderSystem::out()
     return 0;
 }
 
-bool RenderSystem::handle(REvent e)
+bool RenderSystem::handle(REvents e)
 {
     switch (e)
     {
@@ -56,11 +56,11 @@ bool RenderSystem::handle(REvent e)
     return true;
 }
 
-REvent              RenderSystem::getEvent()
+REvents              RenderSystem::getEvent()
 {
-    REvent          tmp = noEvent;
+    REvents          tmp = 0;
 
-    if (_event != noEvent)
+    if (_event != 0)
     {
         tmp = _event;
         _event = noEvent;

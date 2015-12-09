@@ -34,18 +34,10 @@ class StageScene : public Scene
 
         }
 
-        virtual void    handle(REvent e, REvent&)
+        virtual void    handle(REvents e, REvents&)
         {
-            switch (e)
-            {
-                case Key_Up:
-                case Key_Down:
-                case Key_Left:
-                case Key_Right:
-                    _direction = e;
-                default:
-                    ;
-            }
+            if (e & Key_Up || e & Key_Down || e & Key_Left || e & Key_Right)
+                _direction = e;
         }
 
         virtual void    update(int duration)
@@ -55,29 +47,20 @@ class StageScene : public Scene
             _s1.update(duration);
             _s2.update(duration);
             _s3.update(duration);
-            switch (_direction)
-            {
-                case Key_Up:
-                    _ship.setPosition(_ship.getPosition() +
-                            sf::Vector2f(0, -move));
-                    break;
-                case Key_Down:
-                    _ship.setPosition(_ship.getPosition() +
-                            sf::Vector2f(0, move));
-                    break;
-                case Key_Left:
-                    _ship.setPosition(_ship.getPosition() +
-                            sf::Vector2f(-move, 0));
-                    break;
-                case Key_Right:
-                    _ship.setPosition(_ship.getPosition() +
-                            sf::Vector2f(move, 0));
-                    break;
-                default:
-                    ;
-            }
-            if (_direction != noEvent)
-                _direction = noEvent;
+            if (_direction & Key_Up)
+                _ship.setPosition(_ship.getPosition() +
+                        sf::Vector2f(0, -move));
+            if (_direction & Key_Down)
+            _ship.setPosition(_ship.getPosition() +
+                    sf::Vector2f(0, move));
+            if (_direction & Key_Left)
+            _ship.setPosition(_ship.getPosition() +
+                    sf::Vector2f(-move, 0));
+            if (_direction & Key_Right)
+            _ship.setPosition(_ship.getPosition() +
+                    sf::Vector2f(move, 0));
+            if (_direction != 0)
+                _direction = 0;
             _ship.update(duration);
         }
 
@@ -93,7 +76,7 @@ class StageScene : public Scene
         ScrollingSprite _s3;
         AnimatedSprite  _ship;
 
-        REvent          _direction;
+        REvents         _direction;
 };
 
 

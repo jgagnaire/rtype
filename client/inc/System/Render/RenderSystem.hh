@@ -14,9 +14,9 @@ class RenderSystem : public ISystem
 
         virtual void                update(IClock&);
         virtual IPacket             *out();
-        virtual bool                handle(REvent e);
+        virtual bool                handle(REvents e);
         virtual std::vector<REvent> broadcast(void);
-        virtual REvent              getEvent(void);
+        virtual REvents             getEvent(void);
         IWindow                     *getWindow() const;
 
     private:
@@ -25,7 +25,7 @@ class RenderSystem : public ISystem
         MenuScene                                           *_menu;
         StageScene                                          *_stage;
         IWindow                                             *_window;
-        REvent                                              _event;
+        REvents                                             _event;
 };
 
 #endif /* end of include guard: RENDERSYSTEM_HH_C8GDRQJ2 */
