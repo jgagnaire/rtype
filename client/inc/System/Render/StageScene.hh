@@ -14,18 +14,21 @@ class StageScene : public Scene
         {
             _entities.push_back(&_b1);
             _entities.push_back(&_b2);
-            _entities.push_back(&_gui);
             _entities.push_back(&_b3);
+            _entities.push_back(&_gui);
+            _entities.push_back(&_b4);
 
             _b1.manager.add<AView*>("view", &_view);
             _b1.manager.add<ADrawable*>("background", &_s1);
             _b2.manager.add<ADrawable*>("background", &_s2);
             _b3.manager.add<ADrawable*>("background", &_s3);
+            _b4.manager.add<ADrawable*>("background", &_s4);
             _gui.manager.add<ADrawable*>("ship", &_ship);
 
-            _s1.load("client/res/stages/stage1/background_7680.png", 1);
-            _s2.load("client/res/stages/stage1/middle_7680.png", 2);
-            _s3.load("client/res/stages/stage1/top_7680.png", 3);
+            _s1.load("client/res/stages/stage2/background_7680.png", 1);
+            _s2.load("client/res/stages/stage2/middle_7680.png", 2);
+            _s3.load("client/res/stages/stage2/middle2_7680.png", 3);
+            _s4.load("client/res/stages/stage2/top_7680.png", 4);
             _ship.load("client/res/ship/player-ship-blue_107.png", true);
         }
 
@@ -47,6 +50,7 @@ class StageScene : public Scene
             _s1.update(duration);
             _s2.update(duration);
             _s3.update(duration);
+            _s4.update(duration);
             if (_direction & Key_Up)
                 _ship.setPosition(_ship.getPosition() +
                         sf::Vector2f(0, -move));
@@ -68,12 +72,14 @@ class StageScene : public Scene
         Entity          _b1;
         Entity          _b2;
         Entity          _b3;
+        Entity          _b4;
         Entity          _gui;
 
         View            _view;
         ScrollingSprite _s1;
         ScrollingSprite _s2;
         ScrollingSprite _s3;
+        ScrollingSprite _s4;
         AnimatedSprite  _ship;
 
         REvents         _direction;
