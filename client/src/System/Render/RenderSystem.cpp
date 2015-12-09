@@ -11,6 +11,7 @@ RenderSystem::RenderSystem()
     _eventList.push_back(Key_Right);
     _eventList.push_back(Key_Select);
     _eventList.push_back(Key_Close);
+    _eventList.push_back(Key_Change);
     _eventList.push_back(E_PlayOffline);
     _window = new Window();
     _menu = new MenuScene(*_window);
