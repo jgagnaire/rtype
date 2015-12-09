@@ -1,6 +1,6 @@
 #include <algorithm>
-#include "System/ISystem.hh"
-#include "System/Render/IWindow.hh"
+#include "ISystem.hh"
+#include "IWindow.hh"
 
 void	EventAggregator::send(REvents e)
 {

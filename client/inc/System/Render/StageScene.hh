@@ -63,23 +63,23 @@ class StageScene : public Scene
         virtual void    update(int duration)
         {
             _win.setMenuMode(false);
-            int move = duration * 0.75;
+			float move = duration * 0.75f;
             _s1[_stageNb - 1]->update(duration);
             _s2[_stageNb - 1]->update(duration);
             _s3[_stageNb - 1]->update(duration);
             _s4[_stageNb - 1]->update(duration);
             if (_direction & Key_Up)
                 _ship.setPosition(_ship.getPosition() +
-                        sf::Vector2f(0, -move));
+                        sf::Vector2f(0.0f, -move));
             if (_direction & Key_Down)
                 _ship.setPosition(_ship.getPosition() +
-                        sf::Vector2f(0, move));
+                        sf::Vector2f(0.0f, move));
             if (_direction & Key_Left)
                 _ship.setPosition(_ship.getPosition() +
-                        sf::Vector2f(-move, 0));
+                        sf::Vector2f(-move, 0.0f));
             if (_direction & Key_Right)
                 _ship.setPosition(_ship.getPosition() +
-                        sf::Vector2f(move, 0));
+                        sf::Vector2f(move, 0.0f));
             if (_direction != 0)
                 _direction = 0;
             _ship.update(duration);
