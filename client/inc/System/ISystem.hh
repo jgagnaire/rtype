@@ -14,6 +14,7 @@ class ISystem
 
         virtual void                    update(IClock &clock) = 0;
         virtual IPacket                 *out() = 0;
+        virtual void                    in(IPacket*) = 0;
         virtual bool                    handle(REvents e) = 0;
         virtual std::vector<REvent>     broadcast(void) = 0;
         virtual REvents                 getEvent() = 0;
