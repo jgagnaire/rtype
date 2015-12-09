@@ -16,7 +16,8 @@ RenderSystem::RenderSystem()
     _window = new Window();
     _menu = new MenuScene(*_window);
     _stage = new StageScene(*_window);
-    _current = _menu;
+    _login = new LoginScene(*_window);
+    _current = _login;
 }
 
 RenderSystem::~RenderSystem()
@@ -41,8 +42,9 @@ IPacket *RenderSystem::out()
     return 0;
 }
 
-void    RenderSystem::in(IPacket *tmp)
+void    RenderSystem::in(IPacket *)
 {
+    //TODO
 }
 
 bool RenderSystem::handle(REvents e)

@@ -41,6 +41,20 @@ REvents  Window::getEvent()
     {
         if (e.type == sf::Event::Closed)
             return (Key_Close);
+        if (_menuMode && e.type == sf::Event::KeyReleased)
+        {
+            if (e.key.code == sf::Keyboard::BackSpace)
+                return (127 | Key_Change);
+            else if (e.key.code == sf::Keyboard::Return)
+                return (126 | Key_Change);
+        }
+        if (_menuMode && e.type == sf::Event::TextEntered)
+        {
+            if (e.text.unicode >= 'a' && e.text.unicode <= 'z')
+                return (e.text.unicode | Key_Change);
+            else
+                return (Key_Change);
+        }
         if (e.type == sf::Event::KeyReleased)
         {
             switch(e.key.code) {
@@ -53,11 +67,6 @@ REvents  Window::getEvent()
                 default:
                     return (noEvent);
             }
-        }
-        if (_menuMode && e.type == sf::Event::TextEntered)
-        {
-            if (e.text.unicode < 128)
-                return (e.text.unicode | Key_Change);
         }
     }
     if (_menuMode == false)

@@ -27,6 +27,7 @@ class SystemManager
                 for (auto x : systemList)
                 {
                     IPacket *p = _networkManager.getPacket();
+                    (void)p; //TODO
                     ea->update();
                     x.second->update(*this->clk);
                 }

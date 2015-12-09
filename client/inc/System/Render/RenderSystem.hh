@@ -4,6 +4,7 @@
 # include "System/ISystem.hh"
 # include "System/Render/MenuScene.hh"
 # include "System/Render/StageScene.hh"
+# include "System/Render/LoginScene.hh"
 # include "Window.hh"
 
 class RenderSystem : public ISystem
@@ -25,6 +26,7 @@ class RenderSystem : public ISystem
         Scene                                               *_current;
         MenuScene                                           *_menu;
         StageScene                                          *_stage;
+        LoginScene                                          *_login;
         IWindow                                             *_window;
         REvents                                             _event;
 };
