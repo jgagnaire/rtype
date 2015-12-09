@@ -18,7 +18,7 @@ class StageScene : public Scene
         _entities.push_back(&_gui);
         _entities.push_back(&_b4);
 
-        _ship.load("client/res/ship/player-ship-blue_107.png", true);
+        _ship.load("client/res/ship/player-ship-grey2_111.png", true);
 
         for (int i = 1; i <= 2; ++i)
         {

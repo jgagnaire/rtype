@@ -40,6 +40,10 @@ IPacket *RenderSystem::out()
     return 0;
 }
 
+void    RenderSystem::in(IPacket *tmp)
+{
+}
+
 bool RenderSystem::handle(REvents e)
 {
     switch (e)

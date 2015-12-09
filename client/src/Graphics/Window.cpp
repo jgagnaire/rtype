@@ -54,6 +54,11 @@ REvents  Window::getEvent()
                     return (noEvent);
             }
         }
+        if (_menuMode && e.type == sf::Event::TextEntered)
+        {
+            if (e.text.unicode < 128)
+                return (e.text.unicode | Key_Change);
+        }
     }
     if (_menuMode == false)
         _block = false;
