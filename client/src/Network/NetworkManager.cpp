@@ -10,7 +10,7 @@ NetworkManager::NetworkManager(const std::string &ip,
     _udp(*new UdpSocket()), _tcp(*new TcpSocket()),
     _tcpIp(ip), _udpIp(udpIp)
 {
-    _tcp.connect(ip, 1120);
+    _tcp.connect(ip, 1119);
     _udp.bind(1726);
 }
 
@@ -87,10 +87,24 @@ void        NetworkManager::receiveTcp()
             read = _tcp.receive(buf, packet->getSize());
         }
         packet->setData(buf);
-        _packets.push_back(packet);
+        std::cout << "Tcp {" << packet->getSize() <<
+            ", " << packet->getQuery() << "}" << std::endl;
+        if (static_cast<Codes>(packet->getQuery()) == Codes::Ping)
+        {
+            TcpPacket   p;
+            p.setSize(0);
+            p.setData(0);
+            p.setQuery(static_cast<uint16_t>(Codes::Pong));
+            this->send(p);
+            delete packet;
+            packet = 0;
+        }
+        else
+            _packets.push_back(packet);
     }
     else
         delete packet;
+
 }
 
 IPacket     *NetworkManager::getPacket()

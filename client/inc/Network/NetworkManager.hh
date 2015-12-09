@@ -7,6 +7,12 @@
 # include "IUdpSocket.hh"
 # include "ITcpSocket.hh"
 
+enum class Codes
+{
+    Ping = 109,
+    Pong = 110
+};
+
 class NetworkManager
 {
     public:

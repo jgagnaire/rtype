@@ -5,11 +5,13 @@
 #include "System/Render/RenderSystem.hh"
 #include "System/Event/EventAggregator.hh"
 #include "Utility/Clock.hh"
+#include "Network/NetworkManager.hh"
 
 class SystemManager
 {
     public:
-        SystemManager()
+        SystemManager(const std::string &ip):
+            _networkManager(ip, ip)
         {
             ISystem *render = new RenderSystem();
             systemList["render"] = render;
@@ -24,6 +26,7 @@ class SystemManager
             {
                 for (auto x : systemList)
                 {
+                    IPacket *p = _networkManager.getPacket();
                     ea->update();
                     x.second->update(*this->clk);
                 }
@@ -34,6 +37,7 @@ class SystemManager
         std::unordered_map<std::string, ISystem*> systemList;
         EventAggregator	*ea;
         IClock		*clk;
+        NetworkManager          _networkManager;
 };
 
 #endif //SYSTEMMANAGER_HH_
