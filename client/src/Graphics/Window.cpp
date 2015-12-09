@@ -88,10 +88,10 @@ REvents  Window::getEvent()
         z = sf::Joystick::getAxisPosition(0, sf::Joystick::Z);
         r = sf::Joystick::getAxisPosition(0, sf::Joystick::R);
         float &dir = ((x > 0 ? x : -x) > (y > 0 ? y : -y) ? x : y);
+        if (z > -90.0)
+            return (Key_Change);
         if (sf::Joystick::isButtonPressed(0, 1))
             tmp |= Key_Charge;
-        if (z > -90.0)
-            tmp |= Key_Change;
         if (r > -90.0)
             tmp |= Key_Fire;
         if (&dir == &x && x > 25)
