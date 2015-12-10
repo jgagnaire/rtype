@@ -4,12 +4,10 @@
 AudioCallSystem::AudioCallSystem()
 {
   this->_exit = false;
-  this->_recorderThread = 0;
-  this->_playerThread = 0;
+  this->_thread = 0;
   recorder = new Recorder(this);
   recorder->start();
   this->startPlay();
-  this->startRecord();
 }
 
 AudioCallSystem::~AudioCallSystem()
@@ -17,40 +15,14 @@ AudioCallSystem::~AudioCallSystem()
   this->_exit = true;
   recorder->stop();
   delete recorder;
-  this->_recorderThread->join();
-  this->_playerThread->join();
+  this->_thread->join();
   this->_packets.clear();
-
-  delete this->_playerThread;
-  delete this->_recorderThread;
+  delete this->_thread;
 }
 
-void	AudioCallSystem::startThreadRecord(AudioCallSystem *obj)
-{
-  obj->startRecord();  
-}
-
-void	AudioCallSystem::startThreadPlay(AudioCallSystem *obj)
+void	AudioCallSystem::startThread(AudioCallSystem *obj)
 {
   obj->startPlay();  
-}
-
-void AudioCallSystem::startRecord()
-{
-  Recorder recorder(this);
-
-  if (!_recorderThread)
-    {
-      _recorderThread = new std::thread(&AudioCallSystem::startThreadRecord, this);
-      return ;
-    }
-  while (!_exit)
-    {
-      if (!_packets.empty())
-	{
-	  in(out());
-	}
-    }
 }
 
 void	AudioCallSystem::startPlay()
@@ -59,9 +31,9 @@ void	AudioCallSystem::startPlay()
   sf::SoundBuffer *tmp;
   sf::Sound *sound;
 
-  if (!_playerThread)
+  if (!_thread)
     {
-      _playerThread = new std::thread(&AudioCallSystem::startThreadPlay, this);
+      _thread = new std::thread(&AudioCallSystem::startThread, this);
       return ;
     }
   while (!_exit)
@@ -130,7 +102,7 @@ void AudioCallSystem::addBuffer(sf::SoundBuffer *buffer, const std::string &name
 
 void AudioCallSystem::addPacket(sf::SoundBuffer *buffer)
 {
-  UdpPacket *tmp = new UdpPacket();
+  IPacket *tmp = new UdpPacket();
   short int *data;
   const short int *tmpData;
 
@@ -144,14 +116,14 @@ void AudioCallSystem::addPacket(sf::SoundBuffer *buffer)
   delete buffer;
 }
 
-bool AudioCallSystem::in(UdpPacket *packet)
+void AudioCallSystem::in(IPacket *packet)
 {
   sf::SoundBuffer *buffer = new sf::SoundBuffer();
   short int *data;
   short int *tmpData;
 
   if (!packet)
-    return false;
+    return ;
   tmpData = (short int *)(packet->getData());
   data = new short int[packet->getSize()];
   std::copy(tmpData, tmpData + packet->getSize(), data);
@@ -159,12 +131,12 @@ bool AudioCallSystem::in(UdpPacket *packet)
   _mutex.lock();
   this->addBuffer(buffer, "toto");
   _mutex.unlock();
-  return true;
+  return ;
 }
 
-UdpPacket *AudioCallSystem::out()
+IPacket *AudioCallSystem::out()
 {
-  UdpPacket *tmp;
+  IPacket *tmp;
 
   if (_packets.empty())
     return (0);

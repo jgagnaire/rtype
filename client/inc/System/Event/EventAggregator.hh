@@ -23,20 +23,20 @@ enum REvent
 
 typedef uint64_t REvents;
 
-class ISystem;
+class ASystem;
 class IWindow;
 
 class EventAggregator
 {
     private:
         IWindow						*win;
-        std::unordered_map<ISystem*, std::vector<REvent> >	_systemList;
+        std::unordered_map<ASystem*, std::vector<REvent> >	_systemList;
     public:
         EventAggregator(IWindow *w) : win(w) {}
         ~EventAggregator() {}
         void send(REvents);
-        void add(REvent, ISystem*);
-        void add(ISystem*);
+        void add(REvent, ASystem*);
+        void add(ASystem*);
         void update(void);
         inline IWindow *getWin() { return win; }
 };

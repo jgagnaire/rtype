@@ -1,9 +1,10 @@
 #ifndef SYSTEMMANAGER_HH_
 # define SYSTEMMANAGER_HH_
 
-#include "System/ISystem.hh"
+#include "System/ASystem.hh"
 #include "System/Render/RenderSystem.hh"
 #include "System/Event/EventAggregator.hh"
+#include "System/Audio/AudioCallSystem.hh"
 #include "Utility/Clock.hh"
 #include "Network/NetworkManager.hh"
 
@@ -13,8 +14,11 @@ class SystemManager
         SystemManager(const std::string &ip):
             _networkManager(ip, ip)
         {
-            ISystem *render = new RenderSystem();
+            ASystem *render = new RenderSystem();
+            ASystem *audioCall = new AudioCallSystem();
+
             systemList["render"] = render;
+	    systemList["audioCall"] = audioCall;
             ea = new EventAggregator(static_cast<RenderSystem*>(render)->getWindow());
             clk = new Clock();
             ea->add(render);
@@ -39,7 +43,7 @@ class SystemManager
         }
 
     private:
-        std::unordered_map<std::string, ISystem*> systemList;
+        std::unordered_map<std::string, ASystem*> systemList;
         EventAggregator	*ea;
         IClock		*clk;
         NetworkManager          _networkManager;

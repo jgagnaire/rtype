@@ -1,16 +1,16 @@
-#ifndef ISYSTEM_HH_
-# define ISYSTEM_HH_
+#ifndef ASYSTEM_HH_
+# define ASYSTEM_HH_
 
 #include <vector>
 #include "Event/EventAggregator.hh"
 #include "Network/IPacket.hh"
 #include "Utility/IClock.hh"
 
-class ISystem
+class ASystem
 {
     public:
-        ISystem() {}
-        virtual ~ISystem() {}
+        ASystem() {}
+        virtual ~ASystem() {}
 
         virtual void                    update(IClock &clock) = 0;
         virtual IPacket                 *out() = 0;
@@ -22,4 +22,4 @@ class ISystem
         std::vector<REvent> _eventList;
 };
 
-#endif //ISYSTEM_HH_
+#endif //ASYSTEM_HH_
