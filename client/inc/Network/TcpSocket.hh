@@ -19,11 +19,11 @@ public:
 
 	inline virtual uint16_t    getSize() const { return this->_header.size; }
 	inline virtual uint16_t    getQuery() const { return this->_header.query; }
-	inline virtual void        *getData() const { return this->_data; }
+	inline virtual const void  *getData() const { return this->_data; }
 
 	inline virtual void        setSize(uint16_t size) { this->_header.size = size; }
 	inline virtual void        setQuery(uint16_t query) { this->_header.query = query; }
-	inline virtual void        setData(void *data) { this->_data = data; }
+	inline virtual void        setData(const void *data) { this->_data = data; }
 
 	inline virtual Header           &getHeader() { return this->_header; }
 	inline virtual const Header     &getHeader() const { return this->_header; }

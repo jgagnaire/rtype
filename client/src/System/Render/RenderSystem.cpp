@@ -39,12 +39,12 @@ void RenderSystem::update(IClock &e)
 
 IPacket *RenderSystem::out()
 {
-    return 0;
+    return _current->out();
 }
 
-void    RenderSystem::in(IPacket *)
+void    RenderSystem::in(IPacket *p)
 {
-    //TODO
+    _current->in(p);
 }
 
 bool RenderSystem::handle(REvents e)

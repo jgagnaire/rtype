@@ -41,6 +41,8 @@ void    NetworkManager::send(const IPacket &packet)
         _tcp.send(buf, totalSize);
     else if (udpPacket)
         _udp.send(buf, totalSize, _udpIp, 1725);
+    std::cout << "send {" << packet.getSize() <<
+            ", " << packet.getQuery() << "}" << std::endl;
 }
 
 void        NetworkManager::receiveUdp()

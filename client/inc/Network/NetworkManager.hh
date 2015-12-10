@@ -10,7 +10,8 @@
 enum class Codes
 {
     Ping = 109,
-    Pong = 110
+    Pong = 110,
+    Login = 100,
 };
 
 class NetworkManager

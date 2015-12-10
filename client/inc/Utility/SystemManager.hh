@@ -29,7 +29,11 @@ class SystemManager
                     IPacket *p = _networkManager.getPacket();
                     (void)p; //TODO
                     ea->update();
+                    x.second->in(p);
                     x.second->update(*this->clk);
+                    p = x.second->out();
+                    if (p != 0)
+                        _networkManager.send(*p);
                 }
             }
         }

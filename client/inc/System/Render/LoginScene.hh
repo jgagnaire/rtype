@@ -5,13 +5,23 @@
 #include "System/Render/Scene.hh"
 #include "System/Render/View.hh"
 #include "System/Render/Text.hh"
+#include "Network/TcpSocket.hh"
+#include "Network/NetworkManager.hh"
+
+enum class LoginState
+{
+    NotConnected,
+    Connecting,
+    WaitResponse,
+    Connected
+};
 
 class LoginScene : public Scene
 {
     public:
         LoginScene(IWindow &win):
             Scene(win), _titleLogin("Login :"), _titlePassword("Password :"),
-            _finish(false)
+            _finish(LoginState::NotConnected)
     {
         _entities.push_back(&_b1);
         _entities.push_back(&_texts);
@@ -39,11 +49,11 @@ class LoginScene : public Scene
 
         virtual void    handle(REvents e, REvents &)
         {
-            if (e == Key_Change || _finish)
+            REvents tmp = (e << 1) >> 1;
+            if (e == Key_Change || _finish == LoginState::WaitResponse)
                 return ;
             if (e & Key_Change)
             {
-                REvents tmp = (e << 1) >> 1;
                 if (tmp == 127 && _login.empty() == false)
                     _currentStr->erase(_login.size() - 1, 1);
                 if (tmp == 126)
@@ -54,7 +64,13 @@ class LoginScene : public Scene
                         _currentText = &_printedPassword;
                     }
                     else
-                        _finish = true;
+                    {
+                        _finish = LoginState::Connecting;
+                        _buf = _login + ":" + _password;
+                        _packet.setQuery(static_cast<uint16_t>(Codes::Login));
+                        _packet.setData(_buf.c_str());
+                        _packet.setSize(_buf.size());
+                    }
                     return ;
                 }
                 if (tmp != 127)
@@ -63,6 +79,14 @@ class LoginScene : public Scene
                 _currentText->setCenter();
                 _currentText->setY((_currentStr == &_login ? 400 : 800));
             }
+        }
+
+        virtual IPacket *out()
+        {
+            if (_finish != LoginState::Connecting)
+                return (0);
+            _finish = LoginState::WaitResponse;
+            return &_packet;
         }
 
         virtual void    update(int)
@@ -82,7 +106,9 @@ class LoginScene : public Scene
         Text                    _printedPassword;
         Text                    *_currentText;
         std::string             *_currentStr;
-        bool                    _finish;
+        LoginState              _finish;
+        TcpPacket               _packet;
+        std::string             _buf;
 };
 
 #endif /* end of include guard: LOGINSCENE_HH_QX5LVF1U */
