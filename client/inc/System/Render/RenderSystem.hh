@@ -1,13 +1,13 @@
 #ifndef RENDERSYSTEM_HH_C8GDRQJ2
 # define RENDERSYSTEM_HH_C8GDRQJ2
 
-# include "System/ISystem.hh"
+# include "System/ASystem.hh"
 # include "System/Render/MenuScene.hh"
 # include "System/Render/StageScene.hh"
 # include "System/Render/LoginScene.hh"
 # include "Window.hh"
 
-class RenderSystem : public ISystem
+class RenderSystem : public ASystem
 {
     public:
         RenderSystem();

@@ -1,5 +1,5 @@
 #include <algorithm>
-#include "ISystem.hh"
+#include "ASystem.hh"
 #include "IWindow.hh"
 
 void	EventAggregator::send(REvents e)
@@ -17,14 +17,14 @@ void	EventAggregator::send(REvents e)
     }
 }
 
-void	EventAggregator::add(REvent e, ISystem* s)
+void	EventAggregator::add(REvent e, ASystem* s)
 {
     if (std::find(_systemList[s].begin(), _systemList[s].end(), e)
             == _systemList[s].end())
         _systemList[s].push_back(e);
 }
 
-void    EventAggregator::add(ISystem *s)
+void    EventAggregator::add(ASystem *s)
 {
     _systemList[s] = s->broadcast();
 }
