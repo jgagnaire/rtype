@@ -1,6 +1,7 @@
 #include <iostream>
 #include <limits.h>
 #include <cstring>
+#include <typeinfo>
 #include "Network/NetworkManager.hh"
 #include "Network/UdpSocket.hh"
 #include "Network/TcpSocket.hh"
@@ -22,24 +23,28 @@ NetworkManager::~NetworkManager()
 
 void    NetworkManager::send(const IPacket &packet)
 {
-    const IPacket *tmp = &packet;
-    const TcpPacket *tcpPacket = 0;
-    const UdpPacket *udpPacket = 0;
-    std::size_t totalSize = tmp->getSize();
+    bool    isTcp = false;
+    std::size_t totalSize = packet.getSize();
     char *buf = 0;
 
-    if ((tcpPacket = dynamic_cast<const TcpPacket*>(tmp)))
-        totalSize += sizeof(TcpHeader);
-    else if ((udpPacket = dynamic_cast<const UdpPacket*>(tmp)))
-        totalSize += sizeof(UdpHeader);
+    try
+    {
+        dynamic_cast<const TcpPacket&>(packet);
+        isTcp = true;
+    }
+    catch (std::bad_cast &)
+    {
+         isTcp = false;
+    }
+    totalSize += (isTcp ? sizeof(TcpHeader) : sizeof(UdpHeader));
     buf = new char[totalSize];
-    std::memcpy(buf, &(tmp->getHeader()),
-            totalSize - tmp->getSize());
-    std::memcpy(buf + totalSize - tmp->getSize(),
-            tmp->getData(), tmp->getSize());
-    if (tcpPacket)
+    std::memcpy(buf, &(packet.getHeader()),
+            totalSize - packet.getSize());
+    std::memcpy(buf + totalSize - packet.getSize(),
+            packet.getData(), packet.getSize());
+    if (isTcp)
         _tcp.send(buf, totalSize);
-    else if (udpPacket)
+    else
         _udp.send(buf, totalSize, _udpIp, 1725);
     std::cout << "send {" << packet.getSize() <<
             ", " << packet.getQuery() << "}" << std::endl;
