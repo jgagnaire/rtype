@@ -78,6 +78,7 @@ public:
     void	checkObserver() {
         if (this->network_monitor->isObserved(dynamic_cast<IServerSocket<SCK>*>(this->srvset),
                                               Enum::ACCEPT)) {
+            std::cout << "Il y a un nouveau client !!" << std::endl;
             IServerSocket<SCK>	*tmp = this->srvset->absAcceptNewClient();
 
             if (!tmp)
@@ -114,6 +115,7 @@ public:
         for (auto it = this->controllers.begin(); it != this->controllers.end(); ++it) {
             if ((n = ((*it)->*(this->newData))(cli)) == 1)
             {
+                std::cout << "voila !" << std::endl;
                 cli->clearData();
                 this->network_monitor->setObserver(cli->getServerSocket(),
                                                    static_cast<Enum::Flag>(Enum::WRITE |

@@ -10,7 +10,7 @@ class StageScene : public Scene
 {
     public:
         StageScene(IWindow &win):
-            Scene(win), _stageNb(1), _direction(noEvent)
+            Scene(win), _stageNb(3), _direction(noEvent)
     {
         _entities.push_back(&_b1);
         _entities.push_back(&_b2);
