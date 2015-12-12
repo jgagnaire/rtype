@@ -3,7 +3,7 @@
 #include "System/Render/AnimatedSprite.hh"
 
 AnimatedSprite::AnimatedSprite():
-    _current(0), _random(false), _save(0)
+    _current(0), _width(0), _height(0), _random(0), _save(0)
 {
     _buffer = this;
 }

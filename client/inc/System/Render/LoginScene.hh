@@ -72,6 +72,20 @@ class LoginScene : public Scene
                 }
                 else if (_lastCode == Codes::Register)
                 {
+                    switch (static_cast<Codes>(packet->getQuery()))
+                    {
+                        case Codes::Ok:
+                            _event = E_GameRoom;
+                            break ;
+                        case Codes::WrongUserPass:
+                            _error.setText("Wrong username or password");
+                            break ;
+                        case Codes::AlreadyLogin:
+                            _error.setText("Already Loged in");
+                            break ;
+                        default:
+                            ;
+                    }
                 }
             }
         }
