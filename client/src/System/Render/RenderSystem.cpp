@@ -16,10 +16,10 @@ RenderSystem::RenderSystem(std::list<Entity*> *e):
     _eventList.push_back(E_PlayOffline);
     _eventList.push_back(E_GameRoom);
     _window = new Window();
-    _menu = new MenuScene(*_window);
-    _stage = new StageScene(*_window);
-    _login = new LoginScene(*_window);
-    _gameRoom = new GameRoomScene(*_window);
+    _menu = new MenuScene(*_window, _entities);
+    _stage = new StageScene(*_window, _entities);
+    _login = new LoginScene(*_window, _entities);
+    _gameRoom = new GameRoomScene(*_window, _entities);
     _current = _stage;
 }
 
@@ -36,8 +36,6 @@ void RenderSystem::update(IClock &e)
     _window->clear();
     _current->update(e.getElapsedTimeMilli());
     e.restart();
-    for (auto x : _current->getEntities())
-        _window->draw(*x);
     _window->display();
 }
 
