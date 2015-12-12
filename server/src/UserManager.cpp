@@ -8,7 +8,7 @@ const std::string UserManager<T>::database_dir = "./server/.database/.%_data";
 
 template<typename T>
 UserManager<T>::UserManager(IServerSocket<T> *sck) :
-        sock(sck) , status(Enum::LOBBY) { clearData(); }
+        sock(sck) , status(Enum::LOBBY) , ping(true) { clearData(); }
 
 template<typename T>
 UserManager<T>::~UserManager() {

@@ -10,7 +10,7 @@ class StageScene : public Scene
 {
     public:
         StageScene(IWindow &win):
-            Scene(win), _stageNb(1), _direction(noEvent)
+            Scene(win), _stageNb(3), _direction(noEvent)
     {
         _entities.push_back(&_b1);
         _entities.push_back(&_b2);
@@ -20,7 +20,7 @@ class StageScene : public Scene
 
         _ship.load("client/res/ship/player-ship-grey2_111.png", true);
 
-        for (int i = 1; i <= 2; ++i)
+        for (int i = 1; i <= 3; ++i)
         {
             ScrollingSprite *s1 = new ScrollingSprite();
             ScrollingSprite *s2 = new ScrollingSprite();

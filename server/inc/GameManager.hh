@@ -25,6 +25,7 @@ template <typename SCK>
 class GameManager {
 public:
     static  GameManager             &instance();
+    static  std::size_t             getTime();
     Game<SCK>                       *getGameByName(const std::string &);
     void                            createRoom(const std::string &, UserManager<SCK> *);
     void                            deleteUser(UserManager<SCK> *);
@@ -35,6 +36,7 @@ public:
     void                            launchGame(const std::string &);
     static void                     createGame(Game<SCK> *);
     bool                            isPlaying(const std::string &);
+    void                            updatePositions(Game<SCK> *);
     void                            setUdpSocket(IServerSocket<SCK> *);
 
 private:

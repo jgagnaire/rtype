@@ -17,7 +17,12 @@ enum class Codes
     WrongUserPass = 500,
     AlreadyLogin = 501,
     AlreadyExist = 502,
-    WrongFormat = 503
+    WrongFormat = 503,
+    GetGameRooms = 103,
+    AlreadyInRoom = 504,
+    NotLoggedIn = 505,
+    ExistingRoom = 403,
+    CreateRoom = 202
 };
 
 class NetworkManager
