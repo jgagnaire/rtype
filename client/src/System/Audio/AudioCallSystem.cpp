@@ -106,28 +106,26 @@ void AudioCallSystem::addPacket(sf::SoundBuffer *buffer)
   short int *data;
   const short int *tmpData;
 
-  tmp->setSize(static_cast<uint16_t>(buffer->getSampleCount() * 2));
-  data = new short int[tmp->getSize()];
+  tmp->setSize(static_cast<uint16_t>(buffer->getSampleCount() * sizeof(short int)));
+  data = new short int[tmp->getSize() / sizeof(short int)];
   tmp->setQuery(502);
   tmpData = buffer->getSamples();
-  std::copy(tmpData, tmpData + buffer->getSampleCount() * 2, data);
+  std::copy(tmpData, tmpData + buffer->getSampleCount(), data);
   tmp->setData(data);
   _packets.push_back(tmp);
   delete buffer;
+  in(out());
 }
 
 void AudioCallSystem::in(IPacket *packet)
 {
   sf::SoundBuffer *buffer = new sf::SoundBuffer();
-  short int *data;
   short int *tmpData;
 
   if (!packet)
     return ;
   tmpData = (short int *)(packet->getData());
-  data = new short int[packet->getSize()];
-  std::copy(tmpData, tmpData + packet->getSize(), data);
-  buffer->loadFromSamples(data, packet->getSize() / 2, 2, packet->getSize() / 2);
+  buffer->loadFromSamples(tmpData, packet->getSize() / sizeof(short int), 2, packet->getSize() / sizeof(short int));
   _mutex.lock();
   this->addBuffer(buffer, "toto");
   _mutex.unlock();
