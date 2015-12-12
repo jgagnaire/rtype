@@ -5,10 +5,19 @@
 #include <thread>
 #include <mutex>
 #include <SFML/Audio.hpp>
+#include "Recorder.hh"
 #include "System/ASystem.hh"
 #include "Network/UdpSocket.hh"
 #include "Entity/Entity.hh"
-#include "Recorder.hh"
+#include "Utility/ThreadFactory.hh"
+#include "Utility/IThread.hh"
+#include "Utility/IMutex.hh"
+
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+# include "Utility/WinMutex.hh"
+#else
+# include "Utility/UnixMutex.hh"
+#endif
 
 class Recorder;
 
@@ -39,8 +48,8 @@ private:
   Recorder			*recorder;
   std::vector <Entity *>	_users;
   std::list <IPacket *>		_packets;
-  std::thread			*_thread;
-  std::mutex			_mutex;
+  IThread <void, AudioCallSystem *> *_thread;
+  IMutex			*_mutex;
   sf::Clock			_clock;
   bool				_exit;
 };
