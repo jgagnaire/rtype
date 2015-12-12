@@ -32,14 +32,31 @@ bool    Window::isOpen() const
     return _window.isOpen();
 }
 
-REvent  Window::getEvent()
+REvents  Window::getEvent()
 {
     sf::Event e;
+    REvents tmp = 0;
 
     if (_window.pollEvent(e))
     {
         if (e.type == sf::Event::Closed)
             return (Key_Close);
+        if (_menuMode && e.type == sf::Event::KeyReleased)
+        {
+            if (e.key.code == sf::Keyboard::BackSpace)
+                return (127 | Key_Change);
+            else if (e.key.code == sf::Keyboard::Return)
+                return (126 | Key_Change);
+            else if (e.key.code == sf::Keyboard::Tab)
+                return (125 | Key_Change);
+        }
+        if (_menuMode && e.type == sf::Event::TextEntered)
+        {
+            if (e.text.unicode >= 'a' && e.text.unicode <= 'z')
+                return (e.text.unicode | Key_Change);
+            else
+                return (Key_Change);
+        }
         if (e.type == sf::Event::KeyReleased)
         {
             switch(e.key.code) {
@@ -63,22 +80,22 @@ REvent  Window::getEvent()
             _block = false;
             _clock.restart();
         }
-        return (noEvent);
+        return (0);
     }
     else if (_menuMode)
         _block = true;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-        return (Key_Down);
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-        return (Key_Up);
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-        return (Key_Left);
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-        return (Key_Right);
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-        return (Key_Fire);
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-        return (Key_Charge);
+        tmp |= Key_Down;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+        tmp |= Key_Up;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+        tmp |= Key_Left;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+        tmp |= Key_Right;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+        tmp |= Key_Fire;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+        tmp |= Key_Charge;
     if (sf::Joystick::isConnected(0))
     {
         float x, y, z, r;
@@ -87,22 +104,22 @@ REvent  Window::getEvent()
         z = sf::Joystick::getAxisPosition(0, sf::Joystick::Z);
         r = sf::Joystick::getAxisPosition(0, sf::Joystick::R);
         float &dir = ((x > 0 ? x : -x) > (y > 0 ? y : -y) ? x : y);
-        if (sf::Joystick::isButtonPressed(0, 1))
-            return (Key_Charge);
         if (z > -90.0)
             return (Key_Change);
+        if (sf::Joystick::isButtonPressed(0, 1))
+            tmp |= Key_Charge;
         if (r > -90.0)
-            return (Key_Fire);
+            tmp |= Key_Fire;
         if (&dir == &x && x > 25)
-            return (Key_Right);
-        else if (&dir == &x && x < -25)
-            return (Key_Left);
-        else if (&dir == &y && y > 25)
-            return (Key_Down);
-        else if (&dir == &y && y < -25)
-            return (Key_Up);
+            tmp |= Key_Right;
+        if (&dir == &x && x < -25)
+            tmp |= Key_Left;
+        if (&dir == &y && y > 25)
+            tmp |= Key_Down;
+        if (&dir == &y && y < -25)
+            tmp |= Key_Up;
     }
-    return (noEvent);
+    return (tmp);
 }
 
 void  Window::draw(Entity &e)

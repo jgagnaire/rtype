@@ -3,6 +3,7 @@
 
 # include "IWindow.hh"
 # include "Entity/Entity.hh"
+# include "Network/IPacket.hh"
 
 class Scene
 {
@@ -13,7 +14,10 @@ class Scene
         virtual ~Scene() {}
 
         virtual void update(int) = 0;
-        virtual void handle(REvent, REvent&) = 0;
+        virtual void handle(REvents, REvents&) = 0;
+
+        virtual void in(IPacket*) {}
+        virtual IPacket *out() {return 0;}
 
         virtual std::vector<Entity*>    getEntities()
         {

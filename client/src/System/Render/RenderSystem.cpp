@@ -3,7 +3,8 @@
 
 # include "System/Render/RenderSystem.hh"
 
-RenderSystem::RenderSystem()
+RenderSystem::RenderSystem():
+    _event(noEvent)
 {
     _eventList.push_back(Key_Up);
     _eventList.push_back(Key_Down);
@@ -11,11 +12,13 @@ RenderSystem::RenderSystem()
     _eventList.push_back(Key_Right);
     _eventList.push_back(Key_Select);
     _eventList.push_back(Key_Close);
+    _eventList.push_back(Key_Change);
     _eventList.push_back(E_PlayOffline);
     _window = new Window();
     _menu = new MenuScene(*_window);
     _stage = new StageScene(*_window);
-    _current = _menu;
+    _login = new LoginScene(*_window);
+    _current = _login;
 }
 
 RenderSystem::~RenderSystem()
@@ -37,10 +40,15 @@ void RenderSystem::update(IClock &e)
 
 IPacket *RenderSystem::out()
 {
-    return 0;
+    return _current->out();
 }
 
-bool RenderSystem::handle(REvent e)
+void    RenderSystem::in(IPacket *p)
+{
+    _current->in(p);
+}
+
+bool RenderSystem::handle(REvents e)
 {
     switch (e)
     {
@@ -56,11 +64,11 @@ bool RenderSystem::handle(REvent e)
     return true;
 }
 
-REvent              RenderSystem::getEvent()
+REvents              RenderSystem::getEvent()
 {
-    REvent          tmp = noEvent;
+    REvents          tmp = 0;
 
-    if (_event != noEvent)
+    if (_event != 0)
     {
         tmp = _event;
         _event = noEvent;

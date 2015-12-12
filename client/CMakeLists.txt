@@ -12,6 +12,7 @@ file(GLOB_RECURSE client_SOURCES "src/System/Audio/*.cpp")
 file(GLOB_RECURSE client_SOURCES "src/System/Event/*.cpp")
 file(GLOB_RECURSE client_SOURCES "src/*.cpp")
 file(GLOB_RECURSE client_HEADERS "inc/*.hh")
+file(GLOB_RECURSE client_HEADERS "inc/System/Render/*.hh")
 file(GLOB_RECURSE client_HEADERS "inc/System/Audio/*.hh")
 file(GLOB_RECURSE client_HEADERS "inc/Entity/*.hh")
 file(GLOB_RECURSE client_HEADERS "inc/System/*.hh")
@@ -22,7 +23,7 @@ file(GLOB_RECURSE client_HEADERS "inc/Utility/*.hh")
 
 add_executable(client_rtype ${client_SOURCES} ${client_HEADERS})
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/inc ${CMAKE_CURRENT_SOURCE_DIR}/inc/System/Audio)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/inc ${CMAKE_CURRENT_SOURCE_DIR}/inc/System/ ${CMAKE_CURRENT_SOURCE_DIR}/inc/System/Render ${CMAKE_CURRENT_SOURCE_DIR}/inc/System/Audio ${CMAKE_CURRENT_SOURCE_DIR}/inc/Entity)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
 find_package(SFML 2 REQUIRED system window graphics network audio)

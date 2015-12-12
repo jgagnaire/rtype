@@ -1,12 +1,12 @@
 #ifndef MENUSCENE_HH_
 # define MENUSCENE_HH_
 
-# include "Entity/Entity.hh"
-# include "System/Render/Scene.hh"
-# include "System/Render/View.hh"
-# include "System/Render/Text.hh"
-# include "System/Render/AnimatedSprite.hh"
-# include "System/Render/ScrollingSprite.hh"
+# include "Entity.hh"
+# include "Scene.hh"
+# include "View.hh"
+# include "Text.hh"
+# include "AnimatedSprite.hh"
+# include "ScrollingSprite.hh"
 
 class MenuScene : public Scene
 {
@@ -60,7 +60,7 @@ class MenuScene : public Scene
                 delete x;
         }
 
-        virtual void handle(REvent e, REvent &send)
+        virtual void handle(REvents e, REvents &send)
         {
             switch (e)
             {

@@ -3,7 +3,7 @@
 #include "System/Render/AnimatedSprite.hh"
 
 AnimatedSprite::AnimatedSprite():
-    _current(0), _random(false), _save(0)
+    _current(0), _width(0), _height(0), _random(0), _save(0)
 {
     _buffer = this;
 }
@@ -48,9 +48,9 @@ void        AnimatedSprite::setPosition(const sf::Vector2f &pos)
     if (_position.y < 0)
         _position.y = 0;
     if (_position.x + _width > 1920)
-        _position.x = 1920 - _width;
+        _position.x = 1920.0f - _width;
     if (_position.y + _height > 1080)
-        _position.y = 1080 - _height;
+		_position.y = 1080.0f - _height;
 }
 
 void    AnimatedSprite::update(std::size_t duration)

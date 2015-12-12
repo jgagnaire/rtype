@@ -5,35 +5,37 @@
 #include <thread>
 #include <mutex>
 #include <SFML/Audio.hpp>
+#include "System/ASystem.hh"
 #include "Network/UdpSocket.hh"
 #include "Entity/Entity.hh"
 #include "Recorder.hh"
 
 class Recorder;
 
-class AudioCallSystem
+class AudioCallSystem : public ASystem
 {
 public:
   AudioCallSystem();
-  ~AudioCallSystem();
+  virtual ~AudioCallSystem();
 
   void addPacket(sf::SoundBuffer *buffer);
-  bool in(UdpPacket *packet);
-  UdpPacket *out();
+
+  virtual void update(IClock &) {}
+  virtual bool handle(REvents ) { return true; }
+  virtual std::vector<REvent> broadcast(void) { return _eventList; }
+  virtual REvents getEvent() { return 0; }
+  virtual void in(IPacket *packet);
+  virtual IPacket *out();
 
 private:
-  void startRecord();
-  static void startThreadRecord(AudioCallSystem *obj);
-  std::thread	*_recorderThread;
-
   void startPlay();
-  static void startThreadPlay(AudioCallSystem *obj);
+  static void startThread(AudioCallSystem *obj);
   void addBuffer(sf::SoundBuffer *buffer, const std::string &name);
 
   Recorder			*recorder;
   std::vector <Entity *>	_users;
-  std::list <UdpPacket *>	_packets;
-  std::thread			*_playerThread;
+  std::list <IPacket *>		_packets;
+  std::thread			*_thread;
   std::mutex			_mutex;
   sf::Clock			_clock;
   bool				_exit;
