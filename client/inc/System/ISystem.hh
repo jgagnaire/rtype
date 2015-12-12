@@ -15,7 +15,7 @@ public:
   virtual void			update(IClock &clock) = 0;
   virtual IPacket		*out() = 0;
   virtual bool			handle(REvent e) = 0;
-  virtual std::vector<REvent>	broadcast(void) = 0;
+  virtual std::vector<REvent>	&broadcast(void) = 0;
   virtual REvent		getEvent() = 0;
 protected:
   std::vector<REvent> _eventList;

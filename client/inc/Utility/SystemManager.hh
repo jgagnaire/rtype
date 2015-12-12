@@ -18,6 +18,13 @@ class SystemManager
             ea->add(render);
         }
 
+	~SystemManager()
+		{
+			systemList.erase(systemList.begin(), systemList.end());
+			delete ea;
+			delete clk;
+		}
+	
         void gameLoop()
         {
             while (ea->getWin()->isOpen())

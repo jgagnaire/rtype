@@ -15,7 +15,7 @@ class RenderSystem : public ISystem
         virtual void                update(IClock&);
         virtual IPacket             *out();
         virtual bool                handle(REvent e);
-        virtual std::vector<REvent> broadcast(void);
+        virtual std::vector<REvent> &broadcast(void);
         virtual REvent              getEvent(void);
         IWindow                     *getWindow() const;
 
