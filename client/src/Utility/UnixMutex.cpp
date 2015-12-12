@@ -1,5 +1,5 @@
 #include "UnixMutex.hh"
-#include "ServerError.hh"
+#include "ClientError.hh"
 
 UnixMutex::UnixMutex()
 {
