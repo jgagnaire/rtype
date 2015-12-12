@@ -16,7 +16,7 @@ class ASystem
         virtual IPacket                 *out() = 0;
         virtual void                    in(IPacket*) = 0;
         virtual bool                    handle(REvents e) = 0;
-        virtual std::vector<REvent>     broadcast(void) = 0;
+        virtual std::vector<REvent>     &broadcast(void) = 0;
         virtual REvents                 getEvent() = 0;
     protected:
         std::vector<REvent> _eventList;

@@ -34,8 +34,8 @@ class NetworkManager
         void            receiveTcp();
 
         std::list<IPacket*>         _packets;
-        IUdpSocket                  &_udp;
-        ITcpSocket                  &_tcp;
+        IUdpSocket                  *_udp;
+        ITcpSocket                  *_tcp;
         std::string                 _tcpIp;
         std::string                 _udpIp;
 };

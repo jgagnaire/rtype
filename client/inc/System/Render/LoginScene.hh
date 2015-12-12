@@ -21,7 +21,7 @@ class LoginScene : public Scene
     public:
         LoginScene(IWindow &win):
             Scene(win), _titleLogin("Login :"), _titlePassword("Password :"),
-            _finish(LoginState::NotConnected)
+            _finish(LoginState::NotConnected), _event(noEvent)
     {
         _entities.push_back(&_b1);
         _entities.push_back(&_texts);
@@ -90,8 +90,14 @@ class LoginScene : public Scene
             }
         }
 
-        virtual void    handle(REvents e, REvents &)
+        virtual void    handle(REvents e, REvents &send)
         {
+            if (_event)
+            {
+                send = _event;
+                _event = noEvent;
+                return ;
+            }
             REvents tmp = (e << 1) >> 1;
             if (e == Key_Change || _finish == LoginState::WaitResponse)
                 return ;

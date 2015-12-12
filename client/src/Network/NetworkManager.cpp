@@ -8,17 +8,17 @@
 
 NetworkManager::NetworkManager(const std::string &ip,
         const std::string &udpIp):
-    _udp(*new UdpSocket()), _tcp(*new TcpSocket()),
+    _udp(new UdpSocket()), _tcp(new TcpSocket()),
     _tcpIp(ip), _udpIp(udpIp)
 {
-    _tcp.connect(ip, 1119);
-    _udp.bind(1726);
+    _tcp->connect(ip, 1119);
+    _udp->bind(1726);
 }
 
 NetworkManager::~NetworkManager()
 {
-    delete &_udp;
-    delete &_tcp;
+    delete _udp;
+    delete _tcp;
 }
 
 void    NetworkManager::send(const IPacket &packet)
@@ -32,7 +32,7 @@ void    NetworkManager::send(const IPacket &packet)
         dynamic_cast<const TcpPacket&>(packet);
         isTcp = true;
     }
-    catch (std::bad_cast &)
+    catch (std::bad_cast const &)
     {
          isTcp = false;
     }
@@ -43,9 +43,9 @@ void    NetworkManager::send(const IPacket &packet)
     std::memcpy(buf + totalSize - packet.getSize(),
             packet.getData(), packet.getSize());
     if (isTcp)
-        _tcp.send(buf, totalSize);
+        _tcp->send(buf, totalSize);
     else
-        _udp.send(buf, totalSize, _udpIp, 1725);
+        _udp->send(buf, totalSize, _udpIp, 1725);
     if (isTcp)
         std::cout << "send {" << packet.getSize() <<
             ", " << packet.getQuery() << "}" << std::endl;
@@ -59,7 +59,7 @@ void        NetworkManager::receiveUdp()
     char *buf = new char[std::numeric_limits<unsigned short>::max()];
     char *tmp;
 
-    std::size_t read = _udp.receive(buf,
+    std::size_t read = _udp->receive(buf,
             std::numeric_limits<unsigned short>::max(),
             ip, port);
     if (read)
@@ -85,14 +85,14 @@ void        NetworkManager::receiveTcp()
     TcpPacket *packet = new TcpPacket();
     char *buf = 0;
 
-    std::size_t read = _tcp.receive(&(packet->getHeader()),
+    std::size_t read = _tcp->receive(&(packet->getHeader()),
             sizeof(TcpHeader));
     if (read)
     {
         if (packet->getSize())
         {
             buf = new char[packet->getSize()];
-            read = _tcp.receive(buf, packet->getSize());
+            read = _tcp->receive(buf, packet->getSize());
         }
         packet->setData(buf);
         std::cout << "Tcp {" << packet->getSize() <<

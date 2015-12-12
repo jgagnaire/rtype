@@ -76,7 +76,7 @@ REvents              RenderSystem::getEvent()
     return tmp;
 };
 
-std::vector<REvent> RenderSystem::broadcast(void)
+std::vector<REvent> &RenderSystem::broadcast(void)
 {
     return _eventList;
 }
