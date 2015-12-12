@@ -4,6 +4,7 @@
 # include "Enum.hh"
 # include "UserManager.hh"
 # include "IServerMonitor.hh"
+# include "ISocketSet.hh"
 
 template<typename T>
 class AController {
@@ -47,6 +48,8 @@ public:
         }
     }
 
+    void            addUDPSocket(IServerSocket<T> *s) { udp_socket = s; }
+
     UserManager<T>	*findUserByName(const std::string &name) const {
         if (name.empty())
             return (0);
@@ -59,4 +62,5 @@ public:
 
 protected:
     std::list<UserManager<T> *>	&cl_list;
+    IServerSocket<T>		    *udp_socket;
 };

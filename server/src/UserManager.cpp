@@ -74,15 +74,22 @@ Enum::ClientQueries	UserManager<T>::numQuery() const {
 }
 
 template<typename T>
+Enum::ClientQueries	UserManager<T>::numUDPQuery() const {
+    return (static_cast<Enum::ClientQueries>(udp_packet.header.query));
+}
+
+template<typename T>
 std::string	UserManager<T>::getPacketData() const { return (std::string(tmp_packet.data)); }
+
+template<typename T>
+std::string	UserManager<T>::getUDPPacketData() const {return (std::string(udp_packet.data)); }
 
 template<typename T>
 std::string	UserManager<T>::getIP() const { return (this->sock->getIP()); }
 
 template<typename T>
-Enum::TCPServerAnswers	UserManager<T>::verifyUser() {
+Enum::ServerAnswers	UserManager<T>::verifyUser() {
     std::string s(tmp_packet.data);
-    std::string tmp;
     std::string tok;
     std::istringstream is(s);
     std::string	pass;
@@ -97,32 +104,20 @@ Enum::TCPServerAnswers	UserManager<T>::verifyUser() {
     stream.seekg(0, stream.beg);
     if (!stream.is_open())
         return (Enum::EUSERPASS);
-    std::getline(stream, tmp, '|');
     std::getline(is, pass, ':');
     tmp_log = tok + ":" + pass;
-    if (!tmp.compare(0, tmp_log.size(), tmp_log)
-        && (tmp.size() - 2 == tmp_log.size())) {
+    if (tmp_log == s) {
         name = tok;
         stream.clear();
         stream.seekg(0, stream.end);
-        return (Enum::LOGGED_IN);
+        return (Enum::OK);
     }
     stream.close();
     return (Enum::EUSERPASS);
 }
 
 template<typename T>
-std::string	UserManager<T>::getFriendName() {
-    std::string	s;
-
-    if (!stream.is_open())
-        return ("");
-    std::getline(stream, s, '|');
-    return (s);
-}
-
-template<typename T>
-Enum::TCPServerAnswers	UserManager<T>::newUser() {
+Enum::ServerAnswers	UserManager<T>::newUser() {
     std::string s(tmp_packet.data);
     std::istringstream is(s);
     std::string tok[2];
@@ -197,56 +192,7 @@ void	UserManager<T>::disconnect() {
 }
 
 template<typename T>
-bool	UserManager<T>::deleteUserWith(const std::string &s,
-                                       std::fstream &file,
-                                       std::string &stock) {
-    std::string	        tmp;
-    bool			      found = false;
-
-    stock.clear();
-    file.clear();
-    file.seekg(0, file.beg);
-    std::getline(file, tmp, '|');
-    stock = tmp + "|";
-    do {
-        file.clear();
-        std::getline(file, tmp, '|');
-        if (tmp == s)
-            found = true;
-        else {
-            if (!tmp.empty())
-                stock += tmp + "|";
-        }
-    } while (!file.eof());
-    file.close();
-    return (found);
-}
-
-template<typename T>
 const std::string	&UserManager<T>::getName() const { return (name); }
-
-template <typename T>
-Enum::TCPServerAnswers UserManager<T>::startUpload() {
-    if (!stream.is_open())
-        return (Enum::ENOT_LOGGED);
-    if (image_stream.is_open())
-        return (Enum::EIMAGE_KO);
-    image_stream.open(std::string(UserManager<T>::database_dir).replace(Enum::PATH_LENGTH,
-                                                                        1, name + "_image"),
-                      std::fstream::trunc | std::fstream::out);
-    return (Enum::OK);
-}
-
-template <typename T>
-Enum::TCPServerAnswers     UserManager<T>::uploadImage() {
-    if (!stream.is_open())
-        return (Enum::ENOT_LOGGED);
-    if (!image_stream.is_open())
-        return (Enum::EIMAGE_KO);
-    image_stream.clear();
-    image_stream << getPacketData() << std::flush;
-    return (Enum::OK);
-}
 
 template <typename T>
 void    UserManager<T>::setUdpPacketStruct(const Packet<UDPDataHeader>::PacketStruct &p) {
@@ -254,46 +200,7 @@ void    UserManager<T>::setUdpPacketStruct(const Packet<UDPDataHeader>::PacketSt
 }
 
 template <typename T>
-Enum::TCPServerAnswers     UserManager<T>::endOfUploading() {
-    if (!stream.is_open())
-        return (Enum::ENOT_LOGGED);
-    if (!image_stream.is_open())
-        return (Enum::EIMAGE_KO);
-    image_stream.close();
-    return (Enum::OK);
-}
-
-template <typename T>
-Enum::TCPServerAnswers     UserManager<T>::deleteImage() {
-    if (!stream.is_open())
-        return (Enum::ENOT_LOGGED);
-    if (image_stream.is_open())
-        return (Enum::EIMAGE_KO);
-    image_stream.open(std::string(UserManager<T>::database_dir).replace(Enum::PATH_LENGTH,
-                                                                        1, name + "_image"),
-                      std::fstream::trunc);
-    if (!image_stream.is_open())
-        return (Enum::EIMAGE_NO_EXIST);
-    image_stream.close();
-#if (defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64))
-    DeleteFile(std::string(UserManager<T>::database_dir).replace(Enum::PATH_LENGTH,
-                                                          1, name + "_image").c_str());
-#else
-    remove(std::string(UserManager<T>::database_dir).replace(Enum::PATH_LENGTH,
-                                                             1, name + "_image").c_str());
-#endif
-    return (Enum::OK);
-}
-
-template <typename T>
-Enum::TCPServerAnswers     UserManager<T>::retrieveImage() { // TODO, implements
-    if (!stream.is_open())
-        return (Enum::ENOT_LOGGED);
-    return (Enum::OK);
-}
-
-template <typename T>
-Enum::TCPServerAnswers      UserManager<T>::joinRandomRoom() { //TODO, implements
+Enum::ServerAnswers      UserManager<T>::joinRandomRoom() { //TODO, implements
     if (!stream.is_open())
         return (Enum::ENOT_LOGGED);
     is_ready = false;
@@ -301,7 +208,7 @@ Enum::TCPServerAnswers      UserManager<T>::joinRandomRoom() { //TODO, implement
 }
 
 template <typename T>
-Enum::TCPServerAnswers      UserManager<T>::joinNamedRoom() {
+Enum::ServerAnswers      UserManager<T>::joinNamedRoom() {
     std::string             game_name = getPacketData();
     GameManager<T>             &gm = GameManager<T>::instance();
 
@@ -338,7 +245,7 @@ std::string     UserManager<T>::generateRoomName() {
 }
 
 template <typename T>
-Enum::TCPServerAnswers      UserManager<T>::createGameRoom() {
+Enum::ServerAnswers      UserManager<T>::createGameRoom() {
     std::string             game_name = getPacketData();
     GameManager<T>          &gm = GameManager<T>::instance();
 
@@ -356,13 +263,14 @@ Enum::TCPServerAnswers      UserManager<T>::createGameRoom() {
 }
 
 template <typename T>
-Enum::TCPServerAnswers      UserManager<T>::leaveRoom() {
+Enum::ServerAnswers      UserManager<T>::leaveRoom() {
     GameManager<T>             &gm = GameManager<T>::instance();
 
     if (!stream.is_open())
         return (Enum::ENOT_LOGGED);
     if (gameroom.empty())
         return (Enum::ENOT_IN_ROOM);
+    is_ready = false;
     gm.deleteUser(this);
     gameroom.clear();
     status = Enum::LOBBY;
@@ -370,7 +278,7 @@ Enum::TCPServerAnswers      UserManager<T>::leaveRoom() {
 }
 
 template <typename T>
-Enum::TCPServerAnswers      UserManager<T>::ready() {
+Enum::ServerAnswers      UserManager<T>::ready() {
     if (!stream.is_open())
         return (Enum::ENOT_LOGGED);
     if (gameroom.empty())
@@ -380,7 +288,20 @@ Enum::TCPServerAnswers      UserManager<T>::ready() {
 }
 
 template <typename T>
-Enum::TCPServerAnswers      UserManager<T>::notReady() {
+void                    UserManager<T>::clearGameData() {
+    keypressed = 0;
+    has_force = 0;
+    tmp_pos.clear();
+    real_pos.clear();
+    has_force = false;
+    udp_packet_id = 0;
+}
+
+template <typename T>
+uint64_t                UserManager<T>::getUDPPacketId() { return (udp_packet_id++); }
+
+template <typename T>
+Enum::ServerAnswers      UserManager<T>::notReady() {
     if (!stream.is_open())
         return (Enum::ENOT_LOGGED);
     if (gameroom.empty())
@@ -390,7 +311,7 @@ Enum::TCPServerAnswers      UserManager<T>::notReady() {
 }
 
 template <typename T>
-Enum::TCPServerAnswers      UserManager<T>::getRoomList() {
+Enum::ServerAnswers      UserManager<T>::getRoomList() {
     if (!stream.is_open())
         return (Enum::ENOT_LOGGED);
     if (!gameroom.empty())
@@ -405,7 +326,45 @@ template <typename T>
 Enum::UserStatus        UserManager<T>::getStatus() const { return (status); }
 
 template <typename T>
-const std::string      &UserManager<T>::getGameroomName() const { return (gameroom); }
+const std::string       &UserManager<T>::getGameroomName() const { return (gameroom); }
+
+template <typename T>
+Enum::ServerAnswers     UserManager<T>::quitGame() {
+    status = Enum::LOBBY;
+    gameroom.clear();
+    return (Enum::OK);
+}
+
+template <typename T>
+Enum::ServerAnswers     UserManager<T>::currentPosition() {
+    std::istringstream  is(udp_packet.data);
+    std::istringstream  is_pos;
+    std::string         pos[2];
+
+    for (int i = 0; i < 2; ++i)
+        getline(is, pos[i], ':');
+    is_pos.str(pos[0]);
+    is_pos >> tmp_pos.x;
+    is_pos.clear();
+    is_pos.str("");
+    is_pos.str(pos[1]);
+    is_pos >> tmp_pos.y;
+    return (Enum::OK);
+}
+
+template <typename T>
+Enum::ServerAnswers     UserManager<T>::keyPressed() {
+    std::istringstream  is(udp_packet.data);
+
+    is >> keypressed;
+    return (Enum::OK);
+}
+
+template <typename T>
+Enum::ServerAnswers     UserManager<T>::takeForce() {
+    has_force = true;
+    return (Enum::OK);
+}
 
 #if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined (_WIN64)
 template class UserManager<SOCKET>;

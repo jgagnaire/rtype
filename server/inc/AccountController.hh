@@ -11,16 +11,11 @@ public:
     bool	        accountLoginFct(UserManager<T> *) const;
     bool	        accountRegisterFct(UserManager<T> *) const;
     bool	        disconnectionFct(UserManager<T> *) const;
-    bool            startUpload(UserManager<T> *) const;
-    bool            uploadImage(UserManager<T> *) const;
-    bool            finishUpload(UserManager<T> *) const;
-    bool            deleteImage(UserManager<T> *) const;
-    bool            retrieveImage(UserManager<T> *) const;
 
     bool	        pong(UserManager<T> *) const;
     int		        newConnection(UserManager<T> *) const;
     int		        closeConnection(UserManager<T> *) const;
     virtual int	    newData(UserManager<T> *);
 private:
-	AccountController &operator=(AccountController const &rhs) { if (&rhs != this) {} return *this; }
+	AccountController &operator=(AccountController const &) { return *this; }
 };

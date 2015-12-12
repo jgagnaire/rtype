@@ -6,6 +6,7 @@
 # include "IServerMonitor.hh"
 # include "IServerMonitor.hh"
 # include "ISocketSet.hh"
+# include "UserManager.hh"
 
 template <typename CONTROLLER, typename SCK>
 class NetworkManager;
