@@ -10,20 +10,26 @@
 
 class SystemManager
 {
-    public:
-        SystemManager(const std::string &ip):
-            _networkManager(ip, ip)
+public:
+	SystemManager(const std::string &ip):
+		_networkManager(ip, ip), shr_entities(new std::list<Entity*>)
         {
             ASystem *render = new RenderSystem();
             ASystem *audioCall = new AudioCallSystem();
-
+			
             systemList["render"] = render;
-	    systemList["audioCall"] = audioCall;
+			systemList["audioCall"] = audioCall;
             ea = new EventAggregator(static_cast<RenderSystem*>(render)->getWindow());
             clk = new Clock();
             ea->add(render);
-        }
 
+			Entity *e = new Entity;
+			e->manager.add<std::string>("name", "player1");
+			e->manager.add("position", std::pair<float, float>(0, 0));
+			e->manager.add<bool>("isShared", true);
+			shr_entities->push_back(e);
+        }
+	
 	~SystemManager()
 		{
 			systemList.erase(systemList.begin(), systemList.end());
@@ -31,28 +37,30 @@ class SystemManager
 			delete clk;
 		}
 	
-        void gameLoop()
+	void gameLoop()
         {
             while (ea->getWin()->isOpen())
             {
+                ea->update();
+                IPacket *p = _networkManager.getPacket();
                 for (auto x : systemList)
                 {
-                    ea->update();
-                    IPacket *p = _networkManager.getPacket();
-                    x.second->in(p);
+                    if (p)
+                        x.second->in(p);
                     x.second->update(*this->clk);
-                    p = x.second->out();
-                    if (p != 0)
-                        _networkManager.send(*p);
+                    IPacket *m = x.second->out();
+                    if (m != 0)
+                        _networkManager.send(*m);
                 }
             }
         }
-
-    private:
-        std::unordered_map<std::string, ASystem*> systemList;
-        EventAggregator	*ea;
-        IClock		*clk;
-        NetworkManager          _networkManager;
+	
+private:
+	std::unordered_map<std::string, ASystem*>	systemList;
+	EventAggregator								*ea;
+	IClock										*clk;
+	NetworkManager								_networkManager;
+	std::list<Entity*>							*shr_entities;
 };
 
 #endif //SYSTEMMANAGER_HH_

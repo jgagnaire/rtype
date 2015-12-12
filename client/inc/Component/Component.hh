@@ -15,15 +15,10 @@ public:
 
   virtual ~Component() {}
 
-  inline void	setValue(Type &value) {
-    _value = value;
-  }
+  inline void	setValue(Type &value) { _value = value; }
 
-  inline Type& getValue(void) const {
-    return (*_value);
-  }
+  inline Type& getValue(void) const { return (*_value); }
 
-  virtual void update(std::chrono::steady_clock) {}
 private:
   Type *_value;
 };

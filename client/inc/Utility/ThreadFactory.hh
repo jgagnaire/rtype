@@ -8,8 +8,6 @@
 class ThreadFactory
 {
 public:
-	ThreadFactory() {}
-	~ThreadFactory() {}
 	template <typename RET_VAL, typename ARG>
 	static IThread<RET_VAL, ARG>* create()
 	{
