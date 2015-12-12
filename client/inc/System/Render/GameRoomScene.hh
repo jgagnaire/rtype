@@ -28,7 +28,7 @@ class GameRoomScene : public Scene
         {
             _win.setMenuMode(true);
             _lastTime += duration;
-            if (_lastTime > 1000)
+            if (_lastTime > 5000)
                 _update = true;
         }
 
@@ -56,6 +56,7 @@ class GameRoomScene : public Scene
 
         virtual void    in(IPacket *p)
         {
+            std::string tmp, name, nb;
             TcpPacket   *packet;
 
             if ((packet = dynamic_cast<TcpPacket*>(p)))
@@ -67,8 +68,11 @@ class GameRoomScene : public Scene
                     case Codes::NotLoggedIn:
                         break;
                     case Codes::ExistingRoom:
-                        std::cout << "Existing Room" << std::endl;
-                        ;
+                        tmp = static_cast<const char*>(packet->getData());
+                        name = tmp.substr(0, tmp.find(":") - 1);
+                        nb = tmp.substr(tmp.find(":"));
+                        std::cout << "Name " << name << " Nb " << nb << std::endl;
+                        _rooms[name] = std::atoi(nb.c_str());
                     default:
                         ;
                 }
@@ -96,15 +100,16 @@ class GameRoomScene : public Scene
         }
 
     private:
-        View                    _view;
-        Entity                  _b1;
-        Entity                  _texts;
-        TcpPacket                       _packet;
-        int                             _lastTime;
-        bool                            _update;
-        bool                            _new;
-        std::string                     _buffer;
-        Text                            _bufferText;
+        std::unordered_map<std::string, int>        _rooms;
+        View                                        _view;
+        Entity                                      _b1;
+        Entity                                      _texts;
+        TcpPacket                                   _packet;
+        int                                         _lastTime;
+        bool                                        _update;
+        bool                                        _new;
+        std::string                                 _buffer;
+        Text                                        _bufferText;
 };
 
 #endif /* end of include guard: GAMEROOMSCENE_HH_ZNKJPAAS */
