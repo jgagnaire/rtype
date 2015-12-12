@@ -14,10 +14,12 @@ RenderSystem::RenderSystem():
     _eventList.push_back(Key_Close);
     _eventList.push_back(Key_Change);
     _eventList.push_back(E_PlayOffline);
+    _eventList.push_back(E_GameRoom);
     _window = new Window();
     _menu = new MenuScene(*_window);
     _stage = new StageScene(*_window);
     _login = new LoginScene(*_window);
+    _gameRoom = new GameRoomScene(*_window);
     _current = _login;
 }
 
@@ -26,6 +28,7 @@ RenderSystem::~RenderSystem()
     delete _window;
     delete _menu;
     delete _stage;
+    delete _gameRoom;
 }
 
 void RenderSystem::update(IClock &e)
@@ -58,6 +61,9 @@ bool RenderSystem::handle(EventSum e)
         case E_PlayOffline:
             _current = _stage;
             break;
+        case E_GameRoom:
+            _current = _gameRoom;
+            break;
         default:
             _current->handle(e, _event);
     }
@@ -68,7 +74,7 @@ EventSum              RenderSystem::getEvent()
 {
     EventSum          tmp = 0;
 
-    if (_event != 0)
+    if (_event != noEvent)
     {
         tmp = _event;
         _event = noEvent;

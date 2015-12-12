@@ -8,7 +8,7 @@ void	EventAggregator::send(EventSum e)
     {
         for (auto y : x->second)
         {
-            if (e & y)
+            if (e == 0 || e & y)
             {
                 x->first->handle(e);
                 break ;
