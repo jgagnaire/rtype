@@ -48,6 +48,7 @@ public:
         }
     }
 
+    inline
     void            addUDPSocket(IServerSocket<T> *s) { udp_socket = s; }
 
     UserManager<T>	*findUserByName(const std::string &name) const {
@@ -60,7 +61,22 @@ public:
         return (0);
     }
 
+    inline
+    void	writeStruct(const UDPDataHeader &comdata) { packet.stockOnBuff(comdata); }
+
+    inline
+    void	writeMsg(const std::string &s) { packet.stockOnBuff(s); }
+
+    inline
+    bool	writeOnMe(const std::string &ip, const std::string &port) {
+        packet.serialize();
+        return (packet.sendPacket<IServerSocket<T> *>(this->udp_socket, ip, port));
+    }
+
 protected:
     std::list<UserManager<T> *>	&cl_list;
     IServerSocket<T>		    *udp_socket;
+
+private:
+    Packet<UDPDataHeader>		packet;
 };

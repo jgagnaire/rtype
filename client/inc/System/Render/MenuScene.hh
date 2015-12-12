@@ -85,6 +85,7 @@ class MenuScene : public Scene
                             break ;
                         case 1:
                             send = E_PlayOffline;
+                            std::cout << "ASFASF" << std::endl;
                             break ;
                         case 2:
                             break ;

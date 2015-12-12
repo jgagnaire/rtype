@@ -37,8 +37,8 @@ public:
   virtual IPacket *out();
 
 private:
-  static constexpr uint16_t CODE_SEND_PACKET = 302;
-  static constexpr uint16_t CODE_RECEIVE_PACKET = 404;
+  static const uint16_t CODE_SEND_PACKET = 302;
+  static const uint16_t CODE_RECEIVE_PACKET = 404;
 
   void startPlay();
   static void startThread(AudioCallSystem *obj);
