@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 AudioCallSystem::AudioCallSystem():
-	recorder(new Recorder(this)), _thread(0), _exit(false)
+	recorder(new Recorder(*this)), _thread(0), _exit(false)
 {
   recorder->start();
   this->startPlay();
@@ -110,7 +110,7 @@ void AudioCallSystem::addPacket(sf::SoundBuffer *buffer)
 				     + 4 * sizeof(char)));
   data = static_cast<short int *>(malloc(buffer->getSampleCount() * sizeof(short int)
 					 + 4 * sizeof(char)));
-  tmp->setQuery(502);
+  tmp->setQuery(302);
   tmpData = buffer->getSamples();
   char *tmpPseudo = new char[4];
   tmpPseudo[0] = 'l';
@@ -126,7 +126,7 @@ void AudioCallSystem::addPacket(sf::SoundBuffer *buffer)
   in(out());
 }
 
-std::string AudioCallSystem::getPseudo(const void *data, uint16_t packetSize)
+std::string AudioCallSystem::getPseudo(const void *data, uint16_t packetSize) const
 {
   int	size;
   char	*tmpPseudo;
@@ -158,7 +158,8 @@ void AudioCallSystem::in(IPacket *packet)
   std::string pseudo;
   const void *tmpData;
 
-  if (!packet)
+  if (!packet || !dynamic_cast<UdpPacket *>(packet)
+      || packet->getQuery() != 404)
     return ;
   tmpData = packet->getData();
   pseudo = getPseudo(tmpData, packet->getSize());
