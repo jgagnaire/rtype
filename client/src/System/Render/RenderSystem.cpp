@@ -3,7 +3,8 @@
 
 # include "System/Render/RenderSystem.hh"
 
-RenderSystem::RenderSystem()
+RenderSystem::RenderSystem():
+    _event(noEvent)
 {
     _eventList.push_back(Key_Up);
     _eventList.push_back(Key_Down);
@@ -11,13 +12,20 @@ RenderSystem::RenderSystem()
     _eventList.push_back(Key_Right);
     _eventList.push_back(Key_Select);
     _eventList.push_back(Key_Close);
-    _current = &_menu;
+    _eventList.push_back(Key_Change);
+    _eventList.push_back(E_PlayOffline);
     _window = new Window();
+    _menu = new MenuScene(*_window);
+    _stage = new StageScene(*_window);
+    _login = new LoginScene(*_window);
+    _current = _login;
 }
 
 RenderSystem::~RenderSystem()
 {
     delete _window;
+    delete _menu;
+    delete _stage;
 }
 
 void RenderSystem::update(IClock &e)
@@ -32,24 +40,43 @@ void RenderSystem::update(IClock &e)
 
 IPacket *RenderSystem::out()
 {
-    return 0;
+    return _current->out();
 }
 
-bool RenderSystem::handle(REvent e)
+void    RenderSystem::in(IPacket *p)
+{
+    _current->in(p);
+}
+
+bool RenderSystem::handle(EventSum e)
 {
     switch (e)
     {
         case Key_Close:
             _window->close();
             break;
+        case E_PlayOffline:
+            _current = _stage;
+            break;
         default:
-            _current->handle(e);
-            ;
+            _current->handle(e, _event);
     }
     return true;
 }
 
-std::vector<REvent> RenderSystem::broadcast(void)
+EventSum              RenderSystem::getEvent()
+{
+    EventSum          tmp = 0;
+
+    if (_event != 0)
+    {
+        tmp = _event;
+        _event = noEvent;
+    }
+    return tmp;
+};
+
+std::vector<REvent> &RenderSystem::broadcast(void)
 {
     return _eventList;
 }

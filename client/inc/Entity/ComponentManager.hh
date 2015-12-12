@@ -72,7 +72,7 @@ type for compenents \"" + name + "\" is : " + compenents[name]->getType());
 	  }
 	return false;
       }
-    else { 
+    else if (name.empty()) {
       for (std::unordered_map<std::string, IComponent*>::iterator it
 	     = compenents.begin();
 	   it != compenents.end();++it)
@@ -85,6 +85,7 @@ type for compenents \"" + name + "\" is : " + compenents[name]->getType());
 	}
       return false;
     }
+    return false;
   }
   
   template<typename Type>

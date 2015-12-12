@@ -1,22 +1,30 @@
 #include <algorithm>
-#include "System/ISystem.hh"
-#include "System/Render/IWindow.hh"
+#include "ASystem.hh"
+#include "IWindow.hh"
 
-void	EventAggregator::send(REvent e)
+void	EventAggregator::send(EventSum e)
 {
     for (auto x = _systemList.begin(); x != _systemList.end(); ++x)
-        if (std::find(x->second.begin(), x->second.end(), e) != x->second.end())
-            x->first->handle(e);
+    {
+        for (auto y : x->second)
+        {
+            if (e & y)
+            {
+                x->first->handle(e);
+                break ;
+            }
+        }
+    }
 }
 
-void	EventAggregator::add(REvent e, ISystem* s)
+void	EventAggregator::add(REvent e, ASystem* s)
 {
     if (std::find(_systemList[s].begin(), _systemList[s].end(), e)
             == _systemList[s].end())
         _systemList[s].push_back(e);
 }
 
-void    EventAggregator::add(ISystem *s)
+void    EventAggregator::add(ASystem *s)
 {
     _systemList[s] = s->broadcast();
 }
@@ -24,13 +32,14 @@ void    EventAggregator::add(ISystem *s)
 void	EventAggregator::update()
 {
     std::vector<REvent> tmp;
-    REvent              e;
+    EventSum              e;
 
-    while ((e = this->win->getEvent()) != noEvent)
+    if ((e = this->win->getEvent()) != noEvent)
         this->send(e);
     for (auto x = _systemList.begin(); x != _systemList.end(); ++x)
     {
         if ((tmp = x->first->broadcast()) != x->second)
             x->second = tmp;
+        this->send(x->first->getEvent());
     }
 }

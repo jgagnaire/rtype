@@ -3,8 +3,11 @@
 #include "System/Render/AView.hh"
 
 Window::Window():
-    _window(sf::VideoMode(1280, 720), "Pede")
-{}
+    _window(sf::VideoMode(1920, 1080), "Pede"),
+    _menuMode(true), _block(false)
+{
+    _window.setVerticalSyncEnabled(true);
+}
 
 Window::~Window()
 {}
@@ -29,32 +32,32 @@ bool    Window::isOpen() const
     return _window.isOpen();
 }
 
-REvent  Window::getEvent()
+EventSum Window::getEvent()
 {
     sf::Event e;
+    EventSum tmp = 0;
 
     if (_window.pollEvent(e))
     {
-        if (e.type == sf::Event::KeyPressed)
+        if (e.type == sf::Event::Closed)
+            return (Key_Close);
+        if (_menuMode && e.type == sf::Event::KeyReleased)
         {
-            switch(e.key.code) {
-                case sf::Keyboard::S :
-                    return (Key_Fire);
-                case sf::Keyboard::Space :
-                    return (Key_Charge);
-                case sf::Keyboard::Left :
-                    return (Key_Left);
-                case sf::Keyboard::Right :
-                    return (Key_Right);
-                case sf::Keyboard::Up :
-                    return (Key_Up);
-                case sf::Keyboard::Down :
-                    return (Key_Down);
-                default:
-                    return (noEvent);
-            }
+            if (e.key.code == sf::Keyboard::BackSpace)
+                return (127 | Key_Change);
+            else if (e.key.code == sf::Keyboard::Return)
+                return (126 | Key_Change);
+            else if (e.key.code == sf::Keyboard::Tab)
+                return (125 | Key_Change);
         }
-        else if (e.type == sf::Event::KeyReleased)
+        if (_menuMode && e.type == sf::Event::TextEntered)
+        {
+            if (e.text.unicode >= 'a' && e.text.unicode <= 'z')
+                return (e.text.unicode | Key_Change);
+            else
+                return (Key_Change);
+        }
+        if (e.type == sf::Event::KeyReleased)
         {
             switch(e.key.code) {
                 case sf::Keyboard::Tab :
@@ -67,10 +70,56 @@ REvent  Window::getEvent()
                     return (noEvent);
             }
         }
-        else if (e.type == sf::Event::Closed)
-            return (Key_Close);
     }
-    return (noEvent);
+    if (_menuMode == false)
+        _block = false;
+    if (_menuMode && _block)
+    {
+        if (_clock.getElapsedTimeMilli() > 75)
+        {
+            _block = false;
+            _clock.restart();
+        }
+        return (0);
+    }
+    else if (_menuMode)
+        _block = true;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+        tmp |= Key_Down;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+        tmp |= Key_Up;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+        tmp |= Key_Left;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+        tmp |= Key_Right;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+        tmp |= Key_Fire;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+        tmp |= Key_Charge;
+    if (sf::Joystick::isConnected(0))
+    {
+        float x, y, z, r;
+        x = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
+        y = sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
+        z = sf::Joystick::getAxisPosition(0, sf::Joystick::Z);
+        r = sf::Joystick::getAxisPosition(0, sf::Joystick::R);
+        float &dir = ((x > 0 ? x : -x) > (y > 0 ? y : -y) ? x : y);
+        if (z > -90.0)
+            return (Key_Change);
+        if (sf::Joystick::isButtonPressed(0, 1))
+            tmp |= Key_Charge;
+        if (r > -90.0)
+            tmp |= Key_Fire;
+        if (&dir == &x && x > 25)
+            tmp |= Key_Right;
+        if (&dir == &x && x < -25)
+            tmp |= Key_Left;
+        if (&dir == &y && y > 25)
+            tmp |= Key_Down;
+        if (&dir == &y && y < -25)
+            tmp |= Key_Up;
+    }
+    return (tmp);
 }
 
 void  Window::draw(Entity &e)
@@ -88,4 +137,9 @@ void  Window::draw(Entity &e)
         if (d)
             _window.draw(*d);
     }
+}
+
+void        Window::setMenuMode(bool m)
+{
+    _menuMode = m;
 }

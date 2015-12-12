@@ -7,7 +7,7 @@
 class Text : public ADrawable
 {
     public:
-        Text(const std::string &text, uint32_t colorCode = 0xffffffff) {
+        Text(const std::string &text = "", uint32_t colorCode = 0xffffffff) {
             _buffer = 0;
             if (_font.loadFromFile("client/res/pixel-font.ttf"))
             {
@@ -25,6 +25,11 @@ class Text : public ADrawable
         virtual void    update(std::size_t)
         {
 
+        }
+
+        void            setText(const std::string &str)
+        {
+            _text.setString(str);
         }
 
         void            setCenter()

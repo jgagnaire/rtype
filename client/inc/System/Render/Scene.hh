@@ -3,15 +3,21 @@
 
 # include "IWindow.hh"
 # include "Entity/Entity.hh"
+# include "Network/IPacket.hh"
 
 class Scene
 {
     public:
-        Scene() {}
+        Scene(IWindow &win):
+            _win(win)
+        {}
         virtual ~Scene() {}
 
         virtual void update(int) = 0;
-        virtual void handle(REvent) = 0;
+        virtual void handle(EventSum, EventSum&) = 0;
+
+        virtual void in(IPacket*) {}
+        virtual IPacket *out() {return 0;}
 
         virtual std::vector<Entity*>    getEntities()
         {
@@ -20,6 +26,7 @@ class Scene
 
     protected:
         std::vector<Entity*>            _entities;
+        IWindow                         &_win;
 };
 
 #endif /* ifndef SCENE_HH_ */

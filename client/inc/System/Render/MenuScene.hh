@@ -1,18 +1,18 @@
 #ifndef MENUSCENE_HH_
 # define MENUSCENE_HH_
 
-# include "Entity/Entity.hh"
-# include "System/Render/Scene.hh"
-# include "System/Render/View.hh"
-# include "System/Render/Text.hh"
-# include "System/Render/AnimatedSprite.hh"
-# include "System/Render/ScrollingSprite.hh"
+# include "Entity.hh"
+# include "Scene.hh"
+# include "View.hh"
+# include "Text.hh"
+# include "AnimatedSprite.hh"
+# include "ScrollingSprite.hh"
 
 class MenuScene : public Scene
 {
     public:
-        MenuScene():
-            _current(0)
+        MenuScene(IWindow &win):
+            Scene(win), _current(0)
         {
             _entities.push_back(&_b1);
             _entities.push_back(&_b2);
@@ -60,7 +60,7 @@ class MenuScene : public Scene
                 delete x;
         }
 
-        virtual void handle(REvent e)
+        virtual void handle(EventSum e, EventSum &send)
         {
             switch (e)
             {
@@ -81,8 +81,16 @@ class MenuScene : public Scene
                 case Key_Select:
                     switch (_current)
                     {
-                        default:
-                            ;
+                        case 0:
+                            break ;
+                        case 1:
+                            send = E_PlayOffline;
+                            break ;
+                        case 2:
+                            break ;
+                        case 3:
+                            send = Key_Close;
+                            break ;
                     }
                     break;
                 default:
@@ -92,6 +100,7 @@ class MenuScene : public Scene
 
         virtual void update(int duration)
         {
+            _win.setMenuMode(true);
             _selector.update(duration);
             _arrow.update(duration);
             _title.update(duration);
