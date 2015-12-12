@@ -103,8 +103,8 @@ class LoginScene : public Scene
                 return ;
             if (e & Key_Change)
             {
-                if (tmp == 127 && _login.empty() == false)
-                    _currentStr->erase(_login.size() - 1, 1);
+                if (tmp == 127 && _currentStr->empty() == false)
+                    _currentStr->erase(_currentStr->size() - 1, 1);
                 if (tmp == 126 || tmp == 125)
                 {
                     if (_currentStr == &_login)
