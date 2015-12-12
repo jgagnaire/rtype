@@ -32,10 +32,10 @@ bool    Window::isOpen() const
     return _window.isOpen();
 }
 
-REvents  Window::getEvent()
+EventSum Window::getEvent()
 {
     sf::Event e;
-    REvents tmp = 0;
+    EventSum tmp = 0;
 
     if (_window.pollEvent(e))
     {

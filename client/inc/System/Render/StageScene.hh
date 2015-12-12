@@ -54,7 +54,7 @@ class StageScene : public Scene
             }
         }
 
-        virtual void    handle(REvents e, REvents&)
+        virtual void    handle(EventSum e, EventSum&)
         {
             if (e & Key_Up || e & Key_Down || e & Key_Left || e & Key_Right)
                 _direction = e;
@@ -100,7 +100,7 @@ class StageScene : public Scene
         int                             _stageNb;
         AnimatedSprite                  _ship;
 
-        REvents         _direction;
+        EventSum         _direction;
 };
 
 

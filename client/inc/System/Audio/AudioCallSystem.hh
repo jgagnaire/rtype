@@ -21,9 +21,9 @@ public:
   void addPacket(sf::SoundBuffer *buffer);
 
   virtual void update(IClock &) {}
-  virtual bool handle(REvents ) { return true; }
+  virtual bool handle(EventSum) { return true; }
   virtual std::vector<REvent> broadcast(void) { return _eventList; }
-  virtual REvents getEvent() { return 0; }
+  virtual EventSum getEvent() { return 0; }
   virtual void in(IPacket *packet);
   virtual IPacket *out();
 

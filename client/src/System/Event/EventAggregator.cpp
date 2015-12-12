@@ -2,7 +2,7 @@
 #include "ASystem.hh"
 #include "IWindow.hh"
 
-void	EventAggregator::send(REvents e)
+void	EventAggregator::send(EventSum e)
 {
     for (auto x = _systemList.begin(); x != _systemList.end(); ++x)
     {
@@ -32,7 +32,7 @@ void    EventAggregator::add(ASystem *s)
 void	EventAggregator::update()
 {
     std::vector<REvent> tmp;
-    REvents              e;
+    EventSum              e;
 
     if ((e = this->win->getEvent()) != noEvent)
         this->send(e);

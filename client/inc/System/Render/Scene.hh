@@ -14,7 +14,7 @@ class Scene
         virtual ~Scene() {}
 
         virtual void update(int) = 0;
-        virtual void handle(REvents, REvents&) = 0;
+        virtual void handle(EventSum, EventSum&) = 0;
 
         virtual void in(IPacket*) {}
         virtual IPacket *out() {return 0;}

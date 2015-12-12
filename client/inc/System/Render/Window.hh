@@ -17,7 +17,7 @@ class Window : public IWindow
         virtual void        display();
         virtual void        draw(Entity &);
         virtual void        setMenuMode(bool);
-        virtual REvents     getEvent();
+        virtual EventSum     getEvent();
 
     private:
         sf::RenderWindow        _window;

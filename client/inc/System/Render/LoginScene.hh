@@ -90,7 +90,7 @@ class LoginScene : public Scene
             }
         }
 
-        virtual void    handle(REvents e, REvents &send)
+        virtual void    handle(EventSum e, EventSum &send)
         {
             if (_event)
             {
@@ -98,7 +98,7 @@ class LoginScene : public Scene
                 _event = noEvent;
                 return ;
             }
-            REvents tmp = (e << 1) >> 1;
+            EventSum tmp = (e << 1) >> 1;
             if (e == Key_Change || _finish == LoginState::WaitResponse)
                 return ;
             if (e & Key_Change)

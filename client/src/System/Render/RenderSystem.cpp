@@ -48,7 +48,7 @@ void    RenderSystem::in(IPacket *p)
     _current->in(p);
 }
 
-bool RenderSystem::handle(REvents e)
+bool RenderSystem::handle(EventSum e)
 {
     switch (e)
     {
@@ -64,9 +64,9 @@ bool RenderSystem::handle(REvents e)
     return true;
 }
 
-REvents              RenderSystem::getEvent()
+EventSum              RenderSystem::getEvent()
 {
-    REvents          tmp = 0;
+    EventSum          tmp = 0;
 
     if (_event != 0)
     {

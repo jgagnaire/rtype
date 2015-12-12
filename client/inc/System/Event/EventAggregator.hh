@@ -22,7 +22,7 @@ enum REvent
     E_GameRoom
 };
 
-typedef uint64_t REvents;
+typedef uint64_t EventSum;
 
 class ASystem;
 class IWindow;
@@ -35,7 +35,7 @@ class EventAggregator
     public:
         EventAggregator(IWindow *w) : win(w) {}
         ~EventAggregator() {}
-        void send(REvents);
+        void send(EventSum);
         void add(REvent, ASystem*);
         void add(ASystem*);
         void update(void);
