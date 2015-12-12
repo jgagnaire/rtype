@@ -1,9 +1,17 @@
 #pragma once
 
-#include <list>
-#include <iostream>
-#include "UserManager.hh"
-#include "ThreadPool.hh"
+# include <list>
+# include <iostream>
+# include "UserManager.hh"
+# include "ThreadPool.hh"
+
+# if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+#  include <windows.h>
+#  define portable_sleep(x) Sleep(x);
+# else
+#  include <unistd.h>
+#  define portable_sleep(x) usleep(x)
+# endif
 
 template <typename SCK>
 struct Game { // TODO, fill it !
