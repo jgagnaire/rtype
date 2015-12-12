@@ -9,15 +9,9 @@
 class StageScene : public Scene
 {
     public:
-        StageScene(IWindow &win):
-            Scene(win), _stageNb(3), _direction(noEvent)
+        StageScene(IWindow &win, std::list<Entity*> *e):
+            Scene(win, e), _stageNb(3), _direction(noEvent)
     {
-        _entities.push_back(&_b1);
-        _entities.push_back(&_b2);
-        _entities.push_back(&_b3);
-        _entities.push_back(&_gui);
-        _entities.push_back(&_b4);
-
         _ship.load("client/res/ship/player-ship-grey2_111.png", true);
 
         for (int i = 1; i <= 3; ++i)
@@ -60,26 +54,22 @@ class StageScene : public Scene
         virtual void    update(int duration)
         {
             _win.setMenuMode(false);
-			float move = duration * 0.75f;
+            _ship.update(duration);
             _s1[_stageNb - 1]->update(duration);
             _s2[_stageNb - 1]->update(duration);
             _s3[_stageNb - 1]->update(duration);
             _s4[_stageNb - 1]->update(duration);
-            if (_direction & Key_Up)
-                _ship.setPosition(_ship.getPosition() +
-                        sf::Vector2f(0.0f, -move));
-            if (_direction & Key_Down)
-                _ship.setPosition(_ship.getPosition() +
-                        sf::Vector2f(0.0f, move));
-            if (_direction & Key_Left)
-                _ship.setPosition(_ship.getPosition() +
-                        sf::Vector2f(-move, 0.0f));
-            if (_direction & Key_Right)
-                _ship.setPosition(_ship.getPosition() +
-                        sf::Vector2f(move, 0.0f));
-            if (_direction != 0)
-                _direction = 0;
-            _ship.update(duration);
+            _win.draw(_b1);
+            _win.draw(_b2);
+            _win.draw(_b3);
+            for (auto x : *_entities)
+            {
+                if (x->manager.get<std::string>("type") == "player")
+                    _ship.setPosition(sf::Vector2f(x->manager.get<std::pair<float, float> >("position").first,
+                            x->manager.get<std::pair<float, float> >("position").second));
+            }
+            _win.draw(_gui);
+            _win.draw(_b4);
         }
 
     private:

@@ -4,19 +4,39 @@
 #include "UserManager.hh"
 
 template<typename T>
-const std::string UserManager<T>::database_dir = "./server/.database/.%_data";
+const std::string	UserManager<T>::database_dir = "./server/.database/.%_data";
+
+template<typename T>
+# if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined (_WIN64)
+IMutex		*UserManager<T>::user_mutex = new WinMutex;
+# else
+IMutex		*UserManager<T>::user_mutex = new UnixMutex;
+# endif
 
 template<typename T>
 UserManager<T>::UserManager(IServerSocket<T> *sck) :
-        sock(sck) , status(Enum::LOBBY) , ping(true) { clearData(); }
+        sock(sck) , status(Enum::LOBBY) , ping(true) {
+# if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined (_WIN64)
+    game_mutex = new WinMutex;
+    destroy_client_mutex = new WinMutex;
+# else
+    game_mutex = new UnixMutex;
+    destroy_client_mutex = new UnixMutex;
+# endif
+    clearData();
+}
 
 template<typename T>
 UserManager<T>::~UserManager() {
+    destroy_client_mutex->lock();
     if (image_stream.is_open())
         image_stream.close();
     if (stream.is_open())
         stream.close();
+    destroy_client_mutex->unlock();
     delete this->sock;
+    delete this->destroy_client_mutex;
+    delete this->game_mutex;
 }
 
 template<typename T>
@@ -228,16 +248,14 @@ Enum::ServerAnswers      UserManager<T>::joinNamedRoom() {
 
 template <typename T>
 std::string     UserManager<T>::generateRoomName() {
-    struct timeb    tp;
     static const char alphanum[] =
             "0123456789"
                     "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                     "abcdefghijklmnopqrstuvwxyz";
 
-    ftime(&tp);
     std::string s;
-    std::srand(static_cast<unsigned int>((tp.millitm + tp.time * 1000)
-                                         * Enum::MAX_ROOM_NAME_NB));
+    std::srand(static_cast<unsigned int>(GameManager<T>::getTime()) *
+               Enum::MAX_ROOM_NAME_NB);
     for (int i = 0; i < Enum::MAX_ROOM_NAME_NB; ++i)
         s.push_back(alphanum[std::rand() % (sizeof(alphanum) - 1)]);
     return s;
@@ -288,13 +306,17 @@ Enum::ServerAnswers      UserManager<T>::ready() {
 }
 
 template <typename T>
+inline
+bool                    UserManager<T>::isFiring() { return (fire); }
+
+template <typename T>
 void                    UserManager<T>::clearGameData() {
     keypressed = 0;
     has_force = 0;
-    tmp_pos.clear();
-    real_pos.clear();
+    position.clear();
     has_force = false;
     udp_packet_id = 0;
+    fire = false;
 }
 
 template <typename T>
@@ -337,27 +359,62 @@ Enum::ServerAnswers     UserManager<T>::quitGame() {
 
 template <typename T>
 Enum::ServerAnswers     UserManager<T>::currentPosition() {
+    game_mutex->lock();
     std::istringstream  is(udp_packet.data);
     std::istringstream  is_pos;
     std::string         pos[2];
 
+
     for (int i = 0; i < 2; ++i)
         getline(is, pos[i], ':');
     is_pos.str(pos[0]);
-    is_pos >> tmp_pos.x;
+    is_pos >> position.x;
     is_pos.clear();
     is_pos.str("");
     is_pos.str(pos[1]);
-    is_pos >> tmp_pos.y;
+    is_pos >> position.y;
+    game_mutex->unlock();
     return (Enum::OK);
 }
 
 template <typename T>
 Enum::ServerAnswers     UserManager<T>::keyPressed() {
+    game_mutex->lock();
     std::istringstream  is(udp_packet.data);
 
     is >> keypressed;
+    game_mutex->unlock();
     return (Enum::OK);
+}
+
+template <typename T>
+void                    UserManager<T>::changePosition(std::size_t time) {
+    game_mutex->lock();
+    float               move =
+            static_cast<float>((GameManager<T>::getTime() - time) * 0.75);
+
+    if (static_cast<std::size_t>(Enum::LEFT) & keypressed) {
+        position.x -= move;
+        if (position.x < 0.01)
+            position.x = 0;
+    }
+    if (static_cast<std::size_t>(Enum::RIGHT) & keypressed) {
+        position.x += move;
+        if (position.x > static_cast<float>(Enum::GAME_SIZE_WIDTH))
+            position.x = static_cast<float>(Enum::GAME_SIZE_WIDTH);
+    }
+    if (static_cast<std::size_t>(Enum::UP) & keypressed) {
+        position.y -= move;
+        if (position.y < 0.01)
+            position.y = 0;
+    }
+    if (static_cast<std::size_t>(Enum::DOWN) & keypressed) {
+        position.y += move;
+        if (position.y > static_cast<float>(Enum::GAME_SIZE_HEIGHT))
+            position.y = static_cast<float>(Enum::GAME_SIZE_HEIGHT);
+    }
+    fire = !(static_cast<std::size_t>(Enum::FIRE) & keypressed);
+    game_mutex->unlock();
 }
 
 template <typename T>

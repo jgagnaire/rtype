@@ -11,15 +11,9 @@
 class MenuScene : public Scene
 {
     public:
-        MenuScene(IWindow &win):
-            Scene(win), _current(0)
+        MenuScene(IWindow &win, std::list<Entity*> *e):
+            Scene(win, e), _current(0)
         {
-            _entities.push_back(&_b1);
-            _entities.push_back(&_b2);
-            _entities.push_back(&_b3);
-            _entities.push_back(&_b4);
-            _entities.push_back(&_gui);
-
             _b1.manager.add<AView*>("view", &_v1);
             _s1.load("client/res/menu/menu.png");
             _b1.manager.add<ADrawable*>("s1", &_s1);
@@ -85,7 +79,6 @@ class MenuScene : public Scene
                             break ;
                         case 1:
                             send = E_PlayOffline;
-                            std::cout << "ASFASF" << std::endl;
                             break ;
                         case 2:
                             break ;
@@ -109,6 +102,11 @@ class MenuScene : public Scene
             _s2.update(duration);
             _s3.update(duration);
             _s4.update(duration);
+            _win.draw(_b1);
+            _win.draw(_b2);
+            _win.draw(_b3);
+            _win.draw(_b4);
+            _win.draw(_gui);
         }
 
     private:

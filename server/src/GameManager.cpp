@@ -86,14 +86,14 @@ void        GameManager<SCK>::launchGame(const std::string &game_name) {
 }
 
 template <typename SCK>
-void        GameManager<SCK>::updatePositions(Game<SCK> *game) {
-    for (auto it = game->players.begin(); it != game->players.end(); ++it) {
-        ;
-    }
+void        GameManager<SCK>::updatePositions(Game<SCK> *game, std::size_t time) {
+    for (auto it = game->players.begin(); it != game->players.end(); ++it)
+        (*it)->changePosition(time);
 }
 
 template <typename SCK>
-bool        GameManager<SCK>::update(Game<SCK> *) {
+bool        GameManager<SCK>::update(Game<SCK> *game, std::size_t time) {
+    updatePositions(game, time);
     return (true);
 }
 
@@ -106,13 +106,15 @@ std::size_t   GameManager<SCK>::getTime() {
 
 template <typename SCK>
 void            GameManager<SCK>::createGame(Game<SCK> *game) {
+    GameManager<SCK> &g = GameManager<SCK>::instance();
     bool        is_not_finished = true;
-    std::size_t time = GameManager<SCK>::getTime() + Enum::REFRESH_TIME;
+    std::size_t time = GameManager<SCK>::getTime() - Enum::REFRESH_TIME;
+
 
     while (is_not_finished) {
         if (GameManager<SCK>::getTime() - time >= Enum::REFRESH_TIME) {
             time = GameManager<SCK>::getTime();
-            is_not_finished = update(game);
+            is_not_finished = g.update(game, time);
         }
     }
     game->is_playing = false;

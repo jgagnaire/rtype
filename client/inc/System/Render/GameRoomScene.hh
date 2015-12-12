@@ -11,13 +11,10 @@
 class GameRoomScene : public Scene
 {
     public:
-        GameRoomScene(IWindow &win):
-            Scene(win), _buttons(3), _lastTime(0), _update(true), _new(false),
-            _current(0), _currentR(0)
+        GameRoomScene(IWindow &win, std::list<Entity*> *e):
+            Scene(win, e), _buttons(3), _lastTime(0), _update(true),
+            _new(false), _current(0), _currentR(0)
     {
-        _entities.push_back(&_b1);
-        _entities.push_back(&_texts);
-
         _buttons[0].setText("Random");
         _buttons[0].setPosition(300, 50);
         _buttons[1].setText("Join");
@@ -43,6 +40,8 @@ class GameRoomScene : public Scene
             _lastTime += duration;
             if (_lastTime > 5000)
                 _update = true;
+            _win.draw(_b1);
+            _win.draw(_texts);
         }
 
         virtual void    handle(EventSum e, EventSum&)
