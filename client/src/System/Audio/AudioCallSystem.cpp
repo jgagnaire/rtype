@@ -1,11 +1,9 @@
 #include <algorithm>
 #include "AudioCallSystem.hh"
 
-AudioCallSystem::AudioCallSystem()
+AudioCallSystem::AudioCallSystem():
+	recorder(new Recorder(this)), _thread(0), _exit(false)
 {
-  this->_exit = false;
-  this->_thread = 0;
-  recorder = new Recorder(this);
   recorder->start();
   this->startPlay();
 }
@@ -50,7 +48,7 @@ void	AudioCallSystem::startPlay()
 		  delete (*it)->manager.get<sf::SoundBuffer *>("toDelete");
 		  (*it)->manager.remove<sf::SoundBuffer *>("toDelete");
 		}
-		catch (...) {}
+		catch (std::exception const &) {}
 		if (!((*it)->manager.getAll<sf::SoundBuffer *>().empty()))
 		  {
 		    tmp = (*it)->manager.getAll<sf::SoundBuffer *>().front();
