@@ -22,7 +22,7 @@ public:
 
   virtual void update(IClock &) {}
   virtual bool handle(EventSum) { return true; }
-  virtual std::vector<REvent> broadcast(void) { return _eventList; }
+  virtual std::vector<REvent> &broadcast(void) { return _eventList; }
   virtual EventSum getEvent() { return 0; }
   virtual void in(IPacket *packet);
   virtual IPacket *out();
