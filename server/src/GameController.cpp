@@ -53,7 +53,7 @@ bool            GameController<T>::joinRandomRoom(UserManager<T> *cl) const { //
 template <typename T>
 bool            GameController<T>::joinNamedRoom(UserManager<T> *cl) const {
     GameManager<T>              &g = GameManager<T>::instance();
-    Enum::ServerAnswers      sa = cl->joinNamedRoom();
+    Enum::ServerAnswers         sa = cl->joinNamedRoom();
     Game<T>                     *game;
 
     cl->writeStruct({0, sa});

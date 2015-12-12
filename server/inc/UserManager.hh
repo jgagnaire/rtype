@@ -16,14 +16,16 @@
 # include "IServerSocket.hh"
 
 # if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined (_WIN64)
-#  include "WinServerSocket.hh"
+#   include "WinServerSocket.hh"
+#   include "WinMutex.hh"
 # else
-#  include "UnixServerSocket.hh"
+#   include "UnixServerSocket.hh"
+#   include "UnixMutex.hh"
 # endif
 
 struct Position {
-    std::size_t x;
-    std::size_t y;
+    float x;
+    float y;
     void        clear() {
         x = 0;
         y = 0;
@@ -37,6 +39,7 @@ public:
     UserManager(IServerSocket<T> *sck);
     ~UserManager();
 
+  static IMutex				*user_mutex;
     bool					IsFilled() const;
     void					clearData();
     void					readFromMe();
@@ -66,6 +69,8 @@ public:
     void                    setUdpPacketStruct(const Packet<UDPDataHeader>::PacketStruct &);
     void                    clearGameData();
     uint64_t                getUDPPacketId();
+    bool                    isFiring();
+    void                    changePosition(std::size_t);
 
     Enum::ServerAnswers		verifyUser();
     Enum::ServerAnswers	    newUser();
@@ -94,14 +99,15 @@ private:
     Packet<TCPDataHeader>::PacketStruct		tmp_packet;
     Packet<UDPDataHeader>::PacketStruct		udp_packet;
     std::string                             gameroom;
-
+    IMutex                                  *game_mutex;
+    IMutex                                  *destroy_client_mutex;
 
     uint64_t                                udp_packet_id;
     bool                                    is_ready;
     std::size_t                             keypressed;
     bool                                    has_force;
-    Position                                tmp_pos;
-    Position                                real_pos;
+    bool                                    fire;
+    Position                                position;
 
     bool					hasBadFormat(std::string *) const;
     bool					alreadyExist(std::string *);

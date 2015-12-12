@@ -36,11 +36,11 @@ public:
     void                            launchGame(const std::string &);
     static void                     createGame(Game<SCK> *);
     bool                            isPlaying(const std::string &);
-    void                            updatePositions(Game<SCK> *);
     void                            setUdpSocket(IServerSocket<SCK> *);
 
 private:
-    static bool                     update(Game<SCK> *game);
+    bool                            update(Game<SCK> *game, std::size_t);
+    void                            updatePositions(Game<SCK> *, std::size_t);
     static  GameManager                     *game_manager;
     GameManager() {}
     ~GameManager() {}

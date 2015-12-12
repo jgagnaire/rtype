@@ -85,10 +85,14 @@ public:
     }
 
     USER            *findUserByIP(const std::string &ip) {
+        UserManager<SCK>::user_mutex->lock();
         for (auto it = this->cl_list->begin(); it != this->cl_list->end(); ++it) {
-            if ((*it)->getIP() == ip)
+	  if ((*it)->getIP() == ip) {
+		UserManager<SCK>::user_mutex->unlock();
                 return (*it);
+	  }
         }
+	UserManager<SCK>::user_mutex->unlock();
         return (0);
     }
 };

@@ -62,7 +62,6 @@ void   WinServerMonitor::closeFd(IServerSocket<SOCKET> *sock) {
 	  for (i; i < WSA_MAXIMUM_WAIT_EVENTS - 1; ++i) {
 		  _sockets[i] = _sockets[i + 1];
 		  _events[i] = _events[i + 1];
-
 	  }
       --_max_fd;
       break;

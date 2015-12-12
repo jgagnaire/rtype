@@ -68,11 +68,13 @@ public:
     }
 
     void	deleteClient(typename std::list<USER *>::iterator &cli) {
+        UserManager<SCK>::user_mutex->lock();
         this->network_monitor->closeFd((*cli)->getServerSocket());
         ((this->controllers.front())->*(this->closeConnection))(*cli);
         delete *cli;
         *cli = 0;
         this->cl_list->erase(cli);
+	UserManager<SCK>::user_mutex->unlock();
     }
 
     void	checkObserver() {

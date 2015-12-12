@@ -115,8 +115,9 @@ namespace Enum
         DOWN = 2,
         LEFT = 4,
         RIGHT = 8,
-        FIRE1 = 16,
-        FIRE2 = 32,
+        FIRE = 16,
+        CHARGE = 32,
+        SWITCH = 64,
     };
 
     enum GameInfo {
