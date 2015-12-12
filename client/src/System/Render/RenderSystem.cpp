@@ -3,8 +3,8 @@
 
 # include "System/Render/RenderSystem.hh"
 
-RenderSystem::RenderSystem():
-    _event(noEvent)
+RenderSystem::RenderSystem(std::list<Entity*> *e):
+    _entities(e), _event(noEvent)
 {
     _eventList.push_back(Key_Up);
     _eventList.push_back(Key_Down);
@@ -20,7 +20,7 @@ RenderSystem::RenderSystem():
     _stage = new StageScene(*_window);
     _login = new LoginScene(*_window);
     _gameRoom = new GameRoomScene(*_window);
-    _current = _login;
+    _current = _stage;
 }
 
 RenderSystem::~RenderSystem()

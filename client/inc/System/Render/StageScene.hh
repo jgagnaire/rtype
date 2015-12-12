@@ -45,13 +45,10 @@ class StageScene : public Scene
 
         virtual ~StageScene()
         {
-            for (int i = 1; i <= 2; ++i)
-            {
-                delete _s1[i];
-                delete _s2[i];
-                delete _s3[i];
-                delete _s4[i];
-            }
+            _s1.erase(_s1.begin(), _s1.end());
+            _s2.erase(_s2.begin(), _s2.end());
+            _s3.erase(_s3.begin(), _s3.end());
+            _s4.erase(_s4.begin(), _s4.end());
         }
 
         virtual void    handle(EventSum e, EventSum&)
