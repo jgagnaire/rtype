@@ -16,9 +16,9 @@ public:
 	
 	virtual ~MovementSystem() {};
 	
-	virtual void                    update(IClock &clock)
+	virtual void                    update(int duration)
 		{
-			float move  = clock.getElapsedTimeMilli() + 0.75f;
+			float move  = duration + 0.75f;
 			for(auto x : *_eList)
 			{
 				if (x->manager.get<std::string>("name") == "player1")
@@ -44,7 +44,8 @@ public:
 	virtual void                    in(IPacket*){}
 	virtual bool                    handle(EventSum e)
 		{
-			if (lastEvent != e)
+			std::cout << "bite Handle :" << e << std::endl;
+            if (e & Key_Up || e & Key_Down || e & Key_Left || e & Key_Right)
 				lastEvent = e;
 			return (true);
 		}
@@ -52,10 +53,12 @@ public:
 		{
 			return (_eventList);
 		}
+	
 	virtual EventSum                getEvent()
 		{
 			return (lastEvent);
 		}
+	
 protected:
 	std::list<Entity*>	*_eList;
 	EventSum			lastEvent;
