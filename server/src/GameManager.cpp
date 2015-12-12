@@ -1,4 +1,3 @@
-#include <unistd.h>
 #include "GameManager.hh"
 
 template <typename SCK>
@@ -90,7 +89,7 @@ void        GameManager<SCK>::createGame(Game<SCK> *game) {
 
     while (is_not_finished) {
         is_not_finished = update(game);
-        usleep(Enum::REFRESH_TIME);
+		portable_sleep(Enum::REFRESH_TIME);
     }
     game->is_playing = false;
 }

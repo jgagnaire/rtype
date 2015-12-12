@@ -108,7 +108,7 @@ void AudioCallSystem::addPacket(sf::SoundBuffer *buffer)
 
   tmp->setSize(static_cast<uint16_t>(buffer->getSampleCount() * sizeof(short int)
 				     + 4 * sizeof(char)));
-  data = static_cast<short int *>(malloc(buffer->getSampleCount() * sizeof(short int)
+  data = static_cast<short int *>(malloc(static_cast<std::size_t>(buffer->getSampleCount()) * sizeof(short int)
 					 + 4 * sizeof(char)));
   tmp->setQuery(CODE_SEND_PACKET);
   tmpData = buffer->getSamples();
