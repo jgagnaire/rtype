@@ -12,7 +12,7 @@ class Recorder : public sf::SoundRecorder
 {
 public:
   Recorder(AudioCallSystem *obj);
-  ~Recorder();
+  virtual ~Recorder();
 
 private:
 
