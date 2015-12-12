@@ -21,7 +21,7 @@ class LoginScene : public Scene
     public:
         LoginScene(IWindow &win):
             Scene(win), _titleLogin("Login :"), _titlePassword("Password :"),
-            _finish(LoginState::NotConnected)
+            _finish(LoginState::NotConnected), _event(noEvent)
     {
         _entities.push_back(&_b1);
         _entities.push_back(&_texts);
