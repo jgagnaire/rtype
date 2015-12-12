@@ -1,4 +1,4 @@
-#include <unistd.h>
+#include <chrono>
 #include "GameManager.hh"
 
 template <typename SCK>
@@ -85,12 +85,22 @@ void        GameManager<SCK>::launchGame(const std::string &game_name) {
 }
 
 template <typename SCK>
+inline
+unsigned long   GameManager<SCK>::getTime() {
+    return (std::chrono::system_clock::now().time_since_epoch() /
+            std::chrono::milliseconds(1));
+}
+
+template <typename SCK>
 void        GameManager<SCK>::createGame(Game<SCK> *game) {
     bool    is_not_finished = true;
+    unsigned long time = GameManager<SCK>::getTime();
 
     while (is_not_finished) {
-        is_not_finished = update(game);
-        usleep(Enum::REFRESH_TIME);
+        if (GameManager<SCK>::getTime() - time < Enum::REFRESH_TIME) {
+            time = GameManager<SCK>::getTime();
+            is_not_finished = update(game);
+        }
     }
     game->is_playing = false;
 }

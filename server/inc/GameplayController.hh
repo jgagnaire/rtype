@@ -16,11 +16,6 @@ public:
     bool            takeForce(UserManager<T> *);
 
 private:
-    Packet<UDPDataHeader>					packet;
-
-    void	writeStruct(const UDPDataHeader &comdata);
-    void	writeMsg(const std::string &);
-    bool	writeOnMe(const std::string &, const std::string &);
     GameplayController	&operator=(GameplayController const &) { return *this; }
 };
 

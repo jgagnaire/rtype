@@ -17,6 +17,7 @@ template <typename SCK>
 class GameManager {
 public:
     static  GameManager             &instance();
+    static  unsigned long           getTime();
     Game<SCK>                       *getGameByName(const std::string &);
     void                            createRoom(const std::string &, UserManager<SCK> *);
     void                            deleteUser(UserManager<SCK> *);
