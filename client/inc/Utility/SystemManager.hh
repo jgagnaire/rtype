@@ -13,21 +13,22 @@ class SystemManager
 public:
 	SystemManager(const std::string &ip):
 		_networkManager(ip, ip), shr_entities(new std::list<Entity*>)
-        {
-            ASystem *render = new RenderSystem();
-            ASystem *audioCall = new AudioCallSystem();
-			
-            systemList["render"] = render;
+        {			
+			Entity *e = new Entity;
+			e->manager.add<std::string>("name", "player1");
+			e->manager.add<std::string>("type", "player");
+			e->manager.add("position", std::pair<float, float>(0, 0));
+			e->manager.add<bool>("isShared", true);
+			shr_entities->push_back(e);
+
+			ASystem *render = new RenderSystem(shr_entities);
+			ASystem *audioCall = new AudioCallSystem();
+
+			systemList["render"] = render;
 			systemList["audioCall"] = audioCall;
             ea = new EventAggregator(static_cast<RenderSystem*>(render)->getWindow());
             clk = new Clock();
             ea->add(render);
-
-			Entity *e = new Entity;
-			e->manager.add<std::string>("name", "player1");
-			e->manager.add("position", std::pair<float, float>(0, 0));
-			e->manager.add<bool>("isShared", true);
-			shr_entities->push_back(e);
         }
 	
 	~SystemManager()
