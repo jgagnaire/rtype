@@ -9,13 +9,13 @@ namespace Enum
         GAME
     };
 
-  enum JSON {
-    NO_VAL = 0,
-    IS_HASH,
-    IS_STRING,
-    IS_TAB,
-    IS_NUM,
-  };
+    enum JSON {
+        NO_VAL = 0,
+        IS_HASH,
+        IS_STRING,
+        IS_TAB,
+        IS_NUM,
+    };
 
     enum ProtocolIndex {
         TCP_INDEX = 0,
@@ -50,37 +50,42 @@ namespace Enum
 
     enum ClientQueries {
         NONE_QUERY = 0,
-        ACCOUNT_LOGIN = 101,
-        ACCOUNT_REGISTER = 102,
-        UPLOAD_IMAGE = 103,
-        DISCONNECTION = 105,
-        SEND_IMAGE = 106,
-        IMAGE_UPLOADED = 107,
-        DELETE_IMAGE = 108,
+        ACCOUNT_LOGIN = 100,
+        ACCOUNT_REGISTER = 101,
+        DISCONNECTION = 102,
+        GET_ROOM = 103,
         PONG = 110,
-        RETRIEVE_IMAGE = 111,
-        GET_ROOM = 112,
         JOIN_RANDOM_ROOM = 200,
         JOIN_GAME_ROOM = 201,
         CREATE_ROOM = 202,
         LEAVE_ROOM = 300,
         READY = 301,
-        NOT_READY = 302
+        NOT_READY = 302,
+        QUIT_GAME = 200,
+        CURRENT_POS = 300,
+        KEY_PRESS = 301,
+        AUDIO_PACKET = 302,
+        TAKE_FORCE = 303,
     };
 
     enum ServerNotification {
-    };
-
-    enum TCPServerAnswers {
-        OK = 104,
-        LOGGED_IN = 107,
         PING	= 109,
         PLAYER_JOIN = 400,
         PLAYER_LEFT = 401,
         GAME_START = 402,
-        RECV_PROFILE = 403,
-        END_PROFILE = 404,
-        GAME_NAME = 405,
+        GAME_NAME = 403,
+        MONSTER_SPAWNED = 400,
+        MONSTER_DESTROYED = 401,
+        MONSTER_FIRED = 402,
+        PLAYER_KILLED = 403,
+        BROADCAST_AUDIO = 404,
+        USER_TAKE_FORCE = 405,
+        USER_QUIT_GAME = 406,
+    };
+
+    enum ServerAnswers {
+        // FOR TCP
+        OK = 104,
         EUSERPASS = 500,
         EALREADY_LOGGED = 501,
         EUSER_EXIST = 502,
@@ -88,10 +93,12 @@ namespace Enum
         EALREADY_ON_ROOM = 504,
         ENOT_LOGGED = 505,
         ENOT_IN_ROOM = 506,
-        EIMAGE_NO_EXIST = 507,
-        EIMAGE_KO = 508,
         ENO_AVAILABLE_ROOM = 509,
-        EROOM_NO_EXIST = 510
+        EROOM_NO_EXIST = 510,
+
+        // FOR UDP
+        ENOT_IN_GAME = 504,
+        EUDP_NOT_LOGGEDIN = 506
     };
 
     enum ServerInfo {
@@ -102,11 +109,23 @@ namespace Enum
         MAX_BUFFER_LENGTH = 512,
     };
 
+    enum Key {
+        NO_KEY = 0,
+        UP = 1,
+        DOWN = 2,
+        LEFT = 4,
+        RIGHT = 8,
+        FIRE1 = 16,
+        FIRE2 = 32,
+    };
+
     enum GameInfo {
         MAX_PLAYER = 4,
         MAX_ROOM_NAME_NB = 16,
         MAX_GAME = 8,
         REFRESH_TIME = 1000,
+        GAME_SIZE_WIDTH = 1920,
+        GAME_SIZE_HEIGHT = 1080,
     };
 };
 

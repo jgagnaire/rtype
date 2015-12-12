@@ -7,6 +7,7 @@ AccountController<T>::AccountController(std::list<UserManager<T> *> *cli)
 template<typename T>
 int	AccountController<T>::newData(UserManager<T> *cli) {
     cli->fillPacketStruct();
+    std::cout << "La query: " << cli->numQuery() << std::endl;
     switch (cli->numQuery()) {
         case Enum::ACCOUNT_LOGIN:
             return (static_cast<int>(accountLoginFct(cli)));
@@ -16,49 +17,9 @@ int	AccountController<T>::newData(UserManager<T> *cli) {
             return (static_cast<int>(disconnectionFct(cli)));
         case Enum::PONG:
             return (static_cast<int>(pong(cli)));
-        case Enum::UPLOAD_IMAGE:
-            return (static_cast<int>(startUpload(cli)));
-        case Enum::SEND_IMAGE:
-            return (static_cast<int>(uploadImage(cli)));
-        case Enum::IMAGE_UPLOADED:
-            return (static_cast<int>(finishUpload(cli)));
-        case Enum::DELETE_IMAGE:
-            return (static_cast<int>(deleteImage(cli)));
-        case Enum::RETRIEVE_IMAGE:
-            return (static_cast<int>(retrieveImage(cli)));
         default:
             return (-1);
     }
-}
-
-template<typename T>
-bool            AccountController<T>::uploadImage(UserManager<T> *cl) const {
-    cl->writeStruct({0, cl->uploadImage()});
-    return (true);
-}
-
-template<typename T>
-bool            AccountController<T>::finishUpload(UserManager<T> *cl) const {
-    cl->writeStruct({0, cl->endOfUploading()});
-    return (true);
-}
-
-template<typename T>
-bool            AccountController<T>::deleteImage(UserManager<T> *cl) const {
-    cl->writeStruct({0, cl->deleteImage()});
-    return (true);
-}
-
-template<typename T>
-bool    AccountController<T>::startUpload(UserManager<T> *cl) const {
-    cl->writeStruct({0, cl->startUpload()});
-    return (true);
-}
-
-template<typename T>
-bool    AccountController<T>::retrieveImage(UserManager<T> *cl) const {
-    cl->writeStruct({0, cl->retrieveImage()});
-    return (true);
 }
 
 template<typename T>
