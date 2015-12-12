@@ -110,7 +110,7 @@ void AudioCallSystem::addPacket(sf::SoundBuffer *buffer)
 				     + 4 * sizeof(char)));
   data = static_cast<short int *>(malloc(buffer->getSampleCount() * sizeof(short int)
 					 + 4 * sizeof(char)));
-  tmp->setQuery(302);
+  tmp->setQuery(CODE_SEND_PACKET);
   tmpData = buffer->getSamples();
   char *tmpPseudo = new char[4];
   tmpPseudo[0] = 'l';
@@ -159,7 +159,7 @@ void AudioCallSystem::in(IPacket *packet)
   const void *tmpData;
 
   if (!packet || !dynamic_cast<UdpPacket *>(packet)
-      || packet->getQuery() != 404)
+      || packet->getQuery() != CODE_RECEIVE_PACKET)
     return ;
   tmpData = packet->getData();
   pseudo = getPseudo(tmpData, packet->getSize());

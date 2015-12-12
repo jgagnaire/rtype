@@ -28,6 +28,9 @@ public:
   virtual IPacket *out();
 
 private:
+  static constexpr uint16_t CODE_SEND_PACKET = 302;
+  static constexpr uint16_t CODE_RECEIVE_PACKET = 404;
+
   void startPlay();
   static void startThread(AudioCallSystem *obj);
   void addBuffer(sf::SoundBuffer *buffer, const std::string &name);
