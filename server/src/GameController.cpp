@@ -75,6 +75,7 @@ bool            GameController<T>::joinNamedRoom(UserManager<T> *cl) const {
 
 template <typename T>
 bool            GameController<T>::createGameRoom(UserManager<T> *cl) const {
+    std::cout << cl->getName() << " veut creer "  << cl->getPacketData() << std::endl;
     cl->writeStruct({0, cl->createGameRoom()});
     return (true);
 }
@@ -140,6 +141,8 @@ bool            GameController<T>::getRoomList(UserManager<T> *cl) const {
     std::string                 tmp;
 
     cl->writeStruct({0, sa});
+    std::cout << "qwe " << sa << std::endl;
+    std::cout << "la taille des games: " << game.size() << std::endl;
     if (sa == Enum::OK) {
         for (auto it = game.begin(); it != game.end(); ++it) {
             tmp.clear();
@@ -147,6 +150,7 @@ bool            GameController<T>::getRoomList(UserManager<T> *cl) const {
             os.str("");
             os <<  (Enum::MAX_PLAYER - (*it)->players.size());
             tmp = (*it)->name + ":" + os.str();
+            std::cout << "LOL: " << tmp << std::endl;
             cl->writeStruct({static_cast<uint16_t>(tmp.size()),
                              Enum::GAME_NAME});
             cl->writeMsg(tmp);

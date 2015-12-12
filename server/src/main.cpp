@@ -29,36 +29,12 @@ int main(int, char **av)
 	  netmgr.triggerClose(&AController<int>::closeConnection);
 	  netmgr.triggerTimeout(&AController<int>::timeout);
 	  netmgr.triggerAObserve(&AController<int>::timeout);
-	  netmgr.addController(new GameController<int>(netmgr.getClientList()));
       netmgr.addController(new AccountController<int>(netmgr.getClientList()));
+      netmgr.addController(new GameController<int>(netmgr.getClientList()));
 #endif
 	netmgr.launch();
   }
-  
-  catch (ESockCreate const &e) {
-    std::cerr << e.what() << std::endl;
-    return -1;
-  }
-  catch (ESockAccept const &e) {
-    std::cerr << e.what() << std::endl;
-    return -1;
-  }
-  catch (ESockRead const &e) {
-    std::cerr << e.what() << std::endl;
-    return -1;
-  }
-  catch (ESockWrite const &e) {
-    std::cerr << e.what() << std::endl;
-    return -1;
-  }
-  catch (ServerError const &e) {
-    std::cerr << e.what() << std::endl;
-    return -1;
-  }
-  catch (std::bad_alloc const &e) {
-    std::cerr << e.what() << std::endl;
-    return -1;
-  }
+
   catch (std::exception const &e) {
     std::cerr << e.what() << std::endl;
     return -1;

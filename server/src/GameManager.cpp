@@ -27,6 +27,7 @@ void        GameManager<SCK>::createRoom(const std::string &name, UserManager<SC
 
     g->name = name;
     g->players.push_back(s);
+    _games.push_back(g);
 }
 
 template <typename SCK>
