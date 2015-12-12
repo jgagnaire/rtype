@@ -55,6 +55,10 @@ class StageScene : public Scene
         {
             _win.setMenuMode(false);
             _ship.update(duration);
+            _s1[_stageNb - 1]->update(duration);
+            _s2[_stageNb - 1]->update(duration);
+            _s3[_stageNb - 1]->update(duration);
+            _s4[_stageNb - 1]->update(duration);
             _win.draw(_b1);
             _win.draw(_b2);
             _win.draw(_b3);

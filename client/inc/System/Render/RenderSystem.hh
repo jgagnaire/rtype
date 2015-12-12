@@ -14,7 +14,7 @@ class RenderSystem : public ASystem
         RenderSystem(std::list<Entity*> *);
         virtual ~RenderSystem();
 
-        virtual void                update(IClock&);
+        virtual void                update(int duration);
         virtual IPacket             *out();
         virtual void                in(IPacket*);
         virtual bool                handle(EventSum e);

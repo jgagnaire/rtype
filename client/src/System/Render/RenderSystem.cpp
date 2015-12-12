@@ -31,11 +31,10 @@ RenderSystem::~RenderSystem()
     delete _gameRoom;
 }
 
-void RenderSystem::update(IClock &e)
+void RenderSystem::update(int duration)
 {
     _window->clear();
-    _current->update(e.getElapsedTimeMilli());
-    e.restart();
+    _current->update(duration);
     _window->display();
 }
 
