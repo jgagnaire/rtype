@@ -32,7 +32,7 @@ void    NetworkManager::send(const IPacket &packet)
         dynamic_cast<const TcpPacket&>(packet);
         isTcp = true;
     }
-    catch (std::bad_cast &)
+    catch (std::bad_cast const &)
     {
          isTcp = false;
     }
