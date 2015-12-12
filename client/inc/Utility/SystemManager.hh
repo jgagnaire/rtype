@@ -30,9 +30,8 @@ class SystemManager
             {
                 for (auto x : systemList)
                 {
-                    IPacket *p = _networkManager.getPacket();
-                    (void)p; //TODO
                     ea->update();
+                    IPacket *p = _networkManager.getPacket();
                     x.second->in(p);
                     x.second->update(*this->clk);
                     p = x.second->out();
