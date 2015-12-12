@@ -31,6 +31,7 @@ private:
   void startPlay();
   static void startThread(AudioCallSystem *obj);
   void addBuffer(sf::SoundBuffer *buffer, const std::string &name);
+  std::string getPseudo(const void *data, uint16_t packetSize) const;
 
   Recorder			*recorder;
   std::vector <Entity *>	_users;

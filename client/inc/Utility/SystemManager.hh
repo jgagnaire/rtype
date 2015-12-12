@@ -13,37 +13,38 @@ class SystemManager
     public:
         SystemManager(const std::string &ip):
             _networkManager(ip, ip)
-        {
-            ASystem *render = new RenderSystem();
-            ASystem *audioCall = new AudioCallSystem();
+    {
+        ASystem *render = new RenderSystem();
+        ASystem *audioCall = new AudioCallSystem();
 
-            systemList["render"] = render;
-	    systemList["audioCall"] = audioCall;
-            ea = new EventAggregator(static_cast<RenderSystem*>(render)->getWindow());
-            clk = new Clock();
-            ea->add(render);
+        systemList["render"] = render;
+        systemList["audioCall"] = audioCall;
+        ea = new EventAggregator(static_cast<RenderSystem*>(render)->getWindow());
+        clk = new Clock();
+        ea->add(render);
+    }
+
+        ~SystemManager()
+        {
+            systemList.erase(systemList.begin(), systemList.end());
+            delete ea;
+            delete clk;
         }
 
-	~SystemManager()
-		{
-			systemList.erase(systemList.begin(), systemList.end());
-			delete ea;
-			delete clk;
-		}
-	
         void gameLoop()
         {
             while (ea->getWin()->isOpen())
             {
+                ea->update();
+                IPacket *p = _networkManager.getPacket();
                 for (auto x : systemList)
                 {
-                    ea->update();
-                    IPacket *p = _networkManager.getPacket();
-                    x.second->in(p);
+                    if (p)
+                        x.second->in(p);
                     x.second->update(*this->clk);
-                    p = x.second->out();
-                    if (p != 0)
-                        _networkManager.send(*p);
+                    IPacket *m = x.second->out();
+                    if (m != 0)
+                        _networkManager.send(*m);
                 }
             }
         }

@@ -92,7 +92,7 @@ class LoginScene : public Scene
 
         virtual void    handle(EventSum e, EventSum &send)
         {
-            if (_event)
+             if (_event)
             {
                 send = _event;
                 _event = noEvent;
@@ -161,7 +161,7 @@ class LoginScene : public Scene
         TcpPacket               _packet;
         std::string             _buf;
         Codes                   _lastCode;
-        REvent                  _event;
+        EventSum                _event;
 };
 
 #endif /* end of include guard: LOGINSCENE_HH_QX5LVF1U */
