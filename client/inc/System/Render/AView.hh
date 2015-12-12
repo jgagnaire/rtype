@@ -7,10 +7,7 @@ class AView
         AView() {}
         virtual ~AView() {}
 
-        virtual void *  getBuffer() const
-        {
-            return _buffer;
-        }
+        inline virtual void *getBuffer() const { return _buffer; }
     protected:
         void      *_buffer;
 };

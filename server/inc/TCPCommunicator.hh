@@ -103,7 +103,7 @@ public:
             this->afterObserveAction();
     }
 
-    virtual bool            readAction(UserManager<SCK> *cli) {
+    virtual bool    readAction(UserManager<SCK> *cli) {
         int         n;
 
         cli->readFromMe();
