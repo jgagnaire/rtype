@@ -12,7 +12,7 @@ class GameRoomScene : public Scene
 {
     public:
         GameRoomScene(IWindow &win):
-            Scene(win), _lastTime(0), _update(0)
+            Scene(win), _lastTime(0), _update(true), _new(false)
     {
         _entities.push_back(&_b1);
         _entities.push_back(&_texts);
@@ -44,6 +44,13 @@ class GameRoomScene : public Scene
                     _buffer += static_cast<char>(tmp);
                 _bufferText.setText(_buffer);
                 _bufferText.setCenter();
+                if (tmp == 126)
+                {
+                    _packet.setQuery(static_cast<uint16_t>(Codes::CreateRoom));
+                    _packet.setData(_buffer.c_str());
+                    _packet.setSize(_buffer.size());
+                    _new = true;
+                }
             }
         }
 
@@ -60,6 +67,7 @@ class GameRoomScene : public Scene
                     case Codes::NotLoggedIn:
                         break;
                     case Codes::ExistingRoom:
+                        std::cout << "Existing Room" << std::endl;
                         ;
                     default:
                         ;
@@ -70,6 +78,11 @@ class GameRoomScene : public Scene
 
         virtual IPacket *out()
         {
+            if (_new)
+            {
+                _new = false;
+                 return (&_packet);
+            }
             if (_update)
             {
                 _packet.setQuery(static_cast<uint16_t>(Codes::GetGameRooms));
@@ -89,6 +102,7 @@ class GameRoomScene : public Scene
         TcpPacket                       _packet;
         int                             _lastTime;
         bool                            _update;
+        bool                            _new;
         std::string                     _buffer;
         Text                            _bufferText;
 };

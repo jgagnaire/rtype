@@ -21,7 +21,8 @@ enum class Codes
     GetGameRooms = 103,
     AlreadyInRoom = 504,
     NotLoggedIn = 505,
-    ExistingRoom = 403
+    ExistingRoom = 403,
+    CreateRoom = 202
 };
 
 class NetworkManager
