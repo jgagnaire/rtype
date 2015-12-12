@@ -3,7 +3,8 @@
 
 # include "System/Render/RenderSystem.hh"
 
-RenderSystem::RenderSystem()
+RenderSystem::RenderSystem():
+    _event(noEvent)
 {
     _eventList.push_back(Key_Up);
     _eventList.push_back(Key_Down);

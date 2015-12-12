@@ -47,6 +47,8 @@ REvents  Window::getEvent()
                 return (127 | Key_Change);
             else if (e.key.code == sf::Keyboard::Return)
                 return (126 | Key_Change);
+            else if (e.key.code == sf::Keyboard::Tab)
+                return (125 | Key_Change);
         }
         if (_menuMode && e.type == sf::Event::TextEntered)
         {

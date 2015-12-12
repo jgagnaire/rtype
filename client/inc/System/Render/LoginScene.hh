@@ -39,12 +39,41 @@ class LoginScene : public Scene
         _texts.manager.add<ADrawable*>("printedLogin", &_printedLogin);
         _texts.manager.add<ADrawable*>("titlePassword", &_titlePassword);
         _texts.manager.add<ADrawable*>("printedPassword", &_printedPassword);
+        _texts.manager.add<ADrawable*>("error", &_error);
         _currentStr = &_login;
         _currentText = &_printedLogin;
     }
         virtual ~LoginScene()
         {
 
+        }
+
+        virtual void    in(IPacket *p)
+        {
+            TcpPacket   *packet;
+            if ((packet = dynamic_cast<TcpPacket*>(p)))
+            {
+                if (_lastCode == Codes::Login)
+                {
+                    switch (static_cast<Codes>(packet->getQuery()))
+                    {
+                        case Codes::Ok:
+                            _event = E_GameRoom;
+                            break ;
+                        case Codes::WrongUserPass:
+                            _error.setText("Wrong username or password");
+                            break ;
+                        case Codes::AlreadyLogin:
+                            _error.setText("Already Loged in");
+                            break ;
+                        default:
+                            ;
+                    }
+                }
+                else if (_lastCode == Codes::Register)
+                {
+                }
+            }
         }
 
         virtual void    handle(REvents e, REvents &)
@@ -56,7 +85,7 @@ class LoginScene : public Scene
             {
                 if (tmp == 127 && _login.empty() == false)
                     _currentStr->erase(_login.size() - 1, 1);
-                if (tmp == 126)
+                if (tmp == 126 || tmp == 125)
                 {
                     if (_currentStr == &_login)
                     {
@@ -65,9 +94,10 @@ class LoginScene : public Scene
                     }
                     else
                     {
+                        _lastCode = (tmp == 126 ? Codes::Login : Codes::Register);
                         _finish = LoginState::Connecting;
                         _buf = _login + ":" + _password;
-                        _packet.setQuery(static_cast<uint16_t>(Codes::Login));
+                        _packet.setQuery(static_cast<uint16_t>(_lastCode));
                         _packet.setData(_buf.c_str());
                         _packet.setSize(_buf.size());
                     }
@@ -104,11 +134,14 @@ class LoginScene : public Scene
         Text                    _printedLogin;
         Text                    _titlePassword;
         Text                    _printedPassword;
+        Text                    _error;
         Text                    *_currentText;
         std::string             *_currentStr;
         LoginState              _finish;
         TcpPacket               _packet;
         std::string             _buf;
+        Codes                   _lastCode;
+        REvent                  _event;
 };
 
 #endif /* end of include guard: LOGINSCENE_HH_QX5LVF1U */

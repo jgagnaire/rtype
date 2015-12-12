@@ -18,7 +18,8 @@ enum REvent
     Key_Select,
     Key_Back,
     Key_Close,
-    E_PlayOffline
+    E_PlayOffline,
+    E_GameRoom
 };
 
 typedef uint64_t REvents;
