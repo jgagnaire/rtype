@@ -12,13 +12,26 @@ class GameRoomScene : public Scene
 {
     public:
         GameRoomScene(IWindow &win):
-            Scene(win), _lastTime(0), _update(true), _new(false)
+            Scene(win), _buttons(3), _lastTime(0), _update(true), _new(false),
+            _current(0), _currentR(0)
     {
         _entities.push_back(&_b1);
         _entities.push_back(&_texts);
 
+        _buttons[0].setText("Random");
+        _buttons[0].setPosition(300, 50);
+        _buttons[1].setText("Join");
+        _buttons[1].setCenter();
+        _buttons[1].setY(50);
+        _buttons[2].setText("Create");
+        _buttons[2].setPosition(1300, 50);
+
         _b1.manager.add<View*>("view", &_view);
         _texts.manager.add<ADrawable*>("buffer", &_bufferText);
+        _texts.manager.add<ADrawable*>("list", &_list);
+        for (std::size_t i = 0; i < _buttons.size(); ++i)
+            _texts.manager.add<ADrawable*>("button" + std::to_string(i),
+                    &_buttons[i]);
     }
 
         virtual ~GameRoomScene()
@@ -34,6 +47,8 @@ class GameRoomScene : public Scene
 
         virtual void    handle(EventSum e, EventSum&)
         {
+            std::string text;
+
             if (e & Key_Change && e != Key_Change)
             {
                 EventSum tmp = (e << 1) >> 1;
@@ -52,11 +67,21 @@ class GameRoomScene : public Scene
                     _new = true;
                 }
             }
+            if (e & Key_Left && _current > 0)
+                --_current;
+            else if (e & Key_Right && _current < _buttons.size() - 1)
+                ++_current;
+            for (std::size_t i = 0; i <  _buttons.size(); ++i)
+                _buttons[i].setColor(0xffffffff);
+            _buttons[_current].setColor(0xff0000ff);
+            for (auto x : _rooms)
+                text += x.first + "\t" + x.second + "/4\n";
+            _list.setText(text);
         }
 
         virtual void    in(IPacket *p)
         {
-            std::string tmp, name, nb;
+            std::string tmp, name;
             TcpPacket   *packet;
 
             if ((packet = dynamic_cast<TcpPacket*>(p)))
@@ -69,15 +94,12 @@ class GameRoomScene : public Scene
                         break;
                     case Codes::ExistingRoom:
                         tmp = static_cast<const char*>(packet->getData());
-                        name = tmp.substr(0, tmp.find(":") - 1);
-                        nb = tmp.substr(tmp.find(":"));
-                        std::cout << "Name " << name << " Nb " << nb << std::endl;
-                        _rooms[name] = std::atoi(nb.c_str());
+                        name = tmp.substr(0, tmp.find(":"));
+                        _rooms[name] = tmp.substr(tmp.find(":") + 1, 1);
                     default:
                         ;
                 }
             }
-
         }
 
         virtual IPacket *out()
@@ -100,7 +122,8 @@ class GameRoomScene : public Scene
         }
 
     private:
-        std::unordered_map<std::string, int>        _rooms;
+        std::vector<Text>                                   _buttons;
+        std::unordered_map<std::string, std::string>        _rooms;
         View                                        _view;
         Entity                                      _b1;
         Entity                                      _texts;
@@ -110,6 +133,9 @@ class GameRoomScene : public Scene
         bool                                        _new;
         std::string                                 _buffer;
         Text                                        _bufferText;
+        Text                                        _list;
+        std::size_t                                 _current;
+        std::size_t                                 _currentR;
 };
 
 #endif /* end of include guard: GAMEROOMSCENE_HH_ZNKJPAAS */

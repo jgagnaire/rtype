@@ -27,6 +27,11 @@ class Text : public ADrawable
 
         }
 
+        void            setColor(uint32_t color)
+        {
+            _text.setColor(sf::Color(color));
+        }
+
         void            setText(const std::string &str)
         {
             _text.setString(str);
