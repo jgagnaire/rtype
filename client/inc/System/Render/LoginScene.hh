@@ -90,8 +90,14 @@ class LoginScene : public Scene
             }
         }
 
-        virtual void    handle(REvents e, REvents &)
+        virtual void    handle(REvents e, REvents &send)
         {
+            if (_event)
+            {
+                send = _event;
+                _event = noEvent;
+                return ;
+            }
             REvents tmp = (e << 1) >> 1;
             if (e == Key_Change || _finish == LoginState::WaitResponse)
                 return ;
