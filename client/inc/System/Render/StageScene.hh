@@ -20,7 +20,7 @@ class StageScene : public Scene
 
         _ship.load("client/res/ship/player-ship-grey2_111.png", true);
 
-        for (int i = 1; i <= 2; ++i)
+        for (int i = 1; i <= 3; ++i)
         {
             ScrollingSprite *s1 = new ScrollingSprite();
             ScrollingSprite *s2 = new ScrollingSprite();
