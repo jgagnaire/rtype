@@ -20,6 +20,7 @@ Game<SCK>        *GameManager<SCK>::getGameByName(const std::string &name) {
 }
 
 template <typename SCK>
+inline
 void        GameManager<SCK>::createRoom(const std::string &name, UserManager<SCK> *s) {
     Game<SCK>    *g = new Game<SCK>;
 
@@ -62,6 +63,7 @@ bool        GameManager<SCK>::joinRoom(const std::string &name, UserManager<SCK>
 }
 
 template <typename SCK>
+inline
 bool        GameManager<SCK>::roomIsFull(const std::string &name) {
     Game<SCK> *game = getGameByName(name);
 
@@ -71,6 +73,7 @@ bool        GameManager<SCK>::roomIsFull(const std::string &name) {
 }
 
 template <typename SCK>
+inline
 void        GameManager<SCK>::launchGame(const std::string &game_name) {
     Game<SCK>    *game = getGameByName(game_name);
 
@@ -81,16 +84,32 @@ void        GameManager<SCK>::launchGame(const std::string &game_name) {
 }
 
 template <typename SCK>
-void        GameManager<SCK>::createGame(Game<SCK> *) {
+void        GameManager<SCK>::createGame(Game<SCK> *game) {
+    bool    is_not_finished = true;
 
+    while (is_not_finished) {
+        is_not_finished = update(game);
+		portable_sleep(Enum::REFRESH_TIME);
+    }
+    game->is_playing = false;
 }
 
 template <typename SCK>
+bool        GameManager<SCK>::update(Game<SCK> *) {
+    return (true);
+}
+
+template <typename SCK>
+inline
 bool        GameManager<SCK>::isPlaying(const std::string &roomname) {
     Game<SCK> *g = getGameByName(roomname);
 
     return (!g && g->is_playing);
 }
+
+template <typename SCK>
+inline
+void        GameManager<SCK>::setUdpSocket(IServerSocket<SCK> *sock) { _udp_socket = sock; }
 
 template <typename SCK>
 bool        GameManager<SCK>::isAllReady(const std::string &roomname) {
@@ -106,6 +125,7 @@ bool        GameManager<SCK>::isAllReady(const std::string &roomname) {
 }
 
 template <typename SCK>
+inline
 const std::list<Game<SCK> *>        &GameManager<SCK>::getGames() const { return (_games); }
 
 #if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined (_WIN64)

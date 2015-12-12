@@ -41,15 +41,16 @@ public:
         {
             while (ea->getWin()->isOpen())
             {
+                ea->update();
+                IPacket *p = _networkManager.getPacket();
                 for (auto x : systemList)
                 {
-                    ea->update();
-                    IPacket *p = _networkManager.getPacket();
-                    x.second->in(p);
+                    if (p)
+                        x.second->in(p);
                     x.second->update(*this->clk);
-                    p = x.second->out();
-                    if (p != 0)
-                        _networkManager.send(*p);
+                    IPacket *m = x.second->out();
+                    if (m != 0)
+                        _networkManager.send(*m);
                 }
             }
         }

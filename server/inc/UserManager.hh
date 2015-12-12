@@ -14,11 +14,21 @@
 # include "Enum.hh"
 # include "Packet.hh"
 # include "IServerSocket.hh"
+
 # if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined (_WIN64)
 #  include "WinServerSocket.hh"
 # else
 #  include "UnixServerSocket.hh"
 # endif
+
+struct Position {
+    std::size_t x;
+    std::size_t y;
+    void        clear() {
+        x = 0;
+        y = 0;
+    }
+};
 
 template <typename T>
 class UserManager
@@ -34,10 +44,11 @@ public:
     bool		        	isLogged() const;
     bool					emptyData() const;
     Enum::ClientQueries		numQuery() const;
+    Enum::ClientQueries     numUDPQuery() const;
     void					setPing(bool p = true);
     bool					getPing() const;
-    std::string				getFriendName();
     std::string				getPacketData() const;
+    std::string				getUDPPacketData() const;
     const std::string		&getName() const;
     std::string				getIP() const;
     bool					sendStructEmpty() const;
@@ -48,32 +59,28 @@ public:
     void					disconnect();
     void		        	fillPacketStruct();
     void					sendPing();
-    bool					deleteUserWith(const std::string &s,
-                                           std::fstream &file,
-                                           std::string &stock);
     const std::string       &getGameroomName() const;
     bool                    isReady() const;
     Enum::UserStatus        getStatus() const;
     void                    inGame();
     void                    setUdpPacketStruct(const Packet<UDPDataHeader>::PacketStruct &);
+    void                    clearGameData();
+    uint64_t                getUDPPacketId();
 
-    Enum::TCPServerAnswers		verifyUser();
-    Enum::TCPServerAnswers	    newUser();
-    Enum::TCPServerAnswers      startUpload();
-    Enum::TCPServerAnswers      uploadImage();
-    Enum::TCPServerAnswers      endOfUploading();
-    Enum::TCPServerAnswers      deleteImage();
-    Enum::TCPServerAnswers      retrieveImage();
-
-    Enum::TCPServerAnswers      joinRandomRoom();
-    Enum::TCPServerAnswers      joinNamedRoom();
-    Enum::TCPServerAnswers      createGameRoom();
-    Enum::TCPServerAnswers      leaveRoom();
-    Enum::TCPServerAnswers      ready();
-    Enum::TCPServerAnswers      notReady();
-    Enum::TCPServerAnswers      getRoomList();
-
-
+    Enum::ServerAnswers		verifyUser();
+    Enum::ServerAnswers	    newUser();
+    Enum::ServerAnswers     joinRandomRoom();
+    Enum::ServerAnswers     joinNamedRoom();
+    Enum::ServerAnswers     createGameRoom();
+    Enum::ServerAnswers     leaveRoom();
+    Enum::ServerAnswers     ready();
+    Enum::ServerAnswers     notReady();
+    Enum::ServerAnswers     getRoomList();
+    Enum::ServerAnswers     quitGame();
+    Enum::ServerAnswers     currentPosition();
+    Enum::ServerAnswers     keyPressed();
+    Enum::ServerAnswers     audioPacket();
+    Enum::ServerAnswers     takeForce();
 
 private:
     IServerSocket<T>						*sock;
@@ -87,7 +94,14 @@ private:
     Packet<TCPDataHeader>::PacketStruct		tmp_packet;
     Packet<UDPDataHeader>::PacketStruct		udp_packet;
     std::string                             gameroom;
+
+
+    uint64_t                                udp_packet_id;
     bool                                    is_ready;
+    std::size_t                             keypressed;
+    bool                                    has_force;
+    Position                                tmp_pos;
+    Position                                real_pos;
 
     bool					hasBadFormat(std::string *) const;
     bool					alreadyExist(std::string *);

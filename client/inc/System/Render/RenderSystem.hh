@@ -5,14 +5,15 @@
 # include "System/Render/MenuScene.hh"
 # include "System/Render/StageScene.hh"
 # include "System/Render/LoginScene.hh"
+# include "System/Render/GameRoomScene.hh"
 # include "Window.hh"
 
 class RenderSystem : public ASystem
 {
-    public:
-        RenderSystem();
-        virtual ~RenderSystem();
-
+public:
+	RenderSystem();
+	virtual ~RenderSystem();
+	
 	virtual void                update(IClock&);
 	virtual IPacket             *out();
 	virtual void                in(IPacket*);
@@ -27,6 +28,7 @@ private:
 	MenuScene                                           *_menu;
 	StageScene                                          *_stage;
 	LoginScene                                          *_login;
+	GameRoomScene                                       *_gameRoom;
 	IWindow                                             *_window;
 	EventSum                                             _event;
 };

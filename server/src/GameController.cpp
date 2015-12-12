@@ -1,4 +1,4 @@
-#include <GameManager.hh>
+#include "GameManager.hh"
 #include "GameController.hh"
 
 template<typename T>
@@ -30,7 +30,7 @@ int	            GameController<T>::newData(UserManager<T> *cl) {
 template <typename T>
 bool            GameController<T>::joinRandomRoom(UserManager<T> *cl) const { //TODO, refractor
     GameManager<T>              &g = GameManager<T>::instance();
-    Enum::TCPServerAnswers      sa = cl->joinRandomRoom();
+    Enum::ServerAnswers         sa = cl->joinRandomRoom();
     Game<T>                     *game;
 
     cl->writeStruct({0, sa});
@@ -53,7 +53,7 @@ bool            GameController<T>::joinRandomRoom(UserManager<T> *cl) const { //
 template <typename T>
 bool            GameController<T>::joinNamedRoom(UserManager<T> *cl) const {
     GameManager<T>              &g = GameManager<T>::instance();
-    Enum::TCPServerAnswers      sa = cl->joinNamedRoom();
+    Enum::ServerAnswers      sa = cl->joinNamedRoom();
     Game<T>                     *game;
 
     cl->writeStruct({0, sa});
@@ -82,7 +82,7 @@ bool            GameController<T>::createGameRoom(UserManager<T> *cl) const {
 template <typename T>
 bool            GameController<T>::leaveRoom(UserManager<T> *cl) const {
     GameManager<T>              &g = GameManager<T>::instance();
-    Enum::TCPServerAnswers      sa = cl->leaveRoom();
+    Enum::ServerAnswers         sa = cl->leaveRoom();
     Game<T>                     *game;
 
     game = g.getGameByName(cl->getGameroomName());
@@ -109,12 +109,14 @@ bool            GameController<T>::ready(UserManager<T> *cl) const {
     cl->writeStruct({0, cl->ready()});
     if (g.isPlaying(cl->getGameroomName())) {
         cl->inGame();
+        cl->clearGameData();
         cl->writeStruct({0, Enum::GAME_START});
     }
     else if (g.isAllReady(cl->getGameroomName())) {
-        if (game && game->players.size() > 1) {
+        if (game) {
             for (auto it = game->players.begin(); it != game->players.end(); ++it) {
                 (*it)->inGame();
+                (*it)->clearGameData();
                 (*it)->writeStruct({0, Enum::GAME_START});
             }
             g.launchGame(cl->getGameroomName());
@@ -132,7 +134,7 @@ bool            GameController<T>::notReady(UserManager<T> *cl) const {
 template <typename T>
 bool            GameController<T>::getRoomList(UserManager<T> *cl) const {
     GameManager<T>              &g = GameManager<T>::instance();
-    Enum::TCPServerAnswers      sa = cl->getRoomList();
+    Enum::ServerAnswers      sa = cl->getRoomList();
     const std::list<Game<T> *>  &game =  g.getGames();
     std::ostringstream          os;
     std::string                 tmp;
