@@ -23,8 +23,8 @@ add_executable(client_rtype ${client_SOURCES} ${client_HEADERS})
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/inc ${CMAKE_CURRENT_SOURCE_DIR}/inc/Component ${CMAKE_CURRENT_SOURCE_DIR}/inc/Entity/ ${CMAKE_CURRENT_SOURCE_DIR}/inc/Network ${CMAKE_CURRENT_SOURCE_DIR}/inc/System/ ${CMAKE_CURRENT_SOURCE_DIR}/inc/System/Audio/ ${CMAKE_CURRENT_SOURCE_DIR}/inc/System/Event ${CMAKE_CURRENT_SOURCE_DIR}/inc/System/Render ${CMAKE_CURRENT_SOURCE_DIR}/inc/Utility)
 
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
-find_package(SFML 2 REQUIRED system window graphics network audio)
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
+find_package(SFML 2 REQUIRED system window network graphics audio main)
 
 target_compile_features(client_rtype PRIVATE cxx_range_for)
 

@@ -1,5 +1,5 @@
 #include "Utility/WinMutex.hh"
-#include "ServerError.hh"
+#include "ClientError.hh"
 
 WinMutex::WinMutex() { }
 
@@ -17,7 +17,7 @@ void	WinMutex::lock(void)
 
 void	WinMutex::unlock(void)
 {
-	if (!ReleaseMutex(_mutex))
+	if (!::ReleaseMutex(_mutex))
 		throw MutexException("Unlock failed");
 }
 

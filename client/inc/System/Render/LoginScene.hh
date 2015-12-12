@@ -119,7 +119,7 @@ class LoginScene : public Scene
                         _buf = _login + ":" + _password;
                         _packet.setQuery(static_cast<uint16_t>(_lastCode));
                         _packet.setData(_buf.c_str());
-                        _packet.setSize(_buf.size());
+                        _packet.setSize(static_cast<uint16_t>(_buf.size()));
                     }
                     return ;
                 }

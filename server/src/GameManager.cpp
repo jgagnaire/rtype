@@ -99,7 +99,7 @@ bool        GameManager<SCK>::update(Game<SCK> *) {
 
 template <typename SCK>
 inline
-unsigned long   GameManager<SCK>::getTime() {
+std::size_t   GameManager<SCK>::getTime() {
     return (std::chrono::system_clock::now().time_since_epoch() /
             std::chrono::milliseconds(1));
 }
