@@ -28,7 +28,7 @@ public:
 			ASystem *audioCall = new AudioCallSystem();
 			ASystem *mvt = new MovementSystem(shr_entities);
 			ASystem *shot = new ShootSystem(shr_entities);
-			
+
 			systemList["1mov"] = mvt;
 			systemList["2Shoot"] = shot;
 			systemList["3audioCall"] = audioCall;
@@ -38,6 +38,7 @@ public:
             ea->add(render);
 			ea->add(mvt);
 			ea->add(shot);
+            ea->add(audioCall);
         }
 
 	~SystemManager()
@@ -63,7 +64,7 @@ public:
                     IPacket *m = x.second->out();
                     if (m != 0)
                         _networkManager.send(*m);
-                }				
+                }
 				ea->update();
             }
         }
