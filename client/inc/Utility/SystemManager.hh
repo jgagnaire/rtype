@@ -37,7 +37,8 @@ public:
 
 	~SystemManager()
 		{
-			systemList.erase(systemList.begin(), systemList.end());
+			for(auto x : systemList)
+				delete(x.second);
 			delete ea;
 			delete clk;
 		}
