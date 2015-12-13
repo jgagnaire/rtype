@@ -18,7 +18,17 @@ public:
 	
 	virtual void                    update(int duration)
 		{
-			float move  = duration + 0.75f;
+			float culpointastah = 1.0f;
+		    
+			for (unsigned i = 1; i < sizeof(EventSum) * 8; i <<= 1)
+			{
+				if (lastEvent & i)
+					++culpointastah;
+				if (culpointastah >= 2)
+					break ;
+			}
+			
+			float move  = duration + (0.75f / culpointastah);
 			for(auto x : *_eList)
 			{
 				if (x->manager.get<std::string>("name") == "player1")
@@ -44,7 +54,6 @@ public:
 	virtual void                    in(IPacket*){}
 	virtual bool                    handle(EventSum e)
 		{
-			std::cout << "bite Handle :" << e << std::endl;
             if (e & Key_Up || e & Key_Down || e & Key_Left || e & Key_Right)
 				lastEvent = e;
 			return (true);
