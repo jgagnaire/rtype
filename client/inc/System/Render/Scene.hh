@@ -20,6 +20,7 @@ class Scene
         virtual void in(IPacket*) {}
         virtual IPacket *out() {return 0;}
 
+        virtual void draw() {}
     protected:
         IWindow                         &_win;
         std::list<Entity*>              *_entities;

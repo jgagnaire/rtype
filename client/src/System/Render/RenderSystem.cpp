@@ -36,9 +36,11 @@ RenderSystem::~RenderSystem()
 
 void RenderSystem::update(int duration)
 {
-    _window->clear();
+    if (_current != _stage)
+        _window->clear();
     _current->update(duration);
-    _window->display();
+    if (_current != _stage)
+        _window->display();
 }
 
 IPacket *RenderSystem::out()
@@ -74,6 +76,13 @@ bool RenderSystem::handle(EventSum e)
             _current->handle(e, _event);
     }
     return true;
+}
+
+void                        RenderSystem::draw()
+{
+    _window->clear();
+    _current->draw();
+    _window->display();
 }
 
 EventSum              RenderSystem::getEvent()

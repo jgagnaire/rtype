@@ -24,6 +24,8 @@ class RenderSystem : public ASystem
         virtual EventSum             getEvent(void);
         IWindow                     *getWindow() const;
 
+        virtual void                        draw();
+
     private:
         std::chrono::time_point<std::chrono::steady_clock>  _last;
         std::list<Entity*>                                  *_entities;

@@ -55,17 +55,19 @@ public:
             {
                 std::size_t s = this->clk->getElapsedTimeMilli();
                 this->clk->restart();
-                IPacket *p = _networkManager.getPacket();
+                ea->update();
                 for (auto x : systemList)
                 {
-                    if (p)
-                        x.second->in(p);
-                    x.second->update(s);
                     IPacket *m = x.second->out();
                     if (m != 0)
                         _networkManager.send(*m);
+                    x.second->update(s);
                 }
-                ea->update();
+                systemList["4render"]->draw();
+                IPacket *p = _networkManager.getPacket();
+                for (auto x : systemList)
+                    if (p)
+                        x.second->in(p);
             }
         }
 

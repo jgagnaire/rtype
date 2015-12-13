@@ -34,6 +34,7 @@ enum class Codes
 enum class UdpCodes
 {
     KeyPressed = 301,
+    NewPos = 408
 };
 
 class NetworkManager
