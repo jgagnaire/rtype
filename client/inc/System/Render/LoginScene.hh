@@ -19,13 +19,10 @@ enum class LoginState
 class LoginScene : public Scene
 {
     public:
-        LoginScene(IWindow &win):
-            Scene(win), _titleLogin("Login :"), _titlePassword("Password :"),
+        LoginScene(IWindow &win, std::list<Entity*> *e):
+            Scene(win, e), _titleLogin("Login :"), _titlePassword("Password :"),
             _finish(LoginState::NotConnected), _event(noEvent)
     {
-        _entities.push_back(&_b1);
-        _entities.push_back(&_texts);
-
         _titleLogin.setCenter();
         _printedLogin.setCenter();
         _titlePassword.setCenter();
@@ -119,7 +116,7 @@ class LoginScene : public Scene
                         _buf = _login + ":" + _password;
                         _packet.setQuery(static_cast<uint16_t>(_lastCode));
                         _packet.setData(_buf.c_str());
-                        _packet.setSize(_buf.size());
+                        _packet.setSize(static_cast<uint16_t>(_buf.size()));
                     }
                     return ;
                 }
@@ -142,6 +139,8 @@ class LoginScene : public Scene
         virtual void    update(int)
         {
             _win.setMenuMode(true);
+            _win.draw(_b1);
+            _win.draw(_texts);
         }
 
     private:

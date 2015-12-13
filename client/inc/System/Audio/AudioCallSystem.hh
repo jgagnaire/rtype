@@ -29,7 +29,7 @@ public:
 
   void addPacket(sf::SoundBuffer *buffer);
 
-  virtual void update(IClock &) {}
+  virtual void update(int) {}
   inline virtual bool handle(EventSum) { return true; }
   inline virtual std::vector<REvent> &broadcast(void) { return _eventList; }
   inline virtual EventSum getEvent() { return 0; }

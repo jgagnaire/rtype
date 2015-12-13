@@ -88,7 +88,7 @@ EventSum Window::getEvent()
         tmp |= Key_Down;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
         tmp |= Key_Up;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
         tmp |= Key_Left;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
         tmp |= Key_Right;

@@ -33,7 +33,7 @@ bool            GameController<T>::joinRandomRoom(UserManager<T> *cl) const { //
     Enum::ServerAnswers         sa = cl->joinRandomRoom();
     Game<T>                     *game;
 
-    cl->writeStruct({0, sa});
+    cl->writeStruct({0, static_cast<uint16_t>(sa)});
     if (sa == Enum::OK) {
         game = g.getGameByName(cl->getGameroomName());
         if (!game)
@@ -53,10 +53,10 @@ bool            GameController<T>::joinRandomRoom(UserManager<T> *cl) const { //
 template <typename T>
 bool            GameController<T>::joinNamedRoom(UserManager<T> *cl) const {
     GameManager<T>              &g = GameManager<T>::instance();
-    Enum::ServerAnswers      sa = cl->joinNamedRoom();
+    Enum::ServerAnswers         sa = cl->joinNamedRoom();
     Game<T>                     *game;
 
-    cl->writeStruct({0, sa});
+    cl->writeStruct({0, static_cast<uint16_t>(sa)});
     if (sa == Enum::OK) {
         game = g.getGameByName(cl->getGameroomName());
         if (!game)
@@ -76,7 +76,7 @@ bool            GameController<T>::joinNamedRoom(UserManager<T> *cl) const {
 template <typename T>
 bool            GameController<T>::createGameRoom(UserManager<T> *cl) const {
     std::cout << cl->getName() << " veut creer "  << cl->getPacketData() << std::endl;
-    cl->writeStruct({0, cl->createGameRoom()});
+    cl->writeStruct({0, static_cast<uint16_t>(cl->createGameRoom())});
     return (true);
 }
 
@@ -87,7 +87,7 @@ bool            GameController<T>::leaveRoom(UserManager<T> *cl) const {
     Game<T>                     *game;
 
     game = g.getGameByName(cl->getGameroomName());
-    cl->writeStruct({0, sa});
+    cl->writeStruct({0, static_cast<uint16_t>(sa)});
     if (sa == Enum::OK) {
         if (!game)
             return (true);
@@ -107,7 +107,7 @@ bool            GameController<T>::ready(UserManager<T> *cl) const {
     GameManager<T>              &g = GameManager<T>::instance();
     Game<T>                     *game = g.getGameByName(cl->getGameroomName());
 
-    cl->writeStruct({0, cl->ready()});
+    cl->writeStruct({0, static_cast<uint16_t>(cl->ready())});
     if (g.isPlaying(cl->getGameroomName())) {
         cl->inGame();
         cl->clearGameData();
@@ -128,7 +128,7 @@ bool            GameController<T>::ready(UserManager<T> *cl) const {
 
 template <typename T>
 bool            GameController<T>::notReady(UserManager<T> *cl) const {
-    cl->writeStruct({0, cl->notReady()});
+    cl->writeStruct({0, static_cast<uint16_t>(cl->notReady())});
     return (true);
 }
 
@@ -140,7 +140,7 @@ bool            GameController<T>::getRoomList(UserManager<T> *cl) const {
     std::ostringstream          os;
     std::string                 tmp;
 
-    cl->writeStruct({0, sa});
+    cl->writeStruct({0, static_cast<uint16_t>(sa)});
     std::cout << "qwe " << sa << std::endl;
     std::cout << "la taille des games: " << game.size() << std::endl;
     if (sa == Enum::OK) {

@@ -10,7 +10,7 @@ void	WinUDPSocketSet::absInitSocket(unsigned short port) {
   srv_addr.sin_family = AF_INET;
   srv_addr.sin_port = ::htons(port);
   srv_addr.sin_addr.s_addr = INADDR_ANY;
-  if ((sock = ::WSASocket(AF_INET, SOCK_DGRAM,
+  if ((sock = ::WSASocketW(AF_INET, SOCK_DGRAM,
 			  IPPROTO_UDP,
 			  NULL, 0, 0)) == INVALID_SOCKET
       || bind(sock, reinterpret_cast<const sockaddr *>(&srv_addr),

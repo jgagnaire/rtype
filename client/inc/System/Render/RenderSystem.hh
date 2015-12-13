@@ -12,9 +12,10 @@ class RenderSystem : public ASystem
 {
     public:
         RenderSystem(std::list<Entity*> *);
+		RenderSystem() {}
         virtual ~RenderSystem();
 
-        virtual void                update(IClock&);
+        virtual void                update(int duration);
         virtual IPacket             *out();
         virtual void                in(IPacket*);
         virtual bool                handle(EventSum e);
