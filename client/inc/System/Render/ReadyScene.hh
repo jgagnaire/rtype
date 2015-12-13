@@ -11,11 +11,14 @@ class ReadyScene : public Scene
 {
     public:
         ReadyScene(IWindow &win, std::list<Entity*> *e):
-            Scene(win, e), _isReady(false), _send(false)
+            Scene(win, e), _isReady(false), _send(false),
+            _new(false), _quit(false), _lastCode(0)
     {
         _b1.manager.add<View*>("view", &_view);
         _texts.manager.add<ADrawable*>("isReady", &_isReadyText);
         _texts.manager.add<ADrawable*>("list", &_playersText);
+
+        _isReadyText.setText("You are not ready.");
     }
 
         virtual ~ReadyScene()
@@ -28,29 +31,69 @@ class ReadyScene : public Scene
             _win.draw(_texts);
         }
 
-        virtual void    handle(EventSum e, EventSum&)
+        virtual void    handle(EventSum e, EventSum &send)
         {
+            if (_quit)
+            {
+                send = E_GameRoom;
+                _quit = false;
+                _isReady = false;
+                _isReadyText.setText("You are not ready.");
+                return ;
+            }
             if (e != Key_Change && e & Key_Change)
             {
                 EventSum tmp = (e << 1) >> 1;
-                if (tmp == 125)
+                if (tmp == 126)
                 {
                     if (_isReady)
                         _packet.setQuery(static_cast<uint16_t>(Codes::NotReady));
                     else
                         _packet.setQuery(static_cast<uint16_t>(Codes::Ready));
+                    _new = true;
                 }
                 else if (tmp == 127)
+                {
                     _packet.setQuery(static_cast<uint16_t>(Codes::LeaveRoom));
+                    _new = true;
+                }
             }
         }
 
-        virtual void    in(IPacket *)
+        virtual void    in(IPacket *p)
         {
+            TcpPacket   *packet;
+
+            if ((packet = dynamic_cast<TcpPacket*>(p)))
+            {
+                switch (static_cast<Codes>(packet->getQuery()))
+                {
+                    case Codes::Ok:
+                        if (static_cast<Codes>(_lastCode) == Codes::Ready
+                                || static_cast<Codes>(_lastCode) == Codes::NotReady)
+                            _isReady = !_isReady;
+                        if (_isReady)
+                            _isReadyText.setText("You are ready");
+                        else
+                            _isReadyText.setText("You are not ready.");
+                        if (static_cast<Codes>(_lastCode) == Codes::LeaveRoom)
+                        {
+                            _quit = true;
+                        }
+                    default:
+                        ;
+                }
+            }
         }
 
         virtual IPacket *out()
         {
+            if (_new)
+            {
+                _lastCode = _packet.getQuery();
+                _new = false;
+                return (&_packet);
+            }
             return (0);
         }
     private:
@@ -63,6 +106,9 @@ class ReadyScene : public Scene
         std::unordered_map<std::string, bool>               _players;
         Text                                                _playersText;
         bool                                                _send;
+        bool                                                _new;
+        bool                                                _quit;
+        int                                                 _lastCode;
 };
 
 

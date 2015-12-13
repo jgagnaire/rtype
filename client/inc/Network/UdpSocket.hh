@@ -26,7 +26,12 @@ struct UdpHeader : public Header
 class UdpPacket : public IPacket
 {
     public:
-        UdpPacket() {}
+        UdpPacket() {
+            _header.size = 0;
+            _header.query = 0;
+            _header.id = 0;
+            _data = 0;
+        }
         virtual ~UdpPacket() {}
 
 		inline virtual uint16_t    getSize() const { return this->_header.size; }

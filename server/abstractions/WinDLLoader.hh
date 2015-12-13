@@ -3,19 +3,18 @@
 
 # include <windows.h> 
 # include <string>
-# include "ADLLoader.h"
+# include "ADLLoader.hh"
 
-template <typename PLUGIN>
-class WinDLLoader : public ADLLoader<PLUGIN>
+class WinDLLoader : public ADLLoader<void *>
 {
 public:
-	WinDLLoader(std::string const &);
-	virtual ~WinDLLoader();
-	virtual void loadLib(std::string const &);
+  WinDLLoader();
+  virtual ~WinDLLoader();
 
-private:
-	WinDLLoader() {}
-	HINSTANCE handle;
+  virtual bool		openLib(std::string const &path, const std::string &key);
+  virtual bool		loadLib(const std::string &key, const std::string &sym);
+  virtual void		closeLib(const std::string &key);
+  virtual Entity	*operator()(const std::string &key, const std::string &sym);
 };
 
 #endif // !WINDLLOADER_H_
