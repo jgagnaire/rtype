@@ -46,7 +46,7 @@ int WinServerSocket::absReadFromClient(char *&to_fill, unsigned size, std::strin
 	to_fill = wsabuf.buf;
 	if (ip != NULL)
 	{
-		char buf[16] = { 0 };
+		char buf[22] = { 0 };
 		::inet_ntop(AF_INET, &from.sin_addr, &buf[0], INET_ADDRSTRLEN);
 		*ip = std::string(&buf[0]);
 	}
@@ -55,7 +55,7 @@ int WinServerSocket::absReadFromClient(char *&to_fill, unsigned size, std::strin
 
 inline
 std::string	WinServerSocket::getIP() const {
-	char buf[16] = { 0 };
+	char buf[22] = { 0 };
 	::inet_ntop(AF_INET, &addr->sin_addr, &buf[0], INET_ADDRSTRLEN);
 	return (std::string(&buf[0]));
 }

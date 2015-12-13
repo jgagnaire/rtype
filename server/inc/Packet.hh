@@ -95,7 +95,7 @@ public:
         char	*str = const_cast<char *>(_send_pack.front().data.c_str());
         char	*com = reinterpret_cast<char *>(&_send_pack.front().header);
 
-        _wr_buff = new char [sizeof(T) + _send_pack.front().data.size()];
+        _wr_buff = new char [sizeof(T) + _send_pack.front().data.size() + 1];
         std::copy(com, com + sizeof(T), _wr_buff);
         for (std::size_t i = 0;  i < sizeof(T); ++i)
           _wr_buff[i] = com[i];
