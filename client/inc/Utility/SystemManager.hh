@@ -37,6 +37,7 @@ public:
             clk = new Clock();
             ea->add(render);
 			ea->add(mvt);
+			ea->add(shot);
         }
 
 	~SystemManager()

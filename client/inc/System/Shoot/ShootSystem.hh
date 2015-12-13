@@ -10,12 +10,15 @@ namespace Pattern {
 	
 	void	line(Entity &e, Side s, int duration)
 	{
+		std::cout << "LINE" << std::endl;
 		std::pair<float, float> pos = e.manager.get<std::pair<float, float> >("position");
+		std::cout << "Before : " << pos.first << " : " << pos.second << std::endl;
 		float vel = duration + e.manager.get<float>("velocity");
 		if (s == Side::LEFT)
 			vel *= -1;
-		pos.second += vel;
+		pos.first += vel;
 		e.manager.set("position", pos);
+		std::cout << "After : " << e.manager.get<std::pair<float, float> >("position").first << " : " << e.manager.get<std::pair<float, float> >("position").second << std::endl;
 	}
 }
 
@@ -30,21 +33,27 @@ public:
 	
 	virtual void                    update(int duration)
 		{
-			for(auto x : *_eList)
+			for(auto x = _eList->begin(); x != _eList->end(); ++x)
 			{
-				if (x->manager.get<std::string>("type") == "shoot")
+				if ((*x)->manager.get<std::string>("type") == "shoot")
 				{
-					x->manager.get
-						<void (Entity&, Pattern::Side, int)>
-						("pattern")(*x, x->manager.
+					(*x)->manager.get<std::function<void (Entity&, Pattern::Side, int)> >
+						("pattern")(**x, (*x)->manager.
 									get<Pattern::Side>("direction"), duration);
-					std::pair<float, float> tmp = x->manager.
+					std::pair<float, float> tmp = (*x)->manager.
 						get<std::pair<float, float> >("position");
 					if (tmp.first > 1920 || tmp.second > 1080
 						|| tmp.first < 0 || tmp.second < 0)
-						delete x;
+					{
+						std::cout << _eList->size() << std::endl;
+						_eList->erase(x);
+						//delete x;
+						std::cout << _eList->size() << std::endl;
+						std::cout << "LES FESSES CA DELETE" << std::endl;
+					}
 				}
 			}
+			std::cout << "Bye bye" << std::endl;
 		}
 	
 	virtual IPacket                 *out() {/*envoi de packet quand on tire*/ return NULL; }
@@ -55,8 +64,8 @@ public:
 			{
 				Entity *e = new Entity;
 				
-				e->manager.add("name", "playerShoot");
-				e->manager.add("type", "shoot");
+				e->manager.add<std::string>("name", "playerShoot");
+				e->manager.add<std::string>("type", "shoot");
 				e->manager.add("velocity", 1.35f);
 				e->manager.add<size_t>("dammage", 25);  
 				for(auto x : *_eList)
