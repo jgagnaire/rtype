@@ -129,7 +129,7 @@ inline
 bool        GameManager<SCK>::isPlaying(const std::string &roomname) {
     Game<SCK> *g = getGameByName(roomname);
 
-    return (!g && g->is_playing);
+    return (g && g->is_playing);
 }
 
 template <typename SCK>
