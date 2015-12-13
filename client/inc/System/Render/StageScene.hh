@@ -63,13 +63,10 @@ class StageScene : public Scene
             _win.draw(_b1);
             _win.draw(_b2);
             _win.draw(_b3);
-            std::cout << "Entites " << _entities->size() << std::endl;
             for (auto x : *_entities)
             {
                 if (x->manager.get<std::string>("type") == "shoot")
-                {
-					std::cout << "Shoot : " << x->manager.get<std::pair<float, float> >("position").first << " - " << x->manager.get<std::pair<float, float> >("position").second << std::endl;
-					
+                {					
                     _shoot.setPosition(sf::Vector2f(x->manager.get<std::pair<float, float> >("position").first,
                                 x->manager.get<std::pair<float, float> >("position").second));
                     _shoot.update(duration);
