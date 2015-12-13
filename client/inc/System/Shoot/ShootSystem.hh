@@ -25,8 +25,8 @@ namespace Pattern {
 		float vel = duration + e.manager.get<float>("velocity");
 		if (s == Side::LEFT)
 			vel *= -1;
-		pos.second += 250 * sin(duration * 0.5 * M_PI);
 		pos.first += vel;
+		pos.second += (40 * sin(pos.first * 0.5 * M_PI / 180));
 		e.manager.set("position", pos);
 	}
 }
@@ -57,8 +57,7 @@ public:
 									get<Pattern::Side>("direction"), duration);
 					std::pair<float, float> tmp = (*x)->manager.
 						get<std::pair<float, float> >("position");
-					if (tmp.first > 1920 || tmp.second > 1080
-						|| tmp.first < 0 || tmp.second < 0)
+					if (tmp.first > 1920 || tmp.first < 0 )
 						x = _eList->erase(x);
 				}
 			}
@@ -76,7 +75,7 @@ public:
 				
 				e->manager.add<std::string>("name", "playerShoot");
 				e->manager.add<std::string>("type", "shoot");
-				e->manager.add("velocity", 9.50f);
+				e->manager.add("velocity", 4.50f);
 				e->manager.add<size_t>("dammage", 25);  
 				for(auto x : *_eList)
 					if (x->manager.get<std::string>("name") == "player1")
@@ -90,7 +89,7 @@ public:
 					}
 				e->manager.add<Pattern::Side>("direction", Pattern::Side::RIGHT);
 				e->manager.add<std::function<void (Entity&, Pattern::Side, int)> >
-					("pattern", Pattern::line);
+					("pattern", Pattern::sinusoid);
 				_eList->push_back(e);
 			}
 			return true;
