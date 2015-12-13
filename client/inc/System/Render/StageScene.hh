@@ -13,6 +13,7 @@ class StageScene : public Scene
             Scene(win, e), _stageNb(3), _direction(noEvent)
     {
         _ship.load("client/res/ship/player-ship-grey2_111.png", true);
+        _shoot.load("client/res/bullet.png", true);
 
         for (int i = 1; i <= 3; ++i)
         {
@@ -34,7 +35,8 @@ class StageScene : public Scene
         _b2.manager.add<ADrawable*>("background", _s2[_stageNb - 1]);
         _b3.manager.add<ADrawable*>("background", _s3[_stageNb - 1]);
         _b4.manager.add<ADrawable*>("background", _s4[_stageNb - 1]);
-        _gui.manager.add<ADrawable*>("ship", &_ship);
+        _guiPlayers.manager.add<ADrawable*>("ship", &_ship);
+        _guiShoots.manager.add<ADrawable*>("shoot", &_shoot);
     }
 
         virtual ~StageScene()
@@ -62,13 +64,23 @@ class StageScene : public Scene
             _win.draw(_b1);
             _win.draw(_b2);
             _win.draw(_b3);
+            std::cout << "Entites " << _entities->size() << std::endl;
             for (auto x : *_entities)
             {
-                if (x->manager.get<std::string>("type") == "player")
-                    _ship.setPosition(sf::Vector2f(x->manager.get<std::pair<float, float> >("position").first,
+                if (x->manager.get<std::string>("type") == "shoot")
+                {
+                    std::cout << "SHoot" << std::endl;
+                    _shoot.setPosition(sf::Vector2f(x->manager.get<std::pair<float, float> >("position").first,
                             x->manager.get<std::pair<float, float> >("position").second));
+                    _win.draw(_guiShoots);
+                }
+                else if (x->manager.get<std::string>("type") == "player")
+                {
+                    _ship.setPosition(sf::Vector2f(x->manager.get<std::pair<float, float> >("position").first,
+                                x->manager.get<std::pair<float, float> >("position").second));
+                    _win.draw(_guiPlayers);
+                }
             }
-            _win.draw(_gui);
             _win.draw(_b4);
         }
 
@@ -77,7 +89,8 @@ class StageScene : public Scene
         Entity          _b2;
         Entity          _b3;
         Entity          _b4;
-        Entity          _gui;
+        Entity          _guiPlayers;
+        Entity          _guiShoots;
 
         View            _view;
         std::vector<ScrollingSprite*>   _s1;
@@ -86,6 +99,7 @@ class StageScene : public Scene
         std::vector<ScrollingSprite*>   _s4;
         int                             _stageNb;
         AnimatedSprite                  _ship;
+        AnimatedSprite                  _shoot;
 
         EventSum         _direction;
 };
