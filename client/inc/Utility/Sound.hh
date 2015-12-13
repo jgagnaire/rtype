@@ -7,13 +7,27 @@
 class Sound : public ISound
 {
 public:
-  Sound();
-  virtual ~Sound();
+  Sound() {}
+  virtual ~Sound() {}
 
-virtual void play();
-virtual void stop();
-virtual void resetBuffer();
-virtual void setBuffer(const ISoundBuffer &buffer);
+  inline virtual void play()
+  {
+    this->_sound.play(); 
+  }
+  inline virtual void stop()
+  {
+    this->_sound.stop();
+  }
+  inline virtual void resetBuffer()
+  {
+    this->_sound.resetBuffer();
+  }
+  virtual void setBuffer(const ISoundBuffer &buffer)
+  {
+    this->_buffer.loadFromSamples(buffer.getSamples(), buffer.getSampleCount(),
+				  2, buffer.getSampleRate());
+    this->_sound.setBuffer(this->_buffer);
+  }
 
 private:
   sf::Sound	_sound;

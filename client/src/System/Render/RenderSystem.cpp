@@ -20,7 +20,8 @@ RenderSystem::RenderSystem(std::list<Entity*> *e):
     _stage = new StageScene(*_window, _entities);
     _login = new LoginScene(*_window, _entities);
     _gameRoom = new GameRoomScene(*_window, _entities);
-    _current = _stage;
+    _ready = new ReadyScene(*_window, _entities);
+    _current = _login;
 }
 
 RenderSystem::~RenderSystem()

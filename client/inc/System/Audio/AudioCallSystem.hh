@@ -2,26 +2,15 @@
 # define AUDIOCALLSYSTEM_HH_
 
 #include <vector>
-#include <thread>
 #include <mutex>
-#include <SFML/Audio.hpp>
 #include "Recorder.hh"
 #include "System/ASystem.hh"
 #include "Network/UdpSocket.hh"
 #include "Entity/Entity.hh"
 #include "Utility/ThreadFactory.hh"
 #include "Utility/IThread.hh"
-#include "Utility/IMutex.hh"
 #include "Utility/Sound.hh"
-#include "Utility/ISoundBuffer.hh"
-#include "Utility/SoundBuffer.hh"
 #include "Utility/RTime.hh"
-
-#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-# include "Utility/WinMutex.hh"
-#else
-# include "Utility/UnixMutex.hh"
-#endif
 
 class Recorder;
 
