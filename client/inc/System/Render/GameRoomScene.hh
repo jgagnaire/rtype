@@ -45,6 +45,11 @@ class GameRoomScene : public Scene
         {
             std::string text;
 
+            if (e == Key_Change)
+            {
+                _update = true;
+                return ;
+            }
             if (e & Key_Change && e != Key_Change)
             {
                 EventSum tmp = (e << 1) >> 1;
@@ -107,6 +112,7 @@ class GameRoomScene : public Scene
         {
             std::string tmp, name, nb;
             TcpPacket   *packet;
+                        std::size_t i = 0;
 
             if ((packet = dynamic_cast<TcpPacket*>(p)))
             {
@@ -122,9 +128,10 @@ class GameRoomScene : public Scene
                         nb = tmp.substr(tmp.find(":") + 1, 1);
                         _rooms[name] = new Text(name + "    " + nb + "/4");
                         _rooms[name]->setCenter();
-                        _rooms[name]->setY(_rooms.size() * 75 + 50);
                         _changingText.manager.add<ADrawable*>(name, _rooms[name]);
                         _currentR = 0;
+                        for (auto x : _rooms)
+                            x.second->setY(++i * 75 + 50);
                     default:
                         ;
                 }
