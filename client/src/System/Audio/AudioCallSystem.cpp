@@ -2,16 +2,9 @@
 #include "AudioCallSystem.hh"
 #include "Utility/Clock.hh"
 
-#include <stdlib.h>
-
 AudioCallSystem::AudioCallSystem():
 	recorder(new Recorder(*this)), _thread(ThreadFactory::create<void, AudioCallSystem *>()), _exit(false)
 {
-// #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-//   _mutex = new WinMutex;
-// #else
-//   _mutex = new UnixMutex;
-// #endif
   recorder->start();
   _thread->loadFunc(&AudioCallSystem::startThread);
   _thread->create(this);
@@ -106,27 +99,16 @@ void AudioCallSystem::addPacket(SoundBuffer *buffer)
 {
   IPacket *tmp = new UdpPacket();
   void *data;
-  const short int *tmpData;
+  short int *tmpData;
 
-  tmp->setSize(static_cast<uint16_t>(buffer->getSampleCount() * sizeof(short int)
-				     + 4 * sizeof(char)));
-  data = static_cast<short int *>(malloc(static_cast<std::size_t>(buffer->getSampleCount()) * sizeof(short int)
-					 + 4 * sizeof(char)));
+  tmp->setSize(static_cast<uint16_t>(buffer->getSampleCount() * sizeof(short int)));
+  data = new short int [buffer->getSampleCount()];
   tmp->setQuery(CODE_SEND_PACKET);
-  tmpData = buffer->getSamples();
-  char *tmpPseudo = new char[4];
-  tmpPseudo[0] = 'l';
-  tmpPseudo[1] = 'o';
-  tmpPseudo[2] = 'l';
-  tmpPseudo[3] = ':';
-  std::copy(tmpPseudo, tmpPseudo + 4, static_cast<char *>(data));
-  delete [] tmpPseudo;
-  std::copy(tmpData, tmpData + buffer->getSampleCount(),
-	    reinterpret_cast<short int *>(&((static_cast<char *>(data))[4])));
+  tmpData = const_cast<short int *>(buffer->getSamples());
+  std::copy(tmpData, tmpData + buffer->getSampleCount(), static_cast<short int *>(data));
   tmp->setData(data);
   _packets.push_back(tmp);
   delete buffer;
-  in(out());
 }
 
 std::string AudioCallSystem::getPseudo(const void *data, uint16_t packetSize) const
@@ -162,7 +144,7 @@ void AudioCallSystem::in(IPacket *packet)
   const void *tmpData;
 
   if (!packet || !dynamic_cast<UdpPacket *>(packet)
-      || packet->getQuery() == CODE_RECEIVE_PACKET)
+      || packet->getQuery() != CODE_RECEIVE_PACKET)
     return ;
   tmpData = packet->getData();
   pseudo = getPseudo(tmpData, packet->getSize());
