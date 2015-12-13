@@ -20,9 +20,14 @@ class LoginScene : public Scene
 {
     public:
         LoginScene(IWindow &win, std::list<Entity*> *e):
-            Scene(win, e), _titleLogin("Login :"), _titlePassword("Password :"),
+            Scene(win, e), _titleLogin("Login :", 0xff0000ff),
+            _titlePassword("Password :", 0xff0000ff),
             _finish(LoginState::NotConnected), _event(noEvent)
     {
+        _printedLogin.setColor(0xff0000ff);
+        _printedPassword.setColor(0xff0000ff);
+        _bg.load("./client/res/cockbitte_1920.png");
+        _b1.manager.add<ADrawable*>("background", &_bg);
         _titleLogin.setCenter();
         _printedLogin.setCenter();
         _titlePassword.setCenter();
@@ -136,9 +141,10 @@ class LoginScene : public Scene
             return &_packet;
         }
 
-        virtual void    update(int)
+        virtual void    update(int duration)
         {
             _win.setMenuMode(true);
+            _bg.update(duration);
             _win.draw(_b1);
             _win.draw(_texts);
         }
@@ -161,6 +167,7 @@ class LoginScene : public Scene
         std::string             _buf;
         Codes                   _lastCode;
         EventSum                _event;
+        AnimatedSprite          _bg;
 };
 
 #endif /* end of include guard: LOGINSCENE_HH_QX5LVF1U */

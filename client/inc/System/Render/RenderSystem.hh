@@ -6,6 +6,7 @@
 # include "System/Render/StageScene.hh"
 # include "System/Render/LoginScene.hh"
 # include "System/Render/GameRoomScene.hh"
+# include "System/Render/ReadyScene.hh"
 # include "Window.hh"
 
 class RenderSystem : public ASystem
@@ -31,6 +32,7 @@ class RenderSystem : public ASystem
         StageScene                                          *_stage;
         LoginScene                                          *_login;
         GameRoomScene                                       *_gameRoom;
+        ReadyScene                                          *_ready;
         IWindow                                             *_window;
         EventSum                                             _event;
 };

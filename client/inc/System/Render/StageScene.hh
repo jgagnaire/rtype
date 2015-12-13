@@ -56,7 +56,6 @@ class StageScene : public Scene
         virtual void    update(int duration)
         {
             _win.setMenuMode(false);
-            _ship.update(duration);
             _s1[_stageNb - 1]->update(duration);
             _s2[_stageNb - 1]->update(duration);
             _s3[_stageNb - 1]->update(duration);
@@ -69,15 +68,18 @@ class StageScene : public Scene
             {
                 if (x->manager.get<std::string>("type") == "shoot")
                 {
-                    std::cout << "SHoot" << std::endl;
+					std::cout << "Shoot : " << x->manager.get<std::pair<float, float> >("position").first << " - " << x->manager.get<std::pair<float, float> >("position").second << std::endl;
+					
                     _shoot.setPosition(sf::Vector2f(x->manager.get<std::pair<float, float> >("position").first,
-                            x->manager.get<std::pair<float, float> >("position").second));
+                                x->manager.get<std::pair<float, float> >("position").second));
+                    _shoot.update(duration);
                     _win.draw(_guiShoots);
                 }
                 else if (x->manager.get<std::string>("type") == "player")
                 {
                     _ship.setPosition(sf::Vector2f(x->manager.get<std::pair<float, float> >("position").first,
                                 x->manager.get<std::pair<float, float> >("position").second));
+                    _ship.update(duration);
                     _win.draw(_guiPlayers);
                 }
             }

@@ -9,12 +9,18 @@
 class RTime : public IRTime
 {
 public:
-  RTime();
-  virtual ~RTime();
+  RTime() {}
+  virtual ~RTime() {}
 
-  virtual std::size_t getTimeMicro() const;
-  virtual IRTime	&operator=(const IRTime &rhs);
-  virtual IRTime	&operator=(const ISoundBuffer &rhs);
+  inline virtual std::size_t getTimeMicro() const
+  {
+    return static_cast<std::size_t>(_time.asMicroseconds());
+  }
+  virtual IRTime	&operator=(const ISoundBuffer &rhs)
+  {
+    this->_time = sf::microseconds(rhs.getDuration());
+    return *this;
+  }
 
 private:
   sf::Time       _time;
