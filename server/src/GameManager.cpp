@@ -5,6 +5,7 @@ template <typename SCK>
 GameManager<SCK> *GameManager<SCK>::game_manager = 0;
 
 template <typename SCK>
+inline
 GameManager<SCK>     &GameManager<SCK>::instance() {
     if (GameManager::game_manager == 0)
         GameManager::game_manager = new GameManager();
@@ -86,12 +87,14 @@ void        GameManager<SCK>::launchGame(const std::string &game_name) {
 }
 
 template <typename SCK>
+inline
 void        GameManager<SCK>::updatePositions(Game<SCK> *game, std::size_t time) {
     for (auto it = game->players.begin(); it != game->players.end(); ++it)
         (*it)->changePosition(time);
 }
 
 template <typename SCK>
+inline
 bool        GameManager<SCK>::update(Game<SCK> *game, std::size_t time) {
     updatePositions(game, time);
     return (true);

@@ -9,11 +9,13 @@ ServerError::~ServerError() throw()
 {
 }
 
+inline
 const char *ServerError::what() const throw()
 {
   return this->s.str().c_str();
 }
 
+inline
 std::stringstream const &ServerError::getS() const
 {
   return this->s;

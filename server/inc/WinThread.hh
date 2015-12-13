@@ -48,17 +48,20 @@ public:
     _state = Enum::DEAD;
   }
 
+  inline
   virtual void	loadFunc(RET_VAL(*p)(ARG))
   {
     _func = reinterpret_cast<typename IThread<RET_VAL, ARG>::thread_func>(p);
   }
 
+  inline
   virtual Enum::ThreadState	state() const
   {
     return (_state);
   }
 
-    void terminateThread() {
-      _state = Enum::DEAD;
-    }
+  inline
+  void terminateThread() {
+    _state = Enum::DEAD;
+  }
 };

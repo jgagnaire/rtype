@@ -8,11 +8,13 @@ JSONParser::JSONParser() {}
 
 JSONParser::~JSONParser() {}
 
+inline
 JSONParser::JSONParser(const JSONParser &jp) {
   if (this != &jp)
     this->_main_entity = jp._main_entity;
 }
 
+inline
 JSONParser	&JSONParser::operator=(const JSONParser &jp) {
   if (this != &jp)
     this->_main_entity = jp._main_entity;
