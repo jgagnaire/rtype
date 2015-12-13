@@ -79,8 +79,8 @@ public:
 protected:
     std::list<UserManager<T> *>	    &cl_list;
     IServerSocket<T>		    *udp_socket;
+    std::string				port;
 
 private:
     Packet<UDPDataHeader>		packet;
-    std::string				port;
 };

@@ -2,7 +2,7 @@
 # include "AController.hh"
 
 template<typename T>
-class GameplayController : AController<T> {
+class GameplayController : public AController<T> {
 public:
     GameplayController(std::list<UserManager<T> *> *);
 
