@@ -10,7 +10,7 @@ bool	WinDLLoader::openLib(std::string const &path, const std::string &key) {
   ADLLoader<HMODULE>::DLInfo	info;
   HMODULE			handle;
 
-  if (key.empty() || !(handle = ::LoadLibrary(path.c_str(), RTLD_NOW)))
+  if (key.empty() || !(handle = ::LoadLibrary(path.c_str())))
     return (false);
   info.handle = handle;
   info.path = path;
@@ -24,7 +24,7 @@ bool	WinDLLoader::loadLib(const std::string &key, const std::string &sym) {
 
   if (it == plugins.end())
     return (false);
-  if (!(tmp_sym = getProcAddress(it->second.handle, sym.c_str())))
+  if (!(tmp_sym = GetProcAddress(it->second.handle, sym.c_str())))
     return (false);
   it->second.fptr[sym] = reinterpret_cast<entry_point_fptr>(tmp_sym);
   return (true);
@@ -35,7 +35,7 @@ void	WinDLLoader::closeLib(const std::string &key) {
 
   if (it == plugins.end())
     return ;
-  ::dlclose(it->second.handle);
+  ::FreeLibrary(it->second.handle);
   plugins.erase(it);
 }
 
