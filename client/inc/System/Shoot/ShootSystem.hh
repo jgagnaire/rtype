@@ -2,7 +2,8 @@
 # define SHOOTSYSTEM_HH_
 
 #include <functional>
-#include <System/ASystem.hh>
+#include <cmath>
+#include "System/ASystem.hh"
 
 namespace Pattern {
 	
@@ -14,6 +15,17 @@ namespace Pattern {
 		float vel = duration + e.manager.get<float>("velocity");
 		if (s == Side::LEFT)
 			vel *= -1;
+		pos.first += vel;
+		e.manager.set("position", pos);
+	}
+
+	void	sinusoid(Entity &e, Side s, int duration)
+	{
+		std::pair<float, float> pos = e.manager.get<std::pair<float, float> >("position");
+		float vel = duration + e.manager.get<float>("velocity");
+		if (s == Side::LEFT)
+			vel *= -1;
+		pos.second += 250 * sin(duration * 0.5 * M_PI);
 		pos.first += vel;
 		e.manager.set("position", pos);
 	}
