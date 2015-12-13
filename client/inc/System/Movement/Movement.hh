@@ -65,7 +65,7 @@ public:
 	
 	virtual EventSum                getEvent()
 		{
-			return (lastEvent);
+			return (noEvent);
 		}
 	
 protected:
