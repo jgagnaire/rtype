@@ -22,7 +22,7 @@ void Sound::resetBuffer()
   this->_sound.resetBuffer();
 }
 
-void Sound::setBuffer(const SoundBuffer &buffer)
+void Sound::setBuffer(const ISoundBuffer &buffer)
 {
   this->_buffer.loadFromSamples(buffer.getSamples(), buffer.getSampleCount(),
 			  2, buffer.getSampleRate());

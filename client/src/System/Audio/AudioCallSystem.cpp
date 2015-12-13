@@ -35,8 +35,8 @@ void	AudioCallSystem::startThread(AudioCallSystem *obj)
 void	AudioCallSystem::startPlay()
 {
   std::vector <Entity *>::iterator it;
-  SoundBuffer *tmp;
-  Sound *sound;
+  ISoundBuffer *tmp;
+  ISound *sound;
 
   while (!_exit)
     {
@@ -45,38 +45,38 @@ void	AudioCallSystem::startPlay()
       if (!this->_users.empty())
 	for (it = this->_users.begin(); it != this->_users.end(); ++it)
 	  {
-	    if ((*it)->manager.get<Clock *>("clock")->getElapsedTimeMicro() >=
-		(*it)->manager.get<RTime *>("time")->getTimeMicro())
+	    if ((*it)->manager.get<IClock *>("clock")->getElapsedTimeMicro() >=
+		(*it)->manager.get<IRTime *>("time")->getTimeMicro())
 	      {
 		try {
-		  delete (*it)->manager.get<SoundBuffer *>("toDelete");
-		  (*it)->manager.remove<SoundBuffer *>("toDelete");
+		  delete (*it)->manager.get<ISoundBuffer *>("toDelete");
+		  (*it)->manager.remove<ISoundBuffer *>("toDelete");
 		}
 		catch (std::exception const &) {}
-		if (!((*it)->manager.getAll<SoundBuffer *>().empty()))
+		if (!((*it)->manager.getAll<ISoundBuffer *>().empty()))
 		  {
-		    tmp = (*it)->manager.getAll<SoundBuffer *>().front();
+		    tmp = (*it)->manager.getAll<ISoundBuffer *>().front();
 		    break ;
 		  }
 	      }
 	  }
       if (tmp && *it)
 	{
-	  sound = (*it)->manager.get<Sound *>("sound");
+	  sound = (*it)->manager.get<ISound *>("sound");
 	  sound->stop();
 	  sound->resetBuffer();
 	  sound->setBuffer(*tmp);
 	  sound->play();
-	  (*it)->manager.get<Clock *>("clock")->restart();
-	  *((*it)->manager.get<RTime *>("time")) = *tmp;
-	  (*it)->manager.remove<SoundBuffer *>();
-	  (*it)->manager.add<SoundBuffer *>("toDelete", tmp);
+	  (*it)->manager.get<IClock *>("clock")->restart();
+	  *((*it)->manager.get<IRTime *>("time")) = *tmp;
+	  (*it)->manager.remove<ISoundBuffer *>();
+	  (*it)->manager.add<ISoundBuffer *>("toDelete", tmp);
 	}
       _mutex->unlock();
     }
 }
 
-void AudioCallSystem::addBuffer(SoundBuffer *buffer, const std::string &name)
+void AudioCallSystem::addBuffer(ISoundBuffer *buffer, const std::string &name)
 {
   static unsigned int	id = 0;
   Entity	*tmp;
@@ -88,15 +88,15 @@ void AudioCallSystem::addBuffer(SoundBuffer *buffer, const std::string &name)
 	break ;
     }
   if (it != this->_users.end())
-    (*it)->manager.add<SoundBuffer *>(std::to_string(id), buffer);
+    (*it)->manager.add<ISoundBuffer *>(std::to_string(id), buffer);
   else
     {
       tmp = new Entity;
       tmp->manager.add<std::string>("name", name);
-      tmp->manager.add<Clock *>("clock", new Clock);
-      tmp->manager.add<RTime *>("time", new RTime);
-      tmp->manager.add<Sound *>("sound", new Sound);
-      tmp->manager.add<SoundBuffer *>(std::to_string(id), buffer);
+      tmp->manager.add<IClock *>("clock", new Clock);
+      tmp->manager.add<IRTime *>("time", new RTime);
+      tmp->manager.add<ISound *>("sound", new Sound);
+      tmp->manager.add<ISoundBuffer *>(std::to_string(id), buffer);
       this->_users.push_back(tmp);
     }
   ++id;
@@ -120,6 +120,7 @@ void AudioCallSystem::addPacket(SoundBuffer *buffer)
   tmpPseudo[2] = 'l';
   tmpPseudo[3] = ':';
   std::copy(tmpPseudo, tmpPseudo + 4, static_cast<char *>(data));
+  delete [] tmpPseudo;
   std::copy(tmpData, tmpData + buffer->getSampleCount(),
 	    reinterpret_cast<short int *>(&((static_cast<char *>(data))[4])));
   tmp->setData(data);
@@ -146,7 +147,7 @@ std::string AudioCallSystem::getPseudo(const void *data, uint16_t packetSize) co
 		tmpPseudo);
       tmpPseudo[size] = 0;
       pseudo = tmpPseudo;
-      delete tmpPseudo;
+      delete[] tmpPseudo;
       ++size;
     }
   else
@@ -156,7 +157,7 @@ std::string AudioCallSystem::getPseudo(const void *data, uint16_t packetSize) co
 
 void AudioCallSystem::in(IPacket *packet)
 {
-  SoundBuffer *buffer = new SoundBuffer();
+  ISoundBuffer *buffer = new SoundBuffer();
   std::string pseudo;
   const void *tmpData;
 
@@ -167,8 +168,8 @@ void AudioCallSystem::in(IPacket *packet)
   pseudo = getPseudo(tmpData, packet->getSize());
   tmpData = &((static_cast<char *>(const_cast<void *>(tmpData)))[pseudo.length() + 1]);
   buffer->loadFromSamples(static_cast<short int *>(const_cast<void *>(tmpData)),
-			  packet->getSize() / sizeof(short int), 2,
-			  packet->getSize() / sizeof(short int));
+			  packet->getSize() / sizeof(short int) - (pseudo.length() + 1) * sizeof(char), 2,
+			  packet->getSize() / sizeof(short int) - (pseudo.length() + 1) * sizeof(char));
   _mutex->lock();
   this->addBuffer(buffer, pseudo);
   _mutex->unlock();

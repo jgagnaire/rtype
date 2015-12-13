@@ -11,7 +11,7 @@ public:
   virtual void play() = 0;
   virtual void stop() = 0;
   virtual void resetBuffer() = 0;
-  virtual void setBuffer(const SoundBuffer &buffer) = 0;
+  virtual void setBuffer(const ISoundBuffer &buffer) = 0;
 };
 
 #endif //!ISOUND_HH_
