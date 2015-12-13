@@ -122,7 +122,7 @@ class LoginScene : public Scene
                 }
                 if (tmp != 127)
                     *_currentStr += static_cast<char>(tmp);
-                _currentText->setText(*_currentStr);
+                _currentText->setText((_currentStr == &_login ? *_currentStr : std::string(_currentStr->size(), '*')));
                 _currentText->setCenter();
                 _currentText->setY((_currentStr == &_login ? 400 : 800));
             }
