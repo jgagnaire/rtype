@@ -14,7 +14,7 @@ public:
 
   virtual std::size_t getTimeMicro() const;
   virtual IRTime	&operator=(const IRTime &rhs);
-  virtual IRTime	&operator=(const SoundBuffer &rhs);
+  virtual IRTime	&operator=(const ISoundBuffer &rhs);
 
 private:
   sf::Time       _time;

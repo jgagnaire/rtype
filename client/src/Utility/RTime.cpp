@@ -20,7 +20,7 @@ IRTime	&RTime::operator=(const IRTime &rhs)
   return *this;
 }
 
-IRTime	&RTime::operator=(const SoundBuffer &rhs)
+IRTime	&RTime::operator=(const ISoundBuffer &rhs)
 {
   this->_time = sf::microseconds(rhs.getDuration());
   return *this;

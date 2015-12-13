@@ -13,11 +13,11 @@ public:
 virtual void play();
 virtual void stop();
 virtual void resetBuffer();
-virtual void setBuffer(const SoundBuffer &buffer);
+virtual void setBuffer(const ISoundBuffer &buffer);
 
 private:
   sf::Sound	_sound;
-sf::SoundBuffer _buffer;
+  sf::SoundBuffer _buffer;
 };
 
 #endif //!SOUND_HH_
