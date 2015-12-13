@@ -26,7 +26,7 @@ namespace Pattern {
 		if (s == Side::LEFT)
 			vel *= -1;
 		pos.first += vel;
-		pos.second += (40 * sin(pos.first * 0.5 * M_PI / 180));
+		pos.second += (35 * sin(pos.first * 0.5 * M_PI / 180));
 		e.manager.set("position", pos);
 	}
 }
@@ -103,6 +103,7 @@ public:
 		{
 			return (noEvent);
 		}
+	
 protected:
 	std::list<Entity*>	*_eList;
 	int					fireRate;
