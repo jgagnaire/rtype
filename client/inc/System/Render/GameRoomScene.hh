@@ -62,7 +62,7 @@ class GameRoomScene : public Scene
                 {
                     _packet.setQuery(static_cast<uint16_t>(Codes::CreateRoom));
                     _packet.setData(_buffer.c_str());
-                    _packet.setSize(_buffer.size());
+                    _packet.setSize(static_cast<uint16_t>(_buffer.size()));
                     _new = true;
                 }
             }

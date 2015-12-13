@@ -12,6 +12,7 @@ class RenderSystem : public ASystem
 {
     public:
         RenderSystem(std::list<Entity*> *);
+		RenderSystem() {}
         virtual ~RenderSystem();
 
         virtual void                update(int duration);
