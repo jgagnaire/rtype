@@ -33,7 +33,7 @@ class MovementSystem : public ASystem
                     break ;
             }
 
-            float move  = duration;
+            float move = static_cast<float>(duration);
             for(auto x : *_eList)
             {
                 if (x->manager.get<std::string>("name") == "player1")
@@ -72,7 +72,7 @@ class MovementSystem : public ASystem
                 std::string     tmp = std::to_string(lastEvent);
                 _packet.setQuery(static_cast<uint16_t>(UdpCodes::KeyPressed));
                 _packet.setData(tmp.c_str());
-                _packet.setSize(tmp.size());
+                _packet.setSize(static_cast<uint16_t>(tmp.size()));
                 lastEvent = 0;
                 return (&_packet);
             }

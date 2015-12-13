@@ -12,11 +12,11 @@ public:
 
   inline virtual std::size_t getDuration() const
   {
-    return this->_buffer.getDuration().asMicroseconds();
+    return static_cast<std::size_t>(this->_buffer.getDuration().asMicroseconds());
   }
   inline virtual std::size_t getSampleCount() const
   {
-    return this->_buffer.getSampleCount();
+    return static_cast<std::size_t>(this->_buffer.getSampleCount());
   }
   inline virtual unsigned int getSampleRate() const
   {
