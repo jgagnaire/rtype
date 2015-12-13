@@ -12,6 +12,9 @@
 #include "Utility/ThreadFactory.hh"
 #include "Utility/IThread.hh"
 #include "Utility/IMutex.hh"
+#include "Utility/Sound.hh"
+#include "Utility/SoundBuffer.hh"
+#include "Utility/RTime.hh"
 
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
 # include "Utility/WinMutex.hh"
@@ -27,7 +30,7 @@ public:
   AudioCallSystem();
   virtual ~AudioCallSystem();
 
-  void addPacket(sf::SoundBuffer *buffer);
+  void addPacket(SoundBuffer *buffer);
 
   virtual void update(int) {}
   inline virtual bool handle(EventSum) { return true; }
@@ -42,7 +45,7 @@ private:
 
   void startPlay();
   static void startThread(AudioCallSystem *obj);
-  void addBuffer(sf::SoundBuffer *buffer, const std::string &name);
+  void addBuffer(SoundBuffer *buffer, const std::string &name);
   std::string getPseudo(const void *data, uint16_t packetSize) const;
 
   Recorder			*recorder;
@@ -50,7 +53,6 @@ private:
   std::list <IPacket *>		_packets;
   IThread <void, AudioCallSystem *> *_thread;
   IMutex			*_mutex;
-  sf::Clock			_clock;
   bool				_exit;
 };
 

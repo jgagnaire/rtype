@@ -12,7 +12,7 @@ class GameRoomScene : public Scene
 {
     public:
         GameRoomScene(IWindow &win, std::list<Entity*> *e):
-            Scene(win, e), _buttons(3), _lastTime(0), _update(true),
+            Scene(win, e), _buttons(3), _update(true),
             _new(false), _current(0), _currentR(0)
     {
         _buttons[0].setText("Random");
@@ -25,7 +25,6 @@ class GameRoomScene : public Scene
 
         _b1.manager.add<View*>("view", &_view);
         _texts.manager.add<ADrawable*>("buffer", &_bufferText);
-        _texts.manager.add<ADrawable*>("list", &_list);
         for (std::size_t i = 0; i < _buttons.size(); ++i)
             _texts.manager.add<ADrawable*>("button" + std::to_string(i),
                     &_buttons[i]);
@@ -34,12 +33,9 @@ class GameRoomScene : public Scene
         virtual ~GameRoomScene()
         {}
 
-        virtual void    update(int duration)
+        virtual void    update(int)
         {
             _win.setMenuMode(true);
-            _lastTime += duration;
-            if (_lastTime > 5000)
-                _update = true;
             _win.draw(_b1);
             _win.draw(_texts);
         }
@@ -70,17 +66,27 @@ class GameRoomScene : public Scene
                 --_current;
             else if (e & Key_Right && _current < _buttons.size() - 1)
                 ++_current;
+            if (e & Key_Up && _currentR > 0)
+                --_currentR;
+            else if (e & Key_Down && _currentR < _buttons.size() - 1)
+                ++_currentR;
             for (std::size_t i = 0; i <  _buttons.size(); ++i)
                 _buttons[i].setColor(0xffffffff);
             _buttons[_current].setColor(0xff0000ff);
+            std::size_t i = 0;
             for (auto x : _rooms)
-                text += x.first + "\t" + x.second + "/4\n";
-            _list.setText(text);
+            {
+                if (i == _currentR)
+                    x.second.setColor(0xff0000ff);
+                else
+                    x.second.setColor(0xffffffff);
+                ++i;
+            }
         }
 
         virtual void    in(IPacket *p)
         {
-            std::string tmp, name;
+            std::string tmp, name, nb;
             TcpPacket   *packet;
 
             if ((packet = dynamic_cast<TcpPacket*>(p)))
@@ -94,7 +100,9 @@ class GameRoomScene : public Scene
                     case Codes::ExistingRoom:
                         tmp = static_cast<const char*>(packet->getData());
                         name = tmp.substr(0, tmp.find(":"));
-                        _rooms[name] = tmp.substr(tmp.find(":") + 1, 1);
+                        nb = tmp.substr(tmp.find(":") + 1, 1);
+                        _rooms[name] = Text(name + "    " + nb + "/4");
+                        _changingText.manager.add<ADrawable*>("name", &_rooms[name]);
                     default:
                         ;
                 }
@@ -114,7 +122,8 @@ class GameRoomScene : public Scene
                 _packet.setData(0);
                 _packet.setSize(0);
                 _update = false;
-                _lastTime = 0;
+                _rooms.clear();
+                _changingText.manager.removeAll();
                 return (&_packet);
             }
             return (0);
@@ -122,19 +131,18 @@ class GameRoomScene : public Scene
 
     private:
         std::vector<Text>                                   _buttons;
-        std::unordered_map<std::string, std::string>        _rooms;
-        View                                        _view;
-        Entity                                      _b1;
-        Entity                                      _texts;
-        TcpPacket                                   _packet;
-        int                                         _lastTime;
-        bool                                        _update;
-        bool                                        _new;
-        std::string                                 _buffer;
-        Text                                        _bufferText;
-        Text                                        _list;
-        std::size_t                                 _current;
-        std::size_t                                 _currentR;
+        std::unordered_map<std::string, Text>               _rooms;
+        View                                                _view;
+        Entity                                              _b1;
+        Entity                                              _texts;
+        Entity                                              _changingText;
+        TcpPacket                                           _packet;
+        bool                                                _update;
+        bool                                                _new;
+        std::string                                         _buffer;
+        Text                                                _bufferText;
+        std::size_t                                         _current;
+        std::size_t                                         _currentR;
 };
 
 #endif /* end of include guard: GAMEROOMSCENE_HH_ZNKJPAAS */
