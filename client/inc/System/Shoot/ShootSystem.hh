@@ -19,6 +19,16 @@ namespace Pattern {
 	enum MovePattern {LINE = 0, SINUS = 1};
 	
 	enum class Side {LEFT, RIGHT};
+
+	Pattern::MovePattern incremente(Pattern::MovePattern m)
+	{
+		switch (m)
+		{
+		case Pattern::MovePattern::LINE: return (Pattern::MovePattern::SINUS);
+		case Pattern::MovePattern::SINUS: return (Pattern::MovePattern::LINE);
+		default : return (Pattern::MovePattern::LINE);
+		}
+	}
 	
 	void	line(Entity &e, Side s, int duration)
 	{
@@ -27,7 +37,7 @@ namespace Pattern {
 		if (s == Side::LEFT)
 			vel *= -1;
 		pos.first += vel;
-		pos.second += sin(pos.first * 0.5 * M_PI / 180);
+		pos.second += sin(pos.first * 0.5 * M_PI / 90);
 		e.manager.set("position", pos);
 	}
 
@@ -114,13 +124,14 @@ public:
 				e->manager.add<Pattern::Side>("direction", Pattern::Side::RIGHT);
 				_eList->push_back(e);
 			}
-			else if (ev & Key_Change && this->fireRate == 250 && isActiv)
+			else if (ev & Key_Change && isActiv)
 			{
 				for(auto x : *_eList)
 					if (x->manager.get<std::string>("name") == "player1")
 					{
 						x->manager.set<Pattern::MovePattern>
-							("pattern", static_cast<Pattern::MovePattern>(x->manager.get<Pattern::MovePattern>("pattern") + 1));
+							("pattern", Pattern::incremente
+							 (x->manager.get<Pattern::MovePattern>("pattern")));
 						break ;
 					}
 			}
