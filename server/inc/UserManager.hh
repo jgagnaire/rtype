@@ -44,24 +44,24 @@ public:
     void					clearData();
     void					readFromMe();
 
-    bool		        	isLogged() const;
-    bool					emptyData() const;
-    Enum::ClientQueries		numQuery() const;
+    bool		    isLogged() const;
+    bool		    emptyData() const;
+    Enum::ClientQueries	    numQuery() const;
     Enum::ClientQueries     numUDPQuery() const;
-    void					setPing(bool p = true);
-    bool					getPing() const;
-    std::string				getPacketData() const;
-    std::string				getUDPPacketData() const;
-    const std::string		&getName() const;
-    std::string				getIP() const;
-    bool					sendStructEmpty() const;
-    void					writeStruct(const ::TCPDataHeader &);
-    void					writeMsg(const std::string &);
-    bool 					writeOnMe();
-    IServerSocket<T>		*getServerSocket();
-    void					disconnect();
-    void		        	fillPacketStruct();
-    void					sendPing();
+    void		    setPing(bool p = true);
+    bool		    getPing() const;
+    std::string		    getPacketData() const;
+    std::string		    getUDPPacketData() const;
+    const std::string	    &getName() const;
+    std::string		    getIP() const;
+    bool		    sendStructEmpty() const;
+    void		    writeStruct(const ::TCPDataHeader &);
+    void		    writeMsg(const std::string &);
+    bool		    writeOnMe();
+    IServerSocket<T>        *getServerSocket();
+    void		    disconnect();
+    void		    fillPacketStruct();
+    void		    sendPing();
     const std::string       &getGameroomName() const;
     bool                    isReady() const;
     Enum::UserStatus        getStatus() const;
@@ -89,29 +89,29 @@ public:
     IMutex		    *destroy_client_mutex;
 
 private:
-    IServerSocket<T>						*sock;
-    Enum::UserStatus                        status;
-    std::string								name;
-    std::fstream							stream;
-    std::fstream                            image_stream;
-    static const std::string				database_dir;
-    bool									ping;
-    Packet<TCPDataHeader>					packet;
-    Packet<TCPDataHeader>::PacketStruct		tmp_packet;
-    Packet<UDPDataHeader>::PacketStruct		udp_packet;
-    std::string                             gameroom;
-    IMutex                                  *game_mutex;
+  IServerSocket<T>			  *sock;
+  Enum::UserStatus                        status;
+  std::string				  name;
+  std::fstream				  stream;
+  std::fstream                            image_stream;
+  static const std::string		  database_dir;
+  bool					  ping;
+  Packet<TCPDataHeader>			  packet;
+  Packet<TCPDataHeader>::PacketStruct	  tmp_packet;
+  Packet<UDPDataHeader>::PacketStruct	  udp_packet;
+  std::string                             gameroom;
+  IMutex                                  *game_mutex;
 
-    uint64_t                                udp_packet_id;
-    bool                                    is_ready;
-    std::size_t                             keypressed;
-    bool                                    has_force;
-    bool                                    fire;
-    Position                                position;
+  uint64_t                                udp_packet_id;
+  bool                                    is_ready;
+  std::size_t                             keypressed;
+  bool                                    has_force;
+  bool                                    fire;
+  Position                                position;
 
-    bool					hasBadFormat(std::string *) const;
-    bool					alreadyExist(std::string *);
-    std::string             generateRoomName();
+  bool					hasBadFormat(std::string *) const;
+  bool					alreadyExist(std::string *);
+  std::string				generateRoomName();
 
 };
 

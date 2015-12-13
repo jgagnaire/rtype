@@ -103,6 +103,7 @@ class GameRoomScene : public Scene
                         nb = tmp.substr(tmp.find(":") + 1, 1);
                         _rooms[name] = Text(name + "    " + nb + "/4");
                         _changingText.manager.add<ADrawable*>("name", &_rooms[name]);
+                        _currentR = 0;
                     default:
                         ;
                 }
@@ -124,6 +125,7 @@ class GameRoomScene : public Scene
                 _update = false;
                 _rooms.clear();
                 _changingText.manager.removeAll();
+                _currentR = 0;
                 return (&_packet);
             }
             return (0);

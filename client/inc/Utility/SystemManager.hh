@@ -49,7 +49,6 @@ public:
             {
                 std::size_t s = this->clk->getElapsedTimeMilli();
                 this->clk->restart();
-                ea->update();
                 IPacket *p = _networkManager.getPacket();
                 for (auto x : systemList)
                 {
@@ -59,7 +58,8 @@ public:
                     IPacket *m = x.second->out();
                     if (m != 0)
                         _networkManager.send(*m);
-                }
+                }				
+				ea->update();
             }
         }
 

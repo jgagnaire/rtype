@@ -74,6 +74,7 @@ bool            GameController<T>::joinNamedRoom(UserManager<T> *cl) const {
 }
 
 template <typename T>
+inline
 bool            GameController<T>::createGameRoom(UserManager<T> *cl) const {
     std::cout << cl->getName() << " veut creer "  << cl->getPacketData() << std::endl;
     cl->writeStruct({0, static_cast<uint16_t>(cl->createGameRoom())});
@@ -127,6 +128,7 @@ bool            GameController<T>::ready(UserManager<T> *cl) const {
 }
 
 template <typename T>
+inline
 bool            GameController<T>::notReady(UserManager<T> *cl) const {
     cl->writeStruct({0, static_cast<uint16_t>(cl->notReady())});
     return (true);
