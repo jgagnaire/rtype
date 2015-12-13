@@ -93,6 +93,7 @@ namespace Enum
         EALREADY_ON_ROOM = 504,
         ENOT_LOGGED = 505,
         ENOT_IN_ROOM = 506,
+	EALREADY_IN_GAME = 507,
         ENO_AVAILABLE_ROOM = 509,
         EROOM_NO_EXIST = 510,
 

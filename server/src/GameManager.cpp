@@ -81,7 +81,7 @@ inline
 void        GameManager<SCK>::launchGame(const std::string &game_name) {
     Game<SCK>    *game = getGameByName(game_name);
 
-    if (game) {
+    if (game && game->is_playing) {
         game->is_playing = true;
         _threadpool.add(&GameManager::createGame, game);
     }
@@ -114,7 +114,7 @@ void            GameManager<SCK>::createGame(Game<SCK> *game) {
     bool        is_not_finished = true;
     std::size_t time = GameManager<SCK>::getTime() - Enum::REFRESH_TIME;
 
-
+    std::cout << "Que la partie commence pour la room: " << game->name << std::endl;
     while (is_not_finished) {
         if (GameManager<SCK>::getTime() - time >= Enum::REFRESH_TIME) {
             time = GameManager<SCK>::getTime();

@@ -317,6 +317,8 @@ Enum::ServerAnswers      UserManager<T>::ready() {
         return (Enum::ENOT_LOGGED);
     if (gameroom.empty())
         return (Enum::ENOT_IN_ROOM);
+    if (status == Enum::GAME)
+      return (Enum::EALREADY_IN_GAME);
     is_ready = true;
     return (Enum::OK);
 }
@@ -343,6 +345,8 @@ template <typename T>
 Enum::ServerAnswers      UserManager<T>::notReady() {
     if (!stream.is_open())
         return (Enum::ENOT_LOGGED);
+    if (status == Enum::GAME)
+      return (Enum::EALREADY_IN_GAME);
     if (gameroom.empty())
         return (Enum::ENOT_IN_ROOM);
     is_ready = false;

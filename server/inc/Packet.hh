@@ -44,7 +44,7 @@ private:
     template <typename SCK>
     size_t		getMsg(const SCK s, std::string * const p) {
       size_t	ret;
-      char	    *str = NULL;
+      char	    *str = 0;
 
       if (_get_pack.header.packet_size == 0) {
         _get_pack.data = "";
@@ -59,7 +59,7 @@ private:
       return (ret);
     }
 public:
-      Packet() :  _wr_buff(NULL) { clearAll(); }
+      Packet() :  _wr_buff(0) { clearAll(); }
 
       virtual ~Packet() {};
 
@@ -133,6 +133,7 @@ public:
       template <typename SCK>
       bool                  sendPacket(const SCK s, const std::string &ip = "", const std::string &port = "") {
         bool	                ret;
+
 
         ret = s->absWriteOnClient(_wr_buff, sizeof(T) + _send_pack.front().data.size(),
                                   ip, port);
