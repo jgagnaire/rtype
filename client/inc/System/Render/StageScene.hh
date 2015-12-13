@@ -10,12 +10,12 @@ class StageScene : public Scene
 {
     public:
         StageScene(IWindow &win, std::list<Entity*> *e):
-            Scene(win, e), _stageNb(4), _direction(noEvent)
+            Scene(win, e), _stageNb(2), _direction(noEvent)
     {
         _ship.load("client/res/ship/player-ship-grey2_111.png", true);
         _shoot.load("client/res/bullet.png", true);
 
-        for (int i = 1; i <= 4; ++i)
+        for (int i = 1; i <= 2; ++i)
         {
             ScrollingSprite *s1 = new ScrollingSprite();
             ScrollingSprite *s2 = new ScrollingSprite();
