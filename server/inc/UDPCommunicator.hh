@@ -37,18 +37,20 @@ public:
         this->srvset = new WinUDPSocketSet(!port ? 1725 : std::atoi(port));
         this->network_monitor = new WinServerMonitor();
 #else
-        this->srvset = new UnixUDPSocketSet(!port ? 1726 : std::atoi(port));
+        this->srvset = new UnixUDPSocketSet(!port ? 1725 : std::atoi(port));
         this->network_monitor = new UnixServerMonitor();
 #endif
         this->network_monitor->addFd(dynamic_cast<IServerSocket<SCK>*>(this->srvset),
                                      Enum::READ);
         ::init_memory(&this->_data.buff[0], Enum::MAX_BUFFER_LENGTH);
+	
     }
 
     virtual ~UDPCommunicator() {}
 
     virtual void launch(std::list<USER*> *cl) {
         GameManager<SCK>::instance().setUdpSocket(dynamic_cast<IServerSocket<SCK>*>(this->srvset));
+	(*this->controllers.begin())->setPort(1726);
         this->cl_list = cl;
         for (auto it = this->controllers.begin(); it != this->controllers.end(); ++it)
             (*it)->addUDPSocket(dynamic_cast<IServerSocket<SCK>*>(this->srvset));

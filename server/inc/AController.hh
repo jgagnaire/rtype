@@ -68,15 +68,19 @@ public:
     void	writeMsg(const std::string &s) { packet.stockOnBuff(s); }
 
     inline
-    bool	writeOnMe(const std::string &ip, const std::string &port) {
+    bool	writeOnMe(const std::string &ip) {
         packet.serialize();
-        return (packet.sendPacket<IServerSocket<T> *>(this->udp_socket, ip, port));
+        return (packet.sendPacket<IServerSocket<T> *>(this->udp_socket, ip, this->port));
     }
 
+    inline
+    void	setPort(uint16_t p) { port = std::to_string(p); }
+
 protected:
-    std::list<UserManager<T> *>	&cl_list;
+    std::list<UserManager<T> *>	    &cl_list;
     IServerSocket<T>		    *udp_socket;
 
 private:
     Packet<UDPDataHeader>		packet;
+    std::string				port;
 };

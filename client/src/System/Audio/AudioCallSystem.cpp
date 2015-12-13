@@ -7,11 +7,11 @@
 AudioCallSystem::AudioCallSystem():
 	recorder(new Recorder(*this)), _thread(ThreadFactory::create<void, AudioCallSystem *>()), _exit(false)
 {
-#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-  _mutex = new WinMutex;
-#else
-  _mutex = new UnixMutex;
-#endif
+// #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+//   _mutex = new WinMutex;
+// #else
+//   _mutex = new UnixMutex;
+// #endif
   recorder->start();
   _thread->loadFunc(&AudioCallSystem::startThread);
   _thread->create(this);
@@ -41,7 +41,7 @@ void	AudioCallSystem::startPlay()
   while (!_exit)
     {
       tmp = 0;
-      _mutex->lock();
+      _mutex.lock();
       if (!this->_users.empty())
 	for (it = this->_users.begin(); it != this->_users.end(); ++it)
 	  {
@@ -72,7 +72,7 @@ void	AudioCallSystem::startPlay()
 	  (*it)->manager.remove<ISoundBuffer *>();
 	  (*it)->manager.add<ISoundBuffer *>("toDelete", tmp);
 	}
-      _mutex->unlock();
+      _mutex.unlock();
     }
 }
 
@@ -170,9 +170,9 @@ void AudioCallSystem::in(IPacket *packet)
   buffer->loadFromSamples(static_cast<short int *>(const_cast<void *>(tmpData)),
 			  (packet->getSize() - (pseudo.length() + 1) * sizeof(char))  / sizeof(short int), 2,
 			  (packet->getSize() - (pseudo.length() + 1) * sizeof(char))  / sizeof(short int));
-  _mutex->lock();
+  _mutex.lock();
   this->addBuffer(buffer, pseudo);
-  _mutex->unlock();
+  _mutex.unlock();
   return ;
 }
 

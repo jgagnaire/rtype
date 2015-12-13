@@ -1,3 +1,5 @@
+#include "GameManager.hh"
+#include "GameController.hh"
 #include "AccountController.hh"
 
 template<typename T>
@@ -53,8 +55,21 @@ bool    AccountController<T>::accountRegisterFct(UserManager<T> *cl) const {
 template<typename T>
 inline
 bool	AccountController<T>::disconnectionFct(UserManager<T> *cl) const {
+    GameManager<T>              &g = GameManager<T>::instance();
+    Game<T>                     *game;
+
+    game = g.getGameByName(cl->getGameroomName());
     if (!cl->isLogged())
         return (false);
+    if (!game)
+      return (true);
+    for (auto it = game->players.begin(); it != game->players.end(); ++it) {
+      if ((*it)->getName() != cl->getName()) {
+	(*it)->writeStruct({static_cast<uint16_t>(cl->getName().size()),
+	      Enum::PLAYER_LEFT});
+	(*it)->writeMsg(cl->getName());
+      }
+    }
     cl->disconnect();
     return (false);
 }

@@ -28,9 +28,8 @@ int	            GameController<T>::newData(UserManager<T> *cl) {
 }
 
 template <typename T>
-bool            GameController<T>::joinRandomRoom(UserManager<T> *cl) const { //TODO, refractor
+bool            GameController<T>::joinRoom(UserManager<T> *cl, Enum::ServerAnswers sa) const {
     GameManager<T>              &g = GameManager<T>::instance();
-    Enum::ServerAnswers         sa = cl->joinRandomRoom();
     Game<T>                     *game;
 
     cl->writeStruct({0, static_cast<uint16_t>(sa)});
@@ -39,9 +38,11 @@ bool            GameController<T>::joinRandomRoom(UserManager<T> *cl) const { //
         if (!game)
             return (true);
         for (auto it = game->players.begin(); it != game->players.end(); ++it) {
+	  if (cl->getName() != (*it)->getName()) {
             cl->writeStruct({static_cast<uint16_t>((*it)->getName().size()),
-                             Enum::PLAYER_JOIN});
+		  Enum::PLAYER_JOIN});
             cl->writeMsg((*it)->getName());
+	  }
             (*it)->writeStruct({static_cast<uint16_t>(cl->getName().size()),
                                 Enum::PLAYER_JOIN});
             (*it)->writeMsg(cl->getName());
@@ -51,26 +52,13 @@ bool            GameController<T>::joinRandomRoom(UserManager<T> *cl) const { //
 }
 
 template <typename T>
-bool            GameController<T>::joinNamedRoom(UserManager<T> *cl) const {
-    GameManager<T>              &g = GameManager<T>::instance();
-    Enum::ServerAnswers         sa = cl->joinNamedRoom();
-    Game<T>                     *game;
+bool            GameController<T>::joinRandomRoom(UserManager<T> *cl) const {
+  return (joinRoom(cl, cl->joinRandomRoom()));
+}
 
-    cl->writeStruct({0, static_cast<uint16_t>(sa)});
-    if (sa == Enum::OK) {
-        game = g.getGameByName(cl->getGameroomName());
-        if (!game)
-            return (true);
-        for (auto it = game->players.begin(); it != game->players.end(); ++it) {
-            cl->writeStruct({static_cast<uint16_t>((*it)->getName().size()),
-                             Enum::PLAYER_JOIN});
-            cl->writeMsg((*it)->getName());
-            (*it)->writeStruct({static_cast<uint16_t>(cl->getName().size()),
-                                Enum::PLAYER_JOIN});
-            (*it)->writeMsg(cl->getName());
-        }
-    }
-    return (true);
+template <typename T>
+bool            GameController<T>::joinNamedRoom(UserManager<T> *cl) const {
+  return (joinRoom(cl, cl->joinNamedRoom()));
 }
 
 template <typename T>
@@ -143,7 +131,6 @@ bool            GameController<T>::getRoomList(UserManager<T> *cl) const {
     std::string                 tmp;
 
     cl->writeStruct({0, static_cast<uint16_t>(sa)});
-    std::cout << "qwe " << sa << std::endl;
     std::cout << "la taille des games: " << game.size() << std::endl;
     if (sa == Enum::OK) {
         for (auto it = game.begin(); it != game.end(); ++it) {
@@ -152,7 +139,7 @@ bool            GameController<T>::getRoomList(UserManager<T> *cl) const {
             os.str("");
             os <<  (Enum::MAX_PLAYER - (*it)->players.size());
             tmp = (*it)->name + ":" + os.str();
-            std::cout << "LOL: " << tmp << std::endl;
+            std::cout << "Nom de room: " << tmp << std::endl;
             cl->writeStruct({static_cast<uint16_t>(tmp.size()),
                              Enum::GAME_NAME});
             cl->writeMsg(tmp);
