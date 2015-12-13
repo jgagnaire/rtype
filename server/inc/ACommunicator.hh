@@ -34,7 +34,7 @@ protected:
 public:
     virtual ~ACommunicator() {}
 
-    static void    _launch(std::vector<void *> arg) {
+    inline static void    _launch(std::vector<void *> arg) {
       NetworkManager<SCK, CONTROLLER>  *netmng = reinterpret_cast<NetworkManager<SCK, CONTROLLER> *>(arg[0]);
       ACommunicator   *ac = reinterpret_cast<ACommunicator *>(arg[1]);
       ac->launch(netmng->getClientList());

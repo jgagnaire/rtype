@@ -35,8 +35,8 @@ void	AudioCallSystem::startThread(AudioCallSystem *obj)
 void	AudioCallSystem::startPlay()
 {
   std::vector <Entity *>::iterator it;
-  sf::SoundBuffer *tmp;
-  sf::Sound *sound;
+  SoundBuffer *tmp;
+  Sound *sound;
 
   while (!_exit)
     {
@@ -46,37 +46,37 @@ void	AudioCallSystem::startPlay()
 	for (it = this->_users.begin(); it != this->_users.end(); ++it)
 	  {
 	    if ((*it)->manager.get<Clock *>("clock")->getElapsedTimeMicro() >=
-		(*it)->manager.get<sf::Time *>("time")->asMicroseconds())
+		(*it)->manager.get<RTime *>("time")->getTimeMicro())
 	      {
 		try {
-		  delete (*it)->manager.get<sf::SoundBuffer *>("toDelete");
-		  (*it)->manager.remove<sf::SoundBuffer *>("toDelete");
+		  delete (*it)->manager.get<SoundBuffer *>("toDelete");
+		  (*it)->manager.remove<SoundBuffer *>("toDelete");
 		}
 		catch (std::exception const &) {}
-		if (!((*it)->manager.getAll<sf::SoundBuffer *>().empty()))
+		if (!((*it)->manager.getAll<SoundBuffer *>().empty()))
 		  {
-		    tmp = (*it)->manager.getAll<sf::SoundBuffer *>().front();
+		    tmp = (*it)->manager.getAll<SoundBuffer *>().front();
 		    break ;
 		  }
 	      }
 	  }
       if (tmp && *it)
 	{
-	  sound = (*it)->manager.get<sf::Sound *>("sound");
+	  sound = (*it)->manager.get<Sound *>("sound");
 	  sound->stop();
 	  sound->resetBuffer();
 	  sound->setBuffer(*tmp);
 	  sound->play();
 	  (*it)->manager.get<Clock *>("clock")->restart();
-	  *((*it)->manager.get<sf::Time *>("time")) = tmp->getDuration();
-	  (*it)->manager.remove<sf::SoundBuffer *>();
-	  (*it)->manager.add<sf::SoundBuffer *>("toDelete", tmp);
+	  *((*it)->manager.get<RTime *>("time")) = *tmp;
+	  (*it)->manager.remove<SoundBuffer *>();
+	  (*it)->manager.add<SoundBuffer *>("toDelete", tmp);
 	}
       _mutex->unlock();
     }
 }
 
-void AudioCallSystem::addBuffer(sf::SoundBuffer *buffer, const std::string &name)
+void AudioCallSystem::addBuffer(SoundBuffer *buffer, const std::string &name)
 {
   static unsigned int	id = 0;
   Entity	*tmp;
@@ -88,21 +88,21 @@ void AudioCallSystem::addBuffer(sf::SoundBuffer *buffer, const std::string &name
 	break ;
     }
   if (it != this->_users.end())
-    (*it)->manager.add<sf::SoundBuffer *>(std::to_string(id), buffer);
+    (*it)->manager.add<SoundBuffer *>(std::to_string(id), buffer);
   else
     {
       tmp = new Entity;
       tmp->manager.add<std::string>("name", name);
       tmp->manager.add<Clock *>("clock", new Clock);
-      tmp->manager.add<sf::Time *>("time", new sf::Time);
-      tmp->manager.add<sf::Sound *>("sound", new sf::Sound);
-      tmp->manager.add<sf::SoundBuffer *>(std::to_string(id), buffer);
+      tmp->manager.add<RTime *>("time", new RTime);
+      tmp->manager.add<Sound *>("sound", new Sound);
+      tmp->manager.add<SoundBuffer *>(std::to_string(id), buffer);
       this->_users.push_back(tmp);
     }
   ++id;
 }
 
-void AudioCallSystem::addPacket(sf::SoundBuffer *buffer)
+void AudioCallSystem::addPacket(SoundBuffer *buffer)
 {
   IPacket *tmp = new UdpPacket();
   void *data;
@@ -156,7 +156,7 @@ std::string AudioCallSystem::getPseudo(const void *data, uint16_t packetSize) co
 
 void AudioCallSystem::in(IPacket *packet)
 {
-  sf::SoundBuffer *buffer = new sf::SoundBuffer();
+  SoundBuffer *buffer = new SoundBuffer();
   std::string pseudo;
   const void *tmpData;
 

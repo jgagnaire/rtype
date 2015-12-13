@@ -57,44 +57,44 @@ public:
         }
     }
 
-    void	triggerConnection(trigger connection) { com[Enum::TCP_INDEX]->triggerConnection(connection); }
+    inline void	triggerConnection(trigger connection) { com[Enum::TCP_INDEX]->triggerConnection(connection); }
 
-    void	triggerNewData(triggerNew data) {
+    inline void	triggerNewData(triggerNew data) {
         if (com[Enum::TCP_INDEX])
             com[Enum::TCP_INDEX]->triggerNewData(data);
         if (com[Enum::UDP_INDEX])
             com[Enum::UDP_INDEX]->triggerNewData(data);
     }
 
-    void	triggerClose(trigger close, Enum::Protocol p = Enum::TCP) {
+    inline void	triggerClose(trigger close, Enum::Protocol p = Enum::TCP) {
         if (static_cast<int>(Enum::TCP) & static_cast<int>(p))
             com[Enum::TCP_INDEX]->triggerClose(close);
         if (static_cast<int>(Enum::UDP) & static_cast<int>(p))
             com[Enum::UDP_INDEX]->triggerClose(close);
     }
 
-    void	triggerTimeout(Timeout t, Enum::Protocol p = Enum::TCP) {
+    inline void	triggerTimeout(Timeout t, Enum::Protocol p = Enum::TCP) {
         if (static_cast<int>(Enum::TCP) & static_cast<int>(p))
             com[Enum::TCP_INDEX]->triggerTimeout(t);
         if (static_cast<int>(Enum::UDP) & static_cast<int>(p))
             com[Enum::UDP_INDEX]->triggerTimeout(t);
     }
 
-    void	triggerAObserve(AfterObserve ao, Enum::Protocol p = Enum::TCP) {
+    inline void	triggerAObserve(AfterObserve ao, Enum::Protocol p = Enum::TCP) {
         if (static_cast<int>(Enum::TCP) & static_cast<int>(p))
             com[Enum::TCP_INDEX]->triggerAObserve(ao);
         if (static_cast<int>(Enum::UDP) & static_cast<int>(p))
             com[Enum::UDP_INDEX]->triggerAObserve(ao);
     }
 
-    void addController(CONTROLLER *c, Enum::Protocol p = Enum::TCP) {
+    inline void addController(CONTROLLER *c, Enum::Protocol p = Enum::TCP) {
         if (static_cast<int>(Enum::TCP) & static_cast<int>(p))
             com[Enum::TCP_INDEX]->addController(c);
         if (static_cast<int>(Enum::UDP) & static_cast<int>(p))
             com[Enum::UDP_INDEX]->addController(c);
     }
 
-    void	launch() {
+    inline void	launch() {
         com_thread->startAll();
         com_thread->joinAll();
     }

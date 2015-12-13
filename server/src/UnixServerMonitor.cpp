@@ -63,6 +63,7 @@ int  UnixServerMonitor::observerFds() {
   return (ret);
 }
 
+inline
 void  UnixServerMonitor::setObserver(IServerSocket<int> *sock, Enum::Flag socket_flag) {
   int fd = sock->getSocket();
 
