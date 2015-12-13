@@ -21,7 +21,8 @@ enum REvent
     Key_Close,
     E_PlayOffline,
     E_GameRoom,
-    E_Ready
+    E_Ready,
+	E_Stage
 };
 
 typedef uint64_t EventSum;

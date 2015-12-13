@@ -7,17 +7,21 @@ class MovementSystem : public ASystem
 {
     public:
         MovementSystem() : lastEvent(noEvent) {};
-        MovementSystem(std::list<Entity*> *eList) : _eList(eList), lastEvent(noEvent) {
+	MovementSystem(std::list<Entity*> *eList) : _eList(eList),
+												lastEvent(noEvent), isActiv(false) {
             _eventList.push_back(Key_Up);
             _eventList.push_back(Key_Down);
             _eventList.push_back(Key_Left);
             _eventList.push_back(Key_Right);
+			_eventList.push_back(E_Stage);
         }
 
         virtual ~MovementSystem() {};
 
         virtual void                    update(int duration)
         {
+			if (!isActiv)
+				return ;
             float culpointastah = 1.0f;
 
             for (unsigned i = 1; i < sizeof(EventSum) * 8; i <<= 1)
@@ -59,6 +63,8 @@ class MovementSystem : public ASystem
         virtual void                    in(IPacket*){}
         virtual bool                    handle(EventSum e)
         {
+			if (e == E_Stage)
+				isActiv = !isActiv;
             if (e & Key_Up || e & Key_Down || e & Key_Left || e & Key_Right)
 				lastEvent = e;
 			return (true);
@@ -76,6 +82,7 @@ class MovementSystem : public ASystem
 protected:
 	std::list<Entity*>	*_eList;
 	EventSum			lastEvent;
+	bool				isActiv;
 };
 
 #endif // MOVEMENT_HH_
