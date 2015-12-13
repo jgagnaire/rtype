@@ -3,69 +3,55 @@
 #include "Utility/Clock.hh"
 
 AudioCallSystem::AudioCallSystem():
-  _thread(ThreadFactory::create<void, AudioCallSystem *>()), _exit(false)
+  _exit(false)
 {
   _eventList.push_back(Key_Sound);
   _recorder.start();
-  _thread->loadFunc(&AudioCallSystem::startThread);
-  _thread->create(this);
 }
 
 AudioCallSystem::~AudioCallSystem()
 {
   this->_exit = true;
   _recorder.stop();
-  this->_thread->join();
   this->_packets.clear();
-  delete this->_thread;
 }
 
-void	AudioCallSystem::startThread(AudioCallSystem *obj)
-{
-  obj->startPlay();  
-}
-
-void	AudioCallSystem::startPlay()
+void	AudioCallSystem::update(int)
 {
   std::vector <Entity *>::iterator it;
   ISoundBuffer *tmp;
   ISound *sound;
 
-  while (!_exit)
-    {
-      tmp = 0;
-      _mutex.lock();
-      if (!this->_users.empty())
-	for (it = this->_users.begin(); it != this->_users.end(); ++it)
+  tmp = 0;
+  if (!this->_users.empty())
+    for (it = this->_users.begin(); it != this->_users.end(); ++it)
+      {
+	if ((*it)->manager.get<IClock *>("clock")->getElapsedTimeMicro() >=
+	    (*it)->manager.get<IRTime *>("time")->getTimeMicro())
 	  {
-	    if ((*it)->manager.get<IClock *>("clock")->getElapsedTimeMicro() >=
-		(*it)->manager.get<IRTime *>("time")->getTimeMicro())
+	    try {
+	      delete (*it)->manager.get<ISoundBuffer *>("toDelete");
+	      (*it)->manager.remove<ISoundBuffer *>("toDelete");
+	    }
+	    catch (std::exception const &) {}
+	    if (!((*it)->manager.getAll<ISoundBuffer *>().empty()))
 	      {
-		try {
-		  delete (*it)->manager.get<ISoundBuffer *>("toDelete");
-		  (*it)->manager.remove<ISoundBuffer *>("toDelete");
-		}
-		catch (std::exception const &) {}
-		if (!((*it)->manager.getAll<ISoundBuffer *>().empty()))
-		  {
-		    tmp = (*it)->manager.getAll<ISoundBuffer *>().front();
-		    break ;
-		  }
+		tmp = (*it)->manager.getAll<ISoundBuffer *>().front();
+		break ;
 	      }
 	  }
-      if (tmp && *it)
-	{
-	  sound = (*it)->manager.get<ISound *>("sound");
-	  sound->stop();
-	  sound->resetBuffer();
-	  sound->setBuffer(*tmp);
-	  sound->play();
-	  (*it)->manager.get<IClock *>("clock")->restart();
-	  *((*it)->manager.get<IRTime *>("time")) = *tmp;
-	  (*it)->manager.remove<ISoundBuffer *>();
-	  (*it)->manager.add<ISoundBuffer *>("toDelete", tmp);
-	}
-      _mutex.unlock();
+      }
+  if (tmp && *it)
+    {
+      sound = (*it)->manager.get<ISound *>("sound");
+      sound->stop();
+      sound->resetBuffer();
+      sound->setBuffer(*tmp);
+      sound->play();
+      (*it)->manager.get<IClock *>("clock")->restart();
+      *((*it)->manager.get<IRTime *>("time")) = *tmp;
+      (*it)->manager.remove<ISoundBuffer *>();
+      (*it)->manager.add<ISoundBuffer *>("toDelete", tmp);
     }
 }
 
@@ -156,9 +142,7 @@ void AudioCallSystem::in(IPacket *packet)
   buffer->loadFromSamples(static_cast<short int *>(const_cast<void *>(tmpData)),
 			  (packet->getSize() - (pseudo.length() + 0) * sizeof(char))  / sizeof(short int), 2,
 			  (packet->getSize() - (pseudo.length() + 0) * sizeof(char))  / sizeof(short int));
-  _mutex.lock();
   this->addBuffer(buffer, pseudo);
-  _mutex.unlock();
   return ;
 }
 

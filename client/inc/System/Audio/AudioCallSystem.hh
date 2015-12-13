@@ -2,12 +2,9 @@
 # define AUDIOCALLSYSTEM_HH_
 
 #include <vector>
-#include <mutex>
 #include "System/ASystem.hh"
 #include "Network/UdpSocket.hh"
 #include "Entity/Entity.hh"
-#include "Utility/ThreadFactory.hh"
-#include "Utility/IThread.hh"
 #include "Utility/Sound.hh"
 #include "Utility/RTime.hh"
 #include "Recorder.hh"
@@ -20,7 +17,7 @@ public:
 
   void addPacket(SoundBuffer *buffer);
 
-  virtual void update(int) {}
+  virtual void update(int);
   inline virtual bool handle(EventSum e)
   {
     if (e & Key_Sound)
@@ -42,16 +39,12 @@ private:
   static const uint16_t CODE_SEND_PACKET = 302;
   static const uint16_t CODE_RECEIVE_PACKET = 404;
 
-  void startPlay();
-  static void startThread(AudioCallSystem *obj);
   void addBuffer(ISoundBuffer *buffer, const std::string &name);
   std::string getPseudo(const void *data, uint16_t packetSize) const;
 
   Recorder			_recorder;
   std::vector <Entity *>	_users;
   std::list <IPacket *>		_packets;
-  IThread <void, AudioCallSystem *> *_thread;
-  std::mutex				_mutex;
   bool				_exit;
 };
 
