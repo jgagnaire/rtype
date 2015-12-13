@@ -38,6 +38,7 @@ class GameRoomScene : public Scene
             _win.setMenuMode(true);
             _win.draw(_b1);
             _win.draw(_texts);
+            _win.draw(_changingText);
         }
 
         virtual void    handle(EventSum e, EventSum&)
@@ -56,9 +57,27 @@ class GameRoomScene : public Scene
                 _bufferText.setCenter();
                 if (tmp == 126)
                 {
-                    _packet.setQuery(static_cast<uint16_t>(Codes::CreateRoom));
-                    _packet.setData(_buffer.c_str());
-                    _packet.setSize(static_cast<uint16_t>(_buffer.size()));
+                    std::string name;
+                    std::size_t i = 0;
+                    switch (_current)
+                    {
+                        case 0:
+                            _packet.setQuery(static_cast<uint16_t>(Codes::RandomRoom));
+                            break;
+                        case 1:
+                            _packet.setQuery(static_cast<uint16_t>(Codes::JoinRoom));
+                            for (auto x : _rooms)
+                                if (_currentR == i++)
+                                    name = x.first;
+                            _packet.setData(name.c_str());
+                            _packet.setSize(static_cast<uint16_t>(name.size()));
+                            break;
+                        case 2:
+                            _packet.setQuery(static_cast<uint16_t>(Codes::CreateRoom));
+                            _packet.setData(_buffer.c_str());
+                            _packet.setSize(static_cast<uint16_t>(_buffer.size()));
+                            break;
+                    }
                     _new = true;
                 }
             }
@@ -68,7 +87,7 @@ class GameRoomScene : public Scene
                 ++_current;
             if (e & Key_Up && _currentR > 0)
                 --_currentR;
-            else if (e & Key_Down && _currentR < _buttons.size() - 1)
+            else if (e & Key_Down && _currentR < _rooms.size() - 1)
                 ++_currentR;
             for (std::size_t i = 0; i <  _buttons.size(); ++i)
                 _buttons[i].setColor(0xffffffff);
@@ -77,9 +96,9 @@ class GameRoomScene : public Scene
             for (auto x : _rooms)
             {
                 if (i == _currentR)
-                    x.second.setColor(0xff0000ff);
+                    x.second->setColor(0xff0000ff);
                 else
-                    x.second.setColor(0xffffffff);
+                    x.second->setColor(0xffffffff);
                 ++i;
             }
         }
@@ -101,8 +120,10 @@ class GameRoomScene : public Scene
                         tmp = static_cast<const char*>(packet->getData());
                         name = tmp.substr(0, tmp.find(":"));
                         nb = tmp.substr(tmp.find(":") + 1, 1);
-                        _rooms[name] = Text(name + "    " + nb + "/4");
-                        _changingText.manager.add<ADrawable*>("name", &_rooms[name]);
+                        _rooms[name] = new Text(name + "    " + nb + "/4");
+                        _rooms[name]->setCenter();
+                        _rooms[name]->setY(_rooms.size() * 75 + 50);
+                        _changingText.manager.add<ADrawable*>(name, _rooms[name]);
                         _currentR = 0;
                     default:
                         ;
@@ -115,7 +136,7 @@ class GameRoomScene : public Scene
             if (_new)
             {
                 _new = false;
-                 return (&_packet);
+                return (&_packet);
             }
             if (_update)
             {
@@ -124,6 +145,8 @@ class GameRoomScene : public Scene
                 _packet.setSize(0);
                 _update = false;
                 _rooms.clear();
+                for (auto x : _changingText.manager.getAll<ADrawable*>())
+                    delete x;
                 _changingText.manager.removeAll();
                 _currentR = 0;
                 return (&_packet);
@@ -133,7 +156,7 @@ class GameRoomScene : public Scene
 
     private:
         std::vector<Text>                                   _buttons;
-        std::unordered_map<std::string, Text>               _rooms;
+        std::unordered_map<std::string, Text*>              _rooms;
         View                                                _view;
         Entity                                              _b1;
         Entity                                              _texts;
