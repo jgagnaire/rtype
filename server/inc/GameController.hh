@@ -17,5 +17,6 @@ public:
     bool            notReady(UserManager<T> *) const;
     virtual int	    newData(UserManager<T> *);
 private:
+  bool            joinRoom(UserManager<T> *, Enum::ServerAnswers) const;
 	GameController	&operator=(GameController const &) { return *this; }
 };

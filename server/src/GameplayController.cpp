@@ -9,12 +9,12 @@ template<typename T>
 int	            GameplayController<T>::newData(UserManager<T> *cl) {
     if (!cl->isLogged()) {
         this->writeStruct({0, Enum::EUDP_NOT_LOGGEDIN, cl->getUDPPacketId()});
-        this->writeOnMe(cl->getIP(), "1726"); // TODO, no magic string
+        this->writeOnMe(cl->getIP()); // TODO, no magic string
         return (1);
     }
     else if (cl->getStatus() != Enum::GAME_ROOM) {
         this->writeStruct({0, Enum::ENOT_IN_GAME, cl->getUDPPacketId()});
-        this->writeOnMe(cl->getIP(), "1726"); // TODO, no magic string
+        this->writeOnMe(cl->getIP()); // TODO, no magic string
         return (1);
     }
     switch (cl->numUDPQuery()) {
@@ -40,14 +40,14 @@ bool            GameplayController<T>::quitGame(UserManager<T> *cl) {
 
     if (game) {
         this->writeStruct({0, static_cast<uint16_t>(cl->quitGame()), cl->getUDPPacketId()});
-        this->writeOnMe(cl->getIP(), "1726"); // TODO, no magic string
+        this->writeOnMe(cl->getIP()); // TODO, no magic string
         const std::string &u_name = cl->getName();
         for (auto it = game->players.begin(); it != game->players.end(); ++it) {
             if ((*it)->getName() != u_name) {
                 this->writeStruct({static_cast<uint16_t>(u_name.size()),
                              Enum::USER_QUIT_GAME, (*it)->getUDPPacketId()});
                this->writeMsg(u_name);
-               this->writeOnMe((*it)->getIP(), "1726"); // TODO, no magic string
+               this->writeOnMe((*it)->getIP()); // TODO, no magic string
             }
         }
         g.launchGame(cl->getGameroomName());
@@ -60,7 +60,7 @@ template <typename T>
 inline
 bool            GameplayController<T>::currentPosition(UserManager<T> *cl) {
     this->writeStruct({0, static_cast<uint16_t>(cl->currentPosition()), cl->getUDPPacketId()});
-    this->writeOnMe(cl->getIP(), "1726"); // TODO, no magic string
+    this->writeOnMe(cl->getIP()); // TODO, no magic string
     return (true);
 }
 
@@ -68,7 +68,7 @@ template <typename T>
 inline
 bool            GameplayController<T>::keyPressed(UserManager<T> *cl) {
     this->writeStruct({0, static_cast<uint16_t>(cl->keyPressed()), cl->getUDPPacketId()});
-    this->writeOnMe(cl->getIP(), "1726"); // TODO, no magic string
+    this->writeOnMe(cl->getIP()); // TODO, no magic string
     return (true);
 }
 
@@ -82,7 +82,7 @@ template <typename T>
 inline
 bool            GameplayController<T>::takeForce(UserManager<T> *cl) {
     this->writeStruct({0, static_cast<uint16_t>(cl->takeForce()), cl->getUDPPacketId()});
-    this->writeOnMe(cl->getIP(), "1726"); // TODO, no magic string
+    this->writeOnMe(cl->getIP()); // TODO, no magic string
     return (true);
 }
 

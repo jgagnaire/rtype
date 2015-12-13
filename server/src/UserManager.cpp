@@ -28,9 +28,10 @@ UserManager<T>::UserManager(IServerSocket<T> *sck) :
 
 template<typename T>
 UserManager<T>::~UserManager() {
+    GameManager<T>             &gm = GameManager<T>::instance();
+
     destroy_client_mutex->lock();
-    if (image_stream.is_open())
-        image_stream.close();
+    gm.deleteUser(this);
     if (stream.is_open())
         stream.close();
     destroy_client_mutex->unlock();
@@ -288,7 +289,9 @@ Enum::ServerAnswers      UserManager<T>::createGameRoom() {
         game_name = generateRoomName();
     is_ready = false;
     gameroom = game_name;
+    std::cout << "La room: " << gameroom << " se cree "<< std::endl;
     gm.createRoom(game_name, this);
+    std::cout << "il y a donc " << gm.getGames().size() << " rooms" << std::endl;
     status = Enum::GAME_ROOM;
     return (Enum::OK);
 }

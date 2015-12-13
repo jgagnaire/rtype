@@ -40,6 +40,7 @@ void        GameManager<SCK>::deleteUser(UserManager<SCK> *u) {
     for (auto it = g->players.begin(); it != g->players.end(); ++it) {
         if (u->getName() == (*it)->getName()) {
             g->players.erase(it);
+	    std::cout << u->getName() << " trouve dans la room " << g->name << std::endl;
             break ;
         }
     }
