@@ -12,17 +12,14 @@ class GameRoomScene : public Scene
 {
     public:
         GameRoomScene(IWindow &win, std::list<Entity*> *e):
-            Scene(win, e), _buttons(3), _update(true),
+            Scene(win, e), _buttons(2), _update(true),
             _new(false), _current(0), _currentR(0),
             _event(0), _lastCode(0)
     {
-        _buttons[0].setText("Random");
-        _buttons[0].setPosition(300, 50);
-        _buttons[1].setText("Join");
-        _buttons[1].setCenter();
-        _buttons[1].setY(50);
-        _buttons[2].setText("Create");
-        _buttons[2].setPosition(1300, 50);
+        _buttons[0].setText("Join");
+        _buttons[0].setPosition(500, 50);
+        _buttons[1].setText("Create");
+        _buttons[1].setPosition(1100, 50);
 
         _b1.manager.add<View*>("view", &_view);
         _texts.manager.add<ADrawable*>("buffer", &_bufferText);
@@ -75,9 +72,6 @@ class GameRoomScene : public Scene
                     switch (_current)
                     {
                         case 0:
-                            _packet.setQuery(static_cast<uint16_t>(Codes::RandomRoom));
-                            break;
-                        case 1:
                             _packet.setQuery(static_cast<uint16_t>(Codes::JoinRoom));
                             for (auto x : _rooms)
                                 if (_currentR == i++)
@@ -85,7 +79,7 @@ class GameRoomScene : public Scene
                             _packet.setData(name.c_str());
                             _packet.setSize(static_cast<uint16_t>(name.size()));
                             break;
-                        case 2:
+                        case 1:
                             _packet.setQuery(static_cast<uint16_t>(Codes::CreateRoom));
                             _packet.setData(_buffer.c_str());
                             _packet.setSize(static_cast<uint16_t>(_buffer.size()));
