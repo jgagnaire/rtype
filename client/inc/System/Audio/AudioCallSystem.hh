@@ -50,7 +50,6 @@ private:
   std::list <IPacket *>		_packets;
   IThread <void, AudioCallSystem *> *_thread;
   IMutex			*_mutex;
-  sf::Clock			_clock;
   bool				_exit;
 };
 

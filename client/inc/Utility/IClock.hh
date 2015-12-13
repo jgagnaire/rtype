@@ -1,12 +1,11 @@
 #ifndef ICLOCK_HH_ZSYQXLFC
 #define ICLOCK_HH_ZSYQXLFC
 
-#include <cstddef>
+#include <cstdint>
 
 class IClock
 {
     public:
-        IClock() {}
         virtual ~IClock() {}
 
         virtual std::size_t     getElapsedTimeMicro() const = 0;
