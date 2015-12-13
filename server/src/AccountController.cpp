@@ -36,13 +36,13 @@ int    AccountController<T>::newConnection(UserManager<T> *cl) const {
 
 template<typename T>
 bool    AccountController<T>::accountLoginFct(UserManager<T> *cl) const {
-    cl->writeStruct({0, cl->verifyUser()});
+    cl->writeStruct({0, static_cast<uint16_t>(cl->verifyUser())});
     return (true);
 }
 
 template<typename T>
 bool    AccountController<T>::accountRegisterFct(UserManager<T> *cl) const {
-    cl->writeStruct({0, cl->newUser()});
+    cl->writeStruct({0, static_cast<uint16_t>(cl->newUser())});
     return (true);
 }
 

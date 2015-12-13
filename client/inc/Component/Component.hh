@@ -15,7 +15,7 @@ public:
 
   virtual ~Component() {}
 
-  inline void	setValue(Type &value) { _value = value; }
+	inline void	setValue(Type value) { delete _value; _value = new Type(value); }
 
   inline Type& getValue(void) const { return (*_value); }
 

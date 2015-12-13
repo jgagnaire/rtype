@@ -11,6 +11,7 @@
 #include "System/Render/MenuScene.hh"
 #include "System/Render/StageScene.hh"
 #include "System/Event/EventAggregator.hh"
+#include "System/Movement/Movement.hh"
 
 #include "AudioCallSystem.hh"
 #include "Utility/Clock.hh"

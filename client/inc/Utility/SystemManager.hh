@@ -5,6 +5,7 @@
 #include "System/Render/RenderSystem.hh"
 #include "System/Event/EventAggregator.hh"
 #include "System/Audio/AudioCallSystem.hh"
+#include "System/Movement/Movement.hh"
 #include "Utility/Clock.hh"
 #include "Network/NetworkManager.hh"
 
@@ -23,17 +24,21 @@ public:
 
 			ASystem *render = new RenderSystem(shr_entities);
 			ASystem *audioCall = new AudioCallSystem();
-
-			systemList["render"] = render;
-			systemList["audioCall"] = audioCall;
+			ASystem *mvt = new MovementSystem(shr_entities);
+			
+			systemList["1mov"] = mvt;
+			systemList["3render"] = render;
+			systemList["2audioCall"] = audioCall;
             ea = new EventAggregator(static_cast<RenderSystem*>(render)->getWindow());
             clk = new Clock();
             ea->add(render);
+			ea->add(mvt);
         }
 
 	~SystemManager()
 		{
-			systemList.erase(systemList.begin(), systemList.end());
+			for(auto x : systemList)
+				delete(x.second);
 			delete ea;
 			delete clk;
 		}

@@ -25,7 +25,7 @@ WinServerSocket::~WinServerSocket()
 	::closesocket(this->sock);
 }
 
-int WinServerSocket::absReadFromClient(char *&to_fill, unsigned size, std::string * const ip) const
+int WinServerSocket::absReadFromClient(char *&to_fill, unsigned size, std::string *const ip) const
 {
 	WSABUF wsabuf = { 0 };
 	DWORD read_size = 0;
@@ -45,12 +45,18 @@ int WinServerSocket::absReadFromClient(char *&to_fill, unsigned size, std::strin
 	  }
 	to_fill = wsabuf.buf;
 	if (ip != NULL)
-		*ip = std::string(inet_ntoa(from.sin_addr));
+	{
+		char buf[16] = { 0 };
+		::inet_ntop(AF_INET, &from.sin_addr, &buf[0], INET_ADDRSTRLEN);
+		*ip = std::string(&buf[0]);
+	}
 	return (read_size);
 }
 
 std::string	WinServerSocket::getIP() const {
-  return (std::string(inet_ntoa(addr->sin_addr)));
+	char buf[16] = { 0 };
+	::inet_ntop(AF_INET, &addr->sin_addr, &buf[0], INET_ADDRSTRLEN);
+	return (std::string(&buf[0]));
 }
 
 bool WinServerSocket::absWriteOnClient(char *to_write, size_t size,
