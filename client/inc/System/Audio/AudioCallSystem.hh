@@ -53,7 +53,7 @@ private:
   std::vector <Entity *>	_users;
   std::list <IPacket *>		_packets;
   IThread <void, AudioCallSystem *> *_thread;
-  IMutex			*_mutex;
+  std::mutex				_mutex;
   bool				_exit;
 };
 
