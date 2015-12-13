@@ -1,5 +1,6 @@
 #include <algorithm>
 #include "AudioCallSystem.hh"
+#include "Utility/Clock.hh"
 
 #include <stdlib.h>
 
@@ -44,7 +45,7 @@ void	AudioCallSystem::startPlay()
       if (!this->_users.empty())
 	for (it = this->_users.begin(); it != this->_users.end(); ++it)
 	  {
-	    if ((*it)->manager.get<sf::Clock *>("clock")->getElapsedTime().asMicroseconds() >=
+	    if ((*it)->manager.get<Clock *>("clock")->getElapsedTimeMicro() >=
 		(*it)->manager.get<sf::Time *>("time")->asMicroseconds())
 	      {
 		try {
@@ -66,7 +67,7 @@ void	AudioCallSystem::startPlay()
 	  sound->resetBuffer();
 	  sound->setBuffer(*tmp);
 	  sound->play();
-	  (*it)->manager.get<sf::Clock *>("clock")->restart();
+	  (*it)->manager.get<Clock *>("clock")->restart();
 	  *((*it)->manager.get<sf::Time *>("time")) = tmp->getDuration();
 	  (*it)->manager.remove<sf::SoundBuffer *>();
 	  (*it)->manager.add<sf::SoundBuffer *>("toDelete", tmp);
@@ -92,7 +93,7 @@ void AudioCallSystem::addBuffer(sf::SoundBuffer *buffer, const std::string &name
     {
       tmp = new Entity;
       tmp->manager.add<std::string>("name", name);
-      tmp->manager.add<sf::Clock *>("clock", new sf::Clock);
+      tmp->manager.add<Clock *>("clock", new Clock);
       tmp->manager.add<sf::Time *>("time", new sf::Time);
       tmp->manager.add<sf::Sound *>("sound", new sf::Sound);
       tmp->manager.add<sf::SoundBuffer *>(std::to_string(id), buffer);
@@ -160,7 +161,7 @@ void AudioCallSystem::in(IPacket *packet)
   const void *tmpData;
 
   if (!packet || !dynamic_cast<UdpPacket *>(packet)
-      || packet->getQuery() != CODE_RECEIVE_PACKET)
+      || packet->getQuery() == CODE_RECEIVE_PACKET)
     return ;
   tmpData = packet->getData();
   pseudo = getPseudo(tmpData, packet->getSize());
