@@ -12,7 +12,7 @@ public:
 
   virtual std::size_t getTimeMicro() const = 0;
   virtual IRTime &operator=(const IRTime &rhs) = 0;
-  virtual IRTime &operator=(const SoundBuffer &rhs) = 0;
+  virtual IRTime &operator=(const ISoundBuffer &rhs) = 0;
 };
 
 #endif /* !IRTIME_HH_ */

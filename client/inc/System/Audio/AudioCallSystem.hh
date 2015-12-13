@@ -13,6 +13,7 @@
 #include "Utility/IThread.hh"
 #include "Utility/IMutex.hh"
 #include "Utility/Sound.hh"
+#include "Utility/ISoundBuffer.hh"
 #include "Utility/SoundBuffer.hh"
 #include "Utility/RTime.hh"
 
@@ -45,7 +46,7 @@ private:
 
   void startPlay();
   static void startThread(AudioCallSystem *obj);
-  void addBuffer(SoundBuffer *buffer, const std::string &name);
+  void addBuffer(ISoundBuffer *buffer, const std::string &name);
   std::string getPseudo(const void *data, uint16_t packetSize) const;
 
   Recorder			*recorder;
