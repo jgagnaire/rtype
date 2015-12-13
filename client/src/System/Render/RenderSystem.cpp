@@ -15,6 +15,7 @@ RenderSystem::RenderSystem(std::list<Entity*> *e):
     _eventList.push_back(Key_Change);
     _eventList.push_back(E_PlayOffline);
     _eventList.push_back(E_GameRoom);
+    _eventList.push_back(E_Ready);
     _window = new Window();
     _menu = new MenuScene(*_window, _entities);
     _stage = new StageScene(*_window, _entities);
@@ -61,6 +62,9 @@ bool RenderSystem::handle(EventSum e)
             break;
         case E_GameRoom:
             _current = _gameRoom;
+            break;
+        case E_Ready:
+            _current = _ready;
             break;
         default:
             _current->handle(e, _event);
