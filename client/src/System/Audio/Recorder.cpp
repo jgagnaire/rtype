@@ -1,4 +1,5 @@
 #include "Recorder.hh"
+#include "Utility/SoundBuffer.hh"
 
 Recorder::Recorder(AudioCallSystem &obj) : SoundRecorder(), _obj(obj)
 {
@@ -11,9 +12,9 @@ Recorder::~Recorder()
 
 bool Recorder::onProcessSamples(const sf::Int16* samples, std::size_t sampleCount)
 {
-  sf::SoundBuffer *tmp;
+  SoundBuffer *tmp;
 
-  tmp = new sf::SoundBuffer();
+  tmp = new SoundBuffer();
   tmp->loadFromSamples(samples, sampleCount, 2, sampleCount);    
   this->_obj.addPacket(tmp);
   return true;

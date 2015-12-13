@@ -1,5 +1,13 @@
 #include "Sound.hh"
 
+Sound::Sound()
+{
+}
+
+Sound::~Sound()
+{
+}
+
 void Sound::play()
 {
   this->_sound.play();

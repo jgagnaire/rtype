@@ -103,12 +103,14 @@ public:
           _wr_buff[sizeof(T) + i] = str[i];
       }
 
+      inline
       void                  deserialize(const char *s, std::string str = "") {
         std::copy(s, s + sizeof(T), reinterpret_cast<char *>(&_get_pack));
         _get_pack.data = str;
         std::cout << "la query: " << _get_pack.header.query << std::endl;
       }
 
+      inline
       void                  stockOnBuff(const T &c) {
         PacketStruct	ps;
 
@@ -116,13 +118,13 @@ public:
         _send_pack.push(ps);
       }
 
-      void                  stockOnBuff(const std::string &s) { _send_pack.back().data = s; }
-      bool                  isFilled() const { return _str_ret == _get_pack.header.packet_size; }
-      bool                  HasSendPacket() const { return (!_send_pack.empty()); }
-      bool                  sendPackEmpty() const { return (_send_pack.empty()); }
-      const char            *getBuffer() const { return (_rd_buff.c_str()); }
+      inline void                  stockOnBuff(const std::string &s) { _send_pack.back().data = s; }
+      inline bool                  isFilled() const { return _str_ret == _get_pack.header.packet_size; }
+      inline bool                  HasSendPacket() const { return (!_send_pack.empty()); }
+      inline bool                  sendPackEmpty() const { return (_send_pack.empty()); }
+      inline const char            *getBuffer() const { return (_rd_buff.c_str()); }
 
-      void                  clearAll() {
+      inline void                  clearAll() {
         _rd_buff.clear();
         _comdata_ret = 0;
         _str_ret = 0;

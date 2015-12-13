@@ -11,18 +11,21 @@ UnixMutex::~UnixMutex()
   ::pthread_mutex_destroy(&_mutex);
 }
 
+inline
 void	UnixMutex::lock(void)
 {
 	if (::pthread_mutex_lock(&_mutex) == -1)
 		throw MutexException("Lock failed");
 }
 
+inline
 void	UnixMutex::unlock(void)
 {
 	if (::pthread_mutex_unlock(&_mutex) == -1)
 		throw MutexException("Unlock failed");
 }
 
+inline
 bool	UnixMutex::trylock(void)
 {
 	return (!::pthread_mutex_trylock(&_mutex));

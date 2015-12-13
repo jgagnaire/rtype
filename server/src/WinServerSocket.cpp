@@ -53,6 +53,7 @@ int WinServerSocket::absReadFromClient(char *&to_fill, unsigned size, std::strin
 	return (read_size);
 }
 
+inline
 std::string	WinServerSocket::getIP() const {
 	char buf[16] = { 0 };
 	::inet_ntop(AF_INET, &addr->sin_addr, &buf[0], INET_ADDRSTRLEN);

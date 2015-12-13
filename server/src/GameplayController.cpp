@@ -57,6 +57,7 @@ bool            GameplayController<T>::quitGame(UserManager<T> *cl) {
 }
 
 template <typename T>
+inline
 bool            GameplayController<T>::currentPosition(UserManager<T> *cl) {
     this->writeStruct({0, static_cast<uint16_t>(cl->currentPosition()), cl->getUDPPacketId()});
     this->writeOnMe(cl->getIP(), "1726"); // TODO, no magic string
@@ -64,6 +65,7 @@ bool            GameplayController<T>::currentPosition(UserManager<T> *cl) {
 }
 
 template <typename T>
+inline
 bool            GameplayController<T>::keyPressed(UserManager<T> *cl) {
     this->writeStruct({0, static_cast<uint16_t>(cl->keyPressed()), cl->getUDPPacketId()});
     this->writeOnMe(cl->getIP(), "1726"); // TODO, no magic string
@@ -71,11 +73,13 @@ bool            GameplayController<T>::keyPressed(UserManager<T> *cl) {
 }
 
 template <typename T>
+inline
 bool            GameplayController<T>::audioPacket(UserManager<T> *) const {
     return (true);
 }
 
 template <typename T>
+inline
 bool            GameplayController<T>::takeForce(UserManager<T> *cl) {
     this->writeStruct({0, static_cast<uint16_t>(cl->takeForce()), cl->getUDPPacketId()});
     this->writeOnMe(cl->getIP(), "1726"); // TODO, no magic string
