@@ -6,6 +6,7 @@
 #include "System/Event/EventAggregator.hh"
 #include "System/Audio/AudioCallSystem.hh"
 #include "System/Movement/Movement.hh"
+#include "System/Shoot/ShootSystem.hh"
 #include "Utility/Clock.hh"
 #include "Network/NetworkManager.hh"
 
@@ -26,10 +27,12 @@ public:
 			ASystem *render = new RenderSystem(shr_entities);
 			ASystem *audioCall = new AudioCallSystem();
 			ASystem *mvt = new MovementSystem(shr_entities);
+			ASystem *shot = new ShootSystem(shr_entities);
 			
 			systemList["1mov"] = mvt;
-			systemList["3render"] = render;
-			systemList["2audioCall"] = audioCall;
+			systemList["2Shoot"] = shot;
+			systemList["3audioCall"] = audioCall;
+			systemList["4render"] = render;
             ea = new EventAggregator(static_cast<RenderSystem*>(render)->getWindow());
             clk = new Clock();
             ea->add(render);

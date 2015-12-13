@@ -22,7 +22,10 @@ namespace Pattern {
 class ShootSystem : public ASystem
 {
 public:
-	ShootSystem(std::list<Entity*> *_list) : _eList(_list) {}
+	ShootSystem(std::list<Entity*> *_list) : _eList(_list)
+		{
+			_eventList.push_back(Key_Fire);
+		}
 	virtual ~ShootSystem() {}
 	
 	virtual void                    update(int duration)
