@@ -15,11 +15,13 @@ enum REvent
     Key_Fire = 16,
     Key_Charge = 32,
     Key_Change = 64,
+	Key_Sound,
     Key_Select,
     Key_Back,
     Key_Close,
     E_PlayOffline,
-    E_GameRoom
+    E_GameRoom,
+    E_Ready
 };
 
 typedef uint64_t EventSum;

@@ -60,14 +60,16 @@ EventSum Window::getEvent()
         if (e.type == sf::Event::KeyReleased)
         {
             switch(e.key.code) {
-                case sf::Keyboard::Tab :
-                    return (Key_Change);
-                case sf::Keyboard::Return :
-                    return (Key_Select);
-                case sf::Keyboard::BackSpace :
-                    return (Key_Back);
-                default:
-                    return (noEvent);
+			case sf::Keyboard::Tab :
+				return (Key_Change);
+			case sf::Keyboard::Return :
+				return (Key_Select);
+			case sf::Keyboard::BackSpace :
+				return (Key_Back);
+			case sf::Keyboard::K :
+				return (Key_Sound);
+			default:
+				return (noEvent);
             }
         }
     }
