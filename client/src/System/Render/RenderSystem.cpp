@@ -13,7 +13,8 @@ RenderSystem::RenderSystem(std::list<Entity*> *e):
     _eventList.push_back(Key_Select);
     _eventList.push_back(Key_Close);
     _eventList.push_back(Key_Change);
-    _eventList.push_back(E_PlayOffline);
+    _eventList.push_back(E_Login);
+    _eventList.push_back(E_Stage);
     _eventList.push_back(E_GameRoom);
     _eventList.push_back(E_Ready);
     _window = new Window();
@@ -22,7 +23,7 @@ RenderSystem::RenderSystem(std::list<Entity*> *e):
     _login = new LoginScene(*_window, _entities);
     _gameRoom = new GameRoomScene(*_window, _entities);
     _ready = new ReadyScene(*_window, _entities);
-    _current = _login;
+    _current = _menu;
 }
 
 RenderSystem::~RenderSystem()
@@ -57,7 +58,10 @@ bool RenderSystem::handle(EventSum e)
         case Key_Close:
             _window->close();
             break;
-        case E_PlayOffline:
+        case E_Login:
+            _current = _login;
+            break;
+        case E_Stage:
             _current = _stage;
             break;
         case E_GameRoom:

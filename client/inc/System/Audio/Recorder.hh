@@ -4,20 +4,22 @@
 #include <iostream>
 #include <list>
 #include <SFML/Audio.hpp>
-#include "AudioCallSystem.hh"
-
-class AudioCallSystem;
+#include <SoundBuffer.hh>
 
 class Recorder : public sf::SoundRecorder
 {
 public:
-  Recorder(AudioCallSystem &obj);
+  Recorder();
   virtual ~Recorder();
+
+  void changeState();
+  SoundBuffer *getBuffer();
 
 private:
 
   virtual bool onProcessSamples(const sf::Int16* samples, std::size_t sampleCount);
-  AudioCallSystem &_obj;
+  std::list<SoundBuffer *> _buffers; 
+  bool _state;
 };
 
 #endif //!RECORDER_HH_
