@@ -49,9 +49,6 @@ int UnixServerSocket::absReadFromClient(char *&to_fill, unsigned size, std::stri
   return (ret);
 }
 
-
-#include <stdio.h>
-
 bool UnixServerSocket::absWriteOnClient(char *tmp, size_t size,
                                         const std::string &ip, const std::string &port) const
 {
@@ -67,15 +64,10 @@ bool UnixServerSocket::absWriteOnClient(char *tmp, size_t size,
   }
   while (size > val)
     {
-      std::cout << "asds: " << (int)tmp[0] << ":" << (int)tmp[1] << ":" << ip << ":" << port << std::endl;
       if ((ret = ::sendto(this->sockfd, tmp,
 			 size - val, 0, reinterpret_cast<struct sockaddr *>(to), sizeof(to))) == -1
-	  and errno != EINTR) {
-        perror(0);
-	std::cout << errno << std::endl;
+	  and errno != EINTR)
 	return false;
-      }
-      std::cout << "true: " << size << ":" << ip << ":" << port << "ret"<< std::endl;
       val += static_cast<size_t>(ret);
     }
   return true;
