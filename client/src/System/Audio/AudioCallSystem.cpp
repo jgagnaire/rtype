@@ -2,8 +2,7 @@
 #include "AudioCallSystem.hh"
 #include "Utility/Clock.hh"
 
-AudioCallSystem::AudioCallSystem():
-  _exit(false)
+AudioCallSystem::AudioCallSystem()
 {
   _eventList.push_back(Key_Sound);
   _recorder.start();
@@ -11,7 +10,6 @@ AudioCallSystem::AudioCallSystem():
 
 AudioCallSystem::~AudioCallSystem()
 {
-  this->_exit = true;
   _recorder.stop();
   this->_packets.clear();
 }

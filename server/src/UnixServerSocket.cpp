@@ -54,15 +54,15 @@ bool UnixServerSocket::absWriteOnClient(char *tmp, size_t size,
 {
   size_t val = 0;
   int	ret;
-  sockaddr_in *to = NULL;
+  sockaddr_in *to = 0;
 
-  if (!(ip.empty() || port.empty())) {
+  if (!(ip.empty() && port.empty())) {
     to = new sockaddr_in;
     to->sin_family = AF_INET;
     to->sin_port = ::htons(static_cast<uint16_t>(std::stoi(port)));
     ::inet_aton(ip.c_str(), reinterpret_cast<in_addr *>(&to->sin_addr.s_addr));
   }
-  while (size != val)
+  while (size > val)
     {
       if ((ret = ::sendto(this->sockfd, tmp,
 			 size - val, 0, reinterpret_cast<struct sockaddr *>(to), sizeof(to))) == -1

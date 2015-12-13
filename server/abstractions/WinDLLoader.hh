@@ -5,7 +5,7 @@
 # include <string>
 # include "ADLLoader.hh"
 
-class WinDLLoader : public ADLLoader<void *>
+class WinDLLoader : public ADLLoader<HMODULE>
 {
 public:
   WinDLLoader();
