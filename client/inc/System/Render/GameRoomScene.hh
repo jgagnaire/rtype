@@ -120,7 +120,7 @@ class GameRoomScene : public Scene
         {
             std::string tmp, name, nb;
             TcpPacket   *packet;
-                        std::size_t i = 0;
+            std::size_t i = 0;
 
             if ((packet = dynamic_cast<TcpPacket*>(p)))
             {
@@ -128,10 +128,7 @@ class GameRoomScene : public Scene
                 {
                     case Codes::Ok:
                         if (_lastCode)
-                        {
                             _event = E_Ready;
-                            std::cout << "set _event" << std::endl;
-                        }
                         break;
                     case Codes::AlreadyInRoom:
                     case Codes::NotLoggedIn:
@@ -158,7 +155,6 @@ class GameRoomScene : public Scene
             {
                 _new = false;
                 _lastCode = _packet.getQuery();
-                std::cout << "Last Code " << _lastCode  << std::endl;
                 return (&_packet);
             }
             if (_update)
