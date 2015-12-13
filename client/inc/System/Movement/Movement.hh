@@ -28,11 +28,12 @@ class MovementSystem : public ASystem
                     break ;
             }
 
-            float move  = duration + (0.75f / culpointastah);
+            float move  = duration;
             for(auto x : *_eList)
             {
                 if (x->manager.get<std::string>("name") == "player1")
                 {
+					move += (x->manager.get<float>("velocity") / culpointastah);
                     std::pair<float, float> tmp =
                         x->manager.get<std::pair<float, float> >("position");
                     if (lastEvent & Key_Up)
