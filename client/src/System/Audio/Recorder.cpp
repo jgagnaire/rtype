@@ -1,9 +1,8 @@
 #include "Recorder.hh"
 #include "Utility/SoundBuffer.hh"
 
-Recorder::Recorder() : SoundRecorder()
+Recorder::Recorder() : SoundRecorder(), _state(false)
 {
-  this->_state = true;
   this->setProcessingInterval(sf::milliseconds(500));
 }
 
