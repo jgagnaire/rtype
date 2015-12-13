@@ -66,7 +66,7 @@ public:
                     if (m != 0)
                         _networkManager.send(*m);
                 }
-				ea->update();
+                ea->update();
             }
         }
 

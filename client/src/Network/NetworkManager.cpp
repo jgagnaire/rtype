@@ -43,12 +43,9 @@ void    NetworkManager::send(const IPacket &packet)
     std::memcpy(buf + totalSize - packet.getSize(),
             packet.getData(), packet.getSize());
     if (isTcp)
-        std::cout << "FFF "<< _tcp->send(buf, totalSize) << std::endl;
+        _tcp->send(buf, totalSize);
     else
         _udp->send(buf, totalSize, _udpIp, 1725);
-    if (isTcp)
-        std::cout << "send {" << packet.getSize() <<
-            ", " << packet.getQuery() << "}" << std::endl;
 }
 
 void        NetworkManager::receiveUdp()

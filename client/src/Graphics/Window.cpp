@@ -39,7 +39,9 @@ EventSum Window::getEvent()
 
     if (_window.pollEvent(e))
     {
-        if (e.type == sf::Event::Closed)
+        if (e.type == sf::Event::Closed
+                || (e.type == sf::Event::KeyReleased
+                    && e.key.code == sf::Keyboard::Escape))
             return (Key_Close);
         if (_menuMode && e.type == sf::Event::KeyReleased)
         {

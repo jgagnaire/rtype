@@ -1,9 +1,18 @@
+
 #ifndef SHOOTSYSTEM_HH_
 # define SHOOTSYSTEM_HH_
 
-#include <functional>
-#include <cmath>
-#include "System/ASystem.hh"
+# if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+#  define _USE_MATH_DEFINES
+#  include <ATLComTime.h>
+# else
+#  include <cmath>
+# endif
+
+# include <functional>
+# include "System/ASystem.hh"
+
+double a = M_PI;
 
 namespace Pattern {
 	
@@ -29,7 +38,7 @@ namespace Pattern {
 		if (s == Side::LEFT)
 			vel *= -1;
 		pos.first += vel;
-		pos.second += (35 * sin(pos.first * 0.5 * M_PI / 180));
+		pos.second += static_cast<float>(35 * sin(pos.first * 0.5 * M_PI / 180));
 		e.manager.set("position", pos);
 	}
 }
@@ -53,9 +62,10 @@ public:
 			if (!isActiv)
 				return ;
 			if ((this->fireRate -= duration) <= 0)
-				this->fireRate = 250;
-			for(auto x = _eList->begin(); x != _eList->end(); ++x)
+				this->fireRate = 250;		
+			for (auto x = _eList->begin(); x != _eList->end();)
 			{
+				bool has_been_del = false;
 				if ((*x)->manager.get<std::string>("type") == "shoot")
 				{
 					(*x)->manager.get<std::function<void (Entity&, Pattern::Side, int)> >
@@ -63,9 +73,14 @@ public:
 									get<Pattern::Side>("direction"), duration);
 					std::pair<float, float> tmp = (*x)->manager.
 						get<std::pair<float, float> >("position");
-					if (tmp.first > 1920 || tmp.first < 0 )
+					if (tmp.first > 1920 || tmp.first < 0)
+					{
 						x = _eList->erase(x);
+						has_been_del = true;
+					}
 				}
+				if (!has_been_del)
+					++x;
 			}
 		}
 	
