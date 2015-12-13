@@ -45,7 +45,6 @@ private:
   Recorder			_recorder;
   std::vector <Entity *>	_users;
   std::list <IPacket *>		_packets;
-  bool				_exit;
 };
 
 #endif //!AUDIOCALLSYSTEM_HH_
