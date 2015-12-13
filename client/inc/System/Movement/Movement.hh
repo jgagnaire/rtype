@@ -2,6 +2,7 @@
 # define MOVEMENT_HH_
 
 #include "System/ASystem.hh"
+#include "Network/UdpSocket.hh"
 
 class MovementSystem : public ASystem
 {
@@ -53,36 +54,54 @@ class MovementSystem : public ASystem
                     tmp.second = (tmp.second < 0 ? 0 : tmp.second);
                     tmp.second = (tmp.second > 1080 ? 1080 : tmp.second);
                     x->manager.set("position", tmp);
-                    if (lastEvent != 0)
-                        lastEvent = 0;
                     break;
                 }
             }
         }
-        virtual IPacket                 *out() { return NULL; }
+        virtual IPacket                 *out() {
+            if (isActiv == false)
+                return (0);
+            if (lastEvent)
+            {
+                for(auto x : *_eList)
+                if (x->manager.get<std::string>("name") == "player1")
+                {
+                    auto tmp = x->manager.get<std::pair<float, float> >("position");
+                std::cout << tmp.first << "/" << tmp.second << std::endl;
+                }
+                std::string     tmp = std::to_string(lastEvent);
+                _packet.setQuery(static_cast<uint16_t>(UdpCodes::KeyPressed));
+                _packet.setData(tmp.c_str());
+                _packet.setSize(tmp.size());
+                lastEvent = 0;
+                return (&_packet);
+            }
+            return (0);
+        }
         virtual void                    in(IPacket*){}
         virtual bool                    handle(EventSum e)
         {
-			if (e == E_Stage)
-				isActiv = !isActiv;
+            if (e == E_Stage)
+                isActiv = !isActiv;
             if (e & Key_Up || e & Key_Down || e & Key_Left || e & Key_Right)
-				lastEvent = e;
-			return (true);
-		}
-	virtual std::vector<REvent>     &broadcast(void)
-		{
-			return (_eventList);
-		}
-	
-	virtual EventSum                getEvent()
-		{
-			return (noEvent);
-		}
-	
-protected:
-	std::list<Entity*>	*_eList;
-	EventSum			lastEvent;
-	bool				isActiv;
+                lastEvent = e;
+            return (true);
+        }
+        virtual std::vector<REvent>     &broadcast(void)
+        {
+            return (_eventList);
+        }
+
+        virtual EventSum                getEvent()
+        {
+            return (noEvent);
+        }
+
+    protected:
+        std::list<Entity*>	*_eList;
+        EventSum			lastEvent;
+        bool				isActiv;
+        UdpPacket           _packet;
 };
 
 #endif // MOVEMENT_HH_
