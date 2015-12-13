@@ -1,22 +1,20 @@
 #ifndef UNIXDLLOADER_H_
 # define UNIXDLLOADER_H_
 
-# include <iostream>
 # include <dlfcn.h>
 # include <string>
-# include "ADLLoader.h"
+# include "ADLLoader.hh"
 
-template <typename PLUGIN>
-class UnixDLLoader : public ADLLoader<PLUGIN>
+class UnixDLLoader : public ADLLoader<void *>
 {
 public:
-	UnixDLLoader()
-		: ADLLoader(), handle(0) {}
-	virtual ~UnixDLLoader();
-	virtual void loadLib(std::string const &);
+  UnixDLLoader();
+  virtual ~UnixDLLoader();
 
-private:
-	void *handle;
+  virtual bool		openLib(std::string const &path, const std::string &key);
+  virtual bool		loadLib(const std::string &key, const std::string &sym);
+  virtual void		closeLib(const std::string &key);
+  virtual Entity	*operator()(const std::string &key, const std::string &sym);
 };
 
 #endif // !UNIXDLLOADER_H_
