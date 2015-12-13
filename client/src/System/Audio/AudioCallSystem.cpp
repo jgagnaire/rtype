@@ -3,7 +3,7 @@
 #include "Utility/Clock.hh"
 
 AudioCallSystem::AudioCallSystem():
-	recorder(new Recorder(*this)), _thread(ThreadFactory::create<void, AudioCallSystem *>()), _exit(false)
+	recorder(new Recorder()), _thread(ThreadFactory::create<void, AudioCallSystem *>()), _exit(false)
 {
   _eventList.push_back(Key_Sound);
   recorder->start();
@@ -98,10 +98,13 @@ void AudioCallSystem::addBuffer(ISoundBuffer *buffer, const std::string &name)
 
 void AudioCallSystem::addPacket(SoundBuffer *buffer)
 {
-  IPacket *tmp = new UdpPacket();
+  IPacket *tmp;
   void *data;
   short int *tmpData;
 
+  if (!buffer)
+    return ;
+  tmp = new UdpPacket();
   tmp->setSize(static_cast<uint16_t>(buffer->getSampleCount() * sizeof(short int)));
   data = new short int [buffer->getSampleCount()];
   tmp->setQuery(CODE_SEND_PACKET);
@@ -110,6 +113,7 @@ void AudioCallSystem::addPacket(SoundBuffer *buffer)
   tmp->setData(data);
   _packets.push_back(tmp);
   delete buffer;
+  in(out());
 }
 
 std::string AudioCallSystem::getPseudo(const void *data, uint16_t packetSize) const
@@ -122,7 +126,7 @@ std::string AudioCallSystem::getPseudo(const void *data, uint16_t packetSize) co
   while ((static_cast<char *>(const_cast<void *>(data)))[size] != ':' &&
 	 (size * sizeof(char)) < packetSize)
     ++size;
-  if ((size * sizeof(char)) < packetSize)
+  if (0 && (size * sizeof(char)) < packetSize)
     {
       tmpPseudo = new char[size + 1];
       std::copy(static_cast<char *>(const_cast<void *>(data)),
@@ -145,14 +149,14 @@ void AudioCallSystem::in(IPacket *packet)
   const void *tmpData;
 
   if (!packet || !dynamic_cast<UdpPacket *>(packet)
-      || packet->getQuery() != CODE_RECEIVE_PACKET)
+      || packet->getQuery() == CODE_RECEIVE_PACKET)
     return ;
   tmpData = packet->getData();
   pseudo = getPseudo(tmpData, packet->getSize());
-  tmpData = &((static_cast<char *>(const_cast<void *>(tmpData)))[pseudo.length() + 1]);
+  tmpData = &((static_cast<char *>(const_cast<void *>(tmpData)))[pseudo.length() + 0]);
   buffer->loadFromSamples(static_cast<short int *>(const_cast<void *>(tmpData)),
-			  (packet->getSize() - (pseudo.length() + 1) * sizeof(char))  / sizeof(short int), 2,
-			  (packet->getSize() - (pseudo.length() + 1) * sizeof(char))  / sizeof(short int));
+			  (packet->getSize() - (pseudo.length() + 0) * sizeof(char))  / sizeof(short int), 2,
+			  (packet->getSize() - (pseudo.length() + 0) * sizeof(char))  / sizeof(short int));
   _mutex.lock();
   this->addBuffer(buffer, pseudo);
   _mutex.unlock();
@@ -163,6 +167,7 @@ IPacket *AudioCallSystem::out()
 {
   IPacket *tmp;
 
+  this->addPacket(this->recorder->getBuffer());
   if (_packets.empty())
     return (0);
   tmp = _packets.front();

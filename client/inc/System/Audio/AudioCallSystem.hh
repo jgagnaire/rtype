@@ -3,7 +3,6 @@
 
 #include <vector>
 #include <mutex>
-#include "Recorder.hh"
 #include "System/ASystem.hh"
 #include "Network/UdpSocket.hh"
 #include "Entity/Entity.hh"
@@ -11,8 +10,7 @@
 #include "Utility/IThread.hh"
 #include "Utility/Sound.hh"
 #include "Utility/RTime.hh"
-
-class Recorder;
+#include "Recorder.hh"
 
 class AudioCallSystem : public ASystem
 {
