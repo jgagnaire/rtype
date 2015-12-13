@@ -87,6 +87,12 @@ type for compenents \"" + name + "\" is : " + components[name]->getType());
     }
     return false;
   }
+
+	//Remove all compenents, destructor are called
+	inline void	removeAll(void)
+		{
+			components.clear();
+		}
   
   template<typename Type>
   std::vector<Type>	getAll(void)
