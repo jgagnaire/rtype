@@ -1,9 +1,18 @@
+
 #ifndef SHOOTSYSTEM_HH_
 # define SHOOTSYSTEM_HH_
 
-#include <functional>
-#include <cmath>
-#include "System/ASystem.hh"
+# if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+#  define _USE_MATH_DEFINES
+#  include <ATLComTime.h>
+# else
+#  include <cmath>
+# endif
+
+# include <functional>
+# include "System/ASystem.hh"
+
+double a = M_PI;
 
 namespace Pattern {
 	
