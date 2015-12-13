@@ -2,6 +2,7 @@
 #include "AccountController.hh"
 #include "NetworkManager.hh"
 #include "GameController.hh"
+#include "GameplayController.hh"
 #include "Enum.hh"
 #include "ServerError.hh"
 
@@ -31,6 +32,7 @@ int main(int, char **av)
 	  netmgr.triggerAObserve(&AController<int>::timeout);
       netmgr.addController(new AccountController<int>(netmgr.getClientList()));
       netmgr.addController(new GameController<int>(netmgr.getClientList()));
+      netmgr.addController(new GameplayController<int>(netmgr.getClientList()), Enum::UDP);
 #endif
 	netmgr.launch();
   }
