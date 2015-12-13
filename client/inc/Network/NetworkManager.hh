@@ -22,7 +22,9 @@ enum class Codes
     AlreadyInRoom = 504,
     NotLoggedIn = 505,
     ExistingRoom = 403,
-    CreateRoom = 202
+    CreateRoom = 202,
+    JoinRoom = 201,
+    RandomRoom = 200
 };
 
 class NetworkManager
