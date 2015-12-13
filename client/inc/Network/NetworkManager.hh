@@ -24,7 +24,10 @@ enum class Codes
     ExistingRoom = 403,
     CreateRoom = 202,
     JoinRoom = 201,
-    RandomRoom = 200
+    RandomRoom = 200,
+    LeaveRoom = 300,
+    Ready = 301,
+    NotReady = 302,
 };
 
 class NetworkManager

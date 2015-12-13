@@ -13,7 +13,8 @@ class GameRoomScene : public Scene
     public:
         GameRoomScene(IWindow &win, std::list<Entity*> *e):
             Scene(win, e), _buttons(3), _update(true),
-            _new(false), _current(0), _currentR(0)
+            _new(false), _current(0), _currentR(0),
+            _event(0)
     {
         _buttons[0].setText("Random");
         _buttons[0].setPosition(300, 50);
@@ -41,10 +42,16 @@ class GameRoomScene : public Scene
             _win.draw(_changingText);
         }
 
-        virtual void    handle(EventSum e, EventSum&)
+        virtual void    handle(EventSum e, EventSum &send)
         {
             std::string text;
 
+            if (_event)
+            {
+                send = _event;
+                _event = 0;
+                return ;
+            }
             if (e == Key_Change)
             {
                 _update = true;
@@ -119,6 +126,8 @@ class GameRoomScene : public Scene
                 switch (static_cast<Codes>(packet->getQuery()))
                 {
                     case Codes::Ok:
+                        _event = E_Ready;
+                        break;
                     case Codes::AlreadyInRoom:
                     case Codes::NotLoggedIn:
                         break;
@@ -175,6 +184,7 @@ class GameRoomScene : public Scene
         Text                                                _bufferText;
         std::size_t                                         _current;
         std::size_t                                         _currentR;
+        EventSum                                            _event;
 };
 
 #endif /* end of include guard: GAMEROOMSCENE_HH_ZNKJPAAS */
