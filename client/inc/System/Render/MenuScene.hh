@@ -72,13 +72,20 @@ class MenuScene : public Scene
                         ++_current;
                     }
                     break;
-                case Key_Select:
+                default:
+                    ;
+            }
+            if (e != Key_Change && e & Key_Change)
+            {
+                EventSum tmp = (e << 1) >> 1;
+                if (tmp == 126)
                     switch (_current)
                     {
                         case 0:
+                            send = E_Login;
                             break ;
                         case 1:
-                            send = E_PlayOffline;
+                            send = E_Stage;
                             break ;
                         case 2:
                             break ;
@@ -86,9 +93,6 @@ class MenuScene : public Scene
                             send = Key_Close;
                             break ;
                     }
-                    break;
-                default:
-                    ;
             }
         }
 
