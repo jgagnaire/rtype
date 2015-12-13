@@ -1,6 +1,6 @@
 #include <sstream>
+#include <algorithm>
 #include "JSONParser.hh"
-#include "ServerError.hh"
 
 std::fstream JSONParser::_stream("");
 
