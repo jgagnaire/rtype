@@ -14,7 +14,11 @@ struct TcpHeader : public Header
 class TcpPacket : public IPacket
 {
 public:
-	TcpPacket() {}
+    TcpPacket() {
+        _header.size = 0;
+        _header.query = 0;
+        _data = 0;
+    }
 	virtual ~TcpPacket() {}
 
 	inline virtual uint16_t    getSize() const { return this->_header.size; }
