@@ -168,8 +168,8 @@ void AudioCallSystem::in(IPacket *packet)
   pseudo = getPseudo(tmpData, packet->getSize());
   tmpData = &((static_cast<char *>(const_cast<void *>(tmpData)))[pseudo.length() + 1]);
   buffer->loadFromSamples(static_cast<short int *>(const_cast<void *>(tmpData)),
-			  packet->getSize() / sizeof(short int) - (pseudo.length() + 1) * sizeof(char), 2,
-			  packet->getSize() / sizeof(short int) - (pseudo.length() + 1) * sizeof(char));
+			  (packet->getSize() - (pseudo.length() + 1) * sizeof(char))  / sizeof(short int), 2,
+			  (packet->getSize() - (pseudo.length() + 1) * sizeof(char))  / sizeof(short int));
   _mutex->lock();
   this->addBuffer(buffer, pseudo);
   _mutex->unlock();
