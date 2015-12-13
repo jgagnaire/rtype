@@ -24,7 +24,7 @@ public:
   inline virtual bool handle(EventSum e)
   {
     if (e & Key_Sound)
-      this->recorder->changeState();
+      this->_recorder.changeState();
     return true;
   }
   inline virtual std::vector<REvent> &broadcast(void)
@@ -47,7 +47,7 @@ private:
   void addBuffer(ISoundBuffer *buffer, const std::string &name);
   std::string getPseudo(const void *data, uint16_t packetSize) const;
 
-  Recorder			*recorder;
+  Recorder			_recorder;
   std::vector <Entity *>	_users;
   std::list <IPacket *>		_packets;
   IThread <void, AudioCallSystem *> *_thread;

@@ -3,10 +3,10 @@
 #include "Utility/Clock.hh"
 
 AudioCallSystem::AudioCallSystem():
-	recorder(new Recorder()), _thread(ThreadFactory::create<void, AudioCallSystem *>()), _exit(false)
+  _thread(ThreadFactory::create<void, AudioCallSystem *>()), _exit(false)
 {
   _eventList.push_back(Key_Sound);
-  recorder->start();
+  _recorder.start();
   _thread->loadFunc(&AudioCallSystem::startThread);
   _thread->create(this);
 }
@@ -14,8 +14,7 @@ AudioCallSystem::AudioCallSystem():
 AudioCallSystem::~AudioCallSystem()
 {
   this->_exit = true;
-  recorder->stop();
-  delete recorder;
+  _recorder.stop();
   this->_thread->join();
   this->_packets.clear();
   delete this->_thread;
@@ -167,7 +166,7 @@ IPacket *AudioCallSystem::out()
 {
   IPacket *tmp;
 
-  this->addPacket(this->recorder->getBuffer());
+  this->addPacket(this->_recorder.getBuffer());
   if (_packets.empty())
     return (0);
   tmp = _packets.front();
