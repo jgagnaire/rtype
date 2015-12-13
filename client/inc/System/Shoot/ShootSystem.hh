@@ -56,9 +56,10 @@ public:
 			if (!isActiv)
 				return ;
 			if ((this->fireRate -= duration) <= 0)
-				this->fireRate = 250;
-			for(auto x = _eList->begin(); x != _eList->end(); ++x)
+				this->fireRate = 250;		
+			for (auto x = _eList->begin(); x != _eList->end();)
 			{
+				bool has_been_del = false;
 				if ((*x)->manager.get<std::string>("type") == "shoot")
 				{
 					(*x)->manager.get<std::function<void (Entity&, Pattern::Side, int)> >
@@ -66,9 +67,14 @@ public:
 									get<Pattern::Side>("direction"), duration);
 					std::pair<float, float> tmp = (*x)->manager.
 						get<std::pair<float, float> >("position");
-					if (tmp.first > 1920 || tmp.first < 0 )
+					if (tmp.first > 1920 || tmp.first < 0)
+					{
 						x = _eList->erase(x);
+						has_been_del = true;
+					}
 				}
+				if (!has_been_del)
+					++x;
 			}
 		}
 	
