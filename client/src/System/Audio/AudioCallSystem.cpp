@@ -5,6 +5,7 @@
 AudioCallSystem::AudioCallSystem():
 	recorder(new Recorder(*this)), _thread(ThreadFactory::create<void, AudioCallSystem *>()), _exit(false)
 {
+  _eventList.push_back(Key_Sound);
   recorder->start();
   _thread->loadFunc(&AudioCallSystem::startThread);
   _thread->create(this);
