@@ -19,7 +19,7 @@ public:
 			e->manager.add<std::string>("name", "player1");
 			e->manager.add<std::string>("type", "player");
 			e->manager.add("position", std::pair<float, float>(0, 0));
-			e->mnager.add<float>("velocity", 0.75f);
+			e->manager.add<float>("velocity", 0.75f);
 			e->manager.add<bool>("isShared", true);
 			shr_entities->push_back(e);
 
