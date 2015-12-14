@@ -15,8 +15,7 @@ class MovementSystem : public ASystem
             _eventList.push_back(Key_Left);
             _eventList.push_back(Key_Right);
 			_eventList.push_back(E_Stage);
-            _frequency = 0;
-            _frequency2= 0;
+            _frequency= 0;
             _lastId = 0;
         }
 
@@ -24,8 +23,7 @@ class MovementSystem : public ASystem
 
         virtual void                    update(int duration)
         {
-            _frequency += duration;
-            _frequency2+= duration;
+            _frequency+= duration;
 			if (!isActiv)
 				return ;
             float k = 1.0f;
@@ -66,14 +64,14 @@ class MovementSystem : public ASystem
         virtual IPacket                 *out() {
             if (isActiv == false)
                 return (0);
-            if (lastEvent && _frequency2 > 30)
+            if (lastEvent && _frequency > 30)
             {
                 std::string     tmp = std::to_string(lastEvent);
                 _packet.setQuery(static_cast<uint16_t>(UdpCodes::KeyPressed));
                 _packet.setData(tmp.c_str());
                 _packet.setSize(static_cast<uint16_t>(tmp.size()));
                 lastEvent = 0;
-                _frequency2 = 0;
+                _frequency = 0;
                 return (&_packet);
             }
             return (0);
@@ -89,7 +87,7 @@ class MovementSystem : public ASystem
                 float px, py;
                 px = std::atof(tmp.substr(0, tmp.find(":")).c_str());
                 py = std::atof(tmp.substr(tmp.find(":") + 1).c_str());
-                if (_frequency > 30 && _lastId < packet->getID())
+                if (_lastId < packet->getID())
                 {
                     _lastId = packet->getID();
                     for(auto x : *_eList)
@@ -100,7 +98,6 @@ class MovementSystem : public ASystem
                             tmp.second = py;
                             x->manager.set<std::pair<float, float> >("position", tmp);
                         }
-                    _frequency = 0;
                 }
             }
         }
@@ -129,7 +126,6 @@ class MovementSystem : public ASystem
         bool				isActiv;
         UdpPacket           _packet;
         int                 _frequency;
-        int                 _frequency2;
         uint64_t            _lastId;
 };
 
