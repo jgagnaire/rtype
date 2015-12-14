@@ -86,8 +86,6 @@ class StageScene : public Scene
             _s2[_stageNb - 1]->update(duration);
             _s3[_stageNb - 1]->update(duration);
             _s4[_stageNb - 1]->update(duration);
-            for (auto x : _pSprites)
-                x.update(duration);
             _win.draw(_b1);
             _win.draw(_b2);
             _win.draw(_b3);
@@ -105,9 +103,11 @@ class StageScene : public Scene
                     _pSprites[0].setPosition(sf::Vector2f(x->manager.get<std::pair<float, float> >("position").first,
                                 x->manager.get<std::pair<float, float> >("position").second));
                     _pSprites[0].update(duration);
-                    _win.draw(_guiPlayers);
                 }
             }
+            for (auto x : _players)
+                x.second->update(duration);
+            _win.draw(_guiPlayers);
             _win.draw(_b4);
         }
 
