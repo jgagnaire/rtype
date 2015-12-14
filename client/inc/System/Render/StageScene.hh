@@ -53,11 +53,8 @@ class StageScene : public Scene
             int i = 0;
             for (auto x : tmp)
             {
-                std::cout << "Tmp : " << x << std::endl;
-				std::cout << "Pseudo : " << _entities->front()->manager.get<std::string>("pseudo") << std::endl;
                 if (x != "playersData" && _entities->front()->manager.get<std::string>("pseudo") != x)
                 {
-                    std::cout << "Add " << x << std::endl;
                     _players[x] = &(_pSprites[++i]);
                     _guiPlayers.manager.add<ADrawable*>("player" + std::to_string(i + 1),
                             &_pSprites[i]);
@@ -131,7 +128,6 @@ class StageScene : public Scene
                 if (_lastId < packet->getID())
                 {
                     _lastId = packet->getID();
-                    std::cout << "Move " << name << std::endl;
                     if (_players[name])
                         _players[name]->setPosition(sf::Vector2f(px, py));
                 }
