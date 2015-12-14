@@ -98,6 +98,7 @@ namespace Enum
         EROOM_NO_EXIST = 510,
 
         // FOR UDP
+	PLAYER_POS = 408,
         ENOT_IN_GAME = 504,
         EUDP_NOT_LOGGEDIN = 506
     };
@@ -123,9 +124,9 @@ namespace Enum
 
     enum GameInfo {
         MAX_PLAYER = 4,
-        MAX_ROOM_NAME_NB = 16,
+        MAX_ROOM_NAME_NB = 4,
         MAX_GAME = 8,
-        REFRESH_TIME = 1000,
+        REFRESH_TIME = 15,
         GAME_SIZE_WIDTH = 1920,
         GAME_SIZE_HEIGHT = 1080,
     };

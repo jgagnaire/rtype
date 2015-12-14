@@ -134,7 +134,6 @@ public:
       bool                  sendPacket(const SCK s, const std::string &ip = "", const std::string &port = "") {
         bool	                ret;
 
-
         ret = s->absWriteOnClient(_wr_buff, sizeof(T) + _send_pack.front().data.size(),
                                   ip, port);
         delete  [] _wr_buff;

@@ -40,7 +40,7 @@ public:
         IThread<RET_VAL, ARG>  *thr = ThreadFactory::create<RET_VAL, ARG>();
         thr->loadFunc(f);
         _threads.push_back(std::make_pair(std::make_pair(_id, thr), arg));
-        return (_id++ - 1);
+        return (_id++);
     }
 
     virtual void joinAll() {

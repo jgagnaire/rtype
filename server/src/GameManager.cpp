@@ -81,9 +81,9 @@ inline
 void        GameManager<SCK>::launchGame(const std::string &game_name) {
     Game<SCK>    *game = getGameByName(game_name);
 
-    if (game && game->is_playing) {
+    if (game && !game->is_playing) {
         game->is_playing = true;
-        _threadpool.add(&GameManager::createGame, game);
+        _threadpool.startThread(_threadpool.add(&GameManager::createGame, game));
     }
 }
 
@@ -98,7 +98,7 @@ template <typename SCK>
 inline
 bool        GameManager<SCK>::update(Game<SCK> *game, std::size_t time) {
     updatePositions(game, time);
-    return (true);
+    return (!game->players.empty());
 }
 
 template <typename SCK>
@@ -112,16 +112,46 @@ template <typename SCK>
 void            GameManager<SCK>::createGame(Game<SCK> *game) {
     GameManager<SCK> &g = GameManager<SCK>::instance();
     bool        is_not_finished = true;
-    std::size_t time = GameManager<SCK>::getTime() - Enum::REFRESH_TIME;
+    std::size_t	duration;
+    std::chrono::_V2::steady_clock::time_point start = std::chrono::steady_clock::now();
+    std::chrono::_V2::steady_clock::time_point end;
 
     std::cout << "Que la partie commence pour la room: " << game->name << std::endl;
+    end = std::chrono::steady_clock::now();
     while (is_not_finished) {
-        if (GameManager<SCK>::getTime() - time >= Enum::REFRESH_TIME) {
-            time = GameManager<SCK>::getTime();
-            is_not_finished = g.update(game, time);
-        }
+      std::chrono::duration<double> diff = start - end;
+
+      duration = static_cast<std::size_t>(diff.count() * 1000);
+      if (duration > Enum::REFRESH_TIME) {
+	end = start;
+	is_not_finished = g.update(game, duration);
+      }
+      start = std::chrono::steady_clock::now();
     }
     game->is_playing = false;
+}
+
+template <typename SCK>
+void		GameManager<SCK>::sendPosition(Game<SCK> *game) {
+  Packet<UDPDataHeader> packet;
+  Position p;
+
+  for (auto it = game->players.begin(); it != game->players.end(); ++it) {
+    std::string	s;
+    std::ostringstream	os[2];
+    p = (*it)->getPosition();
+
+    os[0] << p.x;
+    os[1] << p.y;
+    s = os[0].str() + ":" + os[1].str();
+    UDPDataHeader pack = {static_cast<uint16_t>(s.size()),
+			  static_cast<uint16_t>(Enum::PLAYER_POS),
+			  (*it)->getUDPPacketId()};
+    packet.stockOnBuff(pack);
+    packet.stockOnBuff(s);
+    packet.serialize();
+    packet.sendPacket<IServerSocket<SCK> *>(this->_udp_socket, (*it)->getIP(), "1726"); // TODO, no magic string
+  }
 }
 
 template <typename SCK>
@@ -143,9 +173,12 @@ bool        GameManager<SCK>::isAllReady(const std::string &roomname) {
     if (!g)
         return (false);
     for (auto it = g->players.begin(); it != g->players.end(); ++it) {
-        if (!(*it)->isReady())
+      if (!(*it)->isReady()) {
+	std::cout << (*it)->getName() << " n'est pas ready dans la room: " << roomname << std::endl;
             return (false);
+      }
     }
+    std::cout << "Tout le monde est ready dans la room: " << roomname << std::endl;
     return (true);
 }
 

@@ -8,18 +8,15 @@ GameplayController<T>::GameplayController(std::list<UserManager<T> *> *cl)
 template<typename T>
 int	            GameplayController<T>::newData(UserManager<T> *cl) {
     if (!cl->isLogged()) {
-      std::cout << "that" << std::endl;
         this->writeStruct({0, Enum::EUDP_NOT_LOGGEDIN, cl->getUDPPacketId()});
         this->writeOnMe(cl->getIP()); 
         return (1);
     }
-    else if (cl->getStatus() != Enum::GAME_ROOM) {
-      std::cout << "this" << std::endl;
+    else if (cl->getStatus() != Enum::GAME) {
         this->writeStruct({0, Enum::ENOT_IN_GAME, cl->getUDPPacketId()});
         this->writeOnMe(cl->getIP()); 
         return (1);
     }
-    std::cout << "other" << std::endl;
     switch (cl->numUDPQuery()) {
         case (Enum::QUIT_GAME):
             return (static_cast<int>(quitGame(cl)));
