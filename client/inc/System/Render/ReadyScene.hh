@@ -71,7 +71,6 @@ class ReadyScene : public Scene
         {
             TcpPacket   *packet;
             std::string name;
-            int         i = 0;
             Entity *e;
 
             if ((packet = dynamic_cast<TcpPacket*>(p)))
@@ -95,8 +94,7 @@ class ReadyScene : public Scene
                         }
                         e = new Entity();
                         for (auto x : _players)
-                            e->manager.add<std::string>(x.first,
-                                    "player" + std::to_string(++i));
+                            e->manager.add<std::string>(x.first, x.first);
                         e->manager.add<std::string>("type", "playersData");
                         _entities->push_back(e);
                     case Codes::Begin:
