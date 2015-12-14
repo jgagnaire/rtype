@@ -109,7 +109,7 @@ std::string AudioCallSystem::getPseudo(const void *data, uint16_t packetSize) co
   while ((static_cast<char *>(const_cast<void *>(data)))[size] != ':' &&
 	 (size * sizeof(char)) < packetSize)
     ++size;
-  if (0 && (size * sizeof(char)) < packetSize)
+  if ((size * sizeof(char)) < packetSize)
     {
       tmpPseudo = new char[size + 1];
       std::copy(static_cast<char *>(const_cast<void *>(data)),
@@ -132,14 +132,14 @@ void AudioCallSystem::in(IPacket *packet)
   const void *tmpData;
 
   if (!packet || !dynamic_cast<UdpPacket *>(packet)
-      || packet->getQuery() == CODE_RECEIVE_PACKET)
+      || packet->getQuery() != CODE_RECEIVE_PACKET)
     return ;
   tmpData = packet->getData();
   pseudo = getPseudo(tmpData, packet->getSize());
-  tmpData = &((static_cast<char *>(const_cast<void *>(tmpData)))[pseudo.length() + 0]);
+  tmpData = &((static_cast<char *>(const_cast<void *>(tmpData)))[pseudo.length() + 1]);
   buffer->loadFromSamples(static_cast<short int *>(const_cast<void *>(tmpData)),
-			  (packet->getSize() - (pseudo.length() + 0) * sizeof(char))  / sizeof(short int), 2,
-			  (packet->getSize() - (pseudo.length() + 0) * sizeof(char))  / sizeof(short int));
+			  (packet->getSize() - (pseudo.length() + 1) * sizeof(char))  / sizeof(short int), 2,
+			  (packet->getSize() - (pseudo.length() + 1) * sizeof(char))  / sizeof(short int));
   this->addBuffer(buffer, pseudo);
   return ;
 }

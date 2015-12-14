@@ -20,8 +20,9 @@ public:
 			e->manager.add<std::string>("name", "player1");
 			e->manager.add<std::string>("type", "player");
 			e->manager.add("position", std::pair<float, float>(0, 0));
-			e->manager.add<float>("velocity", 0.75f);
+			e->manager.add<float>("velocity", 1.75f);
 			e->manager.add<bool>("isShared", true);
+			e->manager.add<Pattern::MovePattern>("pattern", Pattern::MovePattern::LINE);
 			shr_entities->push_back(e);
 
 			ASystem *render = new RenderSystem(shr_entities);
@@ -65,7 +66,7 @@ public:
                     if (m != 0)
                         _networkManager.send(*m);
                 }
-				ea->update();
+                ea->update();
             }
         }
 

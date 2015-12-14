@@ -28,6 +28,12 @@ enum class Codes
     LeaveRoom = 300,
     Ready = 301,
     NotReady = 302,
+    Begin = 402
+};
+
+enum class UdpCodes
+{
+    KeyPressed = 301,
 };
 
 class NetworkManager

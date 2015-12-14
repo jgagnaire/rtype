@@ -12,7 +12,8 @@ class ReadyScene : public Scene
     public:
         ReadyScene(IWindow &win, std::list<Entity*> *e):
             Scene(win, e), _isReady(false), _send(false),
-            _new(false), _quit(false), _lastCode(0)
+            _new(false), _quit(false), _lastCode(0),
+            _event(0)
     {
         _b1.manager.add<View*>("view", &_view);
         _texts.manager.add<ADrawable*>("isReady", &_isReadyText);
@@ -33,6 +34,12 @@ class ReadyScene : public Scene
 
         virtual void    handle(EventSum e, EventSum &send)
         {
+            if (_event)
+            {
+                send = _event;
+                _event = 0;
+                return ;
+            }
             if (_quit)
             {
                 send = E_GameRoom;
@@ -80,6 +87,9 @@ class ReadyScene : public Scene
                         {
                             _quit = true;
                         }
+                    case Codes::Begin:
+                        _event = E_Stage;
+                        break ;
                     default:
                         ;
                 }
@@ -109,6 +119,7 @@ class ReadyScene : public Scene
         bool                                                _new;
         bool                                                _quit;
         int                                                 _lastCode;
+        EventSum                                            _event;
 };
 
 

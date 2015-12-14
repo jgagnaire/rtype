@@ -10,12 +10,12 @@ class StageScene : public Scene
 {
     public:
         StageScene(IWindow &win, std::list<Entity*> *e):
-            Scene(win, e), _stageNb(3), _direction(noEvent)
+            Scene(win, e), _stageNb(2), _direction(noEvent)
     {
         _ship.load("client/res/ship/player-ship-grey2_111.png", true);
         _shoot.load("client/res/bullet.png", true);
 
-        for (int i = 1; i <= 3; ++i)
+        for (int i = 1; i <= 2; ++i)
         {
             ScrollingSprite *s1 = new ScrollingSprite();
             ScrollingSprite *s2 = new ScrollingSprite();
@@ -66,7 +66,7 @@ class StageScene : public Scene
             for (auto x : *_entities)
             {
                 if (x->manager.get<std::string>("type") == "shoot")
-                {					
+                {
                     _shoot.setPosition(sf::Vector2f(x->manager.get<std::pair<float, float> >("position").first,
                                 x->manager.get<std::pair<float, float> >("position").second));
                     _shoot.update(duration);
