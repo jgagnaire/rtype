@@ -135,20 +135,32 @@ template <typename SCK>
 void		GameManager<SCK>::sendPosition(Game<SCK> *game, UserManager<SCK> *user) {
   Packet<UDPDataHeader> packet;
   Position		p;
+  UDPDataHeader		pack;
   std::string		s;
+  std::string		key;
   std::ostringstream	os[2];
 
   p = user->getPosition();
   os[0] << p.x;
   os[1] << p.y;
   s = user->getName() + ":" + os[0].str() + ":" + os[1].str();
-  UDPDataHeader pack = {static_cast<uint16_t>(s.size()),
-			static_cast<uint16_t>(Enum::PLAYER_POS),
-			user->getUDPPacketId()};
-  
+  key = user->getName() + ":" + std::to_string(user->getKeypressed());
   for (auto it = game->players.begin(); it != game->players.end(); ++it) {
+    pack = {static_cast<uint16_t>(s.size()),
+	    static_cast<uint16_t>(Enum::PLAYER_POS),
+	    (*it)->getUDPPacketId()};
+
       packet.stockOnBuff(pack);
       packet.stockOnBuff(s);
+      packet.serialize();
+      packet.sendPacket<IServerSocket<SCK> *>(this->_udp_socket, (*it)->getIP(), "1726"); // TODO, no magic string
+
+      pack = {static_cast<uint16_t>(key.size()),
+	      static_cast<uint16_t>(Enum::USER_KEYPRESS),
+	      (*it)->getUDPPacketId()};
+
+      packet.stockOnBuff(pack);
+      packet.stockOnBuff(key);
       packet.serialize();
       packet.sendPacket<IServerSocket<SCK> *>(this->_udp_socket, (*it)->getIP(), "1726"); // TODO, no magic string
   }

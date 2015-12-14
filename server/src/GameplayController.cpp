@@ -7,16 +7,16 @@ GameplayController<T>::GameplayController(std::list<UserManager<T> *> *cl)
 
 template<typename T>
 int	            GameplayController<T>::newData(UserManager<T> *cl) {
-    if (!cl->isLogged()) {
-        this->writeStruct({0, Enum::EUDP_NOT_LOGGEDIN, cl->getUDPPacketId()});
-        this->writeOnMe(cl->getIP()); 
-        return (1);
-    }
-    else if (cl->getStatus() != Enum::GAME) {
-        this->writeStruct({0, Enum::ENOT_IN_GAME, cl->getUDPPacketId()});
-        this->writeOnMe(cl->getIP()); 
-        return (1);
-    }
+    // if (!cl->isLogged()) {
+    //     this->writeStruct({0, Enum::EUDP_NOT_LOGGEDIN, cl->getUDPPacketId()});
+    //     this->writeOnMe(cl->getIP()); 
+    //     return (1);
+    // }
+    // else if (cl->getStatus() != Enum::GAME) {
+    //     this->writeStruct({0, Enum::ENOT_IN_GAME, cl->getUDPPacketId()});
+    //     this->writeOnMe(cl->getIP()); 
+    //     return (1);
+    // }
     switch (cl->numUDPQuery()) {
         case (Enum::QUIT_GAME):
             return (static_cast<int>(quitGame(cl)));
@@ -67,8 +67,9 @@ bool            GameplayController<T>::currentPosition(UserManager<T> *cl) {
 template <typename T>
 inline
 bool            GameplayController<T>::keyPressed(UserManager<T> *cl) {
-    this->writeStruct({0, static_cast<uint16_t>(cl->keyPressed()), cl->getUDPPacketId()});
-    this->writeOnMe(cl->getIP()); 
+    // this->writeStruct({0, static_cast<uint16_t>(
+  cl->keyPressed();//), cl->getUDPPacketId()});
+    // this->writeOnMe(cl->getIP());
     return (true);
 }
 

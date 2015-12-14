@@ -131,8 +131,7 @@ Enum::ServerAnswers	UserManager<T>::verifyUser() {
     stream.seekg(0, stream.beg);
     if (!stream.is_open())
         return (Enum::EUSERPASS);
-    std::getline(is, pass, ':');
-    tmp_log = tok + ":" + pass;
+    std::getline(stream, tmp_log, '\n');
     if (tmp_log == s) {
         name = tok;
         stream.clear();
@@ -415,13 +414,7 @@ const std::size_t	    &UserManager<T>::getKeypressed() const { return (keypresse
 template <typename T>
 void                    UserManager<T>::changePosition(std::size_t time) {
     game_mutex->lock();
-    // float k = 1.0f;
-    // for (unsigned i = 1; i < sizeof(uint64_t) * 8; i <<= 1) {
-    //   if (keypressed & i)
-    // 	++k;
-    //   if (k >= 2)
-    // 	break ;
-    // }
+
     float	move = static_cast<float>(time * 1.75);
     if (static_cast<std::size_t>(Enum::LEFT) & keypressed) {
         position.x -= move;

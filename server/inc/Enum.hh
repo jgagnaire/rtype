@@ -81,6 +81,7 @@ namespace Enum
         BROADCAST_AUDIO = 404,
         USER_TAKE_FORCE = 405,
         USER_QUIT_GAME = 406,
+        USER_KEYPRESS = 407,
     };
 
     enum ServerAnswers {
