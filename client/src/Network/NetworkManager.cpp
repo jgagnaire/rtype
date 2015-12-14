@@ -92,6 +92,7 @@ void        NetworkManager::receiveTcp()
             read = _tcp->receive(buf, packet->getSize());
         }
         packet->setData(buf);
+		std::cout << "tcp " << packet->getSize() << "-" << packet->getQuery() << std::endl;
         if (static_cast<Codes>(packet->getQuery()) == Codes::Ping)
         {
             TcpPacket   p;
