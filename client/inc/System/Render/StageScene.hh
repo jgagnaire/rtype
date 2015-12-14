@@ -12,8 +12,12 @@ class StageScene : public Scene
         StageScene(IWindow &win, std::list<Entity*> *e):
             Scene(win, e), _stageNb(2), _direction(noEvent)
     {
-        _ship.load("client/res/ship/player-ship-grey2_111.png", true);
-        _shoot.load("client/res/bullet.png", true);
+        _p1.load("client/res/ship/player-ship-blue2_111.png", true);
+        _p2.load("client/res/ship/player-ship-green2_111.png", true);
+        _p3.load("client/res/ship/player-ship-red2_111.png", true);
+        _p4.load("client/res/ship/player-ship-purple2_111.png", true);
+        _shoot.load("client/res/bullet.png");
+        _shootEnnemy.load("client/res/bullet2.png");
 
         for (int i = 1; i <= 2; ++i)
         {
@@ -35,8 +39,12 @@ class StageScene : public Scene
         _b2.manager.add<ADrawable*>("background", _s2[_stageNb - 1]);
         _b3.manager.add<ADrawable*>("background", _s3[_stageNb - 1]);
         _b4.manager.add<ADrawable*>("background", _s4[_stageNb - 1]);
-        _guiPlayers.manager.add<ADrawable*>("ship", &_ship);
+        _guiPlayers.manager.add<ADrawable*>("player1", &_p1);
+        _guiPlayers.manager.add<ADrawable*>("player2", &_p2);
+        _guiPlayers.manager.add<ADrawable*>("player3", &_p3);
+        _guiPlayers.manager.add<ADrawable*>("player4", &_p4);
         _guiShoots.manager.add<ADrawable*>("shoot", &_shoot);
+        _guiShoots.manager.add<ADrawable*>("shootEnnemy", &_shoot);
     }
 
         virtual ~StageScene()
@@ -60,7 +68,9 @@ class StageScene : public Scene
             _s2[_stageNb - 1]->update(duration);
             _s3[_stageNb - 1]->update(duration);
             _s4[_stageNb - 1]->update(duration);
-            _ship.update(duration);
+            _p2.update(duration);
+            _p3.update(duration);
+            _p4.update(duration);
             _win.draw(_b1);
             _win.draw(_b2);
             _win.draw(_b3);
@@ -75,18 +85,19 @@ class StageScene : public Scene
                 }
                 else if (x->manager.get<std::string>("type") == "player")
                 {
-                    _ship.setPosition(sf::Vector2f(x->manager.get<std::pair<float, float> >("position").first,
+                    _p1.setPosition(sf::Vector2f(x->manager.get<std::pair<float, float> >("position").first,
                                 x->manager.get<std::pair<float, float> >("position").second));
+                    _p1.update(duration);
                     _win.draw(_guiPlayers);
                 }
             }
             _win.draw(_b4);
-
         }
 
-        virtual void draw()
+        virtual void        in(IPacket *p)
         {
         }
+
     private:
         Entity          _b1;
         Entity          _b2;
@@ -101,8 +112,12 @@ class StageScene : public Scene
         std::vector<ScrollingSprite*>   _s3;
         std::vector<ScrollingSprite*>   _s4;
         int                             _stageNb;
-        AnimatedSprite                  _ship;
+        AnimatedSprite                  _p1;
+        AnimatedSprite                  _p2;
+        AnimatedSprite                  _p3;
+        AnimatedSprite                  _p4;
         AnimatedSprite                  _shoot;
+        AnimatedSprite                  _shootEnnemy;
 
         EventSum         _direction;
 };
