@@ -126,7 +126,7 @@ IPacket     *NetworkManager::getPacket()
     if (_packets.empty() == false)
     {
         tmp = _packets.front();
-        _packets.pop_front();
+       _packets.pop_front();
         return tmp;
     }
     return 0;

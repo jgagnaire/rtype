@@ -65,10 +65,13 @@ public:
                         _networkManager.send(*m);
                     x.second->update(s);
                 }
-                IPacket *p = _networkManager.getPacket();
-                for (auto x : systemList)
-                    if (p)
-                        x.second->in(p);
+                IPacket *p;
+				while ((p = _networkManager.getPacket()))
+				{
+					for (auto x : systemList)
+						if (p)
+							x.second->in(p);
+				}
             }
         }
 
