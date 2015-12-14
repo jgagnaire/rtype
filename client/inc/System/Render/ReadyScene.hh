@@ -96,6 +96,7 @@ class ReadyScene : public Scene
                         for (auto x : _players)
                             e->manager.add<std::string>(x.first, x.first);
                         e->manager.add<std::string>("type", "playersData");
+                        e->manager.add<std::string>("name", "playersData");
                         _entities->push_back(e);
                     case Codes::Begin:
                         _event = E_Stage;
