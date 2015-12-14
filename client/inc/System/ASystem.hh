@@ -22,7 +22,6 @@ public:
 	virtual std::vector<REvent>     &broadcast(void) = 0;
 	virtual EventSum                getEvent() = 0;
 
-    virtual void draw() {}
 protected:
 	std::vector<REvent> _eventList;
 };

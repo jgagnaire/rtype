@@ -44,7 +44,6 @@ class MovementSystem : public ASystem
                 if (x->manager.get<std::string>("name") == "player1")
                 {
 					move *= (x->manager.get<float>("velocity") / k);
-                    //move = 0;
                     std::pair<float, float> tmp =
                         x->manager.get<std::pair<float, float> >("position");
                     if (lastEvent & Key_Up)

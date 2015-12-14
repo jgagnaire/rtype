@@ -64,7 +64,6 @@ public:
                         _networkManager.send(*m);
                     x.second->update(s);
                 }
-                systemList["4render"]->draw();
                 IPacket *p = _networkManager.getPacket();
                 for (auto x : systemList)
                     if (p)

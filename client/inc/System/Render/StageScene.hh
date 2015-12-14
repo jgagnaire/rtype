@@ -61,26 +61,16 @@ class StageScene : public Scene
             _s3[_stageNb - 1]->update(duration);
             _s4[_stageNb - 1]->update(duration);
             _ship.update(duration);
-            _shoot.update(duration);
-        }
-
-        virtual void draw()
-        {
             _win.draw(_b1);
             _win.draw(_b2);
             _win.draw(_b3);
-/*            _win.draw(_b1);*/
-            //_win.draw(_b2);
-            //_win.draw(_b3);
-            //_win.draw(_b1);
-            //_win.draw(_b2);
-            /*_win.draw(_b3);*/
             for (auto x : *_entities)
             {
                 if (x->manager.get<std::string>("type") == "shoot")
                 {
                     _shoot.setPosition(sf::Vector2f(x->manager.get<std::pair<float, float> >("position").first,
                                 x->manager.get<std::pair<float, float> >("position").second));
+                    _shoot.update(duration);
                     _win.draw(_guiShoots);
                 }
                 else if (x->manager.get<std::string>("type") == "player")
@@ -91,6 +81,11 @@ class StageScene : public Scene
                 }
             }
             _win.draw(_b4);
+
+        }
+
+        virtual void draw()
+        {
         }
     private:
         Entity          _b1;
