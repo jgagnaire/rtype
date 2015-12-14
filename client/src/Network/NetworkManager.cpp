@@ -70,7 +70,6 @@ void        NetworkManager::receiveUdp()
         }
         else
             packet->setData(0);
-        std::cout << "Receive udp " << std::string(static_cast<const char*>(tmp), packet->getSize()) << std::endl;
         _packets.push_back(packet);
     }
     else
@@ -93,7 +92,6 @@ void        NetworkManager::receiveTcp()
             read = _tcp->receive(buf, packet->getSize());
         }
         packet->setData(buf);
-        std::cout << "Tcp {" << packet->getSize() <<
             ", " << packet->getQuery() << "}" << std::endl;
         if (static_cast<Codes>(packet->getQuery()) == Codes::Ping)
         {
