@@ -17,6 +17,7 @@ public:
 		_networkManager(ip, ip), shr_entities(new std::list<Entity*>)
         {
 			Entity *e = new Entity;
+			e->manager.add<std::string>("pseudo", "");
 			e->manager.add<std::string>("name", "player1");
 			e->manager.add<std::string>("type", "player");
 			e->manager.add("position", std::pair<float, float>(0, 0));
