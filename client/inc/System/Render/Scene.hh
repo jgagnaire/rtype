@@ -12,6 +12,8 @@ class Scene
         Scene(IWindow &win, std::list<Entity*> *entities):
             _win(win), _entities(entities)
         {}
+
+        virtual void init() {}
         virtual ~Scene() {}
 
         virtual void update(int) = 0;

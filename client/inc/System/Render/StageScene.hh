@@ -5,21 +5,23 @@
 # include "System/Render/ScrollingSprite.hh"
 # include "System/Render/AnimatedSprite.hh"
 # include "System/Render/View.hh"
+# include "Network/UdpSocket.hh"
+# include "Network/NetworkManager.hh"
 
 class StageScene : public Scene
 {
     public:
         StageScene(IWindow &win, std::list<Entity*> *e):
-            Scene(win, e), _stageNb(2), _direction(noEvent)
+            Scene(win, e), _stageNb(1), _pSprites(4), _direction(noEvent)
     {
-        _p1.load("client/res/ship/player-ship-blue2_111.png", true);
-        _p2.load("client/res/ship/player-ship-green2_111.png", true);
-        _p3.load("client/res/ship/player-ship-red2_111.png", true);
-        _p4.load("client/res/ship/player-ship-purple2_111.png", true);
+        _pSprites[0].load("client/res/ship/player-ship-blue2_111.png", true);
+        _pSprites[1].load("client/res/ship/player-ship-green2_111.png", true);
+        _pSprites[2].load("client/res/ship/player-ship-red2_111.png", true);
+        _pSprites[3].load("client/res/ship/player-ship-purple2_111.png", true);
         _shoot.load("client/res/bullet.png");
         _shootEnnemy.load("client/res/bullet2.png");
 
-        for (int i = 1; i <= 2; ++i)
+        for (int i = 1; i <= 5; ++i)
         {
             ScrollingSprite *s1 = new ScrollingSprite();
             ScrollingSprite *s2 = new ScrollingSprite();
@@ -39,13 +41,28 @@ class StageScene : public Scene
         _b2.manager.add<ADrawable*>("background", _s2[_stageNb - 1]);
         _b3.manager.add<ADrawable*>("background", _s3[_stageNb - 1]);
         _b4.manager.add<ADrawable*>("background", _s4[_stageNb - 1]);
-        _guiPlayers.manager.add<ADrawable*>("player1", &_p1);
-        _guiPlayers.manager.add<ADrawable*>("player2", &_p2);
-        _guiPlayers.manager.add<ADrawable*>("player3", &_p3);
-        _guiPlayers.manager.add<ADrawable*>("player4", &_p4);
+        _guiPlayers.manager.add<ADrawable*>("player1", &(_pSprites[0]));
         _guiShoots.manager.add<ADrawable*>("shoot", &_shoot);
         _guiShoots.manager.add<ADrawable*>("shootEnnemy", &_shoot);
+        _lastId = 0;
     }
+
+        virtual void    init()
+        {
+            auto tmp = _entities->back()->manager.getAll<std::string>();
+            int i = 0;
+            for (auto x : tmp)
+            {
+                if (x != "playersData" && _entities->front()->manager.get<std::string>("pseudo") != x)
+                {
+                    _players[x] = &(_pSprites[++i]);
+                    _guiPlayers.manager.add<ADrawable*>("player" + std::to_string(i + 1),
+                            &_pSprites[i]);
+                }
+                else
+                    _players[x] = &(_pSprites[0]);
+            }
+        }
 
         virtual ~StageScene()
         {
@@ -68,9 +85,8 @@ class StageScene : public Scene
             _s2[_stageNb - 1]->update(duration);
             _s3[_stageNb - 1]->update(duration);
             _s4[_stageNb - 1]->update(duration);
-            _p2.update(duration);
-            _p3.update(duration);
-            _p4.update(duration);
+            for (auto x : _pSprites)
+                x.update(duration);
             _win.draw(_b1);
             _win.draw(_b2);
             _win.draw(_b3);
@@ -85,9 +101,9 @@ class StageScene : public Scene
                 }
                 else if (x->manager.get<std::string>("type") == "player")
                 {
-                    _p1.setPosition(sf::Vector2f(x->manager.get<std::pair<float, float> >("position").first,
+                    _pSprites[0].setPosition(sf::Vector2f(x->manager.get<std::pair<float, float> >("position").first,
                                 x->manager.get<std::pair<float, float> >("position").second));
-                    _p1.update(duration);
+                    _pSprites[0].update(duration);
                     _win.draw(_guiPlayers);
                 }
             }
@@ -96,6 +112,26 @@ class StageScene : public Scene
 
         virtual void        in(IPacket *p)
         {
+            UdpPacket   *packet;
+
+            if ((packet = dynamic_cast<UdpPacket*>(p))
+                    && packet->getQuery() == static_cast<uint16_t>(UdpCodes::NewPos))
+            {
+                std::string tmp = std::string(
+                        static_cast<const char *>(packet->getData()), packet->getSize());
+                float px, py;
+                std::string name = tmp.substr(0, tmp.find(":")).c_str();
+                tmp = tmp.substr(tmp.find(":") + 1);
+                px = std::atof(tmp.substr(0, tmp.find(":")).c_str());
+                py = std::atof(tmp.substr(tmp.find(":") + 1).c_str());
+                if (_lastId < packet->getID())
+                {
+                    _lastId = packet->getID();
+                    if (_players[name])
+                        _players[name]->setPosition(sf::Vector2f(px, py));
+                }
+            }
+
         }
 
     private:
@@ -112,14 +148,13 @@ class StageScene : public Scene
         std::vector<ScrollingSprite*>   _s3;
         std::vector<ScrollingSprite*>   _s4;
         int                             _stageNb;
-        AnimatedSprite                  _p1;
-        AnimatedSprite                  _p2;
-        AnimatedSprite                  _p3;
-        AnimatedSprite                  _p4;
+        std::vector<AnimatedSprite>     _pSprites;
         AnimatedSprite                  _shoot;
         AnimatedSprite                  _shootEnnemy;
 
         EventSum         _direction;
+        uint64_t         _lastId;
+        std::unordered_map<std::string, AnimatedSprite*>    _players;
 };
 
 

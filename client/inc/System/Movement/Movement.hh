@@ -94,6 +94,8 @@ class MovementSystem : public ASystem
                 {
                     _lastId = packet->getID();
                     for(auto x : *_eList)
+                    {
+                        try {
                         if (x->manager.get<std::string>("pseudo") == name)
                         {
                             auto tmp = x->manager.get<std::pair<float, float> >("position");
@@ -101,6 +103,8 @@ class MovementSystem : public ASystem
                             tmp.second = py;
                             x->manager.set<std::pair<float, float> >("position", tmp);
                         }
+                        } catch (ComponentManagerException &) {}
+                    }
                 }
             }
         }
