@@ -45,7 +45,6 @@ class StageScene : public Scene
         _guiShoots.manager.add<ADrawable*>("shoot", &_shoot);
         _guiShoots.manager.add<ADrawable*>("shootEnnemy", &_shoot);
         _lastId = 0;
-        _frequency = 0;
     }
 
         virtual void    init()
@@ -82,7 +81,6 @@ class StageScene : public Scene
 
         virtual void    update(int duration)
         {
-            _frequency += duration;
             _win.setMenuMode(false);
             _s1[_stageNb - 1]->update(duration);
             _s2[_stageNb - 1]->update(duration);
@@ -118,10 +116,8 @@ class StageScene : public Scene
             UdpPacket   *packet;
 
             if ((packet = dynamic_cast<UdpPacket*>(p))
-                    && packet->getQuery() == static_cast<uint16_t>(UdpCodes::NewPos)
-                    && _frequency > 30)
+                    && packet->getQuery() == static_cast<uint16_t>(UdpCodes::NewPos))
             {
-                _frequency = 0;
                 std::string tmp = std::string(
                         static_cast<const char *>(packet->getData()), packet->getSize());
                 float px, py;
@@ -160,7 +156,6 @@ class StageScene : public Scene
         EventSum         _direction;
         uint64_t         _lastId;
         std::unordered_map<std::string, AnimatedSprite*>    _players;
-        std::size_t                                         _frequency;
 };
 
 
