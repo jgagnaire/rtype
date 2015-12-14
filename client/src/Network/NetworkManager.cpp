@@ -70,6 +70,7 @@ void        NetworkManager::receiveUdp()
         }
         else
             packet->setData(0);
+        std::cout << "Receive udp " << std::string(static_cast<const char*>(tmp), packet->getSize()) << std::endl;
         _packets.push_back(packet);
     }
     else
