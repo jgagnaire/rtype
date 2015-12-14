@@ -63,6 +63,7 @@ class StageScene : public Scene
                 else
                     _players[x] = &(_pSprites[0]);
             }
+            _players[_entities->front()->manager.get<std::string>("pseudo")] = &(_pSprites[0]);
         }
 
         virtual ~StageScene()
