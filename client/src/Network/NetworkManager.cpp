@@ -70,8 +70,6 @@ void        NetworkManager::receiveUdp()
         }
         else
             packet->setData(0);
-        std::cout << "UdpPacket " << packet->getID() << " "<< packet->getQuery()
-            << " " << std::string(static_cast<const char *>(packet->getData()), packet->getSize()) << std::endl;
         _packets.push_back(packet);
     }
     else

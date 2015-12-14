@@ -45,6 +45,7 @@ class StageScene : public Scene
         _guiShoots.manager.add<ADrawable*>("shoot", &_shoot);
         _guiShoots.manager.add<ADrawable*>("shootEnnemy", &_shoot);
         _lastId = 0;
+        _frequency = 0;
     }
 
         virtual void    init()
@@ -53,11 +54,8 @@ class StageScene : public Scene
             int i = 0;
             for (auto x : tmp)
             {
-                std::cout << "Tmp : " << x << std::endl;
-				std::cout << "Pseudo : " << _entities->front()->manager.get<std::string>("pseudo") << std::endl;
                 if (x != "playersData" && _entities->front()->manager.get<std::string>("pseudo") != x)
                 {
-                    std::cout << "Add " << x << std::endl;
                     _players[x] = &(_pSprites[++i]);
                     _guiPlayers.manager.add<ADrawable*>("player" + std::to_string(i + 1),
                             &_pSprites[i]);
@@ -84,6 +82,7 @@ class StageScene : public Scene
 
         virtual void    update(int duration)
         {
+            _frequency += duration;
             _win.setMenuMode(false);
             _s1[_stageNb - 1]->update(duration);
             _s2[_stageNb - 1]->update(duration);
@@ -119,8 +118,10 @@ class StageScene : public Scene
             UdpPacket   *packet;
 
             if ((packet = dynamic_cast<UdpPacket*>(p))
-                    && packet->getQuery() == static_cast<uint16_t>(UdpCodes::NewPos))
+                    && packet->getQuery() == static_cast<uint16_t>(UdpCodes::NewPos)
+                    && _frequency > 30)
             {
+                _frequency = 0;
                 std::string tmp = std::string(
                         static_cast<const char *>(packet->getData()), packet->getSize());
                 float px, py;
@@ -131,8 +132,7 @@ class StageScene : public Scene
                 if (_lastId < packet->getID())
                 {
                     _lastId = packet->getID();
-                    std::cout << "Move " << name << std::endl;
-                    if (_players[name])
+                    if (_players[name] && _players[name] != &(_pSprites[0]))
                         _players[name]->setPosition(sf::Vector2f(px, py));
                 }
             }
@@ -160,6 +160,7 @@ class StageScene : public Scene
         EventSum         _direction;
         uint64_t         _lastId;
         std::unordered_map<std::string, AnimatedSprite*>    _players;
+        std::size_t                                         _frequency;
 };
 
 
