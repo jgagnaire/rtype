@@ -129,6 +129,7 @@ class StageScene : public Scene
                 if (_lastId < packet->getID())
                 {
                     _lastId = packet->getID();
+                    std::cout << "Move " << name << std::endl;
                     if (_players[name])
                         _players[name]->setPosition(sf::Vector2f(px, py));
                 }

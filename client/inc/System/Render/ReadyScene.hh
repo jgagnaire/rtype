@@ -92,14 +92,14 @@ class ReadyScene : public Scene
                         {
                             _quit = true;
                         }
+                        break ;
+                    case Codes::Begin:
                         e = new Entity();
                         for (auto x : _players)
                             e->manager.add<std::string>(x.first, x.first);
                         e->manager.add<std::string>("type", "playersData");
                         e->manager.add<std::string>("name", "playersData");
                         _entities->push_back(e);
-                        break ;
-                    case Codes::Begin:
                         _event = E_Stage;
                         break ;
                     case Codes::PlayerJoined:
