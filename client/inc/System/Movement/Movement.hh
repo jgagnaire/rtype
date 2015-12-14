@@ -80,7 +80,8 @@ class MovementSystem : public ASystem
         virtual void                    in(IPacket *p){
             UdpPacket   *packet;
 
-            if ((packet = dynamic_cast<UdpPacket*>(p)) && packet->getQuery() == static_cast<uint16_t>(UdpCodes::NewPos))
+            if ((packet = dynamic_cast<UdpPacket*>(p)) &&
+				packet->getQuery() == static_cast<uint16_t>(UdpCodes::NewPos))
             {
                 std::string tmp = std::string(
                         static_cast<const char *>(packet->getData()), packet->getSize());
@@ -93,7 +94,7 @@ class MovementSystem : public ASystem
                 {
                     _lastId = packet->getID();
                     for(auto x : *_eList)
-                        if (x->manager.get<std::string>("name") == "player1")
+                        if (x->manager.get<std::string>("pseudo") == name)
                         {
                             auto tmp = x->manager.get<std::pair<float, float> >("position");
                             tmp.first = px;
