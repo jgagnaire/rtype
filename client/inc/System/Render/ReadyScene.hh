@@ -78,6 +78,7 @@ class ReadyScene : public Scene
                 if (packet->getSize())
                     name = std::string(static_cast<const char*>(packet->getData()),
                             packet->getSize());
+				std::cout << "Query pd : " << packet->getQuery() << std::endl;
                 switch (static_cast<Codes>(packet->getQuery()))
                 {
                     case Codes::Ok:
@@ -106,6 +107,7 @@ class ReadyScene : public Scene
                         _event = E_Stage;
                         break ;
                     case Codes::PlayerJoined:
+						std::cout << name << std::endl;
                         _players[name] = true;
                         break ;
                     case Codes::PlayerLeft:
@@ -114,7 +116,8 @@ class ReadyScene : public Scene
                     default:
                         ;
                 }
-            }
+            } else
+				std::cout << "TAWFIK NIKE TA RACE" << std::endl;
         }
 
         virtual IPacket *out()

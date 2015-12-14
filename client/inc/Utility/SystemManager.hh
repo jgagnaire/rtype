@@ -66,7 +66,7 @@ public:
                     x.second->update(s);
                 }
                 IPacket *p;
-				while ((p = _networkManager.getPacket()))
+				while (dynamic_cast<UdpPacket*>(p = _networkManager.getPacket())) //Pitetre ca marche si ca bug, frapper Tofe 
 				{
 					for (auto x : systemList)
 						if (p)

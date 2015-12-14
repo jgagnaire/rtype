@@ -53,7 +53,8 @@ class StageScene : public Scene
             int i = 0;
             for (auto x : tmp)
             {
-                std::cout << "Tmp " << x << std::endl;
+                std::cout << "Tmp : " << x << std::endl;
+				std::cout << "Pseudo : " << _entities->front()->manager.get<std::string>("pseudo") << std::endl;
                 if (x != "playersData" && _entities->front()->manager.get<std::string>("pseudo") != x)
                 {
                     std::cout << "Add " << x << std::endl;
