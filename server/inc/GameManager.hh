@@ -37,7 +37,7 @@ public:
     static void                     createGame(Game<SCK> *);
     bool                            isPlaying(const std::string &);
     void                            setUdpSocket(IServerSocket<SCK> *);
-    void			    sendPosition(Game<SCK> *);
+    void			    sendPosition(Game<SCK> *, UserManager<SCK> *);
 
 private:
     bool                            update(Game<SCK> *game, std::size_t);

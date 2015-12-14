@@ -98,6 +98,7 @@ template <typename SCK>
 inline
 bool        GameManager<SCK>::update(Game<SCK> *game, std::size_t time) {
     updatePositions(game, time);
+    
     return (!game->players.empty());
 }
 
@@ -132,25 +133,25 @@ void            GameManager<SCK>::createGame(Game<SCK> *game) {
 }
 
 template <typename SCK>
-void		GameManager<SCK>::sendPosition(Game<SCK> *game) {
+void		GameManager<SCK>::sendPosition(Game<SCK> *game, UserManager<SCK> *user) {
   Packet<UDPDataHeader> packet;
-  Position p;
+  Position		p;
+  std::string		s;
+  std::ostringstream	os[2];
 
+  p = user->getPosition();
+  os[0] << p.x;
+  os[1] << p.y;
+  s = user->getName() + ":" + os[0].str() + ":" + os[1].str();
+  UDPDataHeader pack = {static_cast<uint16_t>(s.size()),
+			static_cast<uint16_t>(Enum::PLAYER_POS),
+			user->getUDPPacketId()};
+  
   for (auto it = game->players.begin(); it != game->players.end(); ++it) {
-    std::string	s;
-    std::ostringstream	os[2];
-    p = (*it)->getPosition();
-
-    os[0] << p.x;
-    os[1] << p.y;
-    s = os[0].str() + ":" + os[1].str();
-    UDPDataHeader pack = {static_cast<uint16_t>(s.size()),
-			  static_cast<uint16_t>(Enum::PLAYER_POS),
-			  (*it)->getUDPPacketId()};
-    packet.stockOnBuff(pack);
-    packet.stockOnBuff(s);
-    packet.serialize();
-    packet.sendPacket<IServerSocket<SCK> *>(this->_udp_socket, (*it)->getIP(), "1726"); // TODO, no magic string
+      packet.stockOnBuff(pack);
+      packet.stockOnBuff(s);
+      packet.serialize();
+      packet.sendPacket<IServerSocket<SCK> *>(this->_udp_socket, (*it)->getIP(), "1726"); // TODO, no magic string
   }
 }
 

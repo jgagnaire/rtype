@@ -448,7 +448,7 @@ void                    UserManager<T>::changePosition(std::size_t time) {
     GameManager<T>	&g = GameManager<T>::instance();
 
     if (keypressed)
-      g.sendPosition(g.getGameByName(gameroom));
+      g.sendPosition(g.getGameByName(gameroom), this);
     keypressed = 0;
     game_mutex->unlock();
 }
