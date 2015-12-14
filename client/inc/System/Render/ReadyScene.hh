@@ -96,7 +96,10 @@ class ReadyScene : public Scene
                     case Codes::Begin:
                         e = new Entity();
                         for (auto x : _players)
+                        {
                             e->manager.add<std::string>(x.first, x.first);
+                            std::cout << "_players " << x.first << std::endl;
+                        }
                         e->manager.add<std::string>("type", "playersData");
                         e->manager.add<std::string>("name", "playersData");
                         _entities->push_back(e);
