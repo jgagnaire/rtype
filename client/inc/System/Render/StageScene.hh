@@ -14,10 +14,10 @@ class StageScene : public Scene
         StageScene(IWindow &win, std::list<Entity*> *e):
             Scene(win, e), _stageNb(1), _pSprites(4), _direction(noEvent)
     {
-        _pSprites[0].load("client/res/ship/player-ship-blue2_111.png", true);
-        _pSprites[1].load("client/res/ship/player-ship-green2_111.png", true);
-        _pSprites[2].load("client/res/ship/player-ship-red2_111.png", true);
-        _pSprites[3].load("client/res/ship/player-ship-purple2_111.png", true);
+        _pSprites[0].load("client/res/ship/player-ship-blue2_111.png");
+        _pSprites[1].load("client/res/ship/player-ship-green2_111.png");
+        _pSprites[2].load("client/res/ship/player-ship-red2_111.png");
+        _pSprites[3].load("client/res/ship/player-ship-purple2_111.png");
         _shoot.load("client/res/bullet.png");
         _shootEnnemy.load("client/res/bullet2.png");
 
@@ -102,7 +102,6 @@ class StageScene : public Scene
                 {
                     _pSprites[0].setPosition(sf::Vector2f(x->manager.get<std::pair<float, float> >("position").first,
                                 x->manager.get<std::pair<float, float> >("position").second));
-                    _pSprites[0].update(duration);
                 }
             }
             for (auto x : _players)
