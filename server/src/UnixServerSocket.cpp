@@ -65,7 +65,8 @@ bool UnixServerSocket::absWriteOnClient(char *tmp, size_t size,
   while (size > val)
     {
       if ((ret = ::sendto(this->sockfd, tmp,
-			 size - val, 0, reinterpret_cast<struct sockaddr *>(to), sizeof(to))) == -1
+			  size - val, 0,
+			  reinterpret_cast<struct sockaddr *>(to), sizeof(*to))) == -1
 	  and errno != EINTR)
 	return false;
       val += static_cast<size_t>(ret);

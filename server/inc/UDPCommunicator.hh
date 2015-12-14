@@ -61,6 +61,9 @@ public:
             this->network_monitor->observerFds();
             if (this->network_monitor->isObserved(dynamic_cast<IServerSocket<SCK> *>(this->srvset),
                                                   Enum::READ)) {
+	        init_memory(&_pack.header, sizeof(_pack.header));
+	        init_memory(&_data, sizeof(_data));
+		_pack.data.clear();
                 size_t ret = _packet.getPacket(dynamic_cast<IServerSocket<SCK>*>(this->srvset),
                                                &ip, true);
                 buff = _packet.getBuffer();
@@ -71,6 +74,7 @@ public:
                 _pack.data = _data.buff;
                 this->readAction(this->findUserByIP(ip));
                 _packet.clearAll();
+
             }
         }
     }
@@ -80,7 +84,7 @@ public:
             return (true);
         cli->setUdpPacketStruct(_pack);
         for (auto it = this->controllers.begin(); it != this->controllers.end(); ++it) {
-	    if (((*it)->*(this->newData))(cli) == 1) {
+	  if (((*it)->*(this->newData))(cli) == 1) {
 		cli->destroy_client_mutex->unlock();
                 return true;
 	    }

@@ -71,6 +71,8 @@ public:
     uint64_t                getUDPPacketId();
     bool                    isFiring();
     void                    changePosition(std::size_t);
+    const Position	    &getPosition() const;
+    const std::size_t	    &getKeypressed() const;
 
     Enum::ServerAnswers		verifyUser();
     Enum::ServerAnswers	    newUser();
@@ -105,6 +107,7 @@ private:
   uint64_t                                udp_packet_id;
   bool                                    is_ready;
   std::size_t                             keypressed;
+  std::size_t				  last_duration;
   bool                                    has_force;
   bool                                    fire;
   Position                                position;

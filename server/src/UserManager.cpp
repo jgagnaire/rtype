@@ -409,11 +409,20 @@ Enum::ServerAnswers     UserManager<T>::keyPressed() {
 }
 
 template <typename T>
+inline
+const std::size_t	    &UserManager<T>::getKeypressed() const { return (keypressed); }
+
+template <typename T>
 void                    UserManager<T>::changePosition(std::size_t time) {
     game_mutex->lock();
-    float               move =
-            static_cast<float>((GameManager<T>::getTime() - time) * 0.75);
-
+    // float k = 1.0f;
+    // for (unsigned i = 1; i < sizeof(uint64_t) * 8; i <<= 1) {
+    //   if (keypressed & i)
+    // 	++k;
+    //   if (k >= 2)
+    // 	break ;
+    // }
+    float	move = static_cast<float>(time * 1.75);
     if (static_cast<std::size_t>(Enum::LEFT) & keypressed) {
         position.x -= move;
         if (position.x < 0.01)
@@ -435,6 +444,12 @@ void                    UserManager<T>::changePosition(std::size_t time) {
             position.y = static_cast<float>(Enum::GAME_SIZE_HEIGHT);
     }
     fire = !(static_cast<std::size_t>(Enum::FIRE) & keypressed);
+
+    GameManager<T>	&g = GameManager<T>::instance();
+
+    if (keypressed)
+      g.sendPosition(g.getGameByName(gameroom));
+    keypressed = 0;
     game_mutex->unlock();
 }
 
@@ -444,6 +459,10 @@ Enum::ServerAnswers     UserManager<T>::takeForce() {
     has_force = true;
     return (Enum::OK);
 }
+
+template <typename T>
+inline
+const Position	    &UserManager<T>::getPosition() const { return (position); }
 
 #if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined (_WIN64)
 template class UserManager<SOCKET>;

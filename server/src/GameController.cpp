@@ -105,6 +105,7 @@ bool            GameController<T>::ready(UserManager<T> *cl) const {
     else if (g.isAllReady(cl->getGameroomName())) {
         if (game) {
             for (auto it = game->players.begin(); it != game->players.end(); ++it) {
+	      std::cout << "je clean: " << (*it)->getName() << std::endl;
                 (*it)->inGame();
                 (*it)->clearGameData();
                 (*it)->writeStruct({0, Enum::GAME_START});
