@@ -92,8 +92,7 @@ void        NetworkManager::receiveTcp()
             read = _tcp->receive(buf, packet->getSize());
         }
         packet->setData(buf);
-        std::cout << "Tcp {" << packet->getSize() <<
-            ", " << packet->getQuery() << "}" << std::endl;
+		std::cout << "tcp " << packet->getSize() << "-" << packet->getQuery() << std::endl;
         if (static_cast<Codes>(packet->getQuery()) == Codes::Ping)
         {
             TcpPacket   p;
@@ -125,7 +124,7 @@ IPacket     *NetworkManager::getPacket()
     if (_packets.empty() == false)
     {
         tmp = _packets.front();
-        _packets.pop_front();
+       _packets.pop_front();
         return tmp;
     }
     return 0;

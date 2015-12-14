@@ -12,45 +12,46 @@
 
 class SystemManager
 {
-public:
-	SystemManager(const std::string &ip):
-		_networkManager(ip, ip), shr_entities(new std::list<Entity*>)
+    public:
+        SystemManager(const std::string &ip):
+            _networkManager(ip, ip), shr_entities(new std::list<Entity*>)
+    {
+        Entity *e = new Entity;
+        e->manager.add<std::string>("pseudo", "");
+        e->manager.add<std::string>("name", "player1");
+        e->manager.add<std::string>("type", "player");
+        e->manager.add("position", std::pair<float, float>(0, 0));
+        e->manager.add<float>("velocity", 1.75f);
+        e->manager.add<bool>("isShared", true);
+        e->manager.add<Pattern::MovePattern>("pattern", Pattern::MovePattern::LINE);
+        shr_entities->push_back(e);
+
+        ASystem *render = new RenderSystem(shr_entities);
+        ASystem *audioCall = new AudioCallSystem();
+        ASystem *mvt = new MovementSystem(shr_entities);
+        ASystem *shot = new ShootSystem(shr_entities);
+
+        systemList["1mov"] = mvt;
+        systemList["2Shoot"] = shot;
+        systemList["3audioCall"] = audioCall;
+        systemList["4render"] = render;
+        ea = new EventAggregator(static_cast<RenderSystem*>(render)->getWindow());
+        clk = new Clock();
+        ea->add(render);
+        ea->add(mvt);
+        ea->add(shot);
+        ea->add(audioCall);
+    }
+
+        ~SystemManager()
         {
-			Entity *e = new Entity;
-			e->manager.add<std::string>("name", "player1");
-			e->manager.add<std::string>("type", "player");
-			e->manager.add("position", std::pair<float, float>(0, 0));
-			e->manager.add<float>("velocity", 1.75f);
-			e->manager.add<bool>("isShared", true);
-			e->manager.add<Pattern::MovePattern>("pattern", Pattern::MovePattern::LINE);
-			shr_entities->push_back(e);
-
-			ASystem *render = new RenderSystem(shr_entities);
-			ASystem *audioCall = new AudioCallSystem();
-			ASystem *mvt = new MovementSystem(shr_entities);
-			ASystem *shot = new ShootSystem(shr_entities);
-
-			systemList["1mov"] = mvt;
-			systemList["2Shoot"] = shot;
-			systemList["3audioCall"] = audioCall;
-			systemList["4render"] = render;
-            ea = new EventAggregator(static_cast<RenderSystem*>(render)->getWindow());
-            clk = new Clock();
-            ea->add(render);
-			ea->add(mvt);
-			ea->add(shot);
-            ea->add(audioCall);
+            for(auto x : systemList)
+                delete(x.second);
+            delete ea;
+            delete clk;
         }
 
-	~SystemManager()
-		{
-			for(auto x : systemList)
-				delete(x.second);
-			delete ea;
-			delete clk;
-		}
-
-	void gameLoop()
+        void gameLoop()
         {
             while (ea->getWin()->isOpen())
             {
@@ -64,19 +65,23 @@ public:
                         _networkManager.send(*m);
                     x.second->update(s);
                 }
-                IPacket *p = _networkManager.getPacket();
-                for (auto x : systemList)
+                IPacket *p;
+                while (dynamic_cast<UdpPacket*>(p = _networkManager.getPacket()))
                     if (p)
+                        for (auto x : systemList)
+                            x.second->in(p);
+                if (p)
+                    for (auto x : systemList)
                         x.second->in(p);
             }
         }
 
-private:
-    std::unordered_map<std::string, ASystem*>	systemList;
-    EventAggregator								*ea;
-    IClock										*clk;
-    NetworkManager								_networkManager;
-    std::list<Entity*>							*shr_entities;
+    private:
+        std::unordered_map<std::string, ASystem*>	systemList;
+        EventAggregator								*ea;
+        IClock										*clk;
+        NetworkManager								_networkManager;
+        std::list<Entity*>							*shr_entities;
 };
 
 #endif //SYSTEMMANAGER_HH_

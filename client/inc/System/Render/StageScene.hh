@@ -53,8 +53,11 @@ class StageScene : public Scene
             int i = 0;
             for (auto x : tmp)
             {
+                std::cout << "Tmp : " << x << std::endl;
+				std::cout << "Pseudo : " << _entities->front()->manager.get<std::string>("pseudo") << std::endl;
                 if (x != "playersData" && _entities->front()->manager.get<std::string>("pseudo") != x)
                 {
+                    std::cout << "Add " << x << std::endl;
                     _players[x] = &(_pSprites[++i]);
                     _guiPlayers.manager.add<ADrawable*>("player" + std::to_string(i + 1),
                             &_pSprites[i]);
@@ -62,6 +65,7 @@ class StageScene : public Scene
                 else
                     _players[x] = &(_pSprites[0]);
             }
+            _players[_entities->front()->manager.get<std::string>("pseudo")] = &(_pSprites[0]);
         }
 
         virtual ~StageScene()
@@ -85,8 +89,6 @@ class StageScene : public Scene
             _s2[_stageNb - 1]->update(duration);
             _s3[_stageNb - 1]->update(duration);
             _s4[_stageNb - 1]->update(duration);
-            for (auto x : _pSprites)
-                x.update(duration);
             _win.draw(_b1);
             _win.draw(_b2);
             _win.draw(_b3);
@@ -104,9 +106,11 @@ class StageScene : public Scene
                     _pSprites[0].setPosition(sf::Vector2f(x->manager.get<std::pair<float, float> >("position").first,
                                 x->manager.get<std::pair<float, float> >("position").second));
                     _pSprites[0].update(duration);
-                    _win.draw(_guiPlayers);
                 }
             }
+            for (auto x : _players)
+                x.second->update(duration);
+            _win.draw(_guiPlayers);
             _win.draw(_b4);
         }
 
@@ -127,6 +131,7 @@ class StageScene : public Scene
                 if (_lastId < packet->getID())
                 {
                     _lastId = packet->getID();
+                    std::cout << "Move " << name << std::endl;
                     if (_players[name])
                         _players[name]->setPosition(sf::Vector2f(px, py));
                 }

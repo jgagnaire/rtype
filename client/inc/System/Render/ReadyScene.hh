@@ -71,7 +71,6 @@ class ReadyScene : public Scene
         {
             TcpPacket   *packet;
             std::string name;
-            int         i = 0;
             Entity *e;
 
             if ((packet = dynamic_cast<TcpPacket*>(p)))
@@ -79,6 +78,7 @@ class ReadyScene : public Scene
                 if (packet->getSize())
                     name = std::string(static_cast<const char*>(packet->getData()),
                             packet->getSize());
+				std::cout << "Query pd : " << packet->getQuery() << std::endl;
                 switch (static_cast<Codes>(packet->getQuery()))
                 {
                     case Codes::Ok:
@@ -93,16 +93,21 @@ class ReadyScene : public Scene
                         {
                             _quit = true;
                         }
+                        break ;
+                    case Codes::Begin:
                         e = new Entity();
                         for (auto x : _players)
-                            e->manager.add<std::string>(x.first,
-                                    "player" + std::to_string(++i));
+                        {
+                            e->manager.add<std::string>(x.first, x.first);
+                            std::cout << "_players " << x.first << std::endl;
+                        }
                         e->manager.add<std::string>("type", "playersData");
+                        e->manager.add<std::string>("name", "playersData");
                         _entities->push_back(e);
-                    case Codes::Begin:
                         _event = E_Stage;
                         break ;
                     case Codes::PlayerJoined:
+						std::cout << name << std::endl;
                         _players[name] = true;
                         break ;
                     case Codes::PlayerLeft:
@@ -111,7 +116,8 @@ class ReadyScene : public Scene
                     default:
                         ;
                 }
-            }
+            } else
+				std::cout << "TAWFIK NIKE TA RACE" << std::endl;
         }
 
         virtual IPacket *out()

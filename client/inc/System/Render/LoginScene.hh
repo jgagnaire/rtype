@@ -61,7 +61,7 @@ class LoginScene : public Scene
                     {
                         case Codes::Ok:
                             _event = E_GameRoom;
-							_entities->front()->manager.add<std::string>("pseudo", _login);
+                            _entities->front()->manager.set<std::string>("pseudo", _login);
                             break ;
                         case Codes::WrongUserPass:
                             _error.setText("Wrong username or password");
@@ -79,7 +79,7 @@ class LoginScene : public Scene
                     {
                         case Codes::Ok:
                             _event = E_GameRoom;
-							_entities->front()->manager.add<std::string>("pseudo", _login);
+                            _entities->front()->manager.set<std::string>("pseudo", _login);
                             break ;
                         case Codes::WrongUserPass:
                             _error.setText("Wrong username or password");
@@ -96,7 +96,7 @@ class LoginScene : public Scene
 
         virtual void    handle(EventSum e, EventSum &send)
         {
-             if (_event)
+            if (_event)
             {
                 send = _event;
                 _event = noEvent;
