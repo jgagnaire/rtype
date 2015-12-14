@@ -70,9 +70,15 @@ class ReadyScene : public Scene
         virtual void    in(IPacket *p)
         {
             TcpPacket   *packet;
+            std::string name;
+            int         i = 0;
+            Entity *e;
 
             if ((packet = dynamic_cast<TcpPacket*>(p)))
             {
+                if (packet->getSize())
+                    name = std::string(static_cast<const char*>(packet->getData()),
+                            packet->getSize());
                 switch (static_cast<Codes>(packet->getQuery()))
                 {
                     case Codes::Ok:
@@ -87,9 +93,21 @@ class ReadyScene : public Scene
                         {
                             _quit = true;
                         }
+                        e = new Entity();
+                        for (auto x : _players)
+                            e->manager.add<std::string>(x.first,
+                                    "player" + std::to_string(++i));
+                        e->manager.add<std::string>("type", "playersData");
+                        _entities->push_back(e);
                     case Codes::Begin:
                         _event = E_Stage;
                         break ;
+                    case Codes::PlayerJoined:
+                        _players[name] = true;
+                        break ;
+                    case Codes::PlayerLeft:
+                        _players.erase(name);
+                        break;
                     default:
                         ;
                 }

@@ -114,11 +114,10 @@ void            GameManager<SCK>::createGame(Game<SCK> *game) {
     GameManager<SCK> &g = GameManager<SCK>::instance();
     bool        is_not_finished = true;
     std::size_t	duration;
-    std::chrono::_V2::steady_clock::time_point start = std::chrono::steady_clock::now();
-    std::chrono::_V2::steady_clock::time_point end;
+    auto start = std::chrono::steady_clock::now();
 
     std::cout << "Que la partie commence pour la room: " << game->name << std::endl;
-    end = std::chrono::steady_clock::now();
+    auto end = std::chrono::steady_clock::now();
     while (is_not_finished) {
       std::chrono::duration<double> diff = start - end;
 

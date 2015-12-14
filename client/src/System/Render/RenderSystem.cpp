@@ -63,6 +63,7 @@ bool RenderSystem::handle(EventSum e)
             break;
         case E_Stage:
             _current = _stage;
+            _current->init();
             break;
         case E_GameRoom:
             _current = _gameRoom;

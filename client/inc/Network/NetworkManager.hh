@@ -28,12 +28,15 @@ enum class Codes
     LeaveRoom = 300,
     Ready = 301,
     NotReady = 302,
-    Begin = 402
+    Begin = 402,
+    PlayerJoined = 400,
+    PlayerLeft = 401
 };
 
 enum class UdpCodes
 {
     KeyPressed = 301,
+    NewPos = 408
 };
 
 class NetworkManager

@@ -12,6 +12,8 @@ class Scene
         Scene(IWindow &win, std::list<Entity*> *entities):
             _win(win), _entities(entities)
         {}
+
+        virtual void init() {}
         virtual ~Scene() {}
 
         virtual void update(int) = 0;
@@ -20,6 +22,7 @@ class Scene
         virtual void in(IPacket*) {}
         virtual IPacket *out() {return 0;}
 
+        virtual void draw() {}
     protected:
         IWindow                         &_win;
         std::list<Entity*>              *_entities;

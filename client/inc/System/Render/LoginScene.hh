@@ -61,6 +61,7 @@ class LoginScene : public Scene
                     {
                         case Codes::Ok:
                             _event = E_GameRoom;
+							_entities->front()->manager.add<std::string>("pseudo", _login);
                             break ;
                         case Codes::WrongUserPass:
                             _error.setText("Wrong username or password");
@@ -78,6 +79,7 @@ class LoginScene : public Scene
                     {
                         case Codes::Ok:
                             _event = E_GameRoom;
+							_entities->front()->manager.add<std::string>("pseudo", _login);
                             break ;
                         case Codes::WrongUserPass:
                             _error.setText("Wrong username or password");

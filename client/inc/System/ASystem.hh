@@ -21,6 +21,7 @@ public:
 	virtual bool                    handle(EventSum e) = 0;
 	virtual std::vector<REvent>     &broadcast(void) = 0;
 	virtual EventSum                getEvent() = 0;
+
 protected:
 	std::vector<REvent> _eventList;
 };

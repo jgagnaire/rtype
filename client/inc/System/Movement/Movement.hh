@@ -15,21 +15,24 @@ class MovementSystem : public ASystem
             _eventList.push_back(Key_Left);
             _eventList.push_back(Key_Right);
 			_eventList.push_back(E_Stage);
+            _frequency= 0;
+            _lastId = 0;
         }
 
         virtual ~MovementSystem() {};
 
         virtual void                    update(int duration)
         {
+            _frequency+= duration;
 			if (!isActiv)
 				return ;
-            float culpointastah = 1.0f;
+            float k = 1.0f;
 
             for (unsigned i = 1; i < sizeof(EventSum) * 8; i <<= 1)
             {
                 if (lastEvent & i)
-                    ++culpointastah;
-                if (culpointastah >= 2)
+                    ++k;
+                if (k >= 2)
                     break ;
             }
 
@@ -38,7 +41,7 @@ class MovementSystem : public ASystem
             {
                 if (x->manager.get<std::string>("name") == "player1")
                 {
-					move *= (x->manager.get<float>("velocity") / culpointastah);
+					move *= (x->manager.get<float>("velocity") / k);
                     std::pair<float, float> tmp =
                         x->manager.get<std::pair<float, float> >("position");
                     if (lastEvent & Key_Up)
@@ -61,24 +64,51 @@ class MovementSystem : public ASystem
         virtual IPacket                 *out() {
             if (isActiv == false)
                 return (0);
-            if (lastEvent)
+            if (lastEvent && _frequency > 30)
             {
-                for(auto x : *_eList)
-                if (x->manager.get<std::string>("name") == "player1")
-                {
-                    auto tmp = x->manager.get<std::pair<float, float> >("position");
-                std::cout << tmp.first << "/" << tmp.second << std::endl;
-                }
                 std::string     tmp = std::to_string(lastEvent);
                 _packet.setQuery(static_cast<uint16_t>(UdpCodes::KeyPressed));
                 _packet.setData(tmp.c_str());
                 _packet.setSize(static_cast<uint16_t>(tmp.size()));
                 lastEvent = 0;
+                _frequency = 0;
                 return (&_packet);
             }
             return (0);
         }
-        virtual void                    in(IPacket*){}
+
+        virtual void                    in(IPacket *p){
+            UdpPacket   *packet;
+
+            if ((packet = dynamic_cast<UdpPacket*>(p)) &&
+				packet->getQuery() == static_cast<uint16_t>(UdpCodes::NewPos))
+            {
+                std::string tmp = std::string(
+                        static_cast<const char *>(packet->getData()), packet->getSize());
+                float px, py;
+                std::string name = tmp.substr(0, tmp.find(":")).c_str();
+                tmp = tmp.substr(tmp.find(":") + 1);
+                px = std::atof(tmp.substr(0, tmp.find(":")).c_str());
+                py = std::atof(tmp.substr(tmp.find(":") + 1).c_str());
+                if (_lastId < packet->getID())
+                {
+                    _lastId = packet->getID();
+                    for(auto x : *_eList)
+                    {
+                        try {
+                        if (x->manager.get<std::string>("pseudo") == name)
+                        {
+                            auto tmp = x->manager.get<std::pair<float, float> >("position");
+                            tmp.first = px;
+                            tmp.second = py;
+                            x->manager.set<std::pair<float, float> >("position", tmp);
+                        }
+                        } catch (ComponentManagerException &) {}
+                    }
+                }
+            }
+        }
+
         virtual bool                    handle(EventSum e)
         {
             if (e == E_Stage)
@@ -102,6 +132,8 @@ class MovementSystem : public ASystem
         EventSum			lastEvent;
         bool				isActiv;
         UdpPacket           _packet;
+        int                 _frequency;
+        uint64_t            _lastId;
 };
 
 #endif // MOVEMENT_HH_
