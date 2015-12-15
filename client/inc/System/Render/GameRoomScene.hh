@@ -126,7 +126,7 @@ class GameRoomScene : public Scene
                 switch (static_cast<Codes>(packet->getQuery()))
                 {
                     case Codes::Ok:
-                        if (_lastCode == Codes::JoinRoom)
+                        if (_lastCode != Codes::nothing)
                             _event = E_Ready;
                         break;
                     case Codes::AlreadyInRoom:

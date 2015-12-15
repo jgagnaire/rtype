@@ -46,7 +46,7 @@ void    NetworkManager::send(const IPacket &packet)
     if (isTcp)
     {
         _tcp->send(buf, totalSize);
-        std::cout << "TCP " << packet.getSize() << "-" <<
+        std::cout << "SEND TCP " << packet.getSize() << "-" <<
             packet.getQuery() << std::endl;
     }
     else
