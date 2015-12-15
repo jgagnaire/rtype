@@ -67,6 +67,7 @@ void        GameManager<SCK>::fireBall(Game<SCK> *game, UserManager<SCK> *u,
   Entity	tmp;
 
   tmp = _game_system["fires"]->getEntity().manager.get<Entity>("fires");
+  auto test = tmp.manager.getAll<Entity>();
   if (second_weapon)
     ent = new Entity(tmp.manager.get<Entity>("rotate"));
   else
@@ -114,7 +115,7 @@ void        GameManager<SCK>::updatePositions(Game<SCK> *game, std::size_t time)
 template <typename SCK>
 bool        GameManager<SCK>::update(Game<SCK> *game, std::size_t time) {
     updatePositions(game, time);
-    //    game->shoot_system->update(time);
+    game->shoot_system->update(time);
     return (!game->players.empty());
 }
 

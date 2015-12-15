@@ -147,7 +147,6 @@ Entity			JSONParser::hashParse(std::string &content) {
 Entity			JSONParser::hashParse(std::string &content,
 				      Entity &entity) {
   std::string		tmp;
-  Enum::JSON		ret;
 
   while (1) {
     tmp = getKeys(content);
@@ -155,17 +154,17 @@ Entity			JSONParser::hashParse(std::string &content,
       delete this;
       throw (JSONException("Parsing error"));
     }
-    ret = getValue(entity, tmp, content);
-    if (*content.begin() == '}')
+    getValue(entity, tmp, content);
+    if (*content.begin() == '}' || content.empty()) {
       break ;
+    }
     else if (*content.begin() != ',') {
       delete this;
       throw (JSONException("Parsing error"));
     }
     content.erase(0, 1);
   }
-  if (ret == Enum::IS_HASH)
-    content.erase(0, 1);
+  content.erase(0, 1);
   return (entity);
 }
 
