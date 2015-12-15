@@ -44,7 +44,11 @@ void    NetworkManager::send(const IPacket &packet)
     std::memcpy(buf + totalSize - packet.getSize(),
             packet.getData(), packet.getSize());
     if (isTcp)
+    {
         _tcp->send(buf, totalSize);
+        std::cout << "TCP " << packet.getSize() << "-" <<
+            packet.getQuery() << std::endl;
+    }
     else
         _udp->send(buf, totalSize, _udpIp, 1725);
 }
@@ -93,7 +97,7 @@ void        NetworkManager::receiveTcp()
             read = _tcp->receive(buf, packet->getSize());
         }
         packet->setData(buf);
-		std::cout << "tcp " << packet->getSize() << "-" << packet->getQuery() << std::endl;
+        std::cout << "tcp " << packet->getSize() << "-" << packet->getQuery() << std::endl;
         if (static_cast<Codes>(packet->getQuery()) == Codes::Ping)
         {
             TcpPacket   p;
