@@ -2,6 +2,7 @@
 # define MOVEMENT_HH_
 
 #include "System/ASystem.hh"
+#include "System/Shoot/ShootSystem.hh"
 #include "Network/UdpSocket.hh"
 
 class MovementSystem : public ASystem
@@ -79,7 +80,8 @@ class MovementSystem : public ASystem
 
         virtual void                    in(IPacket *p){
             UdpPacket   *packet;
-
+			bool		isExist = false;
+			
             if ((packet = dynamic_cast<UdpPacket*>(p)) &&
 				packet->getQuery() == static_cast<uint16_t>(UdpCodes::NewPos))
             {
@@ -102,9 +104,21 @@ class MovementSystem : public ASystem
                             tmp.first = px;
                             tmp.second = py;
                             x->manager.set<std::pair<float, float> >("position", tmp);
+							isExist = true;
                         }
+						
                         } catch (ComponentManagerException &) {}
                     }
+					if (!isExist)
+					{
+						Entity *e = new Entity;
+						e->manager.add<std::string>("type", "player");
+						e->manager.add<std::string>("name", name);
+						e->manager.add<std::pair<float, float> >
+							("position", std::pair<float, float>(px, py));
+						e->manager.add<Pattern::MovePattern>
+							("pattern", Pattern::MovePattern::LINE);
+					}
                 }
             }
         }

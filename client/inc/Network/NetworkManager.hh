@@ -36,6 +36,7 @@ enum class Codes
 enum class UdpCodes
 {
     KeyPressed = 301,
+		ServeKeyPressed = 407,
     NewPos = 408
 };
 
