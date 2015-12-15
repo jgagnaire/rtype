@@ -95,6 +95,7 @@ void    ReadyScene::in(IPacket *p)
 				Entity *pl = new Entity;
 				pl->manager.add<std::string>("type", "player");
 				pl->manager.add<std::string>("pseudo", x.first);
+				pl->manager.add<std::string>("name", x.first);
 				// pl->manager.add<Pattern::MovePattern>
 				// 	("pattern", Pattern::MovePattern::LINE);
 				_entities->push_back(pl);

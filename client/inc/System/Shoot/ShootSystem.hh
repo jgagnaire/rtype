@@ -90,7 +90,7 @@ public:
 			EventSum e = std::atof(tmp.c_str());
 			if (e & Key_Fire)
 			{
-				std::cout << "Friends fire" << std::cout;
+				std::cout << "Friends fire" << std::endl;
 				for (auto x : *_eList)
 				{
 					if (x->manager.get<std::string>("name") == name)
