@@ -91,7 +91,6 @@ class StageScene : public Scene
             _win.draw(_b3);
             for (auto x : *_entities)
             {
-				try {
                 if (x->manager.get<std::string>("type") == "shoot")
                 {
                     _shoot.setPosition(sf::Vector2f(x->manager.get<std::pair<float, float> >("position").first,
@@ -102,9 +101,8 @@ class StageScene : public Scene
                 else if (x->manager.get<std::string>("name") == "player1")
                 {
                     _pSprites[0].setPosition(sf::Vector2f(x->manager.get<std::pair<float, float> >("position").first,
-														  x->manager.get<std::pair<float, float> >("position").second));
+                                x->manager.get<std::pair<float, float> >("position").second));
                 }
-				} catch (...) {}
             }
             for (auto x : _players)
                 x.second->update(duration);
