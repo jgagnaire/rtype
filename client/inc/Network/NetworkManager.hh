@@ -1,7 +1,7 @@
 #ifndef NETWORKMANAGER_HH_
 # define NETWORKMANAGER_HH_
 
-# include <list>
+# include <vector>
 # include <cstdint>
 # include "IPacket.hh"
 # include "IUdpSocket.hh"
@@ -9,6 +9,7 @@
 
 enum class Codes
 {
+    nothing = 0,
     Ping = 109,
     Pong = 110,
     Login = 100,
@@ -30,7 +31,7 @@ enum class Codes
     NotReady = 302,
     Begin = 402,
     PlayerJoined = 400,
-    PlayerLeft = 401
+    PlayerLeft = 401,
 };
 
 enum class UdpCodes
@@ -53,7 +54,7 @@ class NetworkManager
         void            receiveUdp();
         void            receiveTcp();
 
-        std::list<IPacket*>         _packets;
+        std::vector<IPacket*>       _packets;
         IUdpSocket                  *_udp;
         ITcpSocket                  *_tcp;
         std::string                 _tcpIp;

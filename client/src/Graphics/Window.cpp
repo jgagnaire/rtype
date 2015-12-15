@@ -100,6 +100,8 @@ EventSum Window::getEvent()
         tmp |= Key_Fire;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
         tmp |= Key_Charge;
+    if (tmp)
+        return tmp;
     if (sf::Joystick::isConnected(0))
     {
         float x, y, z, r;
@@ -109,9 +111,11 @@ EventSum Window::getEvent()
         r = sf::Joystick::getAxisPosition(0, sf::Joystick::R);
         float &dir = ((x > 0 ? x : -x) > (y > 0 ? y : -y) ? x : y);
         if (z > -90.0)
-            return (Key_Change);
+            return ((_menuMode ? 125 | Key_Change : Key_Change));
         if (sf::Joystick::isButtonPressed(0, 1))
-            tmp |= Key_Charge;
+            tmp |= (_menuMode ? 127 | Key_Change : 0);
+        if (sf::Joystick::isButtonPressed(0, 0))
+            tmp |= (_menuMode ? 126 | Key_Change : Key_Charge);
         if (r > -90.0)
             tmp |= Key_Fire;
         if (&dir == &x && x > 25)

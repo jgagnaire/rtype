@@ -68,11 +68,19 @@ class SystemManager
                 IPacket *p;
                 while (dynamic_cast<UdpPacket*>(p = _networkManager.getPacket()))
                     if (p)
+                    {
                         for (auto x : systemList)
                             x.second->in(p);
+                        delete[] static_cast<const char*>(p->getData());
+                        delete p;
+                    }
                 if (p)
+                {
                     for (auto x : systemList)
                         x.second->in(p);
+                    delete[] static_cast<const char*>(p->getData());
+                    delete p;
+                }
             }
         }
 
