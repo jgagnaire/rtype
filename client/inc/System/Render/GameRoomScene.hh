@@ -48,6 +48,8 @@ class GameRoomScene : public Scene
                 send = _event;
                 _event = 0;
                 _lastCode = Codes::nothing;
+                _currentR = 0;
+                _current = 0;
                 return ;
             }
             if (e == Key_Change)
