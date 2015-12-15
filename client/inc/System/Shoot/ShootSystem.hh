@@ -1,7 +1,7 @@
 #ifndef SHOOTSYSTEM_HH_
 # define SHOOTSYSTEM_HH_
 
-#include "Pattern.hh"
+# include "Pattern.hh"
 
 class ShootSystem : public ASystem
 {
