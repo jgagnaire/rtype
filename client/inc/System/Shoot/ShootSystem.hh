@@ -125,6 +125,7 @@ class ShootSystem : public ASystem
                 isActiv = !isActiv;
             if (ev & Key_Fire && this->fireRate == 250 && isActiv)
             {
+				lastEvent = ev;
                 Entity *e = new Entity;
 
                 e->manager.add<std::string>("name", "playerShoot");
@@ -149,6 +150,7 @@ class ShootSystem : public ASystem
             }
             else if (ev & Key_Change && isActiv)
             {
+                lastEvent = ev;
                 for(auto x : *_eList)
                     if (x->manager.get<std::string>("name") == "player1")
                     {
@@ -158,8 +160,6 @@ class ShootSystem : public ASystem
                         break ;
                     }
             }
-            if (ev)
-                lastEvent = ev;
             return true;
         }
         virtual std::vector<REvent>     &broadcast(void)
