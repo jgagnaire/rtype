@@ -62,11 +62,13 @@ void    RenderSystem::in(IPacket *p)
 
         if (Codes::PlayerJoined == static_cast<Codes>(packet->getQuery()))
             {
+                std::pair<float, float> pos;
                 std::cout << "labite de ouf" << std::endl;
                 Entity *pl = new Entity;
                 pl->manager.add<std::string>("type", "player");
                 pl->manager.add<std::string>("pseudo", name);
                 pl->manager.add<std::string>("name", name);
+                pl->manager.add<std::pair<float, float> >("position", pos);
                 pl->manager.add<Pattern::MovePattern>
                     ("pattern", Pattern::MovePattern::LINE);
                 _entities->push_back(pl);
