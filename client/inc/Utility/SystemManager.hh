@@ -71,12 +71,14 @@ class SystemManager
                     {
                         for (auto x : systemList)
                             x.second->in(p);
+                        delete[] static_cast<const char*>(p->getData());
                         delete p;
                     }
                 if (p)
                 {
                     for (auto x : systemList)
                         x.second->in(p);
+                    delete[] static_cast<const char*>(p->getData());
                     delete p;
                 }
             }
