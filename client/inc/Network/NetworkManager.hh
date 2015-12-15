@@ -1,7 +1,7 @@
 #ifndef NETWORKMANAGER_HH_
 # define NETWORKMANAGER_HH_
 
-# include <list>
+# include <vector>
 # include <cstdint>
 # include "IPacket.hh"
 # include "IUdpSocket.hh"
@@ -52,7 +52,7 @@ class NetworkManager
         void            receiveUdp();
         void            receiveTcp();
 
-        std::list<IPacket*>         _packets;
+        std::vector<IPacket*>       _packets;
         IUdpSocket                  *_udp;
         ITcpSocket                  *_tcp;
         std::string                 _tcpIp;

@@ -11,6 +11,7 @@ NetworkManager::NetworkManager(const std::string &ip,
     _udp(new UdpSocket()), _tcp(new TcpSocket()),
     _tcpIp(ip), _udpIp(udpIp)
 {
+    _packets.reserve(200);
     _tcp->connect(ip, 1119);
     _udp->bind(1726);
 }
@@ -124,7 +125,7 @@ IPacket     *NetworkManager::getPacket()
     if (_packets.empty() == false)
     {
         tmp = _packets.front();
-       _packets.pop_front();
+        _packets.erase(_packets.begin());
         return tmp;
     }
     return 0;
