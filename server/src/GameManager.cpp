@@ -2,14 +2,21 @@
 #include "GameManager.hh"
 
 template <typename SCK>
+GameManager<SCK>::GameManager() {
+  JSONParser::parseFile("./entities/fires"); // TODO, no magic string
+  _game_system["fires"] = JSONParser::parse();
+  JSONParser::parseFile("./entities/levels"); // TODO, no magic string
+  _game_system["levels"] = JSONParser::parse();
+}
+
+template <typename SCK>
 GameManager<SCK> *GameManager<SCK>::game_manager = 0;
 
 template <typename SCK>
-inline
 GameManager<SCK>     &GameManager<SCK>::instance() {
-    if (GameManager::game_manager == 0)
-        GameManager::game_manager = new GameManager();
-    return (*game_manager);
+  if (GameManager::game_manager == 0)
+    GameManager::game_manager = new GameManager();
+  return (*game_manager);
 }
 
 template <typename SCK>
@@ -22,7 +29,6 @@ Game<SCK>        *GameManager<SCK>::getGameByName(const std::string &name) {
 }
 
 template <typename SCK>
-inline
 void        GameManager<SCK>::createRoom(const std::string &name, UserManager<SCK> *s) {
     Game<SCK>    *g = new Game<SCK>;
 
@@ -39,8 +45,8 @@ void        GameManager<SCK>::deleteUser(UserManager<SCK> *u) {
         return ;
     for (auto it = g->players.begin(); it != g->players.end(); ++it) {
         if (u->getName() == (*it)->getName()) {
+	    std::cout << u->getName() << " est trouve dans la room " << g->name << std::endl;
             g->players.erase(it);
-	    std::cout << u->getName() << " trouve dans la room " << g->name << std::endl;
             break ;
         }
     }
@@ -52,6 +58,20 @@ void        GameManager<SCK>::deleteUser(UserManager<SCK> *u) {
             }
         }
     }
+}
+
+template <typename SCK>
+void        GameManager<SCK>::fireBall(Game<SCK> *game, UserManager<SCK> *u,
+				       bool second_weapon) {
+  Entity	*ent;
+  Entity	tmp;
+
+  tmp = _game_system["fires"]->getEntity().manager.get<Entity>("fires");
+  if (second_weapon)
+    ent = new Entity(tmp.manager.get<Entity>("rotate"));
+  else
+    ent = new Entity(tmp.manager.get<Entity>("normal"));
+  game->shoot_system->handle(u->getName(), ent, false, u->getPosition());
 }
 
 template <typename SCK>
@@ -67,7 +87,6 @@ bool        GameManager<SCK>::joinRoom(const std::string &name, UserManager<SCK>
 }
 
 template <typename SCK>
-inline
 bool        GameManager<SCK>::roomIsFull(const std::string &name) {
     Game<SCK> *game = getGameByName(name);
 
@@ -77,7 +96,6 @@ bool        GameManager<SCK>::roomIsFull(const std::string &name) {
 }
 
 template <typename SCK>
-inline
 void        GameManager<SCK>::launchGame(const std::string &game_name) {
     Game<SCK>    *game = getGameByName(game_name);
 
@@ -88,22 +106,19 @@ void        GameManager<SCK>::launchGame(const std::string &game_name) {
 }
 
 template <typename SCK>
-inline
 void        GameManager<SCK>::updatePositions(Game<SCK> *game, std::size_t time) {
     for (auto it = game->players.begin(); it != game->players.end(); ++it)
         (*it)->changePosition(time);
 }
 
 template <typename SCK>
-inline
 bool        GameManager<SCK>::update(Game<SCK> *game, std::size_t time) {
     updatePositions(game, time);
-    
+    //    game->shoot_system->update(time);
     return (!game->players.empty());
 }
 
 template <typename SCK>
-inline
 std::size_t   GameManager<SCK>::getTime() {
     return (std::chrono::system_clock::now().time_since_epoch() /
             std::chrono::milliseconds(1));
@@ -167,7 +182,6 @@ void		GameManager<SCK>::sendPosition(Game<SCK> *game, UserManager<SCK> *user) {
 }
 
 template <typename SCK>
-inline
 bool        GameManager<SCK>::isPlaying(const std::string &roomname) {
     Game<SCK> *g = getGameByName(roomname);
 
@@ -175,7 +189,6 @@ bool        GameManager<SCK>::isPlaying(const std::string &roomname) {
 }
 
 template <typename SCK>
-inline
 void        GameManager<SCK>::setUdpSocket(IServerSocket<SCK> *sock) { _udp_socket = sock; }
 
 template <typename SCK>
@@ -195,7 +208,6 @@ bool        GameManager<SCK>::isAllReady(const std::string &roomname) {
 }
 
 template <typename SCK>
-inline
 const std::list<Game<SCK> *>        &GameManager<SCK>::getGames() const { return (_games); }
 
 #if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined (_WIN64)

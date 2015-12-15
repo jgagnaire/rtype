@@ -11,7 +11,8 @@ public:
   JSONParser();
   ~JSONParser();
   JSONParser(const JSONParser &);
-  JSONParser	&operator=(const JSONParser &);
+  JSONParser		&operator=(const JSONParser &);
+  Entity		&getEntity();
   static bool		parseFile(const std::string &);
   static JSONParser	*parse();
   
@@ -21,13 +22,13 @@ private:
   std::string		getKeys(std::string &);
   std::string		stringParse(std::string &);
   int			valParse(std::string &);
-  std::vector<Entity>	hashParse(std::string &);
-  std::vector<Entity>	hashParse(std::string &, std::vector<Entity> &);
+  Entity		hashParse(std::string &);
+  Entity		hashParse(std::string &, Entity &);
   void			getValueForArray(Entity &, const std::string &,
 					 std::string &);
   Enum::JSON		getValue(Entity &, const std::string &,
 				 std::string &);
-  void			_getVal(std::vector<std::vector<Entity> > &val,
+  void			_getVal(std::vector<Entity> &val,
 				std::string &content);
   void			_getVal(std::vector<std::string> &val,
 				std::string &content);
@@ -84,5 +85,5 @@ private:
 
 
   static std::fstream	_stream;
-  std::vector<Entity>	_main_entity;
+  Entity		_main_entity;
 };

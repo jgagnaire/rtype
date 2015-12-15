@@ -1,4 +1,5 @@
 #include <iostream>
+#include "JSONParser.hh"
 #include "AccountController.hh"
 #include "NetworkManager.hh"
 #include "GameController.hh"
