@@ -42,12 +42,24 @@ class LoginScene : public Scene
         _texts.manager.add<ADrawable*>("titlePassword", &_titlePassword);
         _texts.manager.add<ADrawable*>("printedPassword", &_printedPassword);
         _texts.manager.add<ADrawable*>("error", &_error);
-        _currentStr = &_login;
-        _currentText = &_printedLogin;
+        reset();
     }
         virtual ~LoginScene()
         {
 
+        }
+
+        void            reset()
+        {
+            _login.clear();
+            _password.clear();
+            _printedLogin.setText("");
+            _printedPassword.setText("");
+            _currentStr = &_login;
+            _currentText = &_printedLogin;
+            _finish = LoginState::NotConnected;
+            _event = noEvent;
+            _lastCode = Codes::nothing;
         }
 
         virtual void    in(IPacket *p)
@@ -64,9 +76,11 @@ class LoginScene : public Scene
                             _entities->front()->manager.set<std::string>("pseudo", _login);
                             break ;
                         case Codes::WrongUserPass:
+                            reset();
                             _error.setText("Wrong username or password");
                             break ;
                         case Codes::AlreadyLogin:
+                            reset();
                             _error.setText("Already Loged in");
                             break ;
                         default:
@@ -78,14 +92,16 @@ class LoginScene : public Scene
                     switch (static_cast<Codes>(packet->getQuery()))
                     {
                         case Codes::Ok:
-                            _event = E_GameRoom;
-                            _entities->front()->manager.set<std::string>("pseudo", _login);
+                            reset();
+                            _error.setText("Succesfully registered");
                             break ;
-                        case Codes::WrongUserPass:
-                            _error.setText("Wrong username or password");
+                        case Codes::WrongFormat:
+                            reset();
+                            _error.setText("Wrong username or password format");
                             break ;
-                        case Codes::AlreadyLogin:
-                            _error.setText("Already Loged in");
+                        case Codes::AlreadyExist:
+                            reset();
+                            _error.setText("Already Exist");
                             break ;
                         default:
                             ;

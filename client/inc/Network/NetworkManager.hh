@@ -9,6 +9,7 @@
 
 enum class Codes
 {
+    nothing = 0,
     Ping = 109,
     Pong = 110,
     Login = 100,
@@ -30,7 +31,7 @@ enum class Codes
     NotReady = 302,
     Begin = 402,
     PlayerJoined = 400,
-    PlayerLeft = 401
+    PlayerLeft = 401,
 };
 
 enum class UdpCodes
