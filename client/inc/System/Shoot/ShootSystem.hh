@@ -118,7 +118,6 @@ public:
 			_packet.setQuery(static_cast<uint16_t>(UdpCodes::KeyPressed));
 			_packet.setData(tmp.c_str());
 			_packet.setSize(static_cast<uint16_t>(tmp.size()));
-            std::cout << "out " << lastEvent << std::endl;
 			lastEvent = 0;
 			_frequency = 0;
 			return (&_packet);
