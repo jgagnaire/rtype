@@ -8,13 +8,13 @@ JSONParser::JSONParser() {}
 
 JSONParser::~JSONParser() {}
 
-inline
+
 JSONParser::JSONParser(const JSONParser &jp) {
   if (this != &jp)
     this->_main_entity = jp._main_entity;
 }
 
-inline
+
 JSONParser	&JSONParser::operator=(const JSONParser &jp) {
   if (this != &jp)
     this->_main_entity = jp._main_entity;
@@ -28,7 +28,7 @@ bool	JSONParser::parseFile(const std::string & pathname) {
   return (JSONParser::_stream.is_open());
 }
 
-inline
+
 bool		JSONParser::eraseDelimiter(std::string &content) {
   if (*content.begin() != ':')
     return (false);
@@ -36,10 +36,10 @@ bool		JSONParser::eraseDelimiter(std::string &content) {
   return (true);
 }
 
-inline
+
 bool		JSONParser::isAlpha(const char c) { return (c >= '0' && c <= '9'); }
 
-int		JSONParser::valParse(std::string &content) {
+int			JSONParser::valParse(std::string &content) {
   int			val = 0;
   int			stock;
   std::istringstream	is;
@@ -79,7 +79,7 @@ Enum::JSON	JSONParser::getValue(Entity &entity, const std::string &key,
   throw (JSONException("Parsing error"));
 }
 
-inline 
+ 
 std::string	JSONParser::stringParse(std::string &content) { return (getKeys(content)); }
 
 std::string	JSONParser::getKeys(std::string &content) {
@@ -100,7 +100,7 @@ void	JSONParser::getValueForArray(Entity &entity, const std::string &key,
 				     std::string &content) {
   switch (*content.begin()) {
   case ('{'):
-    entity.manager.add(key, vectorParse<std::vector<Entity> >(content, '{'));
+    entity.manager.add(key, vectorParse<Entity>(content, '{'));
     break ;
   case ('"'):
     entity.manager.add(key, vectorParse<std::string>(content, '"'));
@@ -135,29 +135,27 @@ JSONParser		*JSONParser::parse() {
   return (j);
 }
 
-inline
-std::vector<Entity>    	JSONParser::hashParse(std::string &content) {
-  std::vector<Entity>	vec_entity;
+Entity			&JSONParser::getEntity() { return(_main_entity); }
 
-  return (hashParse(content, vec_entity));
+Entity			JSONParser::hashParse(std::string &content) {
+  Entity		entity;
+
+  return (hashParse(content, entity));
 }
 
 
-std::vector<Entity>    	JSONParser::hashParse(std::string &content,
-					      std::vector<Entity> &vec_entity) {
+Entity			JSONParser::hashParse(std::string &content,
+				      Entity &entity) {
   std::string		tmp;
   Enum::JSON		ret;
 
   while (1) {
-    Entity		entity;
-
     tmp = getKeys(content);
     if (tmp.empty()) {
       delete this;
       throw (JSONException("Parsing error"));
     }
     ret = getValue(entity, tmp, content);
-    vec_entity.push_back(entity);
     if (*content.begin() == '}')
       break ;
     else if (*content.begin() != ',') {
@@ -168,10 +166,10 @@ std::vector<Entity>    	JSONParser::hashParse(std::string &content,
   }
   if (ret == Enum::IS_HASH)
     content.erase(0, 1);
-  return (vec_entity);
+  return (entity);
 }
 
-inline
+
 char			JSONParser::getchar(const char c) {
   if (c == '{')
     return ('}');
@@ -180,19 +178,19 @@ char			JSONParser::getchar(const char c) {
   return (c);
 }
 
-inline
-void			JSONParser::_getVal(std::vector<std::vector<Entity> > &val,
+
+void			JSONParser::_getVal(std::vector<Entity> &val,
 					    std::string &content) {
   val.push_back(hashParse(content));
 }
 
-inline
+
 void			JSONParser::_getVal(std::vector<std::string> &val,
 					    std::string &content) {
   val.push_back(stringParse(content));
 }
 
-inline
+
 void			JSONParser::_getVal(std::vector<int> &val,
 					    std::string &content) {
   val.push_back(valParse(content));

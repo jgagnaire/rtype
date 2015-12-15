@@ -2,6 +2,9 @@
 
 # include <list>
 # include <iostream>
+# include <unordered_map>
+# include "ShootSystem.hh"
+# include "JSONParser.hh"
 # include "UserManager.hh"
 # include "ThreadPool.hh"
 
@@ -14,7 +17,15 @@
 # endif
 
 template <typename SCK>
-struct Game { // TODO, fill it !
+struct Game {
+  ~Game() {
+    if (shoot_system)
+      delete shoot_system;
+  }
+
+  Game() { shoot_system = new ShootSystem; }
+
+    ASystem					*shoot_system;
     std::string                                 name;
     std::list<UserManager<SCK> *>               players;
     std::size_t                                 refresh = Enum::REFRESH_TIME;
@@ -38,15 +49,19 @@ public:
     bool                            isPlaying(const std::string &);
     void                            setUdpSocket(IServerSocket<SCK> *);
     void			    sendPosition(Game<SCK> *, UserManager<SCK> *);
+    void			    fireBall(Game<SCK> *, UserManager<SCK> *, bool);
 
 private:
     bool                            update(Game<SCK> *game, std::size_t);
     void                            updatePositions(Game<SCK> *, std::size_t);
-    static  GameManager                     *game_manager;
-    GameManager() {}
+
+    static  GameManager				  *game_manager;
+    std::list<Game<SCK> *>			  _games;
+    ThreadPool<void, Game<SCK> *>		  _threadpool;
+    IServerSocket<SCK>				  *_udp_socket;
+    std::unordered_map<std::string, JSONParser *> _game_system;
+
+    GameManager();
     ~GameManager() {}
-    std::list<Game<SCK> *>                  _games;
-    ThreadPool<void, Game<SCK> *>           _threadpool;
-    IServerSocket<SCK>                      *_udp_socket;
 };
 

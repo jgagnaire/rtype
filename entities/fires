@@ -1,0 +1,13 @@
+"fires": {
+    "normal": {
+	"name": "normal", 
+	"velocity": 45,
+	"sprite": "lol"
+    },
+
+    "rotate": {
+	"name": "rotate",
+	"velocity": 45,
+	"sprite": "lol"
+    }
+}

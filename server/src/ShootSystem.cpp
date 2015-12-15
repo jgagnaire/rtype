@@ -4,26 +4,11 @@ ShootSystem::ShootSystem() : ASystem() {}
 
 ShootSystem::~ShootSystem() {}
 
-namespace Pattern {
-	
-  enum MovePattern {LINE = 0, SINUS = 1};
-	
-  enum class Side {LEFT, RIGHT};
-
-  Pattern::MovePattern incremente(Pattern::MovePattern m)
-  {
-    switch (m)
-      {
-      case Pattern::MovePattern::LINE: return (Pattern::MovePattern::SINUS);
-      case Pattern::MovePattern::SINUS: return (Pattern::MovePattern::LINE);
-      default : return (Pattern::MovePattern::LINE);
-      }
-  }
-	
+namespace Pattern {	
   void	line(Entity &e, int duration)
   {
     std::pair<float, float> pos = e.manager.get<std::pair<float, float> >("position");
-    float vel = duration + e.manager.get<float>("velocity");
+    float vel = duration + e.manager.get<int>("velocity") / 10;
     if (e.manager.get<bool>("is_a_monster"))
       vel *= -1;
     pos.first += vel;
@@ -34,7 +19,7 @@ namespace Pattern {
   void	sinusoid(Entity &e, int duration)
   {
     std::pair<float, float> pos = e.manager.get<std::pair<float, float> >("position");
-    float vel = duration + e.manager.get<float>("velocity");
+    float vel = duration + e.manager.get<int>("velocity") / 10;
     if (e.manager.get<bool>("is_a_monster"))
       vel *= -1;
     pos.first += vel;
@@ -47,7 +32,7 @@ void                    ShootSystem::update(int duration) {
   for (auto x = _entities.begin(); x != _entities.end();)
     {
       std::string name = (*x)->manager.get<std::string>("name");
-      if (name == "normal_rotate")
+      if (name == "rotate")
 	Pattern::sinusoid(**x, duration);
       if (name == "normal")
 	Pattern::line(**x, duration);

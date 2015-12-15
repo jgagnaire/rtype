@@ -72,10 +72,10 @@ bool            GameController<T>::createGameRoom(UserManager<T> *cl) const {
 template <typename T>
 bool            GameController<T>::leaveRoom(UserManager<T> *cl) const {
     GameManager<T>              &g = GameManager<T>::instance();
-    Enum::ServerAnswers         sa = cl->leaveRoom();
     Game<T>                     *game;
 
     game = g.getGameByName(cl->getGameroomName());
+    Enum::ServerAnswers         sa = cl->leaveRoom();
     cl->writeStruct({0, static_cast<uint16_t>(sa)});
     if (sa == Enum::OK) {
         if (!game)

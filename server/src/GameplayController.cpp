@@ -7,27 +7,13 @@ GameplayController<T>::GameplayController(std::list<UserManager<T> *> *cl)
 
 template<typename T>
 int	            GameplayController<T>::newData(UserManager<T> *cl) {
-    // if (!cl->isLogged()) {
-    //     this->writeStruct({0, Enum::EUDP_NOT_LOGGEDIN, cl->getUDPPacketId()});
-    //     this->writeOnMe(cl->getIP()); 
-    //     return (1);
-    // }
-    // else if (cl->getStatus() != Enum::GAME) {
-    //     this->writeStruct({0, Enum::ENOT_IN_GAME, cl->getUDPPacketId()});
-    //     this->writeOnMe(cl->getIP()); 
-    //     return (1);
-    // }
     switch (cl->numUDPQuery()) {
         case (Enum::QUIT_GAME):
             return (static_cast<int>(quitGame(cl)));
-        case (Enum::CURRENT_POS):
-            return (static_cast<int>(currentPosition(cl)));
         case (Enum::KEY_PRESS):
             return (static_cast<int>(keyPressed(cl)));
         case (Enum::AUDIO_PACKET):
             return (static_cast<int>(audioPacket(cl)));
-        case (Enum::TAKE_FORCE):
-            return (static_cast<int>(takeForce(cl)));
         default:
             return (-1);
     }
@@ -57,33 +43,13 @@ bool            GameplayController<T>::quitGame(UserManager<T> *cl) {
 }
 
 template <typename T>
-inline
-bool            GameplayController<T>::currentPosition(UserManager<T> *cl) {
-    this->writeStruct({0, static_cast<uint16_t>(cl->currentPosition()), cl->getUDPPacketId()});
-    this->writeOnMe(cl->getIP());
-    return (true);
-}
-
-template <typename T>
-inline
 bool            GameplayController<T>::keyPressed(UserManager<T> *cl) {
-    // this->writeStruct({0, static_cast<uint16_t>(
-  cl->keyPressed();//), cl->getUDPPacketId()});
-    // this->writeOnMe(cl->getIP());
-    return (true);
+  cl->keyPressed();
+  return (true);
 }
 
 template <typename T>
-inline
 bool            GameplayController<T>::audioPacket(UserManager<T> *) const {
-    return (true);
-}
-
-template <typename T>
-inline
-bool            GameplayController<T>::takeForce(UserManager<T> *cl) {
-    this->writeStruct({0, static_cast<uint16_t>(cl->takeForce()), cl->getUDPPacketId()});
-    this->writeOnMe(cl->getIP()); 
     return (true);
 }
 

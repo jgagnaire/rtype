@@ -41,23 +41,18 @@ UserManager<T>::~UserManager() {
 }
 
 template<typename T>
-inline
 bool	UserManager<T>::isLogged() const { return (stream.is_open()); }
 
 template<typename T>
-inline
 void	UserManager<T>::writeStruct(const TCPDataHeader &comdata) { packet.stockOnBuff(comdata); }
 
 template<typename T>
-inline
 void	UserManager<T>::readFromMe() { packet.getPacket<IServerSocket<T> *>(sock); }
 
 template<typename T>
-inline
 void	UserManager<T>::writeMsg(const std::string &s) { packet.stockOnBuff(s); }
 
 template<typename T>
-inline
 bool	UserManager<T>::writeOnMe()
 {
     packet.serialize();
@@ -65,53 +60,42 @@ bool	UserManager<T>::writeOnMe()
 }
 
 template<typename T>
-inline
 bool	UserManager<T>::sendStructEmpty() const { return (packet.sendPackEmpty()); }
 
 template<typename T>
-inline
 IServerSocket<T>	*UserManager<T>::getServerSocket() { return (this->sock); }
 
 template<typename T>
-inline
 bool	UserManager<T>::IsFilled() const { return (packet.isFilled()); }
 
 template<typename T>
-inline
 void	UserManager<T>::clearData() { packet.clearAll(); }
 
 template<typename T>
-inline
 void	UserManager<T>::fillPacketStruct() { tmp_packet = packet.retrievePacket(); }
 
 template<typename T>
-inline
 bool	UserManager<T>::emptyData() const {
     return (packet.packetEmpty());
 }
 
 template<typename T>
-inline
 Enum::ClientQueries	UserManager<T>::numQuery() const {
     return (static_cast<Enum::ClientQueries>(tmp_packet.header.query));
 }
 
 template<typename T>
-inline
 Enum::ClientQueries	UserManager<T>::numUDPQuery() const {
     return (static_cast<Enum::ClientQueries>(udp_packet.header.query));
 }
 
 template<typename T>
-inline
 std::string	UserManager<T>::getPacketData() const { return (std::string(tmp_packet.data)); }
 
 template<typename T>
-inline
 std::string	UserManager<T>::getUDPPacketData() const {return (std::string(udp_packet.data)); }
 
 template<typename T>
-inline
 std::string	UserManager<T>::getIP() const { return (this->sock->getIP()); }
 
 template<typename T>
@@ -190,7 +174,6 @@ bool	UserManager<T>::hasBadFormat(std::string *info) const {
 }
 
 template<typename T>
-inline
 bool			UserManager<T>::alreadyExist(std::string *info) {
     stream.open(std::string(UserManager<T>::database_dir).replace(Enum::PATH_LENGTH,
                                                                   1, info[0]),
@@ -199,19 +182,15 @@ bool			UserManager<T>::alreadyExist(std::string *info) {
 }
 
 template<typename T>
-inline
 void	UserManager<T>::sendPing() { writeStruct({0, Enum::PING}); }
 
 template<typename T>
-inline
 void	UserManager<T>::setPing(bool p) { ping = p; }
 
 template<typename T>
-inline
 bool	UserManager<T>::getPing() const { return (ping); }
 
 template<typename T>
-inline
 void    UserManager<T>::inGame() { status = Enum::GAME; }
 
 template<typename T>
@@ -223,11 +202,9 @@ void	UserManager<T>::disconnect() {
 }
 
 template<typename T>
-inline
 const std::string	&UserManager<T>::getName() const { return (name); }
 
 template <typename T>
-inline
 void    UserManager<T>::setUdpPacketStruct(const Packet<UDPDataHeader>::PacketStruct &p) {
     udp_packet = p;
 }
@@ -323,7 +300,6 @@ Enum::ServerAnswers      UserManager<T>::ready() {
 }
 
 template <typename T>
-inline
 bool                    UserManager<T>::isFiring() { return (fire); }
 
 template <typename T>
@@ -334,10 +310,10 @@ void                    UserManager<T>::clearGameData() {
     has_force = false;
     udp_packet_id = 0;
     fire = false;
+    switch_weapon = false;
 }
 
 template <typename T>
-inline
 uint64_t                UserManager<T>::getUDPPacketId() { return (udp_packet_id++); }
 
 template <typename T>
@@ -362,19 +338,15 @@ Enum::ServerAnswers      UserManager<T>::getRoomList() {
 }
 
 template <typename T>
-inline
 bool                    UserManager<T>::isReady() const { return (is_ready); }
 
 template <typename T>
-inline
 Enum::UserStatus        UserManager<T>::getStatus() const { return (status); }
 
 template <typename T>
-inline
 const std::string       &UserManager<T>::getGameroomName() const { return (gameroom); }
 
 template <typename T>
-inline
 Enum::ServerAnswers     UserManager<T>::quitGame() { return (Enum::OK); }
 
 template <typename T>
@@ -408,14 +380,13 @@ Enum::ServerAnswers     UserManager<T>::keyPressed() {
 }
 
 template <typename T>
-inline
 const std::size_t	    &UserManager<T>::getKeypressed() const { return (keypressed); }
 
 template <typename T>
 void                    UserManager<T>::changePosition(std::size_t time) {
     game_mutex->lock();
-
     float	move = static_cast<float>(time * 1.75);
+
     if (static_cast<std::size_t>(Enum::LEFT) & keypressed) {
         position.x -= move;
         if (position.x < 0.01)
@@ -436,25 +407,29 @@ void                    UserManager<T>::changePosition(std::size_t time) {
         if (position.y > static_cast<float>(Enum::GAME_SIZE_HEIGHT))
             position.y = static_cast<float>(Enum::GAME_SIZE_HEIGHT);
     }
-    fire = !(static_cast<std::size_t>(Enum::FIRE) & keypressed);
+    fire = !!(static_cast<std::size_t>(Enum::FIRE) & keypressed);
+    if (static_cast<std::size_t>(Enum::SWITCH) & keypressed)
+      switch_weapon = !switch_weapon; 
 
     GameManager<T>	&g = GameManager<T>::instance();
+    Game<T>		*game = g.getGameByName(gameroom);
 
     if (keypressed)
-      g.sendPosition(g.getGameByName(gameroom), this);
+      g.sendPosition(game, this);
+    // if (fire)
+    //   g.fireBall(game, this, switch_weapon);
     keypressed = 0;
+    fire = false;
     game_mutex->unlock();
 }
 
 template <typename T>
-inline
 Enum::ServerAnswers     UserManager<T>::takeForce() {
     has_force = true;
     return (Enum::OK);
 }
 
 template <typename T>
-inline
 const Position	    &UserManager<T>::getPosition() const { return (position); }
 
 #if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined (_WIN64)

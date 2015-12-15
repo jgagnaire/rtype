@@ -62,10 +62,8 @@ namespace Enum
         READY = 301,
         NOT_READY = 302,
         QUIT_GAME = 200,
-        CURRENT_POS = 300,
         KEY_PRESS = 301,
         AUDIO_PACKET = 302,
-        TAKE_FORCE = 303,
     };
 
     enum ServerNotification {
