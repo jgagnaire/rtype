@@ -1,11 +1,8 @@
-
 #include "System/Render/ReadyScene.hh"
-
 
 ReadyScene::ReadyScene(IWindow &win, std::list<Entity*> *e):
     Scene(win, e), _isReady(false), _send(false),
-    _new(false), _quit(false), _lastCode(0),
-    _event(0)
+    _new(false), _quit(false), _lastCode(0), _event(0)
 {
     _b1.manager.add<View*>("view", &_view);
     _texts.manager.add<ADrawable*>("isReady", &_isReadyText);

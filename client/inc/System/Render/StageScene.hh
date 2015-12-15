@@ -120,7 +120,7 @@ class StageScene : public Scene
                 std::string tmp = std::string(
                         static_cast<const char *>(packet->getData()), packet->getSize());
                 float px, py;
-                std::string name = tmp.substr(0, tmp.find(":")).c_str();
+                std::string name = tmp.substr(0, tmp.find(":"));
                 tmp = tmp.substr(tmp.find(":") + 1);
                 px = std::atof(tmp.substr(0, tmp.find(":")).c_str());
                 py = std::atof(tmp.substr(tmp.find(":") + 1).c_str());
