@@ -13,9 +13,9 @@
 # include "System/ASystem.hh"
 
 namespace Pattern {
-	
+
   enum MovePattern {LINE = 0, SINUS = 1};
-	
+
   enum class Side {LEFT, RIGHT};
 
   Pattern::MovePattern incremente(Pattern::MovePattern m)
@@ -27,7 +27,7 @@ namespace Pattern {
       default : return (Pattern::MovePattern::LINE);
       }
   }
-	
+
   void	line(Entity &e, Side s, int duration)
   {
     std::pair<float, float> pos = e.manager.get<std::pair<float, float> >("position");
@@ -57,7 +57,7 @@ private:
 	Entity	*createShoot(std::pair<float, float> pos, Pattern::MovePattern pattern, Pattern::Side side)
 		{
 			Entity *e = new Entity;
-			
+
 			e->manager.add<std::string>("name", "playerShoot");
 			e->manager.add<std::string>("type", "shoot");
 			e->manager.add("velocity", 4.50f);
@@ -80,14 +80,14 @@ public:
     patterns[1] = Pattern::sinusoid;
   }
   virtual ~ShootSystem() {}
-	
+
   virtual void                    update(int duration)
 		{
 			_frequency += duration;
 			if (!isActiv)
 				return ;
 			if ((this->fireRate -= duration) <= 0)
-				this->fireRate = 250;		
+				this->fireRate = 250;
 			for (auto x = _eList->begin(); x != _eList->end();)
 			{
 				bool has_been_del = false;
@@ -108,7 +108,7 @@ public:
 					++x;
 			}
 		}
-	
+
 	virtual IPacket                 *out() {
 		if (isActiv == false)
 			return (0);
@@ -118,6 +118,7 @@ public:
 			_packet.setQuery(static_cast<uint16_t>(UdpCodes::KeyPressed));
 			_packet.setData(tmp.c_str());
 			_packet.setSize(static_cast<uint16_t>(tmp.size()));
+            std::cout << "out " << lastEvent << std::endl;
 			lastEvent = 0;
 			_frequency = 0;
 			return (&_packet);
@@ -126,7 +127,7 @@ public:
 	}
 	virtual void                    in(IPacket *p) {
 		UdpPacket   *packet;
-		
+
 		if ((packet = dynamic_cast<UdpPacket*>(p)) &&
 			packet->getQuery() == static_cast<uint16_t>(UdpCodes::ServeKeyPressed))
 		{
@@ -172,7 +173,7 @@ public:
 			if (ev & Key_Fire && this->fireRate == 250 && isActiv)
 			{
 				Entity *e = new Entity;
-				
+
 				e->manager.add<std::string>("name", "playerShoot");
 				e->manager.add<std::string>("type", "shoot");
 				e->manager.add("velocity", 4.50f);
@@ -204,27 +205,28 @@ public:
 						break ;
 					}
 			}
-			lastEvent = ev;
-			return true;
-		}
-  virtual std::vector<REvent>     &broadcast(void)
-  {
-    return (_eventList);
-  }
-	
-  virtual EventSum                getEvent()
-  {
-    return (noEvent);
-  }
-	
+            if (ev)
+                lastEvent = ev;
+            return true;
+        }
+    virtual std::vector<REvent>     &broadcast(void)
+    {
+        return (_eventList);
+    }
+
+    virtual EventSum                getEvent()
+    {
+        return (noEvent);
+    }
+
 protected:
-	std::list<Entity*>	*_eList;
-	int					fireRate;
-	bool				isActiv;
-	UdpPacket				_packet;
-	int                 _frequency;
-	EventSum			lastEvent;
-	std::function<void (Entity&, Pattern::Side, int)> patterns[2];
+    std::list<Entity*>	*_eList;
+    int					fireRate;
+    bool				isActiv;
+    UdpPacket				_packet;
+    int                 _frequency;
+    EventSum			lastEvent;
+    std::function<void (Entity&, Pattern::Side, int)> patterns[2];
 };
 
 #endif //SHOOTSYSTEM_HH_
