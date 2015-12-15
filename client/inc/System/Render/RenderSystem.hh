@@ -6,8 +6,9 @@
 # include "System/Render/StageScene.hh"
 # include "System/Render/LoginScene.hh"
 # include "System/Render/GameRoomScene.hh"
-# include "System/Render/ReadyScene.hh"
 # include "Window.hh"
+
+class ReadyScene;
 
 class RenderSystem : public ASystem
 {

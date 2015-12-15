@@ -1,55 +1,7 @@
-
 #ifndef SHOOTSYSTEM_HH_
 # define SHOOTSYSTEM_HH_
 
-# if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
-#  define _USE_MATH_DEFINES
-#  include <ATLComTime.h>
-# else
-#  include <cmath>
-# endif
-
-# include <functional>
-# include "System/ASystem.hh"
-
-namespace Pattern {
-
-  enum MovePattern {LINE = 0, SINUS = 1};
-
-  enum class Side {LEFT, RIGHT};
-
-  Pattern::MovePattern incremente(Pattern::MovePattern m)
-  {
-    switch (m)
-      {
-      case Pattern::MovePattern::LINE: return (Pattern::MovePattern::SINUS);
-      case Pattern::MovePattern::SINUS: return (Pattern::MovePattern::LINE);
-      default : return (Pattern::MovePattern::LINE);
-      }
-  }
-
-  void	line(Entity &e, Side s, int duration)
-  {
-    std::pair<float, float> pos = e.manager.get<std::pair<float, float> >("position");
-    float vel = duration + e.manager.get<float>("velocity");
-    if (s == Side::LEFT)
-      vel *= -1;
-    pos.first += vel;
-    pos.second += sin(pos.first * 0.5 * M_PI / 90);
-    e.manager.set("position", pos);
-  }
-
-  void	sinusoid(Entity &e, Side s, int duration)
-  {
-    std::pair<float, float> pos = e.manager.get<std::pair<float, float> >("position");
-    float vel = duration + e.manager.get<float>("velocity");
-    if (s == Side::LEFT)
-      vel *= -1;
-    pos.first += vel;
-    pos.second += static_cast<float>(35 * sin(pos.first * 0.5 * M_PI / 180));
-    e.manager.set("position", pos);
-  }
-}
+#include "Pattern.hh"
 
 class ShootSystem : public ASystem
 {
@@ -134,14 +86,16 @@ public:
 				static_cast<const char *>(packet->getData()), packet->getSize());
 			tmp = tmp.substr(tmp.find(":") + 1);
 			std::string name = tmp.substr(0, tmp.find(":")).c_str();
-			std::cout << "keycode : " << tmp << std::endl;
+			std::cout << "keycode : " << tmp << " Name : " << name << std::endl;
 			EventSum e = std::atof(tmp.c_str());
 			if (e & Key_Fire)
 			{
+				std::cout << "Friends fire" << std::cout;
 				for (auto x : *_eList)
 				{
 					if (x->manager.get<std::string>("name") == name)
 					{
+						std::cout << "Find friend" << std::endl;
 						Entity *sht = this->createShoot(x->manager.get<std::pair<float, float> >("position"),
 												  x->manager.get<Pattern::MovePattern>("pattern"),
 												  Pattern::Side::RIGHT);

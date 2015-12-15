@@ -27,7 +27,7 @@ class SystemManager
         shr_entities->push_back(e);
 
         ASystem *render = new RenderSystem(shr_entities);
-        ASystem *audioCall = new AudioCallSystem();
+		ASystem *audioCall = new AudioCallSystem();
         ASystem *mvt = new MovementSystem(shr_entities);
         ASystem *shot = new ShootSystem(shr_entities);
 
@@ -40,7 +40,7 @@ class SystemManager
         ea->add(render);
         ea->add(mvt);
         ea->add(shot);
-        ea->add(audioCall);
+		ea->add(audioCall);
     }
 
         ~SystemManager()

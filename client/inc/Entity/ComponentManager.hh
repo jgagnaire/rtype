@@ -43,7 +43,7 @@ class ComponentManager
   {
     if (components.find(name) != components.end())
       return (components[name]->getType());
-    throw ComponentManagerException("No such component to get : [invalid name]");
+    throw ComponentManagerException("No such component to get : [invalid name] : " + name);
   }
   
   template<typename Type>
@@ -57,7 +57,7 @@ class ComponentManager
 	  throw ComponentManagerException("No such component to get : [invalid type] \
 type for compenents \"" + name + "\" is : " + components[name]->getType());
       }
-    throw ComponentManagerException("No such component to get : [invalid name]");
+    throw ComponentManagerException("No such component to get : [invalid name] " + name);
   }
   
   template<typename Type>

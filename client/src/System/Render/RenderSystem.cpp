@@ -2,6 +2,8 @@
 #define RENDERSYSTEM_CPP_ZPTSKFN8
 
 # include "System/Render/RenderSystem.hh"
+# include "System/Render/ReadyScene.hh"
+# include "System/Shoot/Pattern.hh"
 
 RenderSystem::RenderSystem(std::list<Entity*> *e):
     _entities(e), _event(noEvent)
@@ -48,6 +50,28 @@ IPacket *RenderSystem::out()
 
 void    RenderSystem::in(IPacket *p)
 {
+
+	TcpPacket		*packet;
+	std::string		name;
+	
+	if ((packet = dynamic_cast<TcpPacket*>(p)))
+	{
+		if (packet->getSize())
+			name = std::string(static_cast<const char*>(packet->getData()),
+							   packet->getSize());
+		
+		if (Codes::PlayerJoined == static_cast<Codes>(packet->getQuery()))
+			{
+				std::cout << "labite de ouf" << std::endl;
+				Entity *pl = new Entity;
+				pl->manager.add<std::string>("type", "player");
+				pl->manager.add<std::string>("pseudo", name);
+				pl->manager.add<std::string>("name", name);
+				pl->manager.add<Pattern::MovePattern>
+					("pattern", Pattern::MovePattern::LINE);
+				_entities->push_back(pl);
+			}
+	}
     _current->in(p);
 }
 
