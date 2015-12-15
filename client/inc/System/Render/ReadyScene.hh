@@ -71,6 +71,7 @@ class ReadyScene : public Scene
         {
             TcpPacket   *packet;
             std::string name;
+            std::string tmp;
             Entity *e;
 
             if ((packet = dynamic_cast<TcpPacket*>(p)))
@@ -104,9 +105,15 @@ class ReadyScene : public Scene
                         break ;
                     case Codes::PlayerJoined:
                         _players[name] = true;
+                        for (auto x : _players)
+                            tmp += x.first + "\n";
+                        _playersText.setText(tmp);
                         break ;
                     case Codes::PlayerLeft:
                         _players.erase(name);
+                        for (auto x : _players)
+                            tmp += x.first + "\n";
+                        _playersText.setText(tmp);
                         break;
                     default:
                         ;
