@@ -20,6 +20,7 @@ class ReadyScene : public Scene
         _texts.manager.add<ADrawable*>("list", &_playersText);
 
         _isReadyText.setText("You are not ready.");
+        _playersText.setY(100);
     }
 
         virtual ~ReadyScene()
