@@ -52,15 +52,15 @@ class GameRoomScene : public Scene
                 _current = 0;
                 return ;
             }
-            if (e == Key_Change)
-            {
-                _update = true;
-                return ;
-            }
             if (e & Key_Change && e != Key_Change)
             {
                 EventSum tmp = (e << 1) >> 1;
 
+                if (tmp == 125)
+                {
+                    _update = true;
+                    return ;
+                }
                 if (tmp == 127 && _buffer.empty() == false)
                     _buffer.erase(_buffer.size() - 1, 1);
                 if (tmp < 125)
@@ -92,6 +92,7 @@ class GameRoomScene : public Scene
                     }
                     _new = true;
                 }
+                return ;
             }
             if (e & Key_Left && _current > 0)
                 --_current;
