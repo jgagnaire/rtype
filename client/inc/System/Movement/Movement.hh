@@ -80,7 +80,6 @@ class MovementSystem : public ASystem
 
         virtual void                    in(IPacket *p){
             UdpPacket   *packet;
-//			bool		isExist = false;
 			
             if ((packet = dynamic_cast<UdpPacket*>(p)) &&
 				packet->getQuery() == static_cast<uint16_t>(UdpCodes::NewPos))
@@ -102,20 +101,9 @@ class MovementSystem : public ASystem
                         {
                             x->manager.set<std::pair<float, float> >
 								("position", std::pair<float, float>(px, py));
-							//	isExist = true;
                         }
                         } catch (ComponentManagerException &) {}
                     }
-					// if (isExist == false)
-					// {
-					// 	Entity *e = new Entity;
-					// 	e->manager.add<std::string>("type", "player");
-					// 	e->manager.add<std::string>("name", name);
-					// 	e->manager.add<std::pair<float, float> >
-					// 		("position", std::pair<float, float>(px, py));
-					// 	e->manager.add<Pattern::MovePattern>
-					// 		("pattern", Pattern::MovePattern::LINE);
-					// }
                 }
             }
         }
@@ -124,8 +112,13 @@ class MovementSystem : public ASystem
         {
             if (e == E_Stage)
                 isActiv = !isActiv;
-            if (e & Key_Up || e & Key_Down || e & Key_Left || e & Key_Right)
+            if (e & Key_Up || e & Key_Down || e & Key_Left || e & Key_Right
+				|| e & Key_Fire || e & Key_Change)
+			{
+				if ((e & Key_Fire))
+					e = e & ~Key_Fire;
                 lastEvent = e;
+			}
             return (true);
         }
         virtual std::vector<REvent>     &broadcast(void)

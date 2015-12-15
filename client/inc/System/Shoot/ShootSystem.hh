@@ -86,16 +86,13 @@ class ShootSystem : public ASystem
                         static_cast<const char *>(packet->getData()), packet->getSize());
                 std::string name = tmp.substr(0, tmp.find(":"));
                 std::string code = tmp.substr(name.size() + 1);
-                std::cout << "keycode : " << code << " Name : " << name << std::endl;
                 EventSum e = std::atof(code.c_str());
                 if (e & Key_Fire)
                 {
                     for (auto x : *_eList)
                     {
-                        std::cout << "Friends fire " << name << " - "<< x->manager.get<std::string>("name")<< std::endl;
                         if (x->manager.get<std::string>("name") == name)
                         {
-                            std::cout << "Find friend" << std::endl;
                             Entity *sht = this->createShoot(x->manager.get<std::pair<float, float> >("position"),
                                     x->manager.get<Pattern::MovePattern>("pattern"),
                                     Pattern::Side::RIGHT);
@@ -123,7 +120,7 @@ class ShootSystem : public ASystem
         {
             if (ev == E_Stage)
                 isActiv = !isActiv;
-            if (ev & Key_Fire && this->fireRate == 250 && isActiv)
+            if (ev & Key_Fire && this->fireRate >= 250 && isActiv)
             {
 				lastEvent = ev;
                 Entity *e = new Entity;
@@ -160,6 +157,7 @@ class ShootSystem : public ASystem
                         break ;
                     }
             }
+			std::cout << lastEvent << std::endl;
             return true;
         }
         virtual std::vector<REvent>     &broadcast(void)

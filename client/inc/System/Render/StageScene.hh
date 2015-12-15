@@ -12,7 +12,7 @@ class StageScene : public Scene
 {
     public:
         StageScene(IWindow &win, std::list<Entity*> *e):
-            Scene(win, e), _stageNb(1), _pSprites(4), _direction(noEvent)
+            Scene(win, e), _stageNb(5), _pSprites(4), _direction(noEvent)
     {
         _pSprites[0].load("client/res/ship/player-ship-blue2_111.png");
         _pSprites[1].load("client/res/ship/player-ship-green2_111.png");
