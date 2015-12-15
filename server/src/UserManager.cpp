@@ -416,8 +416,8 @@ void                    UserManager<T>::changePosition(std::size_t time) {
 
     if (keypressed)
       g.sendPosition(game, this);
-    // if (fire)
-    //   g.fireBall(game, this, switch_weapon);
+    if (fire)
+      g.fireBall(game, this, switch_weapon);
     keypressed = 0;
     fire = false;
     game_mutex->unlock();
