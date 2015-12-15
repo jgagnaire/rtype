@@ -132,10 +132,10 @@ public:
 		{
 			std::string tmp = std::string(
 				static_cast<const char *>(packet->getData()), packet->getSize());
-			std::cout << "Shoot : " << tmp << std::endl;
 			tmp = tmp.substr(tmp.find(":") + 1);
 			std::string name = tmp.substr(0, tmp.find(":")).c_str();
-			EventSum e = std::atof(tmp.substr(tmp.find(":"), tmp.size()).c_str());
+			std::cout << "keycode : " << tmp << std::endl;
+			EventSum e = std::atof(tmp.c_str());
 			if (e & Key_Fire)
 			{
 				for (auto x : *_eList)
