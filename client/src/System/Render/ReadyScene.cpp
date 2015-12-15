@@ -89,17 +89,6 @@ void    ReadyScene::in(IPacket *p)
 			break ;
 		case Codes::Begin:
 			e = new Entity();
-			for (auto x : _players)
-			{
-				e->manager.add<std::string>(x.first, x.first);
-				Entity *pl = new Entity;
-				pl->manager.add<std::string>("type", "player");
-				pl->manager.add<std::string>("pseudo", x.first);
-				pl->manager.add<std::string>("name", x.first);
-				// pl->manager.add<Pattern::MovePattern>
-				// 	("pattern", Pattern::MovePattern::LINE);
-				_entities->push_back(pl);
-			}
 			e->manager.add<std::string>("type", "playersData");
 			e->manager.add<std::string>("name", "playersData");
 			_entities->push_back(e);
