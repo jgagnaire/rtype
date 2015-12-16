@@ -91,7 +91,6 @@ class ShootSystem : public ASystem
                 {
                     for (auto x : *_eList)
                     {
-                        std::cout << x->manager.get<std::string>("name") << " - " << name << std::endl;
                         if (x->manager.get<std::string>("name") == name)
                         {
                             Entity *sht = this->createShoot(x->manager.get<std::pair<float, float> >("position"),
