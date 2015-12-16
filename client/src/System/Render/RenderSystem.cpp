@@ -63,7 +63,6 @@ void    RenderSystem::in(IPacket *p)
         if (Codes::PlayerJoined == static_cast<Codes>(packet->getQuery()))
             {
                 std::pair<float, float> pos;
-                std::cout << "labite de ouf" << std::endl;
                 Entity *pl = new Entity;
                 pl->manager.add<std::string>("type", "player");
                 pl->manager.add<std::string>("pseudo", name);
