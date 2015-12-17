@@ -93,7 +93,8 @@ class ShootSystem : public ASystem
                 {
                     for (auto x : *_eList)
                     {
-                        if (x->manager.get<std::string>("name") == name)
+						if (x->manager.get<std::string>("type") == "player")
+                        if (x->manager.get<std::string>("pseudo") == name)
                         {
                             Entity *sht = this->createShoot(x->manager.get<std::pair<float, float> >("position"),
                                     x->manager.get<Pattern::MovePattern>("pattern"),
@@ -125,28 +126,7 @@ class ShootSystem : public ASystem
             if (ev & Key_Fire && this->fireRate >= 250 && isActiv)
             {
 				lastEvent = ev;
-                Entity *e = new Entity;
-
-                e->manager.add<std::string>("name", "playerShoot");
-                e->manager.add<std::string>("type", "shoot");
-                e->manager.add("velocity", 4.50f);
-                e->manager.add<size_t>("dammage", 25);
-                for(auto x : *_eList)
-                    if (x->manager.get<std::string>("name") == "player1")
-                    {
-                        e->manager.add("position",
-                                std::pair<float, float>(
-                                    x->manager.get<std::pair<float, float> >
-                                    ("position").first + 105.0f,
-                                    x->manager.get<std::pair<float, float> >
-                                    ("position").second + 9.0f));
-                        e->manager.add<std::function<void (Entity&, Pattern::Side, int)> >
-                            ("pattern",
-                             patterns[x->manager.get<Pattern::MovePattern>("pattern")]);
-                    }
-                e->manager.add<Pattern::Side>("direction", Pattern::Side::RIGHT);
-                _eList->push_back(e);
-            }
+			}
             else if (ev & Key_Change && isActiv)
             {
                 lastEvent = ev;
@@ -159,7 +139,6 @@ class ShootSystem : public ASystem
                         break ;
                     }
             }
-            std::cout << "shoot handle" << lastEvent << std::endl;
             return true;
         }
         virtual std::vector<REvent>     &broadcast(void)
