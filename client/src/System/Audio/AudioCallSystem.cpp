@@ -143,7 +143,7 @@ void AudioCallSystem::in(IPacket *packet)
   return ;
 }
 
-IPacket *AudioCallSystem::out()
+IPacket *AudioCallSystem::out(EventSum &)
 {
   IPacket *tmp;
 

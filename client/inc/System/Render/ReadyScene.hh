@@ -20,7 +20,7 @@ class ReadyScene : public Scene
 
         virtual void    in(IPacket *p);
 
-        virtual IPacket *out();
+        virtual IPacket *out(EventSum&);
     private:
         View                                                _view;
         Entity                                              _b1;

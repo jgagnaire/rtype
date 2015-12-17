@@ -53,18 +53,28 @@ class SystemManager
 
         void gameLoop()
         {
+            EventSum        event;
+            UdpPacket       lastEvent;
+            std::string     tmp;
+
+            lastEvent.setQuery(static_cast<uint16_t>(UdpCodes::KeyPressed));
             while (ea->getWin()->isOpen())
             {
+                event = 0;
                 std::size_t s = this->clk->getElapsedTimeMilli();
                 this->clk->restart();
                 ea->update();
                 for (auto x : systemList)
                 {
-                    IPacket *m = x.second->out();
+                    IPacket *m = x.second->out(event);
                     if (m != 0)
                         _networkManager.send(*m);
                     x.second->update(s);
                 }
+                tmp = std::to_string(event);
+                lastEvent.setData(tmp.c_str());
+                lastEvent.setSize(tmp.size());
+                _networkManager.send(lastEvent);
                 IPacket *p;
                 while (dynamic_cast<UdpPacket*>(p = _networkManager.getPacket()))
                     if (p)
