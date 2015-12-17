@@ -112,6 +112,7 @@ private:
   bool                                    fire;
   bool					  switch_weapon;
   Position                                position;
+  bool					  is_dead;
 
   bool					hasBadFormat(std::string *) const;
   bool					alreadyExist(std::string *);

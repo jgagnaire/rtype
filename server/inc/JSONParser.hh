@@ -23,7 +23,7 @@ private:
   std::string		stringParse(std::string &);
   int			valParse(std::string &);
   Entity		hashParse(std::string &);
-  Entity		hashParse(std::string &, Entity &);
+  Entity		&hashParse(std::string &, Entity &);
   void			getValueForArray(Entity &, const std::string &,
 					 std::string &);
   Enum::JSON		getValue(Entity &, const std::string &,

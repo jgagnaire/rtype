@@ -17,5 +17,5 @@ public:
 					 const Position &p);
 private:
   std::list<Entity*>		_entities;
-  int				fireRate;
+  int				_fire_rate;
 };

@@ -7,6 +7,7 @@ GameManager<SCK>::GameManager() {
   _game_system["fires"] = JSONParser::parse();
   JSONParser::parseFile("./entities/levels"); // TODO, no magic string
   _game_system["levels"] = JSONParser::parse();
+  _game_system["levels"]->getEntity().manager.getAll<Entity>();
 }
 
 template <typename SCK>
@@ -114,9 +115,20 @@ void        GameManager<SCK>::updatePositions(Game<SCK> *game, std::size_t time)
 
 template <typename SCK>
 bool        GameManager<SCK>::update(Game<SCK> *game, std::size_t time) {
+    auto m = &game->level->manager;
+    std::size_t	game_time = m->get<int>("time");
+    std::size_t	tmp_time = getTimeInSecond() - game_time;
+
     updatePositions(game, time);
     game->shoot_system->update(time);
+    game->level->manager.set("time", game_time - tmp_time);
     return (!game->players.empty());
+}
+
+template <typename SCK>
+std::size_t   GameManager<SCK>::getTimeInSecond() {
+    return (std::chrono::system_clock::now().time_since_epoch() /
+            std::chrono::seconds(1));
 }
 
 template <typename SCK>
@@ -127,11 +139,17 @@ std::size_t   GameManager<SCK>::getTime() {
 
 template <typename SCK>
 void            GameManager<SCK>::createGame(Game<SCK> *game) {
-    GameManager<SCK> &g = GameManager<SCK>::instance();
-    bool        is_not_finished = true;
-    std::size_t	duration;
-    auto start = std::chrono::steady_clock::now();
+    GameManager<SCK>	&g = GameManager<SCK>::instance();
+    bool		is_not_finished = true;
+    std::size_t		duration;
+    auto		start = std::chrono::steady_clock::now();
+    Entity		tmp = g._game_system["levels"]->getEntity();
 
+    tmp = tmp.manager.get<Entity>("levels");
+    tmp = tmp.manager.get<Entity>(game->lvl_name);
+    game->level = new Entity(tmp);
+    std::cout << "test" << std::endl;
+    game->level->manager.set("time", getTimeInSecond() + tmp.manager.get<int>("time"));
     std::cout << "Que la partie commence pour la room: " << game->name << std::endl;
     auto end = std::chrono::steady_clock::now();
     while (is_not_finished) {

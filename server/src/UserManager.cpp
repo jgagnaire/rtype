@@ -311,6 +311,7 @@ void                    UserManager<T>::clearGameData() {
     udp_packet_id = 0;
     fire = false;
     switch_weapon = false;
+    is_dead = false;
 }
 
 template <typename T>
@@ -375,6 +376,7 @@ Enum::ServerAnswers     UserManager<T>::keyPressed() {
     std::istringstream  is(udp_packet.data);
 
     is >> keypressed;
+    std::cout << getName() << " " << keypressed << std::endl;
     game_mutex->unlock();
     return (Enum::OK);
 }

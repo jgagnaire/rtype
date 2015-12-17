@@ -1,0 +1,47 @@
+"level1": {
+  "time": 100,
+    "background": "level1",    
+    "monsters": [
+		 {"monster1": {
+		     "name": "monster1",
+		     "appear_at_sec": 2,
+		     "timeval": 1000,
+		     "time": 5
+		 }},
+		 
+		 {"monster3": {
+		     "name": "monster3",
+		     "appear_at_sec": 10,
+		     "timeval": 1500,
+		     "time": 10
+		       }},
+		 
+		 {"monster9": {
+		     "name": "monster9",
+		     "appear_at_sec": 12,
+		     "timeval": 500,
+		     "time": 3
+		       }}
+		 ],
+    
+    "bonus": [
+	      {"bonus1": {
+		  "name": "bonus1",
+		  "appear_at_sec": 2,
+		  "for_everyone": 0
+		    }},
+	      
+	      {"bonus4": {
+		  "name": "bonus4",
+		  "appear_at_sec": 7,
+		  "for_everyone": 0 
+		    }},
+	      
+	      {"bonus3": {
+		  "name": "bonus3",
+		  "appear_at_sec": 14,
+		  "for_everyone": 1
+		    }}
+	      ],
+    "boss": "boss3"
+    }
