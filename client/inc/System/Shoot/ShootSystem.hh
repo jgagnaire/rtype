@@ -22,7 +22,7 @@ class ShootSystem : public ASystem
             return (e);
         }
     public:
-        ShootSystem(std::list<Entity*> *_list) : _eList(_list), fireRate(250), isActiv(false), lastEvent(0)
+        ShootSystem(std::list<Entity*> *_list) : _eList(_list), fireRate(250), isActiv(false), _frequency(0), lastEvent(0)
     {
         _eventList.push_back(Key_Fire);
         _eventList.push_back(Key_Charge);
@@ -65,12 +65,12 @@ class ShootSystem : public ASystem
         virtual IPacket                 *out() {
             if (isActiv == false)
                 return (0);
-            if (lastEvent && _frequency > 30)
+			if (lastEvent && _frequency > 30)
             {
-                std::string     tmp = std::to_string(lastEvent);
+                _tmp = std::to_string(lastEvent);
                 _packet.setQuery(static_cast<uint16_t>(UdpCodes::KeyPressed));
-                _packet.setData(tmp.c_str());
-                _packet.setSize(static_cast<uint16_t>(tmp.size()));
+                _packet.setData(_tmp.c_str());
+                _packet.setSize(static_cast<uint16_t>(_tmp.size()));
                 _frequency = 0;
 				return (&_packet);
             }
@@ -157,6 +157,7 @@ class ShootSystem : public ASystem
         int                 _frequency;
         EventSum			lastEvent;
         std::function<void (Entity&, Pattern::Side, int)> patterns[2];
+        std::string         _tmp;
 };
 
 #endif //SHOOTSYSTEM_HH_

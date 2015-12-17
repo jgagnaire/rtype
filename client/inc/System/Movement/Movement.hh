@@ -69,10 +69,10 @@ class MovementSystem : public ASystem
                 return (0);
             if (lastEvent && _frequency > 30)
             {
-                std::string     tmp = std::to_string(lastEvent);
+                _tmp = std::to_string(lastEvent);
                 _packet.setQuery(static_cast<uint16_t>(UdpCodes::KeyPressed));
-                _packet.setData(tmp.c_str());
-                _packet.setSize(static_cast<uint16_t>(tmp.size()));
+                _packet.setData(_tmp.c_str());
+                _packet.setSize(static_cast<uint16_t>(_tmp.size()));
                 _frequency = 0;
                 return (&_packet);
             }
@@ -139,6 +139,7 @@ class MovementSystem : public ASystem
         UdpPacket           _packet;
         int                 _frequency;
         uint64_t            _lastId;
+        std::string         _tmp;
 };
 
 #endif // MOVEMENT_HH_
