@@ -16,13 +16,15 @@ int main(int, char **av)
   try {
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
 	CreateDirectory("./server/.database", NULL);
-	NetworkManager<SOCKET, AController<SOCKET> > netmgr(av[1]);
+	NetworkManager<SOCKET, AController<SOCKET> > netmgr(av[1], Enum::BOTH_PROTO);
 	netmgr.triggerConnection(&AController<SOCKET>::newConnection);
 	netmgr.triggerNewData(&AController<SOCKET>::newData);
 	netmgr.triggerClose(&AController<SOCKET>::closeConnection);
 	netmgr.triggerTimeout(&AController<SOCKET>::timeout);
 	netmgr.triggerAObserve(&AController<SOCKET>::timeout);
 	netmgr.addController(new AccountController<SOCKET>(netmgr.getClientList()));
+	netmgr.addController(new GameController<SOCKET>(netmgr.getClientList()));
+	netmgr.addController(new GameplayController<SOCKET>(netmgr.getClientList()), Enum::UDP);
 #else
 	  mkdir("./server/.database", 0755);
 	  NetworkManager<int, AController<int> > netmgr(av[1], Enum::BOTH_PROTO);
