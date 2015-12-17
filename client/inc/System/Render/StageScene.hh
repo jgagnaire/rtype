@@ -12,7 +12,8 @@ class StageScene : public Scene
 {
     public:
         StageScene(IWindow &win, std::list<Entity*> *e):
-            Scene(win, e), _stageNb(5), _pSprites(4), _direction(noEvent)
+            Scene(win, e), _stageNb(1), _pSprites(4), _direction(noEvent),
+            _numstage(5)
     {
         _pSprites[0].load("client/res/ship/player-ship-blue2_111.png");
         _pSprites[1].load("client/res/ship/player-ship-green2_111.png");
@@ -45,6 +46,12 @@ class StageScene : public Scene
         _guiShoots.manager.add<ADrawable*>("shoot", &_shoot);
         _guiShoots.manager.add<ADrawable*>("shootEnnemy", &_shoot);
         _lastId = 0;
+        _numstage[0].load("client/res/stages/numero-1_75.png", true);
+        _numstage[1].load("client/res/stages/numero-2_115.png", true);
+        _numstage[2].load("client/res/stages/numero-3_115.png", true);
+        _numstage[3].load("client/res/stages/numero-4_230.png", true);
+        _numstage[4].load("client/res/stages/numero-5_230.png", true);
+        _stage.load("client/res/stages/stage_576.png", true);
     }
 
         virtual void    init()
@@ -131,30 +138,33 @@ class StageScene : public Scene
                         _players[name]->setPosition(sf::Vector2f(px, py));
                 }
             }
-
         }
 
     private:
-        Entity          _b1;
-        Entity          _b2;
-        Entity          _b3;
-        Entity          _b4;
-        Entity          _guiPlayers;
-        Entity          _guiShoots;
+        Entity                                              _b1;
+        Entity                                              _b2;
+        Entity                                              _b3;
+        Entity                                              _b4;
+        Entity                                              _guiPlayers;
+        Entity                                              _guiShoots;
+        Entity                                              _changeScene;
 
-        View            _view;
-        std::vector<ScrollingSprite*>   _s1;
-        std::vector<ScrollingSprite*>   _s2;
-        std::vector<ScrollingSprite*>   _s3;
-        std::vector<ScrollingSprite*>   _s4;
-        int                             _stageNb;
-        std::vector<AnimatedSprite>     _pSprites;
-        AnimatedSprite                  _shoot;
-        AnimatedSprite                  _shootEnnemy;
+        View                                                _view;
+        std::vector<ScrollingSprite*>                       _s1;
+        std::vector<ScrollingSprite*>                       _s2;
+        std::vector<ScrollingSprite*>                       _s3;
+        std::vector<ScrollingSprite*>                       _s4;
+        int                                                 _stageNb;
+        std::vector<AnimatedSprite>                         _pSprites;
+        AnimatedSprite                                      _shoot;
+        AnimatedSprite                                      _shootEnnemy;
 
-        EventSum         _direction;
-        uint64_t         _lastId;
+        EventSum                                            _direction;
+        uint64_t                                            _lastId;
         std::unordered_map<std::string, AnimatedSprite*>    _players;
+
+        AnimatedSprite                                      _stage;
+        std::vector<AnimatedSprite>                         _numstage;
 };
 
 
