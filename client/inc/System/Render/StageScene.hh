@@ -13,7 +13,7 @@ class StageScene : public Scene
     public:
         StageScene(IWindow &win, std::list<Entity*> *e):
             Scene(win, e), _stageNb(1), _pSprites(4), _direction(noEvent),
-            _numstage(5)
+            _numstage(5), _durationAnimation(100)
     {
         _pSprites[0].load("client/res/ship/player-ship-blue2_111.png");
         _pSprites[1].load("client/res/ship/player-ship-green2_111.png");
@@ -52,6 +52,15 @@ class StageScene : public Scene
         _numstage[3].load("client/res/stages/numero-4_230.png", true);
         _numstage[4].load("client/res/stages/numero-5_230.png", true);
         _stage.load("client/res/stages/stage_576.png", true);
+        _stage.setPosition(sf::Vector2f(960 - 576 / 2 - 100, 540 - 123 / 2));
+        for (auto &x : _numstage)
+            x.setPosition(sf::Vector2f(960 - 576 / 2 + 576, 540 - 123 / 2));
+        _changeScene.manager.add<ADrawable*>("stage", &_stage);
+        _changeScene.manager.add<ADrawable*>("n1", &(_numstage[0]));
+        _changeScene.manager.add<ADrawable*>("n2", &(_numstage[1]));
+        _changeScene.manager.add<ADrawable*>("n3", &(_numstage[2]));
+        _changeScene.manager.add<ADrawable*>("n4", &(_numstage[3]));
+        _changeScene.manager.add<ADrawable*>("n5", &(_numstage[4]));
     }
 
         virtual void    init()
@@ -115,6 +124,12 @@ class StageScene : public Scene
                 x.second->update(duration);
             _win.draw(_guiPlayers);
             _win.draw(_b4);
+            if (_durationAnimation)
+            {
+                for (auto x : _changeScene.manager.getAll<ADrawable*>())
+                    x->update(duration);
+                _win.draw(_changeScene);
+            }
         }
 
         virtual void        in(IPacket *p)
@@ -165,6 +180,7 @@ class StageScene : public Scene
 
         AnimatedSprite                                      _stage;
         std::vector<AnimatedSprite>                         _numstage;
+        std::size_t                                         _durationAnimation;
 };
 
 
