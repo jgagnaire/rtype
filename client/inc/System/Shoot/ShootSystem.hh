@@ -67,10 +67,10 @@ class ShootSystem : public ASystem
                 return (0);
             if (lastEvent && _frequency > 30)
             {
-                std::string     tmp = std::to_string(lastEvent);
+                _tmp = std::to_string(lastEvent);
                 _packet.setQuery(static_cast<uint16_t>(UdpCodes::KeyPressed));
-                _packet.setData(tmp.c_str());
-                _packet.setSize(static_cast<uint16_t>(tmp.size()));
+                _packet.setData(_tmp.c_str());
+                _packet.setSize(static_cast<uint16_t>(_tmp.size()));
                 _frequency = 0;
 				return (&_packet);
             }
@@ -157,6 +157,7 @@ class ShootSystem : public ASystem
         int                 _frequency;
         EventSum			lastEvent;
         std::function<void (Entity&, Pattern::Side, int)> patterns[2];
+        std::string         _tmp;
 };
 
 #endif //SHOOTSYSTEM_HH_
