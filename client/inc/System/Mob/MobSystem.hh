@@ -16,11 +16,12 @@ public:
 		e->manager.add<std::string>("name", "mob1");
 		e->manager.add<std::string>("type", "mob");
 		e->manager.add("position",
-					   std::pair<float, float>(1000, 800));
+					   std::pair<float, float>(1850, 1000));
 		e->manager.add<std::function<void (Entity&, Pattern::Side, int)> >
 			("pattern", Pattern::line);
 		e->manager.add<Pattern::Side>("direction", Pattern::Side::LEFT);
 		_eList->push_back(e);
+		_eventList.push_back(E_Stage);
 	}
 	virtual ~MobSystem() {}
 
@@ -31,8 +32,10 @@ public:
 			bool has_been_del = false;
 			for (auto x = _eList->begin(); x != _eList->end();)
 			{
+				std::cout << "labite" << std::endl;
 				if ((*x)->manager.get<std::string>("type") == "mob")
 				{
+					std::cout << "lesexe" << std::endl;
 					(*x)->manager.get<std::function<void (Entity&, Pattern::Side, int)> >
                         ("pattern")(**x, (*x)->manager.
                                     get<Pattern::Side>("direction"), duration);
@@ -50,10 +53,18 @@ public:
 		}
 	virtual IPacket                 *out(EventSum&) { return NULL;}
 	virtual void                    in(IPacket*) {}
-		virtual bool                    handle(EventSum) { return true;}
+	virtual bool                    handle(EventSum ev)
+		{
+			if (ev == E_Stage)
+			{
+				std::cout << "STAGE BITCH" << std::endl;
+				isActiv = !isActiv;
+			}
+			return true;
+		}
 	virtual std::vector<REvent>     &broadcast(void) { return _eventList; }
 	virtual EventSum                getEvent() {return noEvent;}
-
+	
 protected:
 	bool					isActiv;
 	std::list<Entity*>	*_eList;
