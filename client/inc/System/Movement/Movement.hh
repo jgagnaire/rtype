@@ -61,6 +61,7 @@ class MovementSystem : public ASystem
                     break;
                 }
             }
+			lastEvent = 0;
         }
         virtual IPacket                 *out() {
             if (isActiv == false)
@@ -71,7 +72,6 @@ class MovementSystem : public ASystem
                 _packet.setQuery(static_cast<uint16_t>(UdpCodes::KeyPressed));
                 _packet.setData(tmp.c_str());
                 _packet.setSize(static_cast<uint16_t>(tmp.size()));
-                lastEvent = 0;
                 _frequency = 0;
                 return (&_packet);
             }

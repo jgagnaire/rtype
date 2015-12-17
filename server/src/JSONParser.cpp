@@ -155,7 +155,7 @@ Entity			JSONParser::hashParse(std::string &content,
       throw (JSONException("Parsing error"));
     }
     getValue(entity, tmp, content);
-    if (*content.begin() == '}' || content.empty()) {
+    if (content.empty() || *content.begin() == '}') {
       break ;
     }
     else if (*content.begin() != ',') {
