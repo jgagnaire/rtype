@@ -6,10 +6,6 @@ Recorder::Recorder() : SoundRecorder(), _state(false)
   this->setProcessingInterval(sf::milliseconds(500));
 }
 
-Recorder::~Recorder()
-{
-}
-
 bool Recorder::onProcessSamples(const sf::Int16* samples, std::size_t sampleCount)
 {
   SoundBuffer *tmp;
@@ -21,14 +17,6 @@ bool Recorder::onProcessSamples(const sf::Int16* samples, std::size_t sampleCoun
       this->_buffers.push_back(tmp);
     }
   return true;
-}
-
-void Recorder::changeState()
-{
-  if (_state)
-    _state = false;
-  else
-    _state = true;
 }
 
 SoundBuffer *Recorder::getBuffer()

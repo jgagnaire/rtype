@@ -22,7 +22,7 @@ class ShootSystem : public ASystem
             return (e);
         }
     public:
-        ShootSystem(std::list<Entity*> *_list) : _eList(_list), fireRate(250), isActiv(false)
+        ShootSystem(std::list<Entity*> *_list) : _eList(_list), fireRate(250), isActiv(false), lastEvent(0)
     {
         _eventList.push_back(Key_Fire);
         _eventList.push_back(Key_Charge);
@@ -59,6 +59,7 @@ class ShootSystem : public ASystem
                 if (!has_been_del)
                     ++x;
             }
+            lastEvent = 0;
         }
 
         virtual IPacket                 *out() {
@@ -70,11 +71,10 @@ class ShootSystem : public ASystem
                 _packet.setQuery(static_cast<uint16_t>(UdpCodes::KeyPressed));
                 _packet.setData(tmp.c_str());
                 _packet.setSize(static_cast<uint16_t>(tmp.size()));
-                lastEvent = 0;
                 _frequency = 0;
-                return (&_packet);
+				return (&_packet);
             }
-            return NULL;
+            return 0;
         }
         virtual void                    in(IPacket *p) {
             UdpPacket   *packet;
@@ -91,7 +91,6 @@ class ShootSystem : public ASystem
                 {
                     for (auto x : *_eList)
                     {
-                        std::cout << x->manager.get<std::string>("name") << " - " << name << std::endl;
                         if (x->manager.get<std::string>("name") == name)
                         {
                             Entity *sht = this->createShoot(x->manager.get<std::pair<float, float> >("position"),
@@ -124,27 +123,27 @@ class ShootSystem : public ASystem
             if (ev & Key_Fire && this->fireRate >= 250 && isActiv)
             {
 				lastEvent = ev;
-/*                Entity *e = new Entity;*/
+                Entity *e = new Entity;
 
-                //e->manager.add<std::string>("name", "playerShoot");
-                //e->manager.add<std::string>("type", "shoot");
-                //e->manager.add("velocity", 4.50f);
-                //e->manager.add<size_t>("dammage", 25);
-                //for(auto x : *_eList)
-                    //if (x->manager.get<std::string>("name") == "player1")
-                    //{
-                        //e->manager.add("position",
-                                //std::pair<float, float>(
-                                    //x->manager.get<std::pair<float, float> >
-                                    //("position").first + 105.0f,
-                                    //x->manager.get<std::pair<float, float> >
-                                    //("position").second + 9.0f));
-                        //e->manager.add<std::function<void (Entity&, Pattern::Side, int)> >
-                            //("pattern",
-                             //patterns[x->manager.get<Pattern::MovePattern>("pattern")]);
-                    //}
-                //e->manager.add<Pattern::Side>("direction", Pattern::Side::RIGHT);
-                /*_eList->push_back(e);*/
+                e->manager.add<std::string>("name", "playerShoot");
+                e->manager.add<std::string>("type", "shoot");
+                e->manager.add("velocity", 4.50f);
+                e->manager.add<size_t>("dammage", 25);
+                for(auto x : *_eList)
+                    if (x->manager.get<std::string>("name") == "player1")
+                    {
+                        e->manager.add("position",
+                                std::pair<float, float>(
+                                    x->manager.get<std::pair<float, float> >
+                                    ("position").first + 105.0f,
+                                    x->manager.get<std::pair<float, float> >
+                                    ("position").second + 9.0f));
+                        e->manager.add<std::function<void (Entity&, Pattern::Side, int)> >
+                            ("pattern",
+                             patterns[x->manager.get<Pattern::MovePattern>("pattern")]);
+                    }
+                e->manager.add<Pattern::Side>("direction", Pattern::Side::RIGHT);
+                _eList->push_back(e);
             }
             else if (ev & Key_Change && isActiv)
             {

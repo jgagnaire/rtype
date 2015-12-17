@@ -96,7 +96,6 @@ void AudioCallSystem::addPacket(SoundBuffer *buffer)
   tmp->setData(data);
   _packets.push_back(tmp);
   delete buffer;
-  in(out());
 }
 
 std::string AudioCallSystem::getPseudo(const void *data, uint16_t packetSize) const

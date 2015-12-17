@@ -11,7 +11,7 @@ class ADrawable
 
         virtual void    update(std::size_t) = 0;
 
-        inline virtual const void *getBuffer() const { return _buffer; }
+        virtual const void *getBuffer() const { return _buffer; }
 
     protected:
         const void  *_buffer;

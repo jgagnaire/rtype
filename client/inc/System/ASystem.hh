@@ -12,7 +12,7 @@ class ASystem
 {
 public:
 	ASystem() {}
-	ASystem(std::list<Entity*> *);
+	ASystem(std::list<Entity*> *) {}
 	virtual ~ASystem() {}
 
 	virtual void                    update(int duration) = 0;

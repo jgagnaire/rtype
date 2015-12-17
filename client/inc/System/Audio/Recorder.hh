@@ -10,9 +10,13 @@ class Recorder : public sf::SoundRecorder
 {
 public:
   Recorder();
-  virtual ~Recorder();
+  virtual ~Recorder() {}
 
-  void changeState();
+  inline void changeState()
+  {
+    _state = !_state;
+  }
+
   SoundBuffer *getBuffer();
 
 private:

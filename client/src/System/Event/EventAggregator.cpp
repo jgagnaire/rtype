@@ -34,12 +34,14 @@ void	EventAggregator::update()
     std::vector<REvent> tmp;
     EventSum              e;
 
-    if ((e = this->win->getEvent()) != noEvent)
-        this->send(e);
+	if ((e = this->win->getEvent()) != noEvent)
+		this->send(e);
     for (auto x = _systemList.begin(); x != _systemList.end(); ++x)
     {
         if ((tmp = x->first->broadcast()) != x->second)
             x->second = tmp;
-        this->send(x->first->getEvent());
+        if ((e = x->first->getEvent()))
+            this->send(e);
     }
+    this->send(0);
 }

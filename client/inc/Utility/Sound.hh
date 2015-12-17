@@ -10,15 +10,15 @@ public:
   Sound() {}
   virtual ~Sound() {}
 
-  inline virtual void play()
+  virtual void play()
   {
     this->_sound.play(); 
   }
-  inline virtual void stop()
+  virtual void stop()
   {
     this->_sound.stop();
   }
-  inline virtual void resetBuffer()
+  virtual void resetBuffer()
   {
     this->_sound.resetBuffer();
   }

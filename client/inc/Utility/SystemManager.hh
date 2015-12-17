@@ -55,6 +55,7 @@ class SystemManager
         {
             while (ea->getWin()->isOpen())
             {
+                std::cout << "======================" << std::endl;
                 std::size_t s = this->clk->getElapsedTimeMilli();
                 this->clk->restart();
                 ea->update();

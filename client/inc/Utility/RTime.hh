@@ -12,7 +12,7 @@ public:
   RTime() {}
   virtual ~RTime() {}
 
-  inline virtual std::size_t getTimeMicro() const
+  virtual std::size_t getTimeMicro() const
   {
     return static_cast<std::size_t>(_time.asMicroseconds());
   }
