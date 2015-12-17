@@ -1,4 +1,5 @@
 #include "System/Render/ReadyScene.hh"
+#include "System/Shoot/Pattern.hh"
 
 ReadyScene::ReadyScene(IWindow &win, std::list<Entity*> *e):
     Scene(win, e), _isReady(false), _send(false),
@@ -62,6 +63,8 @@ void    ReadyScene::in(IPacket *p)
     TcpPacket   *packet;
     std::string name;
     std::string tmp;
+    std::pair<float, float> pos;
+    Entity *pl;
 
     if ((packet = dynamic_cast<TcpPacket*>(p)))
     {
@@ -85,6 +88,17 @@ void    ReadyScene::in(IPacket *p)
                 }
                 break ;
             case Codes::Begin:
+                for (auto x : _players)
+                {
+                    pl = new Entity;
+                    pl->manager.add<std::string>("type", "player");
+                    pl->manager.add<std::string>("pseudo", x.first);
+                    pl->manager.add<std::string>("name", x.first);
+                    pl->manager.add<std::pair<float, float> >("position", pos);
+                    pl->manager.add<Pattern::MovePattern>
+                        ("pattern", Pattern::MovePattern::LINE);
+                    _entities->push_back(pl);
+                }
                 _event = E_Stage;
                 break ;
             case Codes::PlayerJoined:
