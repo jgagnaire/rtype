@@ -60,13 +60,11 @@ class ShootSystem : public ASystem
                     ++x;
             }
             lastEvent = 0;
-            std::cout << "shoot update " << lastEvent << std::endl;
         }
 
         virtual IPacket                 *out() {
             if (isActiv == false)
                 return (0);
-                std::cout << "shoot out "<< lastEvent<< std::endl;
             if (lastEvent && _frequency > 30)
             {
                 std::string     tmp = std::to_string(lastEvent);
@@ -159,7 +157,6 @@ class ShootSystem : public ASystem
                         break ;
                     }
             }
-            std::cout << "shoot handle" << lastEvent << std::endl;
             return true;
         }
         virtual std::vector<REvent>     &broadcast(void)
