@@ -80,19 +80,21 @@ class StageScene : public Scene
 
         virtual void    init()
         {
+            std::string     name;
             switchStage();
-            auto tmp = _entities->back()->manager.getAll<std::string>();
             int i = 0;
-            for (auto x : tmp)
+            for (auto x : *_entities)
             {
-                if (x != "playersData" && _entities->front()->manager.get<std::string>("pseudo") != x)
+                if (x->manager.get<std::string>("type") == "player")
                 {
-                    _players[x] = &(_pSprites[++i]);
-                    _guiPlayers.manager.add<ADrawable*>("player" + std::to_string(i + 1),
-                            &_pSprites[i]);
+                    name = x->manager.get<std::string>("pseudo");
+                    if (x->manager.get<std::string>("name") != "player1")
+                    {
+                        _players[name] = &(_pSprites[++i]);
+                        _guiPlayers.manager.add<ADrawable*>("player" + std::to_string(i + 1),
+                                &(_pSprites[i]));
+                    }
                 }
-                else
-                    _players[x] = &(_pSprites[0]);
             }
             _players[_entities->front()->manager.get<std::string>("pseudo")] = &(_pSprites[0]);
         }
