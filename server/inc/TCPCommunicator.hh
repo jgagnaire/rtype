@@ -44,6 +44,7 @@ public:
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
                 while (!(*cli)->sendStructEmpty()) {
 	    if (!(*cli)->writeOnMe()) {
+			std::cout << "je supprime: " << (*cli)->getName() << std::endl;
 	      deleteClient(cli);
 	      break;
 	    }
@@ -114,6 +115,7 @@ public:
             return (false);
         if (!cli->IsFilled())
             return (true);
+		std::cout << "la taille des controllers vaut: " << this->controllers.size() << std::endl;
         for (auto it = this->controllers.begin(); it != this->controllers.end(); ++it) {
             if ((n = ((*it)->*(this->newData))(cli)) == 1)
             {

@@ -10,18 +10,21 @@ template<typename T>
 int	AccountController<T>::newData(UserManager<T> *cli) {
     cli->fillPacketStruct();
     std::cout << "La query: " << cli->numQuery() << std::endl;
-    switch (cli->numQuery()) {
-        case Enum::ACCOUNT_LOGIN:
-            return (static_cast<int>(accountLoginFct(cli)));
-        case Enum::ACCOUNT_REGISTER:
-            return (static_cast<int>(accountRegisterFct(cli)));
-        case Enum::DISCONNECTION:
-            return (static_cast<int>(disconnectionFct(cli)));
-        case Enum::PONG:
-            return (static_cast<int>(pong(cli)));
-        default:
-            return (-1);
-    }
+	switch (cli->numQuery()) {
+	case Enum::ACCOUNT_LOGIN:
+		return (static_cast<int>(accountLoginFct(cli)));
+	case Enum::ACCOUNT_REGISTER:
+		return (static_cast<int>(accountRegisterFct(cli)));
+	case Enum::DISCONNECTION:
+		return (static_cast<int>(disconnectionFct(cli)));
+	case Enum::PONG:
+		return (static_cast<int>(pong(cli)));
+	default:
+	{
+		std::cout << "j'ai return -1 ta mere" << std::endl;
+		return (-1);
+	}
+	}
 }
 
 template<typename T>
