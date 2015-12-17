@@ -80,6 +80,7 @@ void    ReadyScene::in(IPacket *p)
                     _isReadyText.setText("You are not ready.");
                 if (static_cast<Codes>(_lastCode) == Codes::LeaveRoom)
                 {
+                    _players.clear();
                     _quit = true;
                 }
                 break ;
