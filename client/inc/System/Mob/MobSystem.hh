@@ -15,6 +15,7 @@ public:
 
 		e->manager.add<std::string>("name", "mob1");
 		e->manager.add<std::string>("type", "mob");
+		e->manager.add<float>("velocity", 0.80f);
 		e->manager.add("position",
 					   std::pair<float, float>(1850, 1000));
 		e->manager.add<std::function<void (Entity&, Pattern::Side, int)> >
@@ -32,7 +33,6 @@ public:
 			bool has_been_del = false;
 			for (auto x = _eList->begin(); x != _eList->end();)
 			{
-				std::cout << "labite" << std::endl;
 				if ((*x)->manager.get<std::string>("type") == "mob")
 				{
 					std::cout << "lesexe" << std::endl;
@@ -41,7 +41,7 @@ public:
                                     get<Pattern::Side>("direction"), duration);
                     std::pair<float, float> tmp = (*x)->manager.
                         get<std::pair<float, float> >("position");
-					if (tmp.first < 0)
+					if (tmp.first <= 0)
 					{
                         x = _eList->erase(x);
                         has_been_del = true;
@@ -56,10 +56,7 @@ public:
 	virtual bool                    handle(EventSum ev)
 		{
 			if (ev == E_Stage)
-			{
-				std::cout << "STAGE BITCH" << std::endl;
 				isActiv = !isActiv;
-			}
 			return true;
 		}
 	virtual std::vector<REvent>     &broadcast(void) { return _eventList; }
