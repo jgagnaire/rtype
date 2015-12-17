@@ -62,7 +62,6 @@ void    ReadyScene::in(IPacket *p)
     TcpPacket   *packet;
     std::string name;
     std::string tmp;
-    Entity *e;
 
     if ((packet = dynamic_cast<TcpPacket*>(p)))
     {
@@ -85,12 +84,6 @@ void    ReadyScene::in(IPacket *p)
                 }
                 break ;
             case Codes::Begin:
-                e = new Entity();
-                for (auto x : _players)
-                    e->manager.add<std::string>(x.first, x.first);
-                e->manager.add<std::string>("type", "playersData");
-                e->manager.add<std::string>("name", "playersData");
-                _entities->push_back(e);
                 _event = E_Stage;
                 break ;
             case Codes::PlayerJoined:

@@ -32,18 +32,18 @@ class SystemManager
         ASystem *mvt = new MovementSystem(shr_entities);
         ASystem *shot = new ShootSystem(shr_entities);
 		ASystem *mob = new MobSystem(shr_entities);
-		
+
         systemList["1mov"] = mvt;
         systemList["2Shoot"] = shot;
         systemList["3audioCall"] = audioCall;
         systemList["4render"] = render;
         ea = new EventAggregator(static_cast<RenderSystem*>(render)->getWindow());
         clk = new Clock();
-        ea->add(render);
         ea->add(mvt);
         ea->add(shot);
 		ea->add(mob);
 		ea->add(audioCall);
+        ea->add(render);
     }
 
         ~SystemManager()
