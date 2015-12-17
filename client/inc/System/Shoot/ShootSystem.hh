@@ -72,9 +72,9 @@ class ShootSystem : public ASystem
                 _packet.setData(tmp.c_str());
                 _packet.setSize(static_cast<uint16_t>(tmp.size()));
                 _frequency = 0;
-                return (&_packet);
+				return (&_packet);
             }
-            return NULL;
+            return 0;
         }
         virtual void                    in(IPacket *p) {
             UdpPacket   *packet;

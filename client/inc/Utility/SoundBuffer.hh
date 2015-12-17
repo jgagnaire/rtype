@@ -10,23 +10,23 @@ public:
   SoundBuffer() {}
   virtual ~SoundBuffer(){}
 
-  inline virtual std::size_t getDuration() const
+  virtual std::size_t getDuration() const
   {
     return static_cast<std::size_t>(this->_buffer.getDuration().asMicroseconds());
   }
-  inline virtual std::size_t getSampleCount() const
+  virtual std::size_t getSampleCount() const
   {
     return static_cast<std::size_t>(this->_buffer.getSampleCount());
   }
-  inline virtual unsigned int getSampleRate() const
+  virtual unsigned int getSampleRate() const
   {
     return this->_buffer.getSampleRate();
   }
-  inline virtual const short int *getSamples() const
+  virtual const short int *getSamples() const
   {
     return this->_buffer.getSamples();
   }
-  inline virtual bool loadFromSamples (const short int *samples, std::size_t sampleCount,
+  virtual bool loadFromSamples (const short int *samples, std::size_t sampleCount,
 			unsigned int channelCount, unsigned int sampleRate)
   {
     return this->_buffer.loadFromSamples(samples, sampleCount, channelCount, sampleRate);
