@@ -2,7 +2,6 @@
 # define IWINDOW_HH_
 
 # include <string>
-# include "System/Render/IEvent.hh"
 # include "Entity/Entity.hh"
 # include "System/Event/EventAggregator.hh"
 
