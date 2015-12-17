@@ -39,10 +39,12 @@ bool            GameController<T>::joinRoom(UserManager<T> *cl, Enum::ServerAnsw
             return (true);
         for (auto it = game->players.begin(); it != game->players.end(); ++it) {
 	  if (cl->getName() != (*it)->getName()) {
+	    std::cout << cl->getName() << " sait que " <<  (*it)->getName() << " est rentre" << std::endl;
             cl->writeStruct({static_cast<uint16_t>((*it)->getName().size()),
 		  Enum::PLAYER_JOIN});
             cl->writeMsg((*it)->getName());
 	  }
+	  std::cout << (*it)->getName() << " sait que " << cl->getName() << " est rentre" << std::endl;
             (*it)->writeStruct({static_cast<uint16_t>(cl->getName().size()),
                                 Enum::PLAYER_JOIN});
             (*it)->writeMsg(cl->getName());

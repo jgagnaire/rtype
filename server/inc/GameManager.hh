@@ -58,6 +58,7 @@ public:
 private:
     bool                            update(Game<SCK> *game, std::size_t);
     void                            updatePositions(Game<SCK> *, std::size_t);
+    bool			    updateTime(Game<SCK> *);
 
     static  GameManager				  *game_manager;
     std::list<Game<SCK> *>			  _games;

@@ -114,14 +114,21 @@ void        GameManager<SCK>::updatePositions(Game<SCK> *game, std::size_t time)
 }
 
 template <typename SCK>
-bool        GameManager<SCK>::update(Game<SCK> *game, std::size_t time) {
-    auto m = &game->level->manager;
-    std::size_t	game_time = m->get<int>("time");
-    std::size_t	tmp_time = getTimeInSecond() - game_time;
+bool        GameManager<SCK>::updateTime(Game<SCK> *game) {
+    Entity	&tmp = *game->level;
+    std::size_t	game_time = tmp.manager.get<int>("time");
+    std::size_t	tmp_time = getTimeInSecond() + tmp.manager.get<int>("time_tmp") - game_time;
 
+    tmp.manager.set<int>("time_tmp", tmp.manager.get<int>("time_tmp") - tmp_time);
+    tmp.manager.set<int>("timeleft", tmp.manager.get<int>("timeleft") + tmp_time);
+    return (tmp.manager.get<int>("timeleft") == tmp.manager.get<int>("time_tmp"));
+}
+
+template <typename SCK>
+bool        GameManager<SCK>::update(Game<SCK> *game, std::size_t time) {
+    updateTime(game);
     updatePositions(game, time);
     game->shoot_system->update(time);
-    game->level->manager.set("time", game_time - tmp_time);
     return (!game->players.empty());
 }
 
@@ -149,7 +156,10 @@ void            GameManager<SCK>::createGame(Game<SCK> *game) {
     tmp = tmp.manager.get<Entity>(game->lvl_name);
     game->level = new Entity(tmp);
     std::cout << "test" << std::endl;
-    game->level->manager.set("time", getTimeInSecond() + tmp.manager.get<int>("time"));
+    Entity		&tmp_entity = *game->level;
+    tmp_entity.manager.add<int>("time_tmp", tmp_entity.manager.get<int>("time"));
+    tmp_entity.manager.add<int>("timeleft", 0);
+    tmp_entity.manager.set<int>("time", getTimeInSecond() + tmp_entity.manager.get<int>("time_tmp"));
     std::cout << "Que la partie commence pour la room: " << game->name << std::endl;
     auto end = std::chrono::steady_clock::now();
     while (is_not_finished) {

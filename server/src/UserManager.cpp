@@ -376,7 +376,6 @@ Enum::ServerAnswers     UserManager<T>::keyPressed() {
     std::istringstream  is(udp_packet.data);
 
     is >> keypressed;
-    std::cout << getName() << " " << keypressed << std::endl;
     game_mutex->unlock();
     return (Enum::OK);
 }
