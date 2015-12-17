@@ -81,6 +81,8 @@ class StageScene : public Scene
         virtual void    init()
         {
             std::string     name;
+            std::string     me;
+
             switchStage();
             int i = 0;
             for (auto x : *_entities)
@@ -88,7 +90,9 @@ class StageScene : public Scene
                 if (x->manager.get<std::string>("type") == "player")
                 {
                     name = x->manager.get<std::string>("pseudo");
-                    if (x->manager.get<std::string>("name") != "player1")
+                    if (me.empty())
+                        me = name;
+                    if (x->manager.get<std::string>("name") != "player1" && me != name)
                     {
                         _players[name] = &(_pSprites[++i]);
                         _guiPlayers.manager.add<ADrawable*>("player" + std::to_string(i + 1),
