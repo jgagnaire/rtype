@@ -362,8 +362,8 @@ Enum::ServerAnswers     UserManager<T>::keyPressed() {
     std::istringstream  is(udp_packet.data);
 
     is >> keypressed;
-    game_mutex.unlock();
-    return (Enum::OK);
+	game_mutex.unlock();
+	return (Enum::OK);
 }
 
 template <typename T>

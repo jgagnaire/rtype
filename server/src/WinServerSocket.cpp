@@ -67,7 +67,7 @@ bool WinServerSocket::absWriteOnClient(char *to_write, size_t size,
 	DWORD written = 0;
 	WSABUF wsabuf = { 0 };
 	char *tmp;
-	sockaddr_in *to = NULL;
+	sockaddr_in *to = 0;
 
 	if (!(ip.empty() || port.empty())) {
 		to = new sockaddr_in;
@@ -82,7 +82,7 @@ bool WinServerSocket::absWriteOnClient(char *to_write, size_t size,
 	while (wsabuf.len > 0)
 	{
 		if ((::WSASendTo(this->sock, &wsabuf, 1, &written,
-			NULL, reinterpret_cast<struct sockaddr *>(to), sizeof(to), NULL, NULL) == SOCKET_ERROR)
+			0, reinterpret_cast<struct sockaddr *>(to), sizeof(*to), 0, 0) == SOCKET_ERROR)
 			&& (WSAGetLastError() != EINTR)) {
 			return false;
 		}
