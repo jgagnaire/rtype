@@ -40,9 +40,9 @@ class ShootSystem : public ASystem
                 return ;
             if ((this->fireRate -= duration) <= 0)
                 this->fireRate = 250;
+			bool has_been_del = false;
             for (auto x = _eList->begin(); x != _eList->end();)
             {
-                bool has_been_del = false;
                 if ((*x)->manager.get<std::string>("type") == "shoot")
                 {
                     (*x)->manager.get<std::function<void (Entity&, Pattern::Side, int)> >

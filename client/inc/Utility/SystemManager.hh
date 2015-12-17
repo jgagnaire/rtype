@@ -7,6 +7,7 @@
 #include "System/Audio/AudioCallSystem.hh"
 #include "System/Movement/Movement.hh"
 #include "System/Shoot/ShootSystem.hh"
+#include "System/Mob/MobSystem.hh"
 #include "Utility/Clock.hh"
 #include "Network/NetworkManager.hh"
 
@@ -30,7 +31,8 @@ class SystemManager
 		ASystem *audioCall = new AudioCallSystem();
         ASystem *mvt = new MovementSystem(shr_entities);
         ASystem *shot = new ShootSystem(shr_entities);
-
+		ASystem *mob = new MobSystem(shr_entities);
+		
         systemList["1mov"] = mvt;
         systemList["2Shoot"] = shot;
         systemList["3audioCall"] = audioCall;
@@ -40,6 +42,7 @@ class SystemManager
         ea->add(render);
         ea->add(mvt);
         ea->add(shot);
+		ea->add(mob);
 		ea->add(audioCall);
     }
 
