@@ -4,7 +4,6 @@
 #include "Network/UdpSocket.hh"
 #include "Network/TcpSocket.hh"
 #include "System/Render/Window.hh"
-#include "System/Render/Event.hh"
 #include "Entity/Entity.hh"
 #include "Component/Component.hh"
 #include "Utility/SystemManager.hh"
