@@ -7,6 +7,7 @@ GameManager<SCK>::GameManager() {
   _game_system["fires"] = JSONParser::parse();
   JSONParser::parseFile("./entities/levels"); // TODO, no magic string
   _game_system["levels"] = JSONParser::parse();
+  _game_system["levels"]->getEntity().manager.getAll<Entity>();
 }
 
 template <typename SCK>
@@ -113,10 +114,28 @@ void        GameManager<SCK>::updatePositions(Game<SCK> *game, std::size_t time)
 }
 
 template <typename SCK>
+bool        GameManager<SCK>::updateTime(Game<SCK> *game) {
+    Entity	&tmp = *game->level;
+    std::size_t	game_time = tmp.manager.get<int>("time");
+    std::size_t	tmp_time = getTimeInSecond() + tmp.manager.get<int>("time_tmp") - game_time;
+
+    tmp.manager.set<int>("time_tmp", tmp.manager.get<int>("time_tmp") - tmp_time);
+    tmp.manager.set<int>("timeleft", tmp.manager.get<int>("timeleft") + tmp_time);
+    return (tmp.manager.get<int>("timeleft") == tmp.manager.get<int>("time_tmp"));
+}
+
+template <typename SCK>
 bool        GameManager<SCK>::update(Game<SCK> *game, std::size_t time) {
+    updateTime(game);
     updatePositions(game, time);
     game->shoot_system->update(time);
     return (!game->players.empty());
+}
+
+template <typename SCK>
+std::size_t   GameManager<SCK>::getTimeInSecond() {
+    return (std::chrono::system_clock::now().time_since_epoch() /
+            std::chrono::seconds(1));
 }
 
 template <typename SCK>
@@ -127,11 +146,20 @@ std::size_t   GameManager<SCK>::getTime() {
 
 template <typename SCK>
 void            GameManager<SCK>::createGame(Game<SCK> *game) {
-    GameManager<SCK> &g = GameManager<SCK>::instance();
-    bool        is_not_finished = true;
-    std::size_t	duration;
-    auto start = std::chrono::steady_clock::now();
+    GameManager<SCK>	&g = GameManager<SCK>::instance();
+    bool		is_not_finished = true;
+    std::size_t		duration;
+    auto		start = std::chrono::steady_clock::now();
+    Entity		tmp = g._game_system["levels"]->getEntity();
 
+    tmp = tmp.manager.get<Entity>("levels");
+    tmp = tmp.manager.get<Entity>(game->lvl_name);
+    game->level = new Entity(tmp);
+    std::cout << "test" << std::endl;
+    Entity		&tmp_entity = *game->level;
+    tmp_entity.manager.add<int>("time_tmp", tmp_entity.manager.get<int>("time"));
+    tmp_entity.manager.add<int>("timeleft", 0);
+    tmp_entity.manager.set<int>("time", getTimeInSecond() + tmp_entity.manager.get<int>("time_tmp"));
     std::cout << "Que la partie commence pour la room: " << game->name << std::endl;
     auto end = std::chrono::steady_clock::now();
     while (is_not_finished) {

@@ -30,6 +30,9 @@ struct Game {
     std::list<UserManager<SCK> *>               players;
     std::size_t                                 refresh = Enum::REFRESH_TIME;
     bool                                        is_playing = false;
+    float					time;
+    std::string					lvl_name = "level1";
+    Entity					*level;
 };
 
 template <typename SCK>
@@ -37,6 +40,7 @@ class GameManager {
 public:
     static  GameManager             &instance();
     static  std::size_t             getTime();
+    static  std::size_t             getTimeInSecond();
     Game<SCK>                       *getGameByName(const std::string &);
     void                            createRoom(const std::string &, UserManager<SCK> *);
     void                            deleteUser(UserManager<SCK> *);
@@ -54,6 +58,7 @@ public:
 private:
     bool                            update(Game<SCK> *game, std::size_t);
     void                            updatePositions(Game<SCK> *, std::size_t);
+    bool			    updateTime(Game<SCK> *);
 
     static  GameManager				  *game_manager;
     std::list<Game<SCK> *>			  _games;

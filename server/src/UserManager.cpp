@@ -311,6 +311,7 @@ void                    UserManager<T>::clearGameData() {
     udp_packet_id = 0;
     fire = false;
     switch_weapon = false;
+    is_dead = false;
 }
 
 template <typename T>

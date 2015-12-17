@@ -1,7 +1,7 @@
 #ifndef SHOOTSYSTEM_HH_
 # define SHOOTSYSTEM_HH_
 
-# include "Pattern.hh"
+#include "Pattern.hh"
 
 class ShootSystem : public ASystem
 {
@@ -22,7 +22,7 @@ class ShootSystem : public ASystem
             return (e);
         }
     public:
-        ShootSystem(std::list<Entity*> *_list) : _eList(_list), fireRate(250), isActiv(false), lastEvent(0)
+        ShootSystem(std::list<Entity*> *_list) : _eList(_list), fireRate(250), isActiv(false)
     {
         _eventList.push_back(Key_Fire);
         _eventList.push_back(Key_Charge);
@@ -59,7 +59,6 @@ class ShootSystem : public ASystem
                 if (!has_been_del)
                     ++x;
             }
-            lastEvent = 0;
         }
 
         virtual IPacket                 *out() {
@@ -71,10 +70,11 @@ class ShootSystem : public ASystem
                 _packet.setQuery(static_cast<uint16_t>(UdpCodes::KeyPressed));
                 _packet.setData(tmp.c_str());
                 _packet.setSize(static_cast<uint16_t>(tmp.size()));
+                lastEvent = 0;
                 _frequency = 0;
-				return (&_packet);
+                return (&_packet);
             }
-            return 0;
+            return NULL;
         }
         virtual void                    in(IPacket *p) {
             UdpPacket   *packet;
@@ -86,14 +86,16 @@ class ShootSystem : public ASystem
                         static_cast<const char *>(packet->getData()), packet->getSize());
                 std::string name = tmp.substr(0, tmp.find(":"));
                 std::string code = tmp.substr(name.size() + 1);
+                std::cout << "keycode : " << code << " Name : " << name << std::endl;
                 EventSum e = std::atof(code.c_str());
                 if (e & Key_Fire)
                 {
                     for (auto x : *_eList)
                     {
-						if (x->manager.get<std::string>("type") == "player")
-                        if (x->manager.get<std::string>("pseudo") == name)
+                        std::cout << "Friends fire " << name << " - "<< x->manager.get<std::string>("name")<< std::endl;
+                        if (x->manager.get<std::string>("name") == name)
                         {
+                            std::cout << "Find friend" << std::endl;
                             Entity *sht = this->createShoot(x->manager.get<std::pair<float, float> >("position"),
                                     x->manager.get<Pattern::MovePattern>("pattern"),
                                     Pattern::Side::RIGHT);
@@ -121,10 +123,31 @@ class ShootSystem : public ASystem
         {
             if (ev == E_Stage)
                 isActiv = !isActiv;
-            if (ev & Key_Fire && this->fireRate >= 250 && isActiv)
+            if (ev & Key_Fire && this->fireRate == 250 && isActiv)
             {
 				lastEvent = ev;
-			}
+                Entity *e = new Entity;
+
+                e->manager.add<std::string>("name", "playerShoot");
+                e->manager.add<std::string>("type", "shoot");
+                e->manager.add("velocity", 4.50f);
+                e->manager.add<size_t>("dammage", 25);
+                for(auto x : *_eList)
+                    if (x->manager.get<std::string>("name") == "player1")
+                    {
+                        e->manager.add("position",
+                                std::pair<float, float>(
+                                    x->manager.get<std::pair<float, float> >
+                                    ("position").first + 105.0f,
+                                    x->manager.get<std::pair<float, float> >
+                                    ("position").second + 9.0f));
+                        e->manager.add<std::function<void (Entity&, Pattern::Side, int)> >
+                            ("pattern",
+                             patterns[x->manager.get<Pattern::MovePattern>("pattern")]);
+                    }
+                e->manager.add<Pattern::Side>("direction", Pattern::Side::RIGHT);
+                _eList->push_back(e);
+            }
             else if (ev & Key_Change && isActiv)
             {
                 lastEvent = ev;

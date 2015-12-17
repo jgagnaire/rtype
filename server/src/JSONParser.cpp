@@ -144,7 +144,7 @@ Entity			JSONParser::hashParse(std::string &content) {
 }
 
 
-Entity			JSONParser::hashParse(std::string &content,
+Entity			&JSONParser::hashParse(std::string &content,
 				      Entity &entity) {
   std::string		tmp;
 

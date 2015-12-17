@@ -45,7 +45,7 @@ class ComponentManager
       return (components[name]->getType());
     throw ComponentManagerException("No such component to get : [invalid name]");
   }
-  
+
   template<typename Type>
   Type &get(const std::string& name)
   {
@@ -59,7 +59,7 @@ type for compenents \"" + name + "\" is : " + components[name]->getType());
       }
     throw ComponentManagerException("No such component to get : [invalid name]");
   }
-  
+
   template<typename Type>
   bool	remove(const std::string& name = "")
   {
