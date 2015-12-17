@@ -36,6 +36,7 @@ void	EventAggregator::update()
 
 	if ((e = this->win->getEvent()) != noEvent)
 		this->send(e);
+    this->send(0);
     for (auto x = _systemList.begin(); x != _systemList.end(); ++x)
     {
         if ((tmp = x->first->broadcast()) != x->second)
