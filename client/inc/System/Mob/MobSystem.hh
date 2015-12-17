@@ -48,7 +48,7 @@ public:
                     ++x;
 			}
 		}
-	virtual IPacket                 *out() { return NULL;}
+	virtual IPacket                 *out(EventSum&) { return NULL;}
 	virtual void                    in(IPacket*) {}
 		virtual bool                    handle(EventSum) { return true;}
 	virtual std::vector<REvent>     &broadcast(void) { return _eventList; }
