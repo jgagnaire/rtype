@@ -63,6 +63,7 @@ class MovementSystem : public ASystem
             }
 			lastEvent = 0;
         }
+
         virtual IPacket                 *out() {
             if (isActiv == false)
                 return (0);
@@ -80,7 +81,7 @@ class MovementSystem : public ASystem
 
         virtual void                    in(IPacket *p){
             UdpPacket   *packet;
-			
+
             if ((packet = dynamic_cast<UdpPacket*>(p)) &&
 				packet->getQuery() == static_cast<uint16_t>(UdpCodes::NewPos))
             {
