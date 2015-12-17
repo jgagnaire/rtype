@@ -13,7 +13,7 @@ class StageScene : public Scene
     public:
         StageScene(IWindow &win, std::list<Entity*> *e):
             Scene(win, e), _stageNb(1), _pSprites(4), _direction(noEvent),
-            _numstage(5), _durationAnimation(100)
+            _numstage(5)
     {
         _pSprites[0].load("client/res/ship/player-ship-blue2_111.png");
         _pSprites[1].load("client/res/ship/player-ship-green2_111.png");
@@ -38,14 +38,14 @@ class StageScene : public Scene
             _s4.push_back(s4);
         }
         _b1.manager.add<AView*>("view", &_view);
+       _guiPlayers.manager.add<ADrawable*>("player1", &(_pSprites[0]));
+        _guiShoots.manager.add<ADrawable*>("shoot", &_shoot);
+        _guiShoots.manager.add<ADrawable*>("shootEnnemy", &_shoot);
+        _lastId = 0;
         _b1.manager.add<ADrawable*>("background", _s1[_stageNb - 1]);
         _b2.manager.add<ADrawable*>("background", _s2[_stageNb - 1]);
         _b3.manager.add<ADrawable*>("background", _s3[_stageNb - 1]);
         _b4.manager.add<ADrawable*>("background", _s4[_stageNb - 1]);
-        _guiPlayers.manager.add<ADrawable*>("player1", &(_pSprites[0]));
-        _guiShoots.manager.add<ADrawable*>("shoot", &_shoot);
-        _guiShoots.manager.add<ADrawable*>("shootEnnemy", &_shoot);
-        _lastId = 0;
         _numstage[0].load("client/res/stages/numero-1_75.png", true);
         _numstage[1].load("client/res/stages/numero-2_115.png", true);
         _numstage[2].load("client/res/stages/numero-3_115.png", true);
@@ -56,15 +56,27 @@ class StageScene : public Scene
         for (auto &x : _numstage)
             x.setPosition(sf::Vector2f(960 - 576 / 2 + 576, 540 - 123 / 2));
         _changeScene.manager.add<ADrawable*>("stage", &_stage);
-        _changeScene.manager.add<ADrawable*>("n1", &(_numstage[0]));
-        _changeScene.manager.add<ADrawable*>("n2", &(_numstage[1]));
-        _changeScene.manager.add<ADrawable*>("n3", &(_numstage[2]));
-        _changeScene.manager.add<ADrawable*>("n4", &(_numstage[3]));
-        _changeScene.manager.add<ADrawable*>("n5", &(_numstage[4]));
+        _changeScene.manager.add<ADrawable*>("numero", &(_numstage[0]));
     }
+
+        void            switchStage()
+        {
+            _durationAnimation = 5000;
+            _changing = true;
+        }
+
+        void            setStage()
+        {
+            _b1.manager.set<ADrawable*>("background", _s1[_stageNb - 1]);
+            _b2.manager.set<ADrawable*>("background", _s2[_stageNb - 1]);
+            _b3.manager.set<ADrawable*>("background", _s3[_stageNb - 1]);
+            _b4.manager.set<ADrawable*>("background", _s4[_stageNb - 1]);
+            _changeScene.manager.set<ADrawable*>("numero", &(_numstage[_stageNb - 1]));
+        }
 
         virtual void    init()
         {
+            switchStage();
             auto tmp = _entities->back()->manager.getAll<std::string>();
             int i = 0;
             for (auto x : tmp)
@@ -124,11 +136,23 @@ class StageScene : public Scene
                 x.second->update(duration);
             _win.draw(_guiPlayers);
             _win.draw(_b4);
-            if (_durationAnimation)
+            if (_durationAnimation > 0)
             {
+                if (_durationAnimation < 2500 && _changing)
+                {
+                    _changing = false;
+                    ++_stageNb;
+                    setStage();
+                }
+                _durationAnimation -= duration;
+                if (_durationAnimation < 0)
+                {
+                    _durationAnimation = 0;
+                }
                 for (auto x : _changeScene.manager.getAll<ADrawable*>())
                     x->update(duration);
-                _win.draw(_changeScene);
+                if (_durationAnimation > 0)
+                    _win.draw(_changeScene);
             }
         }
 
@@ -180,7 +204,8 @@ class StageScene : public Scene
 
         AnimatedSprite                                      _stage;
         std::vector<AnimatedSprite>                         _numstage;
-        std::size_t                                         _durationAnimation;
+        int                                                 _durationAnimation;
+        bool                                                _changing;
 };
 
 
