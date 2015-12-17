@@ -34,18 +34,18 @@ class UdpPacket : public IPacket
         }
         virtual ~UdpPacket() {}
 
-		inline virtual uint16_t    getSize() const { return this->_header.size; }
-		inline virtual uint16_t    getQuery() const { return this->_header.query; }
-		inline virtual const void  *getData() const { return this->_data; }
+		virtual uint16_t    getSize() const { return this->_header.size; }
+		virtual uint16_t    getQuery() const { return this->_header.query; }
+		virtual const void  *getData() const { return this->_data; }
 
-		inline virtual void        setSize(uint16_t size) { this->_header.size = size; }
-		inline virtual void        setQuery(uint16_t query) { this->_header.query = query; }
-		inline virtual void        setData(const void *data) { this->_data = data; }
+		virtual void        setSize(uint16_t size) { this->_header.size = size; }
+		virtual void        setQuery(uint16_t query) { this->_header.query = query; }
+		virtual void        setData(const void *data) { this->_data = data; }
 
-		inline virtual Header           &getHeader() { return this->_header; }
-		inline virtual const Header     &getHeader() const { return this->_header; }
-		inline virtual uint64_t        getID() const { return this->_header.id; }
-		inline virtual void            setID(uint64_t id) { this->_header.id = id; }
+		virtual Header           &getHeader() { return this->_header; }
+		virtual const Header     &getHeader() const { return this->_header; }
+		virtual uint64_t        getID() const { return this->_header.id; }
+		virtual void            setID(uint64_t id) { this->_header.id = id; }
 
     private:
         UdpHeader   _header;
@@ -58,8 +58,8 @@ class UdpSocket : public IUdpSocket
 		virtual ~UdpSocket() {}
 
         virtual bool        bind(unsigned short int port);
-		inline virtual void	unbind() { this->_socket.unbind(); }
-        inline virtual std::size_t send(const void *buf, std::size_t size,
+		virtual void	unbind() { this->_socket.unbind(); }
+        virtual std::size_t send(const void *buf, std::size_t size,
 			const std::string &ip, unsigned short int port) { return (this->_socket.send(buf, size, ip, port) == sf::Socket::Done); }
         virtual std::size_t receive(void *buf, std::size_t size,
                 std::string &ip, unsigned short &port);
