@@ -43,9 +43,9 @@ void RenderSystem::update(int duration)
     _window->display();
 }
 
-IPacket *RenderSystem::out()
+IPacket *RenderSystem::out(EventSum &e)
 {
-    return _current->out();
+    return _current->out(e);
 }
 
 void    RenderSystem::in(IPacket *p)

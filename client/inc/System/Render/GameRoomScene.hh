@@ -150,7 +150,7 @@ class GameRoomScene : public Scene
             }
         }
 
-        virtual IPacket *out()
+        virtual IPacket *out(EventSum&)
         {
             if (_new)
             {

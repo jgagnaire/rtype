@@ -111,7 +111,7 @@ void    ReadyScene::in(IPacket *p)
     }
 }
 
-IPacket *ReadyScene::out()
+IPacket *ReadyScene::out(EventSum&)
 {
     if (_new)
     {

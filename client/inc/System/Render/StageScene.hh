@@ -12,13 +12,16 @@ class StageScene : public Scene
 {
     public:
         StageScene(IWindow &win, std::list<Entity*> *e):
-            Scene(win, e), _stageNb(1), _pSprites(4), _direction(noEvent),
+            Scene(win, e), _stageNb(1), _pSprites(7), _direction(noEvent),
             _numstage(5)
     {
         _pSprites[0].load("client/res/ship/player-ship-blue2_111.png");
         _pSprites[1].load("client/res/ship/player-ship-green2_111.png");
         _pSprites[2].load("client/res/ship/player-ship-red2_111.png");
         _pSprites[3].load("client/res/ship/player-ship-purple2_111.png");
+        _pSprites[4].load("client/res/mobs/mob-1_97.png");
+        _pSprites[5].load("client/res/mobs/mob-2_114.png");
+        _pSprites[6].load("client/res/mobs/mob-3.png");
         _shoot.load("client/res/bullet.png");
         _shootEnnemy.load("client/res/bullet2.png");
 
@@ -38,7 +41,7 @@ class StageScene : public Scene
             _s4.push_back(s4);
         }
         _b1.manager.add<AView*>("view", &_view);
-       _guiPlayers.manager.add<ADrawable*>("player1", &(_pSprites[0]));
+        _guiPlayers.manager.add<ADrawable*>("player1", &(_pSprites[0]));
         _guiShoots.manager.add<ADrawable*>("shoot", &_shoot);
         _guiShoots.manager.add<ADrawable*>("shootEnnemy", &_shoot);
         _lastId = 0;
@@ -57,6 +60,7 @@ class StageScene : public Scene
             x.setPosition(sf::Vector2f(960 - 576 / 2 + 576, 540 - 123 / 2));
         _changeScene.manager.add<ADrawable*>("stage", &_stage);
         _changeScene.manager.add<ADrawable*>("numero", &(_numstage[0]));
+        _guiMobs.manager.add<ADrawable*>("sprite", &(_pSprites[4]));
     }
 
         void            switchStage()
@@ -126,6 +130,16 @@ class StageScene : public Scene
                     _shoot.update(duration);
                     _win.draw(_guiShoots);
                 }
+                else if (x->manager.get<std::string>("type") == "mob")
+                {
+                    if (x->manager.get<std::string>("name") == "mob-1")
+                        _guiMobs.manager.set<ADrawable*>("sprite", &(_pSprites[4]));
+                    else if (x->manager.get<std::string>("name") == "mob-2")
+                        _guiMobs.manager.set<ADrawable*>("sprite", &(_pSprites[5]));
+                    else if (x->manager.get<std::string>("name") == "mob-3")
+                        _guiMobs.manager.set<ADrawable*>("sprite", &(_pSprites[6]));
+                    _win.draw(_guiMobs);
+                }
                 else if (x->manager.get<std::string>("name") == "player1")
                 {
                     _pSprites[0].setPosition(sf::Vector2f(x->manager.get<std::pair<float, float> >("position").first,
@@ -186,6 +200,7 @@ class StageScene : public Scene
         Entity                                              _b4;
         Entity                                              _guiPlayers;
         Entity                                              _guiShoots;
+        Entity                                              _guiMobs;
         Entity                                              _changeScene;
 
         View                                                _view;
