@@ -59,6 +59,7 @@ class ShootSystem : public ASystem
                 if (!has_been_del)
                     ++x;
             }
+            lastEvent = 0;
         }
 
         virtual IPacket                 *out() {
@@ -70,7 +71,6 @@ class ShootSystem : public ASystem
                 _packet.setQuery(static_cast<uint16_t>(UdpCodes::KeyPressed));
                 _packet.setData(tmp.c_str());
                 _packet.setSize(static_cast<uint16_t>(tmp.size()));
-                lastEvent = 0;
                 _frequency = 0;
                 return (&_packet);
             }
@@ -157,7 +157,6 @@ class ShootSystem : public ASystem
                         break ;
                     }
             }
-			std::cout << lastEvent << std::endl;
             return true;
         }
         virtual std::vector<REvent>     &broadcast(void)
