@@ -7,22 +7,11 @@ template<typename T>
 const std::string	UserManager<T>::database_dir = "./server/.database/.%_data";
 
 template<typename T>
-# if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined (_WIN64)
-IMutex		*UserManager<T>::user_mutex = new WinMutex;
-# else
-IMutex		*UserManager<T>::user_mutex = new UnixMutex;
-# endif
+std::mutex          UserManager<T>::user_mutex;
 
 template<typename T>
 UserManager<T>::UserManager(IServerSocket<T> *sck) :
         sock(sck) , status(Enum::LOBBY) , ping(true) {
-# if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined (_WIN64)
-    game_mutex = new WinMutex;
-    destroy_client_mutex = new WinMutex;
-# else
-    game_mutex = new UnixMutex;
-    destroy_client_mutex = new UnixMutex;
-# endif
     clearData();
 }
 
@@ -30,14 +19,11 @@ template<typename T>
 UserManager<T>::~UserManager() {
     GameManager<T>             &gm = GameManager<T>::instance();
 
-    destroy_client_mutex->lock();
+    destroy_client_mutex.lock();
     gm.deleteUser(this);
     if (stream.is_open())
         stream.close();
-    destroy_client_mutex->unlock();
-    delete this->sock;
-    delete this->destroy_client_mutex;
-    delete this->game_mutex;
+    destroy_client_mutex.unlock();
 }
 
 template<typename T>
@@ -352,7 +338,7 @@ Enum::ServerAnswers     UserManager<T>::quitGame() { return (Enum::OK); }
 
 template <typename T>
 Enum::ServerAnswers     UserManager<T>::currentPosition() {
-    game_mutex->lock();
+    game_mutex.lock();
     std::istringstream  is(udp_packet.data);
     std::istringstream  is_pos;
     std::string         pos[2];
@@ -366,17 +352,17 @@ Enum::ServerAnswers     UserManager<T>::currentPosition() {
     is_pos.str("");
     is_pos.str(pos[1]);
     is_pos >> position.y;
-    game_mutex->unlock();
+    game_mutex.unlock();
     return (Enum::OK);
 }
 
 template <typename T>
 Enum::ServerAnswers     UserManager<T>::keyPressed() {
-    game_mutex->lock();
+    game_mutex.lock();
     std::istringstream  is(udp_packet.data);
 
     is >> keypressed;
-    game_mutex->unlock();
+    game_mutex.unlock();
     return (Enum::OK);
 }
 
@@ -385,7 +371,7 @@ const std::size_t	    &UserManager<T>::getKeypressed() const { return (keypresse
 
 template <typename T>
 void                    UserManager<T>::changePosition(std::size_t time) {
-    game_mutex->lock();
+    game_mutex.lock();
     float	move = static_cast<float>(time * 1.75);
 
     if (static_cast<std::size_t>(Enum::LEFT) & keypressed) {
@@ -421,7 +407,7 @@ void                    UserManager<T>::changePosition(std::size_t time) {
       g.fireBall(game, this, switch_weapon);
     keypressed = 0;
     fire = false;
-    game_mutex->unlock();
+    game_mutex.unlock();
 }
 
 template <typename T>

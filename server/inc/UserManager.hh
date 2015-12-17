@@ -11,6 +11,7 @@
 # include <iostream>
 # include <time.h>
 # include <list>
+#include <mutex>
 # include "Enum.hh"
 # include "Packet.hh"
 # include "IServerSocket.hh"
@@ -39,7 +40,7 @@ public:
     UserManager(IServerSocket<T> *sck);
     ~UserManager();
 
-    static IMutex				*user_mutex;
+    static std::mutex       user_mutex;
     bool					IsFilled() const;
     void					clearData();
     void					readFromMe();
@@ -88,7 +89,7 @@ public:
     Enum::ServerAnswers     keyPressed();
     Enum::ServerAnswers     audioPacket();
     Enum::ServerAnswers     takeForce();
-    IMutex		    *destroy_client_mutex;
+    std::mutex              destroy_client_mutex;
 
 private:
   IServerSocket<T>			  *sock;
@@ -102,7 +103,7 @@ private:
   Packet<TCPDataHeader>::PacketStruct	  tmp_packet;
   Packet<UDPDataHeader>::PacketStruct	  udp_packet;
   std::string                             gameroom;
-  IMutex                                  *game_mutex;
+  std::mutex                              game_mutex;
 
   uint64_t                                udp_packet_id;
   bool                                    is_ready;
