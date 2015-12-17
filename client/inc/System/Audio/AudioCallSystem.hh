@@ -18,17 +18,17 @@ public:
   void addPacket(SoundBuffer *buffer);
 
   virtual void update(int);
-  inline virtual bool handle(EventSum e)
+  virtual bool handle(EventSum e)
   {
     if (e & Key_Sound)
       this->_recorder.changeState();
     return true;
   }
-  inline virtual std::vector<REvent> &broadcast(void)
+  virtual std::vector<REvent> &broadcast(void)
   {
     return _eventList;
   }
-  inline virtual EventSum getEvent()
+  virtual EventSum getEvent()
   {
     return noEvent;
   }
