@@ -22,7 +22,7 @@ class ShootSystem : public ASystem
             return (e);
         }
     public:
-        ShootSystem(std::list<Entity*> *_list) : _eList(_list), fireRate(250), isActiv(false)
+        ShootSystem(std::list<Entity*> *_list) : _eList(_list), fireRate(250), isActiv(false), lastEvent(0)
     {
         _eventList.push_back(Key_Fire);
         _eventList.push_back(Key_Charge);
