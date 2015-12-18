@@ -53,22 +53,24 @@ class ColliderSystem : public ASystem
             std::pair<float, float> p2;
             std::pair<int, int>     s1;
             std::pair<int, int>     s2;
+            std::string             t1;
+            std::string             t2;
 
             if (_isActiv)
             {
                 for (auto a : *_eList)
                 {
                     p1 = a->manager.get<std::pair<float, float> >("position");
-                    getSize(s1, a->manager.get<std::string>("type"),
-                            a->manager.get<std::string>("name"));
+                    t1 = a->manager.get<std::string>("type");
+                    getSize(s1, t1, a->manager.get<std::string>("name"));
                     for (auto b : *_eList)
                     {
                         if (a != b)
                         {
                             p2 = b->manager.get<std::pair<float, float> >("position");
-                            getSize(s2, b->manager.get<std::string>("type"),
-                                    b->manager.get<std::string>("name"));
-                            if (p1.first < p2.first + s2.first &&
+                            t2 = b->manager.get<std::string>("type");
+                            getSize(s2, t2, b->manager.get<std::string>("name"));
+                            if (t1 != t2 && p1.first < p2.first + s2.first &&
                                     p1.first + s1.first > p2.first &&
                                     p1.second < p2.second + s2.second &&
                                     s1.second + p1.second > p2.second) {
