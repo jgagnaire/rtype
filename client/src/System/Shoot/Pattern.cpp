@@ -19,7 +19,7 @@ void	Pattern::line(Entity &e, Side s, int duration)
       vel *= -1;
     pos.first += vel;
 	std::cout << "Position x : " << pos.first << std::endl;
-	pos.second += sin(pos.first * 0.5 * M_PI / 90);
+	pos.second += static_cast<float>(sin(pos.first * 0.5 * M_PI / 90));
     e.manager.set("position", pos);
   }
 

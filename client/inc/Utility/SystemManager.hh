@@ -77,7 +77,7 @@ class SystemManager
                 }
                 tmp = std::to_string(event);
                 lastEvent.setData(tmp.c_str());
-                lastEvent.setSize(tmp.size());
+				lastEvent.setSize(static_cast<uint16_t>(tmp.size()));
                 _networkManager.send(lastEvent);
                 IPacket *p;
                 while (dynamic_cast<UdpPacket*>(p = _networkManager.getPacket()))
