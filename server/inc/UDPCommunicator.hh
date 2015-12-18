@@ -67,7 +67,6 @@ public:
                 _pack.data = _data.buff;
                 this->readAction(this->findUserByIP(ip));
                 _packet.clearAll();
-
             }
         }
     }

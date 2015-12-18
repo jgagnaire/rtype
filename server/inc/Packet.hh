@@ -74,7 +74,7 @@ public:
       size_t		getPacket(const SCK s, std::string * const p = NULL, bool max_read = false) {
         size_t	ret;
         char    *str = NULL;
-        std::size_t  max_val = sizeof(T) + 512; // TODO, magic number;
+        std::size_t  max_val = sizeof(T) + Enum::MAX_BUFFER_LENGTH;
 
         if (!max_read)
           max_val = sizeof(T);
@@ -148,4 +148,5 @@ public:
           _send_pack.pop();
         return (ret);
       }
+
 };
