@@ -7,21 +7,23 @@
 class	MobSystem : public ASystem
 {
 private:
-	Entity *createMob(void);
+	Entity *createMob(void)
+		{
+			Entity *e = new Entity;
+			e->manager.add<std::string>("name", "mob1");
+			e->manager.add<std::string>("type", "mob");
+			e->manager.add<float>("velocity", 0.30f);
+			e->manager.add("position",
+						   std::pair<float, float>(1850, rand() % 1000));
+			e->manager.add<std::function<void (Entity&, Pattern::Side, int)> >
+				("pattern", Pattern::line);
+			e->manager.add<Pattern::Side>("direction", Pattern::Side::LEFT);
+			return e;
+		}
 public:
 	MobSystem() {}
 	MobSystem(std::list<Entity*> *list) : isActiv(false), _eList(list) {
-		Entity *e = new Entity;
-
-		e->manager.add<std::string>("name", "mob1");
-		e->manager.add<std::string>("type", "mob");
-		e->manager.add<float>("velocity", 0.80f);
-		e->manager.add("position",
-					   std::pair<float, float>(1850, 1000));
-		e->manager.add<std::function<void (Entity&, Pattern::Side, int)> >
-			("pattern", Pattern::line);
-		e->manager.add<Pattern::Side>("direction", Pattern::Side::LEFT);
-		_eList->push_back(e);
+		_eList->push_back(createMob());
 		_eventList.push_back(E_Stage);
 	}
 	virtual ~MobSystem() {}
@@ -35,7 +37,6 @@ public:
 			{
 				if ((*x)->manager.get<std::string>("type") == "mob")
 				{
-					std::cout << "lesexe" << std::endl;
 					(*x)->manager.get<std::function<void (Entity&, Pattern::Side, int)> >
                         ("pattern")(**x, (*x)->manager.
                                     get<Pattern::Side>("direction"), duration);
@@ -44,6 +45,7 @@ public:
 					if (tmp.first <= 0)
 					{
                         x = _eList->erase(x);
+						_eList->push_back(createMob());
                         has_been_del = true;
                     }
 				}

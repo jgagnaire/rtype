@@ -20,6 +20,7 @@ namespace Pattern {
 	Pattern::MovePattern incremente(Pattern::MovePattern m);
 	void	line(Entity &e, Side s, int duration);
 	void	sinusoid(Entity &e, Side s, int duration);
+	void	mob1(Entity &e, Side s, int duration);
 }
 
 #endif
