@@ -95,6 +95,7 @@ void    ReadyScene::in(IPacket *p)
                     pl->manager.add<std::string>("pseudo", x.first);
                     pl->manager.add<std::string>("name", x.first);
                     pl->manager.add<std::pair<float, float> >("position", pos);
+					pl->manager.add<Pattern::Side>("direction", Pattern::Side::RIGHT);
                     pl->manager.add<Pattern::MovePattern>
                         ("pattern", Pattern::MovePattern::LINE);
                     _entities->push_back(pl);

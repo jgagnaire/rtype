@@ -26,6 +26,7 @@ class SystemManager
         e->manager.add<float>("velocity", 1.75f);
         e->manager.add<bool>("isShared", true);
         e->manager.add<Pattern::MovePattern>("pattern", Pattern::MovePattern::LINE);
+		e->manager.add<Pattern::Side>("direction", Pattern::Side::RIGHT);
         shr_entities->push_back(e);
 
         ASystem *render = new RenderSystem(shr_entities);
