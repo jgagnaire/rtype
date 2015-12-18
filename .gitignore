@@ -32,3 +32,4 @@ server_rtype.exe
 *.tlog
 *.pdb
 *.DS_Store*.opensdf
+\#*

@@ -53,7 +53,7 @@ class StageScene : public Scene
         _numstage[1].load("client/res/stages/numero-2_115.png", true);
         _numstage[2].load("client/res/stages/numero-3_115.png", true);
         _numstage[3].load("client/res/stages/numero-4_230.png", true);
-        _numstage[4].load("client/res/stages/numero-5_230.png", true);
+        _numstage[4].load("client/res/stages/numero-5_120.png", true);
         _stage.load("client/res/stages/stage_576.png", true);
         _stage.setPosition(sf::Vector2f(960 - 576 / 2 - 100, 540 - 123 / 2));
         for (auto &x : _numstage)

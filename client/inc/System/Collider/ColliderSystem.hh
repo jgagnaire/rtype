@@ -49,12 +49,10 @@ class ColliderSystem : public ASystem
 
         virtual void                    update(int)
         {
-            std::pair<float, float> p1;
-            std::pair<float, float> p2;
-            std::pair<int, int>     s1;
-            std::pair<int, int>     s2;
-            std::string             t1;
-            std::string             t2;
+            std::pair<float, float> p1, p2;
+            std::pair<int, int>     s1, s2;
+            std::string             t1, t2;
+			Pattern::Side			d1, d2;
 
             if (_isActiv)
             {
@@ -62,6 +60,7 @@ class ColliderSystem : public ASystem
                 {
                     p1 = a->manager.get<std::pair<float, float> >("position");
                     t1 = a->manager.get<std::string>("type");
+					d1 = a->manager.get<Pattern::Side>("direction");
                     getSize(s1, t1, a->manager.get<std::string>("name"));
                     for (auto b : *_eList)
                     {
@@ -69,8 +68,9 @@ class ColliderSystem : public ASystem
                         {
                             p2 = b->manager.get<std::pair<float, float> >("position");
                             t2 = b->manager.get<std::string>("type");
+							d2 = b->manager.get<Pattern::Side>("direction");
                             getSize(s2, t2, b->manager.get<std::string>("name"));
-                            if (t1 != t2 && p1.first < p2.first + s2.first &&
+                            if (t1 != t2 && d1 != d2 && p1.first < p2.first + s2.first &&
                                     p1.first + s1.first > p2.first &&
                                     p1.second < p2.second + s2.second &&
                                     s1.second + p1.second > p2.second) {
