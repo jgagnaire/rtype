@@ -49,7 +49,6 @@ class ColliderSystem : public ASystem
 
         virtual void                    update(int)
         {
-            return ;
             std::pair<float, float> p1;
             std::pair<float, float> p2;
             std::pair<int, int>     s1;
