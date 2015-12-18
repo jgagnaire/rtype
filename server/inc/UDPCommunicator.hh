@@ -61,7 +61,6 @@ public:
                 size_t ret = _packet.getPacket(dynamic_cast<IServerSocket<SCK>*>(this->srvset),
                                                &ip, true);
                 buff = _packet.getBuffer();
-                // std::cout << ret << " " << sizeof(UDPData) << std::endl;
                 std::copy(buff, buff + ret, reinterpret_cast<char *>(&_data));
 
                 _pack.header = _data.packet;
@@ -77,6 +76,7 @@ public:
         if (!cli)
             return (true);
         cli->setUdpPacketStruct(_pack);
+        cli->setUdpBinaryPacketStruct(_data);
         for (auto it = this->controllers.begin(); it != this->controllers.end(); ++it) {
 	  if (((*it)->*(this->newData))(cli) == 1) {
 		cli->destroy_client_mutex.unlock();

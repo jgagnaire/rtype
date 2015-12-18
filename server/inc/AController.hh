@@ -78,9 +78,10 @@ public:
 
     inline
     void        sendUDP(UDPData &udp_data, const std::string &ip) {
-      this->udp_socket->absWriteOnClient(udp_data.buff, udp_data.packet.packet_size +
-			  sizeof(UDPDataHeader),
-			  ip, port);
+      this->udp_socket->absWriteOnClient(reinterpret_cast<char *>(&udp_data),
+					 udp_data.packet.packet_size +
+					 sizeof(UDPDataHeader),
+					 ip, this->port);
     }
 
 protected:

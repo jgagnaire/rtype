@@ -54,15 +54,21 @@ bool            GameplayController<T>::audioPacket(UserManager<T> *cl) {
   UDPData	       udp = cl->getUdpBinaryPacketStruct();
   Game<T>              *game = g.getGameByName(cl->getGameroomName());
   char		       data[Enum::MAX_BUFFER_LENGTH];
+  std::string		tmp_name = cl->getName() + ":";
 
   init_memory(data, Enum::MAX_BUFFER_LENGTH);
-  std::copy_n(cl->getName().begin(), cl->getName().size(), data);
-  std::copy_n(udp.buff, udp.packet.packet_size, &data[cl->getName().size()]);
-  udp.packet.packet_size += cl->getName().size();
+  std::copy_n(tmp_name.begin(), tmp_name.size(), data);
+  std::copy_n(udp.buff, udp.packet.packet_size, &data[tmp_name.size()]);
+  std::copy_n(data, Enum::MAX_BUFFER_LENGTH, udp.buff);
+  udp.packet.packet_size += tmp_name.size();
+  udp.packet.query = Enum::BROADCAST_AUDIO;
+  std::cout << sizeof(udp) - sizeof(udp.packet) << std::endl;
   if (game) {
     for (auto it = game->players.begin(); it != game->players.end(); ++it) {
-      if ((*it)->getName() != cl->getName())
+      if ((*it)->getName() != cl->getName()) {
+	udp.packet.id = (*it)->getUDPPacketId();
         this->sendUDP(udp, (*it)->getIP());
+      }
     }
   }
   return (true);
