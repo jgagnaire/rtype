@@ -7,6 +7,7 @@
 #include "System/Audio/AudioCallSystem.hh"
 #include "System/Movement/Movement.hh"
 #include "System/Shoot/ShootSystem.hh"
+#include "System/Collider/ColliderSystem.hh"
 #include "System/Mob/MobSystem.hh"
 #include "Utility/Clock.hh"
 #include "Network/NetworkManager.hh"
@@ -32,17 +33,20 @@ class SystemManager
         ASystem *mvt = new MovementSystem(shr_entities);
         ASystem *shot = new ShootSystem(shr_entities);
 		ASystem *mob = new MobSystem(shr_entities);
+		ASystem *col = new ColliderSystem(shr_entities);
 
         systemList["1mov"] = mvt;
         systemList["2mob"] = mob;
         systemList["3Shoot"] = shot;
-        systemList["4audioCall"] = audioCall;
-        systemList["5render"] = render;
+        systemList["4col"] = col;
+        systemList["5audioCall"] = audioCall;
+        systemList["6render"] = render;
         ea = new EventAggregator(static_cast<RenderSystem*>(render)->getWindow());
         clk = new Clock();
         ea->add(mvt);
 		ea->add(mob);
         ea->add(shot);
+        ea->add(col);
 		ea->add(audioCall);
         ea->add(render);
     }
