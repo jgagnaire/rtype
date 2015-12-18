@@ -50,11 +50,9 @@ class	MobSystem : public ASystem
                         has_been_del = true;
                     }
                 }
-                std::cout << "here ?" << std::endl;
                 if (!has_been_del)
                     ++x;
             }
-            std::cout << "FINISH" << std::endl;
         }
         virtual IPacket                 *out(EventSum&) { return NULL;}
         virtual void                    in(IPacket*) {}
