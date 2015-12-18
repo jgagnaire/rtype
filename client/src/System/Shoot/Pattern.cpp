@@ -17,7 +17,7 @@ void	Pattern::line(Entity &e, Side s, int duration)
     if (s == Side::LEFT)
       vel *= -1;
     pos.first += vel;
-	pos.second += sin(pos.first * 0.5 * M_PI / 90);
+	pos.second += static_cast<float>(sin(pos.first * 0.5f * M_PI / 90.0f));
     e.manager.set("position", pos);
   }
 
@@ -28,7 +28,7 @@ void	Pattern::sinusoid(Entity &e, Side s, int duration)
     if (s == Side::LEFT)
       vel *= -1;
     pos.first += vel;
-    pos.second += static_cast<float>(35 * sin(pos.first * 0.5 * M_PI / 180));
+    pos.second += static_cast<float>(35 * sin(pos.first * 0.5f * M_PI / 180.0f));
     e.manager.set("position", pos);
   }
 

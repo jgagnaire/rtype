@@ -134,14 +134,14 @@ bool        GameManager<SCK>::update(Game<SCK> *game, std::size_t time) {
 
 template <typename SCK>
 std::size_t   GameManager<SCK>::getTimeInSecond() {
-    return (std::chrono::system_clock::now().time_since_epoch() /
-            std::chrono::seconds(1));
+    return (static_cast<std::size_t>(std::chrono::system_clock::now().time_since_epoch() /
+           std::chrono::seconds(1)));
 }
 
 template <typename SCK>
 std::size_t   GameManager<SCK>::getTime() {
-    return (std::chrono::system_clock::now().time_since_epoch() /
-            std::chrono::milliseconds(1));
+    return (static_cast<std::size_t>(std::chrono::system_clock::now().time_since_epoch() /
+            std::chrono::milliseconds(1)));
 }
 
 template <typename SCK>
@@ -189,7 +189,6 @@ void		GameManager<SCK>::sendPosition(Game<SCK> *game, UserManager<SCK> *user) {
   os[1] << p.y;
   s = user->getName() + ":" + os[0].str() + ":" + os[1].str();
   key = user->getName() + ":" + std::to_string(user->getKeypressed());
-  std::cout << "key: " << key << std::endl;
   for (auto it = game->players.begin(); it != game->players.end(); ++it) {
     pack = {static_cast<uint16_t>(s.size()),
 	    static_cast<uint16_t>(Enum::PLAYER_POS),

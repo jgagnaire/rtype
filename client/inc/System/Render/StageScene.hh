@@ -191,8 +191,8 @@ class StageScene : public Scene
                 float px, py;
                 std::string name = tmp.substr(0, tmp.find(":"));
                 tmp = tmp.substr(tmp.find(":") + 1);
-                px = std::atof(tmp.substr(0, tmp.find(":")).c_str());
-                py = std::atof(tmp.substr(tmp.find(":") + 1).c_str());
+                px = static_cast<float>(std::atof(tmp.substr(0, tmp.find(":")).c_str()));
+                py = static_cast<float>(std::atof(tmp.substr(tmp.find(":") + 1).c_str()));
                 if (_lastId < packet->getID())
                 {
                     _lastId = packet->getID();

@@ -83,7 +83,7 @@ class ShootSystem : public ASystem
                         static_cast<const char *>(packet->getData()), packet->getSize());
                 std::string name = tmp.substr(0, tmp.find(":"));
                 std::string code = tmp.substr(name.size() + 1);
-                EventSum e = std::atof(code.c_str());
+                EventSum e = static_cast<EventSum>(std::atof(code.c_str()));
                 if (e & Key_Fire)
                 {
                     for (auto x : *_eList)
