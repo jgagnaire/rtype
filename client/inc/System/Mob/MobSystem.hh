@@ -35,6 +35,7 @@ class	MobSystem : public ASystem
             bool has_been_del = false;
             for (auto x = _eList->begin(); x != _eList->end();)
             {
+                has_been_del = false;
                 if ((*x)->manager.get<std::string>("type") == "mob")
                 {
                     (*x)->manager.get<std::function<void (Entity&, Pattern::Side, int)> >
@@ -53,6 +54,7 @@ class	MobSystem : public ASystem
                 if (!has_been_del)
                     ++x;
             }
+            std::cout << "FINISH" << std::endl;
         }
         virtual IPacket                 *out(EventSum&) { return NULL;}
         virtual void                    in(IPacket*) {}

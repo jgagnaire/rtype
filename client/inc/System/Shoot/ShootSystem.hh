@@ -43,6 +43,7 @@ class ShootSystem : public ASystem
 			bool has_been_del = false;
             for (auto x = _eList->begin(); x != _eList->end();)
             {
+                has_been_del = false;
                 if ((*x)->manager.get<std::string>("type") == "shoot")
                 {
                     (*x)->manager.get<std::function<void (Entity&, Pattern::Side, int)> >
