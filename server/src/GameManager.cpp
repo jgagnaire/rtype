@@ -3,9 +3,9 @@
 
 template <typename SCK>
 GameManager<SCK>::GameManager() {
-  JSONParser::parseFile("./entities/fires"); // TODO, no magic string
+  JSONParser::parseFile("./entities/fires.json"); // TODO, no magic string
   _game_system["fires"] = JSONParser::parse();
-  JSONParser::parseFile("./entities/levels"); // TODO, no magic string
+  JSONParser::parseFile("./entities/levels.json"); // TODO, no magic string
   _game_system["levels"] = JSONParser::parse();
   _game_system["levels"]->getEntity().manager.getAll<Entity>();
 }
@@ -134,14 +134,14 @@ bool        GameManager<SCK>::update(Game<SCK> *game, std::size_t time) {
 
 template <typename SCK>
 std::size_t   GameManager<SCK>::getTimeInSecond() {
-    return (std::chrono::system_clock::now().time_since_epoch() /
-            std::chrono::seconds(1));
+    return (static_cast<std::size_t>(std::chrono::system_clock::now().time_since_epoch() /
+           std::chrono::seconds(1)));
 }
 
 template <typename SCK>
 std::size_t   GameManager<SCK>::getTime() {
-    return (std::chrono::system_clock::now().time_since_epoch() /
-            std::chrono::milliseconds(1));
+    return (static_cast<std::size_t>(std::chrono::system_clock::now().time_since_epoch() /
+            std::chrono::milliseconds(1)));
 }
 
 template <typename SCK>

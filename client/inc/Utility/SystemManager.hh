@@ -7,6 +7,8 @@
 #include "System/Audio/AudioCallSystem.hh"
 #include "System/Movement/Movement.hh"
 #include "System/Shoot/ShootSystem.hh"
+#include "System/Collider/ColliderSystem.hh"
+#include "System/Mob/MobSystem.hh"
 #include "Utility/Clock.hh"
 #include "Network/NetworkManager.hh"
 
@@ -24,23 +26,30 @@ class SystemManager
         e->manager.add<float>("velocity", 1.75f);
         e->manager.add<bool>("isShared", true);
         e->manager.add<Pattern::MovePattern>("pattern", Pattern::MovePattern::LINE);
+		e->manager.add<Pattern::Side>("direction", Pattern::Side::RIGHT);
         shr_entities->push_back(e);
 
         ASystem *render = new RenderSystem(shr_entities);
 		ASystem *audioCall = new AudioCallSystem();
         ASystem *mvt = new MovementSystem(shr_entities);
         ASystem *shot = new ShootSystem(shr_entities);
+		ASystem *mob = new MobSystem(shr_entities);
+		ASystem *col = new ColliderSystem(shr_entities);
 
         systemList["1mov"] = mvt;
-        systemList["2Shoot"] = shot;
-        systemList["3audioCall"] = audioCall;
-        systemList["4render"] = render;
+        systemList["2mob"] = mob;
+        systemList["3Shoot"] = shot;
+        systemList["4col"] = col;
+        systemList["5audioCall"] = audioCall;
+        systemList["6render"] = render;
         ea = new EventAggregator(static_cast<RenderSystem*>(render)->getWindow());
         clk = new Clock();
-        ea->add(render);
         ea->add(mvt);
+		ea->add(mob);
         ea->add(shot);
+        ea->add(col);
 		ea->add(audioCall);
+        ea->add(render);
     }
 
         ~SystemManager()
@@ -53,19 +62,28 @@ class SystemManager
 
         void gameLoop()
         {
+            EventSum        event;
+            UdpPacket       lastEvent;
+            std::string     tmp;
+
+            lastEvent.setQuery(static_cast<uint16_t>(UdpCodes::KeyPressed));
             while (ea->getWin()->isOpen())
             {
-                std::cout << "======================" << std::endl;
+                event = 0;
                 std::size_t s = this->clk->getElapsedTimeMilli();
                 this->clk->restart();
                 ea->update();
                 for (auto x : systemList)
                 {
-                    IPacket *m = x.second->out();
+                    IPacket *m = x.second->out(event);
                     if (m != 0)
                         _networkManager.send(*m);
                     x.second->update(s);
                 }
+                tmp = std::to_string(event);
+                lastEvent.setData(tmp.c_str());
+				lastEvent.setSize(static_cast<uint16_t>(tmp.size()));
+                _networkManager.send(lastEvent);
                 IPacket *p;
                 while (dynamic_cast<UdpPacket*>(p = _networkManager.getPacket()))
                     if (p)

@@ -15,18 +15,18 @@ namespace Pattern {
     void	line(Entity &e, int duration)
     {
         std::pair<float, float> pos = e.manager.get<std::pair<float, float> >("position");
-        float vel = duration + e.manager.get<int>("velocity") / 10;
+        float vel = static_cast<float>(duration + e.manager.get<int>("velocity") / 10);
         if (e.manager.get<bool>("is_a_monster"))
             vel *= -1;
         pos.first += vel;
-        pos.second += sin(pos.first * 0.5 * M_PI / 90);
+        pos.second += static_cast<float>(sin(pos.first * 0.5f * M_PI / 90.0f));
         e.manager.set("position", pos);
     }
 
     void	sinusoid(Entity &e, int duration)
     {
         std::pair<float, float> pos = e.manager.get<std::pair<float, float> >("position");
-        float vel = duration + e.manager.get<int>("velocity") / 10;
+        float vel = static_cast<float>(duration + e.manager.get<int>("velocity") / 10);
         if (e.manager.get<bool>("is_a_monster"))
             vel *= -1;
         pos.first += vel;

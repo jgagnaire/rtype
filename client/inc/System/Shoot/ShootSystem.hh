@@ -22,7 +22,7 @@ class ShootSystem : public ASystem
             return (e);
         }
     public:
-        ShootSystem(std::list<Entity*> *_list) : _eList(_list), fireRate(250), isActiv(false), lastEvent(0)
+        ShootSystem(std::list<Entity*> *_list) : _eList(_list), fireRate(250), isActiv(false), _frequency(0), lastEvent(0)
     {
         _eventList.push_back(Key_Fire);
         _eventList.push_back(Key_Charge);
@@ -40,9 +40,10 @@ class ShootSystem : public ASystem
                 return ;
             if ((this->fireRate -= duration) <= 0)
                 this->fireRate = 250;
+			bool has_been_del = false;
             for (auto x = _eList->begin(); x != _eList->end();)
             {
-                bool has_been_del = false;
+                has_been_del = false;
                 if ((*x)->manager.get<std::string>("type") == "shoot")
                 {
                     (*x)->manager.get<std::function<void (Entity&, Pattern::Side, int)> >
@@ -62,15 +63,12 @@ class ShootSystem : public ASystem
             lastEvent = 0;
         }
 
-        virtual IPacket                 *out() {
+        virtual IPacket                 *out(EventSum &e) {
             if (isActiv == false)
                 return (0);
-            if (lastEvent && _frequency > 30)
+			if (lastEvent && _frequency > 30)
             {
-                std::string     tmp = std::to_string(lastEvent);
-                _packet.setQuery(static_cast<uint16_t>(UdpCodes::KeyPressed));
-                _packet.setData(tmp.c_str());
-                _packet.setSize(static_cast<uint16_t>(tmp.size()));
+                e |= lastEvent;
                 _frequency = 0;
 				return (&_packet);
             }
@@ -86,7 +84,7 @@ class ShootSystem : public ASystem
                         static_cast<const char *>(packet->getData()), packet->getSize());
                 std::string name = tmp.substr(0, tmp.find(":"));
                 std::string code = tmp.substr(name.size() + 1);
-                EventSum e = std::atof(code.c_str());
+                EventSum e = static_cast<EventSum>(std::atof(code.c_str()));
                 if (e & Key_Fire)
                 {
                     for (auto x : *_eList)
@@ -157,6 +155,7 @@ class ShootSystem : public ASystem
         int                 _frequency;
         EventSum			lastEvent;
         std::function<void (Entity&, Pattern::Side, int)> patterns[2];
+        std::string         _tmp;
 };
 
 #endif //SHOOTSYSTEM_HH_

@@ -18,7 +18,7 @@ class RenderSystem : public ASystem
         virtual ~RenderSystem();
 
         virtual void                update(int duration);
-        virtual IPacket             *out();
+        virtual IPacket             *out(EventSum &);
         virtual void                in(IPacket*);
         virtual bool                handle(EventSum e);
         virtual std::vector<REvent> &broadcast(void);

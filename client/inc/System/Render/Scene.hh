@@ -20,7 +20,7 @@ class Scene
         virtual void handle(EventSum, EventSum&) = 0;
 
         virtual void in(IPacket*) {}
-        virtual IPacket *out() {return 0;}
+        virtual IPacket *out(EventSum &) {return 0;}
 
         virtual void draw() {}
     protected:

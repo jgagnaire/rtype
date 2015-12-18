@@ -20,10 +20,7 @@ int	AccountController<T>::newData(UserManager<T> *cli) {
 	case Enum::PONG:
 		return (static_cast<int>(pong(cli)));
 	default:
-	{
-		std::cout << "j'ai return -1 ta mere" << std::endl;
 		return (-1);
-	}
 	}
 }
 

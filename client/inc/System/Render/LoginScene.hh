@@ -151,7 +151,7 @@ class LoginScene : public Scene
             }
         }
 
-        virtual IPacket *out()
+        virtual IPacket *out(EventSum &)
         {
             if (_finish != LoginState::Connecting)
                 return (0);

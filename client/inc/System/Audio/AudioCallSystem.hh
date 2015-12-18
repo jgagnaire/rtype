@@ -33,7 +33,7 @@ public:
     return noEvent;
   }
   virtual void in(IPacket *packet);
-  virtual IPacket *out();
+  virtual IPacket *out(EventSum &);
 
 private:
   static const uint16_t CODE_SEND_PACKET = 302;

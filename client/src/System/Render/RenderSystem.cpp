@@ -43,37 +43,13 @@ void RenderSystem::update(int duration)
     _window->display();
 }
 
-IPacket *RenderSystem::out()
+IPacket *RenderSystem::out(EventSum &e)
 {
-    return _current->out();
+    return _current->out(e);
 }
 
 void    RenderSystem::in(IPacket *p)
 {
-
-    TcpPacket		*packet;
-    std::string		name;
-
-    if ((packet = dynamic_cast<TcpPacket*>(p)))
-    {
-        if (packet->getSize())
-            name = std::string(static_cast<const char*>(packet->getData()),
-                               packet->getSize());
-
-        if (Codes::PlayerJoined == static_cast<Codes>(packet->getQuery()))
-            {
-                std::pair<float, float> pos;
-                std::cout << "labite de ouf" << std::endl;
-                Entity *pl = new Entity;
-                pl->manager.add<std::string>("type", "player");
-                pl->manager.add<std::string>("pseudo", name);
-                pl->manager.add<std::string>("name", name);
-                pl->manager.add<std::pair<float, float> >("position", pos);
-                pl->manager.add<Pattern::MovePattern>
-                    ("pattern", Pattern::MovePattern::LINE);
-                _entities->push_back(pl);
-            }
-    }
     _current->in(p);
 }
 

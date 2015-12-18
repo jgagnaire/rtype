@@ -1,4 +1,5 @@
 #include "System/Render/ReadyScene.hh"
+#include "System/Shoot/Pattern.hh"
 
 ReadyScene::ReadyScene(IWindow &win, std::list<Entity*> *e):
     Scene(win, e), _isReady(false), _send(false),
@@ -62,7 +63,8 @@ void    ReadyScene::in(IPacket *p)
     TcpPacket   *packet;
     std::string name;
     std::string tmp;
-    Entity *e;
+    std::pair<float, float> pos;
+    Entity *pl;
 
     if ((packet = dynamic_cast<TcpPacket*>(p)))
     {
@@ -81,16 +83,23 @@ void    ReadyScene::in(IPacket *p)
                     _isReadyText.setText("You are not ready.");
                 if (static_cast<Codes>(_lastCode) == Codes::LeaveRoom)
                 {
+                    _players.clear();
                     _quit = true;
                 }
                 break ;
             case Codes::Begin:
-                e = new Entity();
                 for (auto x : _players)
-                    e->manager.add<std::string>(x.first, x.first);
-                e->manager.add<std::string>("type", "playersData");
-                e->manager.add<std::string>("name", "playersData");
-                _entities->push_back(e);
+                {
+                    pl = new Entity;
+                    pl->manager.add<std::string>("type", "player");
+                    pl->manager.add<std::string>("pseudo", x.first);
+                    pl->manager.add<std::string>("name", x.first);
+                    pl->manager.add<std::pair<float, float> >("position", pos);
+					pl->manager.add<Pattern::Side>("direction", Pattern::Side::RIGHT);
+                    pl->manager.add<Pattern::MovePattern>
+                        ("pattern", Pattern::MovePattern::LINE);
+                    _entities->push_back(pl);
+                }
                 _event = E_Stage;
                 break ;
             case Codes::PlayerJoined:
@@ -111,7 +120,7 @@ void    ReadyScene::in(IPacket *p)
     }
 }
 
-IPacket *ReadyScene::out()
+IPacket *ReadyScene::out(EventSum&)
 {
     if (_new)
     {

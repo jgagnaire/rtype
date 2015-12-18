@@ -69,7 +69,6 @@ class GameRoomScene : public Scene
                 _bufferText.setCenter();
                 if (tmp == 126)
                 {
-                    std::string name;
                     std::size_t i = 0;
                     switch (_current)
                     {
@@ -79,9 +78,9 @@ class GameRoomScene : public Scene
                                 _packet.setQuery(static_cast<uint16_t>(Codes::JoinRoom));
                                 for (auto x : _rooms)
                                     if (_currentR == i++)
-                                        name = x.first;
-                                _packet.setData(name.c_str());
-                                _packet.setSize(static_cast<uint16_t>(name.size()));
+                                        _name = x.first;
+                                _packet.setData(_name.c_str());
+                                _packet.setSize(static_cast<uint16_t>(_name.size()));
                                 _new = true;
                             }
                             break;
@@ -151,7 +150,7 @@ class GameRoomScene : public Scene
             }
         }
 
-        virtual IPacket *out()
+        virtual IPacket *out(EventSum&)
         {
             if (_new)
             {
@@ -191,6 +190,7 @@ class GameRoomScene : public Scene
         std::size_t                                         _currentR;
         EventSum                                            _event;
         Codes                                               _lastCode;
+        std::string                                         _name;
 };
 
 #endif /* end of include guard: GAMEROOMSCENE_HH_ZNKJPAAS */
