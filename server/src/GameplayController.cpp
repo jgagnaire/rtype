@@ -49,8 +49,29 @@ bool            GameplayController<T>::keyPressed(UserManager<T> *cl) {
 }
 
 template <typename T>
-bool            GameplayController<T>::audioPacket(UserManager<T> *) const {
-    return (true);
+bool            GameplayController<T>::audioPacket(UserManager<T> *cl) {
+  GameManager<T>       &g = GameManager<T>::instance();
+  UDPData	       udp = cl->getUdpBinaryPacketStruct();
+  Game<T>              *game = g.getGameByName(cl->getGameroomName());
+  char		       data[Enum::MAX_BUFFER_LENGTH];
+  std::string		tmp_name = cl->getName() + ":";
+
+  init_memory(data, Enum::MAX_BUFFER_LENGTH);
+  std::copy_n(tmp_name.begin(), tmp_name.size(), data);
+  std::copy_n(udp.buff, udp.packet.packet_size, &data[tmp_name.size()]);
+  std::copy_n(data, Enum::MAX_BUFFER_LENGTH, udp.buff);
+  udp.packet.packet_size += tmp_name.size();
+  udp.packet.query = Enum::BROADCAST_AUDIO;
+  std::cout << sizeof(udp) - sizeof(udp.packet) << std::endl;
+  if (game) {
+    for (auto it = game->players.begin(); it != game->players.end(); ++it) {
+      if ((*it)->getName() != cl->getName()) {
+	udp.packet.id = (*it)->getUDPPacketId();
+        this->sendUDP(udp, (*it)->getIP());
+      }
+    }
+  }
+  return (true);
 }
 
 #if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)

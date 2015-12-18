@@ -68,6 +68,8 @@ public:
     Enum::UserStatus        getStatus() const;
     void                    inGame();
     void                    setUdpPacketStruct(const Packet<UDPDataHeader>::PacketStruct &);
+    void                    setUdpBinaryPacketStruct(UDPData &);
+    const UDPData	    &getUdpBinaryPacketStruct() const;
     void                    clearGameData();
     uint64_t                getUDPPacketId();
     bool                    isFiring();
@@ -75,9 +77,8 @@ public:
     const Position	    &getPosition() const;
     const std::size_t	    &getKeypressed() const;
 
-    Enum::ServerAnswers		verifyUser();
+    Enum::ServerAnswers	    verifyUser();
     Enum::ServerAnswers	    newUser();
-    Enum::ServerAnswers     joinRandomRoom();
     Enum::ServerAnswers     joinNamedRoom();
     Enum::ServerAnswers     createGameRoom();
     Enum::ServerAnswers     leaveRoom();
@@ -102,6 +103,7 @@ private:
   Packet<TCPDataHeader>			  packet;
   Packet<TCPDataHeader>::PacketStruct	  tmp_packet;
   Packet<UDPDataHeader>::PacketStruct	  udp_packet;
+  UDPData				  udp_binary_packet;
   std::string                             gameroom;
   std::mutex                              game_mutex;
 

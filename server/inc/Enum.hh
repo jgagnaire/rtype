@@ -1,6 +1,12 @@
 #ifndef		ENUM_H_
 # define	ENUM_H_
 
+# if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+#  define init_memory(x, y) ZeroMemory((x), (y));
+# else
+#  define init_memory(x, y) bzero((x), (y));
+# endif
+
 namespace Enum
 {
     enum UserStatus {
@@ -80,10 +86,10 @@ namespace Enum
         USER_TAKE_FORCE = 405,
         USER_QUIT_GAME = 406,
         USER_KEYPRESS = 407,
+	PLAYER_POS = 408,
     };
 
     enum ServerAnswers {
-        // FOR TCP
         OK = 104,
         EUSERPASS = 500,
         EALREADY_LOGGED = 501,
@@ -95,11 +101,6 @@ namespace Enum
 	EALREADY_IN_GAME = 507,
         ENO_AVAILABLE_ROOM = 509,
         EROOM_NO_EXIST = 510,
-
-        // FOR UDP
-	PLAYER_POS = 408,
-        ENOT_IN_GAME = 504,
-        EUDP_NOT_LOGGEDIN = 506
     };
 
     enum ServerInfo {
@@ -107,7 +108,7 @@ namespace Enum
         REGISTER_MAX = 12,
         REGISTER_MIN = 4,
         MAX_TIME = 10,
-        MAX_BUFFER_LENGTH = 512,
+        MAX_BUFFER_LENGTH = 61440,
     };
 
     enum Key {
