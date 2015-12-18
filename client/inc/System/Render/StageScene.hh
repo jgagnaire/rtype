@@ -7,6 +7,7 @@
 # include "System/Render/View.hh"
 # include "Network/UdpSocket.hh"
 # include "Network/NetworkManager.hh"
+# include "System/Shoot/Pattern.hh"
 
 class StageScene : public Scene
 {
@@ -43,7 +44,7 @@ class StageScene : public Scene
         _b1.manager.add<AView*>("view", &_view);
         _guiPlayers.manager.add<ADrawable*>("player1", &(_pSprites[0]));
         _guiShoots.manager.add<ADrawable*>("shoot", &_shoot);
-        _guiShoots.manager.add<ADrawable*>("shootEnnemy", &_shoot);
+        _guiShootsEnnemy.manager.add<ADrawable*>("shoot", &_shootEnnemy);
         _lastId = 0;
         _b1.manager.add<ADrawable*>("background", _s1[_stageNb - 1]);
         _b2.manager.add<ADrawable*>("background", _s2[_stageNb - 1]);
@@ -133,8 +134,16 @@ class StageScene : public Scene
                 {
                     _shoot.setPosition(sf::Vector2f(x->manager.get<std::pair<float, float> >("position").first,
                                 x->manager.get<std::pair<float, float> >("position").second));
-                    _shoot.update(duration);
-                    _win.draw(_guiShoots);
+                    if (x->manager.get<Pattern::Side>("direction") == Pattern::Side::RIGHT)
+                    {
+                        _shoot.update(duration);
+                        _win.draw(_guiShoots);
+                    }
+                    else
+                    {
+                        _shootEnnemy.update(duration);
+                        _win.draw(_guiShootsEnnemy);
+                    }
                 }
                 else if (x->manager.get<std::string>("type") == "mob")
                 {
@@ -209,6 +218,7 @@ class StageScene : public Scene
         Entity                                              _b4;
         Entity                                              _guiPlayers;
         Entity                                              _guiShoots;
+        Entity                                              _guiShootsEnnemy;
         Entity                                              _guiMobs;
         Entity                                              _changeScene;
 
