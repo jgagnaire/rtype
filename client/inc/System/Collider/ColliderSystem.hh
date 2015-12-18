@@ -60,6 +60,7 @@ class ColliderSystem : public ASystem
             {
                 for (auto a : *_eList)
                 {
+                    std::cout << "FIRST " << std::endl;
                     p1 = a->manager.get<std::pair<float, float> >("position");
                     t1 = a->manager.get<std::string>("type");
                     getSize(s1, t1, a->manager.get<std::string>("name"));
@@ -67,6 +68,7 @@ class ColliderSystem : public ASystem
                     {
                         if (a != b)
                         {
+                            std::cout << "SECONd " << t1 << " " << t2 << std::endl;
                             p2 = b->manager.get<std::pair<float, float> >("position");
                             t2 = b->manager.get<std::string>("type");
                             getSize(s2, t2, b->manager.get<std::string>("name"));
