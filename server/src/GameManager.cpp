@@ -189,6 +189,7 @@ void		GameManager<SCK>::sendPosition(Game<SCK> *game, UserManager<SCK> *user) {
   os[1] << p.y;
   s = user->getName() + ":" + os[0].str() + ":" + os[1].str();
   key = user->getName() + ":" + std::to_string(user->getKeypressed());
+  std::cout << "la key est " << key << std::endl;
   for (auto it = game->players.begin(); it != game->players.end(); ++it) {
     pack = {static_cast<uint16_t>(s.size()),
 	    static_cast<uint16_t>(Enum::PLAYER_POS),

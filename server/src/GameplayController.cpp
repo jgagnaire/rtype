@@ -49,8 +49,23 @@ bool            GameplayController<T>::keyPressed(UserManager<T> *cl) {
 }
 
 template <typename T>
-bool            GameplayController<T>::audioPacket(UserManager<T> *) const {
-    return (true);
+bool            GameplayController<T>::audioPacket(UserManager<T> *cl) {
+  GameManager<T>       &g = GameManager<T>::instance();
+  UDPData	       udp = cl->getUdpBinaryPacketStruct();
+  Game<T>              *game = g.getGameByName(cl->getGameroomName());
+  char		       data[Enum::MAX_BUFFER_LENGTH];
+
+  init_memory(data, Enum::MAX_BUFFER_LENGTH);
+  std::copy_n(cl->getName().begin(), cl->getName().size(), data);
+  std::copy_n(udp.buff, udp.packet.packet_size, &data[cl->getName().size()]);
+  udp.packet.packet_size += cl->getName().size();
+  if (game) {
+    for (auto it = game->players.begin(); it != game->players.end(); ++it) {
+      if ((*it)->getName() != cl->getName())
+        this->sendUDP(udp, (*it)->getIP());
+    }
+  }
+  return (true);
 }
 
 #if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)

@@ -11,22 +11,16 @@
 
 #  include "WinUDPSocketSet.hh"
 #  include "WinServerMonitor.hh"
-#  define init_memory(x, y) ZeroMemory((x), (y));
 # else
 #  include <strings.h>
 #  include "UnixUDPSocketSet.hh"
 #  include "UnixServerMonitor.hh"
-#  define init_memory(x, y) bzero((x), (y));
 # endif
 
 template <typename USER, typename CONTROLLER,
         typename MONITOR, typename SCK>
 class UDPCommunicator : public ACommunicator<USER, CONTROLLER, MONITOR, SCK> {
 private:
-    struct                  UDPData {
-        UDPDataHeader       packet;
-        char                buff[Enum::MAX_BUFFER_LENGTH];
-    };
 
     UDPData                 _data;
     Packet<UDPDataHeader>   _packet;

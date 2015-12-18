@@ -76,6 +76,13 @@ public:
     inline
     void	setPort(uint16_t p) { port = std::to_string(p); }
 
+    inline
+    void        sendUDP(UDPData &udp_data, const std::string &ip) {
+      this->udp_socket->absWriteOnClient(udp_data.buff, udp_data.packet.packet_size +
+			  sizeof(UDPDataHeader),
+			  ip, port);
+    }
+
 protected:
     std::list<UserManager<T> *>	    &cl_list;
     IServerSocket<T>		    *udp_socket;

@@ -26,12 +26,17 @@ struct UDPDataHeader {
 }__attribute__((__packed__));
 # endif
 
+struct                  UDPData {
+  UDPDataHeader       packet;
+  char                buff[Enum::MAX_BUFFER_LENGTH];
+};
+
 template <typename T>
 class Packet {
 public:
     struct    PacketStruct {
-        T	        header;
-        std::string data;
+        T		header;
+        std::string	data;
     };
 private:
     PacketStruct			    _get_pack;
@@ -131,7 +136,8 @@ public:
       }
 
       template <typename SCK>
-      bool                  sendPacket(const SCK s, const std::string &ip = "", const std::string &port = "") {
+      bool                  sendPacket(const SCK s, const std::string &ip = "",
+				       const std::string &port = "") {
         bool	                ret;
 
         ret = s->absWriteOnClient(_wr_buff, sizeof(T) + _send_pack.front().data.size(),

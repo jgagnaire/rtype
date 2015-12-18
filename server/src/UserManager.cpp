@@ -196,11 +196,11 @@ void    UserManager<T>::setUdpPacketStruct(const Packet<UDPDataHeader>::PacketSt
 }
 
 template <typename T>
-Enum::ServerAnswers      UserManager<T>::joinRandomRoom() { //TODO, implements
-    if (!stream.is_open())
-        return (Enum::ENOT_LOGGED);
-    is_ready = false;
-    return (Enum::OK);
+void    UserManager<T>::setUdpBinaryPacketStruct(UDPData &p) { udp_binary_packet = p; }
+
+template <typename T>
+const UDPData    &UserManager<T>::getUdpBinaryPacketStruct() const { 
+  return (udp_binary_packet);
 }
 
 template <typename T>
@@ -362,6 +362,7 @@ Enum::ServerAnswers     UserManager<T>::keyPressed() {
     std::istringstream  is(udp_packet.data);
 
     is >> keypressed;
+    std::cout << name << " " << keypressed << std::endl;
     game_mutex.unlock();
     return (Enum::OK);
 }
