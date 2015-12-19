@@ -54,10 +54,16 @@ class ComponentManager
 	if (components[name]->getType() == typeid(Type).name())
 	  return (static_cast<Component<Type>*>(components[name])->getValue());
 	else
-	  throw ComponentManagerException("No such component to get : [invalid type] \
-type for compenents \"" + name + "\" is : " + components[name]->getType());
+	  throw ComponentManagerException("No such component to get : [invalid type] "
+					  "type for compenents \"" + name + "\" is : " + components[name]->getType());
       }
     throw ComponentManagerException("No such component to get : [invalid name] " + name);
+  }
+
+  template<typename Type>
+  Type const &get(const std::string& name) const
+  {
+    return this->get<Type>(name);
   }
   
   template<typename Type>
