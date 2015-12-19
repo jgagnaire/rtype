@@ -27,8 +27,8 @@ class StageScene : public Scene
         _pSprites[6].load("client/res/mobs/mob-3.png");
         _shoot.load("client/res/bullet.png");
         _shootEnnemy.load("client/res/bullet2.png");
-        _transition.load("client/res/transition_1920.png", false, 5);
-        _transition.setRepeat(false);
+        //TODO, animation does not work _transition.load("client/res/transition_1920.png", false, 5);
+	_transition.setRepeat(false);
         _hud.load("client/res/HUD.png");
         for (int i = 1; i <= 5; ++i)
         {
