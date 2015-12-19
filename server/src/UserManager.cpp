@@ -11,7 +11,7 @@ std::mutex          UserManager<T>::user_mutex;
 
 template<typename T>
 UserManager<T>::UserManager(IServerSocket<T> *sck) :
-        sock(sck) , status(Enum::LOBBY) , ping(true) {
+  sock(sck) , status(Enum::LOBBY) , ping(true) {
     clearData();
 }
 
@@ -362,6 +362,7 @@ Enum::ServerAnswers     UserManager<T>::keyPressed() {
     std::istringstream  is(udp_packet.data);
 
     is >> keypressed;
+    std::cout << name << ": " << keypressed << std::endl;
     game_mutex.unlock();
     return (Enum::OK);
 }

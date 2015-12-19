@@ -5,25 +5,31 @@ template <typename SCK>
 GameManager<SCK> *GameManager<SCK>::game_manager = 0;
 
 template <typename SCK>
+Entity GameManager<SCK>::configuration;
+
+template <typename SCK>
 GameManager<SCK>::GameManager() {
-  JSONParser::parseFile("./entities/fires.json"); // TODO, no magic string
-  _game_system["fires"] = JSONParser::parse();
-  _content_system["fires"] = JSONParser::getContent();
-  JSONParser::parseFile("./entities/levels.json"); // TODO, no magic string
-  _game_system["levels"] = JSONParser::parse();
-  _content_system["levels"] = JSONParser::getContent();
-  JSONParser::parseFile("./entities/monsters.json"); // TODO, no magic string
-  _game_system["monsters"] = JSONParser::parse();
-  _content_system["monsters"] = JSONParser::getContent();
-  JSONParser::parseFile("./entities/bonuses.json"); // TODO, no magic string
-  _game_system["bonuses"] = JSONParser::parse();
-  _content_system["bonuses"] = JSONParser::getContent();
+  const std::string strs[] = {"fires", "levels", "monsters",
+      "bonuses", "hitboxes"};
+
+  for (int i = 0; i < sizeof(strs) / sizeof(strs[0]); ++i) {
+    JSONParser::parseFile(GameManager<SCK>::configuration.manager.get<std::string>(strs[i]));
+    _game_system[strs[i]] = JSONParser::parse();
+    _content_system[strs[i]] = JSONParser::getContent();
+  }
 }
 
 template <typename SCK>
 GameManager<SCK>     &GameManager<SCK>::instance() {
-  if (GameManager::game_manager == 0)
-    GameManager::game_manager = new GameManager();
+  if (GameManager::game_manager == 0) {
+    JSONParser	*p;
+
+    JSONParser::parseFile("./entities/configuration.json");
+    p = JSONParser::parse();
+    GameManager<SCK>::configuration = p->getEntity().manager.get<Entity>("configuration");
+    GameManager<SCK>::game_manager = new GameManager();
+    delete p;
+  }
   return (*game_manager);
 }
 

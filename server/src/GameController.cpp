@@ -27,10 +27,10 @@ int	            GameController<T>::newData(UserManager<T> *cl) {
 
 template <typename T>
 void            GameController<T>::sendJSON(UserManager<T> *cl) const {
-  const std::string strs[] = {"levels", "bonuses", "fires", "monsters"};
-  auto  content = GameManager<T>::instance().getContent();
+  const std::string strs[] = {"levels", "bonuses", "fires", "monsters", "hitboxes"};
+  auto		    content = GameManager<T>::instance().getContent();
 
-  for (int i = 0; i < 4; ++i) {
+  for (int i = 0; i < sizeof(strs) / sizeof(strs[0]); ++i) {
     cl->writeStruct({static_cast<uint16_t>(content[strs[i]].size()),
 	  Enum::SEND_JSON});
     cl->writeMsg(content[strs[i]]);
@@ -137,7 +137,6 @@ bool            GameController<T>::getRoomList(UserManager<T> *cl) const {
     std::string                 tmp;
 
     cl->writeStruct({0, static_cast<uint16_t>(sa)});
-    std::cout << "la taille des games: " << game.size() << std::endl;
     if (sa == Enum::OK) {
         for (auto it = game.begin(); it != game.end(); ++it) {
             tmp.clear();
