@@ -34,6 +34,7 @@ struct Game {
     std::string					lvl_name = "level1";
     std::unordered_map<std::string, Entity>	entities;
     Entity					*level;
+    std::unordered_map<std::string, std::string>  content_system;
 };
 
 template <typename SCK>
@@ -55,8 +56,6 @@ public:
     void                            setUdpSocket(IServerSocket<SCK> *);
     void			    sendPosition(Game<SCK> *, UserManager<SCK> *);
     void			    fireBall(Game<SCK> *, UserManager<SCK> *, bool);
-    const std::unordered_map<std::string, std::string> &
-    getContent() const;
 
 private:
     bool                            update(Game<SCK> *game, std::size_t);
@@ -69,7 +68,6 @@ private:
     ThreadPool<void, Game<SCK> *>		  _threadpool;
     IServerSocket<SCK>				  *_udp_socket;
     std::unordered_map<std::string, JSONParser *> _game_system;
-    std::unordered_map<std::string, std::string>  _content_system;
 
     GameManager();
     ~GameManager() {}
