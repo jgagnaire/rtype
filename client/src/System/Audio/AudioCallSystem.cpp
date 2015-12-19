@@ -2,8 +2,9 @@
 #include "AudioCallSystem.hh"
 #include "Utility/Clock.hh"
 
-AudioCallSystem::AudioCallSystem()
+AudioCallSystem::AudioCallSystem() : _isActive(false)
 {
+  _eventList.push_back(E_Stage);
   _eventList.push_back(Key_Sound);
   _recorder.start();
 }
