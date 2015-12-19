@@ -91,11 +91,22 @@ class	MobSystem : public ASystem
                         {
                             for (auto &monster : monsters.manager.getAll<Entity>())
                             {
+                                int     numbers;
+                                int     firstTime;
+                                int     interval;
+
                                 Entity *tmp;
                                 Entity &pos = monster.second.manager.get<Entity>("position");
                                 std::pair<float, float> pair(pos.manager.get<int>("x"),
                                         pos.manager.get<int>("y"));
-                                tmp = createMob(monster.second.manager.get<std::string>("name"), pair);
+                                numbers = monster.second.manager.get<int>("time");
+                                firstTime = monster.second.manager.get<int>("appear_at_sec");
+                                interval = monster.second.manager.get<int>("timeval");
+                                for (int i = 0; i < numbers; ++i)
+                                {
+                                    tmp = createMob(monster.first, pair);
+                                    tmp->manager.add<int>("appearIn", firstTime + interval * i);
+                                }
                                 l.push_back(tmp);
                             }
                         }
