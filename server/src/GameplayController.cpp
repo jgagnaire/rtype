@@ -53,7 +53,7 @@ bool            GameplayController<T>::audioPacket(UserManager<T> *cl) {
   GameManager<T>       &g = GameManager<T>::instance();
   UDPData	       udp = cl->getUdpBinaryPacketStruct();
   Game<T>              *game = g.getGameByName(cl->getGameroomName());
-  char		       data[Enum::MAX_BUFFER_LENGTH];
+  char		       *data = new char[Enum::MAX_BUFFER_LENGTH];
   std::string		tmp_name = cl->getName() + ":";
 
   init_memory(data, Enum::MAX_BUFFER_LENGTH);
@@ -70,6 +70,7 @@ bool            GameplayController<T>::audioPacket(UserManager<T> *cl) {
       }
     }
   }
+  delete data;
   return (true);
 }
 

@@ -15,7 +15,7 @@ namespace Pattern {
     void	line(Entity &e, int duration)
     {
         std::pair<float, float> pos = e.manager.get<std::pair<float, float> >("position");
-        float vel = static_cast<float>(duration + e.manager.get<float>("velocity"));
+        float vel = static_cast<float>(duration * e.manager.get<float>("velocity"));
         if (e.manager.get<bool>("is_a_monster"))
             vel *= -1;
         pos.first += vel;
@@ -26,7 +26,7 @@ namespace Pattern {
     void	sinusoid(Entity &e, int duration)
     {
         std::pair<float, float> pos = e.manager.get<std::pair<float, float> >("position");
-        float vel = static_cast<float>(duration + e.manager.get<float>("velocity"));
+        float vel = static_cast<float>(duration * e.manager.get<float>("velocity"));
         if (e.manager.get<bool>("is_a_monster"))
             vel *= -1;
         pos.first += vel;
