@@ -19,13 +19,13 @@
 template <typename SCK>
 struct Game {
   ~Game() {
-    if (shoot_system)
-      delete shoot_system;
+    if (system["shoot"])
+      delete system["shoot"];
   }
 
-  Game() { shoot_system = new ShootSystem; }
+  Game() { system["shoot"] = new ShootSystem; }
 
-    ASystem					*shoot_system;
+    std::unordered_map<std::string, ASystem *>  system;
     std::string                                 name;
     std::list<UserManager<SCK> *>               players;
     std::size_t                                 refresh = Enum::REFRESH_TIME;
