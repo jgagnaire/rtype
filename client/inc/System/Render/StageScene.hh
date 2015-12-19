@@ -13,10 +13,11 @@ class StageScene : public Scene
 {
     public:
         StageScene(IWindow &win, std::list<Entity*> *e):
-            Scene(win, e), _stageNb(1), _pSprites(7), _direction(noEvent),
+            Scene(win, e), _stageNb(4), _pSprites(7), _direction(noEvent),
             _numstage(5)
     {
         _pSprites[0].load("client/res/ship/player-ship-blue2_111.png");
+        //_pSprites[0].load("client/res/boss/boss-5_535.png");
         _pSprites[1].load("client/res/ship/player-ship-green2_111.png");
         _pSprites[2].load("client/res/ship/player-ship-red2_111.png");
         _pSprites[3].load("client/res/ship/player-ship-purple2_111.png");
@@ -32,14 +33,17 @@ class StageScene : public Scene
             ScrollingSprite *s2 = new ScrollingSprite();
             ScrollingSprite *s3 = new ScrollingSprite();
             ScrollingSprite *s4 = new ScrollingSprite();
+            ScrollingSprite *s5 = new ScrollingSprite();
             s1->load("client/res/stages/stage" + std::to_string(i) + "/background_7680.png", 1);
             s2->load("client/res/stages/stage" + std::to_string(i) + "/middle_7680.png", 2);
             s3->load("client/res/stages/stage" + std::to_string(i) + "/middle2_7680.png", 3);
-            s4->load("client/res/stages/stage" + std::to_string(i) + "/top_7680.png", 4);
+            s4->load("client/res/stages/stage" + std::to_string(i) + "/top2_7680.png", 4);
+            s5->load("client/res/stages/stage" + std::to_string(i) + "/top_7680.png", 4);
             _s1.push_back(s1);
             _s2.push_back(s2);
             _s3.push_back(s3);
             _s4.push_back(s4);
+            _s5.push_back(s5);
         }
         _b1.manager.add<AView*>("view", &_view);
         _guiPlayers.manager.add<ADrawable*>("player1", &(_pSprites[0]));
@@ -50,6 +54,7 @@ class StageScene : public Scene
         _b2.manager.add<ADrawable*>("background", _s2[_stageNb - 1]);
         _b3.manager.add<ADrawable*>("background", _s3[_stageNb - 1]);
         _b4.manager.add<ADrawable*>("background", _s4[_stageNb - 1]);
+        _b5.manager.add<ADrawable*>("background", _s5[_stageNb - 1]);
         _numstage[0].load("client/res/stages/numero-1_75.png", true);
         _numstage[1].load("client/res/stages/numero-2_115.png", true);
         _numstage[2].load("client/res/stages/numero-3_115.png", true);
@@ -76,6 +81,7 @@ class StageScene : public Scene
             _b2.manager.set<ADrawable*>("background", _s2[_stageNb - 1]);
             _b3.manager.set<ADrawable*>("background", _s3[_stageNb - 1]);
             _b4.manager.set<ADrawable*>("background", _s4[_stageNb - 1]);
+            _b5.manager.set<ADrawable*>("background", _s5[_stageNb - 1]);
             _changeScene.manager.set<ADrawable*>("numero", &(_numstage[_stageNb - 1]));
         }
 
@@ -110,6 +116,7 @@ class StageScene : public Scene
             _s2.erase(_s2.begin(), _s2.end());
             _s3.erase(_s3.begin(), _s3.end());
             _s4.erase(_s4.begin(), _s4.end());
+            _s5.erase(_s5.begin(), _s5.end());
         }
 
         virtual void    handle(EventSum e, EventSum&)
@@ -125,9 +132,11 @@ class StageScene : public Scene
             _s2[_stageNb - 1]->update(duration);
             _s3[_stageNb - 1]->update(duration);
             _s4[_stageNb - 1]->update(duration);
+            _s5[_stageNb - 1]->update(duration);
             _win.draw(_b1);
             _win.draw(_b2);
             _win.draw(_b3);
+            _win.draw(_b4);
             for (auto x : *_entities)
             {
                 if (x->manager.get<std::string>("type") == "shoot")
@@ -167,7 +176,7 @@ class StageScene : public Scene
             for (auto x : _players)
                 x.second->update(duration);
             _win.draw(_guiPlayers);
-            _win.draw(_b4);
+            _win.draw(_b5);
             if (_durationAnimation > 0)
             {
                 if (_durationAnimation < 2500 && _changing)
@@ -216,6 +225,7 @@ class StageScene : public Scene
         Entity                                              _b2;
         Entity                                              _b3;
         Entity                                              _b4;
+        Entity                                              _b5;
         Entity                                              _guiPlayers;
         Entity                                              _guiShoots;
         Entity                                              _guiShootsEnnemy;
@@ -227,6 +237,7 @@ class StageScene : public Scene
         std::vector<ScrollingSprite*>                       _s2;
         std::vector<ScrollingSprite*>                       _s3;
         std::vector<ScrollingSprite*>                       _s4;
+        std::vector<ScrollingSprite*>                       _s5;
         int                                                 _stageNb;
         std::vector<AnimatedSprite>                         _pSprites;
         AnimatedSprite                                      _shoot;

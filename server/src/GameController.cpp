@@ -8,8 +8,6 @@ GameController<T>::GameController(std::list<UserManager<T> *> *cl)
 template<typename T>
 int	            GameController<T>::newData(UserManager<T> *cl) {
     switch (cl->numQuery()) {
-        case (Enum::JOIN_RANDOM_ROOM):
-            return (static_cast<int>(joinRandomRoom(cl)));
         case (Enum::JOIN_GAME_ROOM):
             return (static_cast<int>(joinNamedRoom(cl)));
         case (Enum::CREATE_ROOM):
@@ -28,7 +26,8 @@ int	            GameController<T>::newData(UserManager<T> *cl) {
 }
 
 template <typename T>
-bool            GameController<T>::joinRoom(UserManager<T> *cl, Enum::ServerAnswers sa) const {
+bool            GameController<T>::joinNamedRoom(UserManager<T> *cl) const {
+  Enum::ServerAnswers		sa = cl->joinNamedRoom();
     GameManager<T>              &g = GameManager<T>::instance();
     Game<T>                     *game;
 
@@ -51,16 +50,6 @@ bool            GameController<T>::joinRoom(UserManager<T> *cl, Enum::ServerAnsw
         }
     }
     return (true);
-}
-
-template <typename T>
-bool            GameController<T>::joinRandomRoom(UserManager<T> *cl) const {
-  return (joinRoom(cl, cl->joinRandomRoom()));
-}
-
-template <typename T>
-bool            GameController<T>::joinNamedRoom(UserManager<T> *cl) const {
-  return (joinRoom(cl, cl->joinNamedRoom()));
 }
 
 template <typename T>

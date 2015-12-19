@@ -11,22 +11,16 @@
 
 #  include "WinUDPSocketSet.hh"
 #  include "WinServerMonitor.hh"
-#  define init_memory(x, y) ZeroMemory((x), (y));
 # else
 #  include <strings.h>
 #  include "UnixUDPSocketSet.hh"
 #  include "UnixServerMonitor.hh"
-#  define init_memory(x, y) bzero((x), (y));
 # endif
 
 template <typename USER, typename CONTROLLER,
         typename MONITOR, typename SCK>
 class UDPCommunicator : public ACommunicator<USER, CONTROLLER, MONITOR, SCK> {
 private:
-    struct                  UDPData {
-        UDPDataHeader       packet;
-        char                buff[Enum::MAX_BUFFER_LENGTH];
-    };
 
     UDPData                 _data;
     Packet<UDPDataHeader>   _packet;
@@ -67,14 +61,12 @@ public:
                 size_t ret = _packet.getPacket(dynamic_cast<IServerSocket<SCK>*>(this->srvset),
                                                &ip, true);
                 buff = _packet.getBuffer();
-                // std::cout << ret << " " << sizeof(UDPData) << std::endl;
                 std::copy(buff, buff + ret, reinterpret_cast<char *>(&_data));
 
                 _pack.header = _data.packet;
                 _pack.data = _data.buff;
                 this->readAction(this->findUserByIP(ip));
                 _packet.clearAll();
-
             }
         }
     }
@@ -83,6 +75,7 @@ public:
         if (!cli)
             return (true);
         cli->setUdpPacketStruct(_pack);
+        cli->setUdpBinaryPacketStruct(_data);
         for (auto it = this->controllers.begin(); it != this->controllers.end(); ++it) {
 	  if (((*it)->*(this->newData))(cli) == 1) {
 		cli->destroy_client_mutex.unlock();

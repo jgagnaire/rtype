@@ -13,7 +13,7 @@ bool Recorder::onProcessSamples(const sf::Int16* samples, std::size_t sampleCoun
   if (_state)
     {
       tmp = new SoundBuffer();
-      tmp->loadFromSamples(samples, sampleCount, 2, sampleCount);    
+      tmp->loadFromSamples(samples, sampleCount, 2, sampleCount);
       this->_buffers.push_back(tmp);
     }
   return true;

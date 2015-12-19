@@ -130,7 +130,7 @@ void AudioCallSystem::in(IPacket *packet)
   std::string pseudo;
   const void *tmpData;
 
-  if (!packet || !dynamic_cast<UdpPacket *>(packet)
+  if (!dynamic_cast<UdpPacket *>(packet)
       || packet->getQuery() != CODE_RECEIVE_PACKET)
     return ;
   tmpData = packet->getData();

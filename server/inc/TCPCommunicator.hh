@@ -44,7 +44,6 @@ public:
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
                 while (!(*cli)->sendStructEmpty()) {
 	    if (!(*cli)->writeOnMe()) {
-			std::cout << "je supprime: " << (*cli)->getName() << std::endl;
 	      deleteClient(cli);
 	      break;
 	    }

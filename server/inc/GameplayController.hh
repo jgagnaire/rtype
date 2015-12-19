@@ -12,7 +12,7 @@ public:
     bool            quitGame(UserManager<T> *);
     bool            currentPosition(UserManager<T> *);
     bool            keyPressed(UserManager<T> *);
-    bool            audioPacket(UserManager<T> *) const;
+    bool            audioPacket(UserManager<T> *);
     bool            takeForce(UserManager<T> *);
 
 private:
