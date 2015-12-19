@@ -1,12 +1,12 @@
 "monsters": {
-    "monster1" {
+    "monster1": {
 	"movement": "linear",
 	"fire": ["ichiro_laser_beam"],
 	"velocity": 3.5,
 	"life": 30
     },
 
-    "monster2" {
+    "monster2": {
 	"movement": "sinusoidal",
 	"fire": ["normal"],
 	"velocity": 7.5,

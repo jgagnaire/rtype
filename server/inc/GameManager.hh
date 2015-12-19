@@ -63,6 +63,7 @@ private:
     bool			    updateTime(Game<SCK> *);
 
     static  GameManager				  *game_manager;
+    static  Entity				  configuration;
     std::list<Game<SCK> *>			  _games;
     ThreadPool<void, Game<SCK> *>		  _threadpool;
     IServerSocket<SCK>				  *_udp_socket;

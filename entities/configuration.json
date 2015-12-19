@@ -1,0 +1,7 @@
+"configuration": {
+    "fires": "./entities/fires.json",
+    "levels": "./entities/levels.json",
+    "monsters": "./entities/monsters.json",
+    "bonuses": "./entities/bonuses.json",
+    "hitboxes": "./entities/hitboxes.json"
+}

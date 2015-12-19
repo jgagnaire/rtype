@@ -17,6 +17,7 @@ class StageScene : public Scene
             _numstage(5)
     {
         _pSprites[0].load("client/res/ship/player-ship-blue2_111.png");
+        //_pSprites[0].load("client/res/force_38.png");
         //_pSprites[0].load("client/res/boss/boss-5_535.png");
         _pSprites[1].load("client/res/ship/player-ship-green2_111.png");
         _pSprites[2].load("client/res/ship/player-ship-red2_111.png");
@@ -28,7 +29,7 @@ class StageScene : public Scene
         _shootEnnemy.load("client/res/bullet2.png");
         _transition.load("client/res/transition_1920.png", false, 5);
         _transition.setRepeat(false);
-
+        _hud.load("client/res/HUD.png");
         for (int i = 1; i <= 5; ++i)
         {
             ScrollingSprite *s1 = new ScrollingSprite();
@@ -71,6 +72,7 @@ class StageScene : public Scene
         _changeScene.manager.add<ADrawable*>("1", &_transition);
         _guiMobs.manager.add<ADrawable*>("sprite", &(_pSprites[4]));
         _guiExplosion.manager.add<ADrawable*>("explosion", 0);
+        _b5.manager.add<ADrawable*>("hud", &_hud);
     }
 
         void            switchStage()
@@ -283,6 +285,7 @@ class StageScene : public Scene
         AnimatedSprite                                      _shoot;
         AnimatedSprite                                      _shootEnnemy;
         AnimatedSprite                                      _transition;
+        AnimatedSprite                                      _hud;
         std::vector<AnimatedSprite*>                        _explosions;
 
         EventSum                                            _direction;
