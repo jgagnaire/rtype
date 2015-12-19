@@ -53,3 +53,16 @@ void	Pattern::mob1(Entity &e, Side s, int duration)
 	}
     e.manager.set("position", pos);
   }
+
+std::function<void (Entity&, Pattern::Side, int)>   Pattern::getPattern(
+        const std::string &name)
+{
+    if (name == "line")
+        return &line;
+    else if (name == "sinusoid")
+        return &sinusoid;
+    else if (name == "mob1")
+        return &mob1;
+    return &line;
+}
+

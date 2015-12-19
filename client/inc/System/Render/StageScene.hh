@@ -165,11 +165,11 @@ class StageScene : public Scene
                 }
                 else if ((*x)->manager.get<std::string>("type") == "mob")
                 {
-                    if ((*x)->manager.get<std::string>("name") == "mob-1")
+                    if ((*x)->manager.get<std::string>("name") == "mob1")
                         _guiMobs.manager.set<ADrawable*>("sprite", &(_pSprites[4]));
-                    else if ((*x)->manager.get<std::string>("name") == "mob-2")
+                    else if ((*x)->manager.get<std::string>("name") == "mob2")
                         _guiMobs.manager.set<ADrawable*>("sprite", &(_pSprites[5]));
-                    else if ((*x)->manager.get<std::string>("name") == "mob-3")
+                    else if ((*x)->manager.get<std::string>("name") == "mob3")
                         _guiMobs.manager.set<ADrawable*>("sprite", &(_pSprites[6]));
                     static_cast<AnimatedSprite*>(_guiMobs.manager.get<ADrawable*>("sprite"))->setPosition(sf::Vector2f((*x)->manager.get<std::pair<float, float> >("position").first,
                                 (*x)->manager.get<std::pair<float, float> >("position").second));
