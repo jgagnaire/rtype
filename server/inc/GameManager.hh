@@ -32,6 +32,7 @@ struct Game {
     bool                                        is_playing = false;
     float					time;
     std::string					lvl_name = "level1";
+    std::unordered_map<std::string, Entity>	entities;
     Entity					*level;
 };
 

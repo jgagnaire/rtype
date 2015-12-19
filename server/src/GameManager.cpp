@@ -50,6 +50,7 @@ void        GameManager<SCK>::createRoom(const std::string &name, UserManager<SC
 
     g->name = name;
     g->players.push_back(s);
+    //    g->entities[]
     _games.push_back(g);
 }
 
