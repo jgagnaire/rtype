@@ -7,7 +7,6 @@ GameManager<SCK>::GameManager() {
   _game_system["fires"] = JSONParser::parse();
   JSONParser::parseFile("./entities/levels.json"); // TODO, no magic string
   _game_system["levels"] = JSONParser::parse();
-  _game_system["levels"]->getEntity().manager.getAll<Entity>();
 }
 
 template <typename SCK>

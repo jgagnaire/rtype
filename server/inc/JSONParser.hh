@@ -17,11 +17,13 @@ public:
   static JSONParser	*parse();
   
 private:
+  bool			isFloat(const std::string &str);
   bool			eraseDelimiter(std::string &);
-  bool			isAlpha(const char c);
+  bool			isNum(const char c);
   std::string		getKeys(std::string &);
   std::string		stringParse(std::string &);
   int			valParse(std::string &);
+  float			floatParse(std::string &);
   Entity		hashParse(std::string &);
   Entity		&hashParse(std::string &, Entity &);
   void			getValueForArray(Entity &, const std::string &,
@@ -34,13 +36,15 @@ private:
 				std::string &content);
   void			_getVal(std::vector<int> &val,
 				std::string &content);
+  void			_getVal(std::vector<double> &val,
+				std::string &content);
   char		        getchar(const char);
 
   template <typename T>
   void	        getValue(std::vector<T> &val,
 			 std::string &content, const char c = '\0') {
     if (((c != '\0') && (*content.begin() != c)) &&
-	(!((c == '0') && isAlpha(*content.begin())))) {
+	(!((c == '0') && isNum(*content.begin())))) {
       delete this;
       throw (JSONException("Parsing error"));
     }
@@ -53,7 +57,11 @@ private:
       _getVal(val, content);
       break ;
     default:
-      if (isAlpha(*content.begin())) {
+      if (isFloat(content)) {
+	_getVal(val, content);
+	break ;
+      }
+      if (isNum(*content.begin())) {
 	_getVal(val, content);
 	break ;
       }
