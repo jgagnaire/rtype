@@ -46,7 +46,7 @@ class StageScene : public Scene
             _s5.push_back(s5);
         }
         _b1.manager.add<AView*>("view", &_view);
-        _guiPlayers.manager.add<ADrawable*>("player1", &(_pSprites[0]));
+        _guiPlayers.manager.add<ADrawable*>("player", &(_pSprites[0]));
         _guiShoots.manager.add<ADrawable*>("shoot", &_shoot);
         _guiShootsEnnemy.manager.add<ADrawable*>("shoot", &_shootEnnemy);
         _lastId = 0;
@@ -174,7 +174,7 @@ class StageScene : public Scene
                 {
                     AnimatedSprite *ex = new AnimatedSprite;
 
-                    if (ex->load("client/res/explosion_128.png"))
+                    if (ex->load("client/res/explosion_128.png", false, 24))
                     {
                         _explosions.push_back(ex);
 
@@ -186,10 +186,14 @@ class StageScene : public Scene
                     x = _entities->erase(x);
                     has_been_del = true;
                 }
-                else if ((*x)->manager.get<std::string>("name") == "player1")
+                else if ((*x)->manager.get<std::string>("type") == "player")
                 {
-                    _pSprites[0].setPosition(sf::Vector2f((*x)->manager.get<std::pair<float, float> >("position").first,
+                    _players[(*x)->manager.get<std::string>("pseudo")]->setPosition(
+                            sf::Vector2f((*x)->manager.get<std::pair<float, float> >("position").first,
                                 (*x)->manager.get<std::pair<float, float> >("position").second));
+                    _players[(*x)->manager.get<std::string>("pseudo")]->update(duration);
+                    _guiPlayers.manager.set<ADrawable*>("player", _players[(*x)->manager.get<std::string>("pseudo")]);
+                    _win.draw(_guiPlayers);
                 }
                 if (!has_been_del)
                     ++x;
@@ -207,9 +211,6 @@ class StageScene : public Scene
                 _guiExplosion.manager.set<ADrawable*>("explosion", _explosions[i]);
                 _win.draw(_guiExplosion);
             }
-            for (auto x : _players)
-                x.second->update(duration);
-            _win.draw(_guiPlayers);
             _win.draw(_b5);
             if (_durationAnimation > 0)
             {

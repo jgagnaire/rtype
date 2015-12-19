@@ -95,9 +95,10 @@ class ColliderSystem : public ASystem
                                     s1.second + p1.second > p2.second)
                             {
                                 _eList->push_back(createExplosion(p2));
-                                a = _eList->erase(a);
-                                --a;
                                 b = _eList->erase(b);
+                                a = _eList->erase(a);
+                                if (a != _eList->end())
+                                    --a;
                                 break ;
                             }
                         }
