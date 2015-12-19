@@ -8,12 +8,10 @@ JSONParser::JSONParser() {}
 
 JSONParser::~JSONParser() {}
 
-
 JSONParser::JSONParser(const JSONParser &jp) {
   if (this != &jp)
     this->_main_entity = jp._main_entity;
 }
-
 
 JSONParser	&JSONParser::operator=(const JSONParser &jp) {
   if (this != &jp)
@@ -36,8 +34,40 @@ bool		JSONParser::eraseDelimiter(std::string &content) {
   return (true);
 }
 
+bool		JSONParser::isFloat(const std::string &str) {
+  bool		find_dot = false;
 
-bool		JSONParser::isAlpha(const char c) { return (c >= '0' && c <= '9'); }
+  for (auto it = str.begin(); it != str.end(); ++it) {
+    if (*it == '.' && !find_dot)
+      find_dot = true;
+    else if (!isNum(*it))
+      return (find_dot);
+  }
+  return (find_dot);
+}
+
+bool		JSONParser::isNum(const char c) { return (c >= '0' && c <= '9'); }
+
+float			JSONParser::floatParse(std::string &content) {
+  int			val = 0;
+  double		stock;
+  std::istringstream	is;
+  std::string		tmp;
+  bool			find_dot = false;
+
+  for (auto it = content.begin(); it != content.end(); ++it) {
+    if (*it == '.' && !find_dot)
+      find_dot = true;
+    else if (!isNum(*it))
+      break ;    
+    ++val;
+  }
+  tmp = content.substr(0, val);
+  content.erase(0, val);
+  is.str(tmp);
+  is >> stock;
+  return (static_cast<float>(stock));
+}
 
 int			JSONParser::valParse(std::string &content) {
   int			val = 0;
@@ -45,7 +75,7 @@ int			JSONParser::valParse(std::string &content) {
   std::istringstream	is;
   std::string		tmp;
 
-  for (auto it = content.begin(); (it != content.end()) && isAlpha(*it); ++it)
+  for (auto it = content.begin(); (it != content.end()) && isNum(*it); ++it)
     ++val;
   tmp = content.substr(0, val);
   content.erase(0, val);
@@ -70,7 +100,11 @@ Enum::JSON	JSONParser::getValue(Entity &entity, const std::string &key,
     getValueForArray(entity, key, content);
     return (Enum::IS_TAB);
   default:
-    if (isAlpha(*content.begin())) {
+    if (isFloat(content)) {
+      entity.manager.add(key, floatParse(content));
+      return (Enum::IS_FLOAT);
+    }
+    if (isNum(*content.begin())) {
       entity.manager.add(key, valParse(content));
       return (Enum::IS_NUM);
     }
@@ -78,7 +112,6 @@ Enum::JSON	JSONParser::getValue(Entity &entity, const std::string &key,
   delete this;
   throw (JSONException("Parsing error"));
 }
-
  
 std::string	JSONParser::stringParse(std::string &content) { return (getKeys(content)); }
 
@@ -106,7 +139,11 @@ void	JSONParser::getValueForArray(Entity &entity, const std::string &key,
     entity.manager.add(key, vectorParse<std::string>(content, '"'));
     break ;
   default:
-    if (isAlpha(*content.begin())) {
+    if (isFloat(content)) {
+      entity.manager.add(key, vectorParse<double>(content, '0'));
+      break ;
+    }
+    if (isNum(*content.begin())) {
       entity.manager.add(key, vectorParse<int>(content, '0'));
       break ;
     }
@@ -115,17 +152,21 @@ void	JSONParser::getValueForArray(Entity &entity, const std::string &key,
   }
 }
 
-JSONParser		*JSONParser::parse() {
+JSONParser		*JSONParser::parse(const std::string &str) {
   std::string	        content;
   std::string		tmp;
   JSONParser		*j = new JSONParser();
   Entity		entity;
 
-  if (!JSONParser::_stream.is_open())
-    throw JSONException("Open failed");
-  while (!JSONParser::_stream.eof()) {
-    std::getline(JSONParser::_stream, tmp, '\n');
-    content += tmp;
+  if (!str.empty())
+    content = str;
+  else {
+    if (!JSONParser::_stream.is_open())
+      throw JSONException("Open failed");
+    while (!JSONParser::_stream.eof()) {
+      std::getline(JSONParser::_stream, tmp, '\n');
+      content += tmp;
+    }
   }
   content.erase(std::remove_if(content.begin(), content.end(),
 		 [](const char c) {
@@ -193,4 +234,9 @@ void			JSONParser::_getVal(std::vector<std::string> &val,
 void			JSONParser::_getVal(std::vector<int> &val,
 					    std::string &content) {
   val.push_back(valParse(content));
+}
+
+void			JSONParser::_getVal(std::vector<double> &val,
+					    std::string &content) {
+  val.push_back(floatParse(content));
 }

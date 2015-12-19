@@ -60,9 +60,8 @@ bool            GameplayController<T>::audioPacket(UserManager<T> *cl) {
   std::copy_n(tmp_name.begin(), tmp_name.size(), data);
   std::copy_n(udp.buff, udp.packet.packet_size, &data[tmp_name.size()]);
   std::copy_n(data, Enum::MAX_BUFFER_LENGTH, udp.buff);
-  udp.packet.packet_size += tmp_name.size();
+  udp.packet.packet_size += static_cast<uint16_t>(tmp_name.size());
   udp.packet.query = Enum::BROADCAST_AUDIO;
-  std::cout << sizeof(udp) - sizeof(udp.packet) << std::endl;
   if (game) {
     for (auto it = game->players.begin(); it != game->players.end(); ++it) {
       if ((*it)->getName() != cl->getName()) {
