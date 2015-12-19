@@ -14,7 +14,7 @@ public:
   JSONParser		&operator=(const JSONParser &);
   Entity		&getEntity();
   static bool		parseFile(const std::string &);
-  static JSONParser	*parse();
+  static JSONParser	*parse(const std::string & = "");
   
 private:
   bool			isFloat(const std::string &str);

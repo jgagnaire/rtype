@@ -152,17 +152,21 @@ void	JSONParser::getValueForArray(Entity &entity, const std::string &key,
   }
 }
 
-JSONParser		*JSONParser::parse() {
+JSONParser		*JSONParser::parse(const std::string &str) {
   std::string	        content;
   std::string		tmp;
   JSONParser		*j = new JSONParser();
   Entity		entity;
 
-  if (!JSONParser::_stream.is_open())
-    throw JSONException("Open failed");
-  while (!JSONParser::_stream.eof()) {
-    std::getline(JSONParser::_stream, tmp, '\n');
-    content += tmp;
+  if (!str.empty())
+    content = str;
+  else {
+    if (!JSONParser::_stream.is_open())
+      throw JSONException("Open failed");
+    while (!JSONParser::_stream.eof()) {
+      std::getline(JSONParser::_stream, tmp, '\n');
+      content += tmp;
+    }
   }
   content.erase(std::remove_if(content.begin(), content.end(),
 		 [](const char c) {
