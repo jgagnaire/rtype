@@ -42,27 +42,27 @@ class	MobSystem : public ASystem
         {
             if (!isActiv)
                 return ;
-            bool has_been_del = false;
-            for (auto x = _eList->begin(); x != _eList->end();)
+            for (auto x = _waitingmobs[0].begin(); x != _waitingmobs[0].end();
+                    ++x)
             {
-                has_been_del = false;
+                int tmp = (*x)->manager.get<int>("appearIn");
+                tmp -= duration;
+                (*x)->manager.set<int>("appearIn", tmp);
+                if (tmp <= 0)
+                {
+                    _eList->push_back(*x);
+                    x = _waitingmobs[0].erase(x);
+                    --x;
+                }
+            }
+            for (auto x = _eList->begin(); x != _eList->end(); ++x)
+            {
                 if ((*x)->manager.get<std::string>("type") == "mob")
                 {
                     (*x)->manager.get<std::function<void (Entity&, Pattern::Side, int)> >
                         ("pattern")(**x, (*x)->manager.
                                     get<Pattern::Side>("direction"), duration);
-                    std::pair<float, float> tmp = (*x)->manager.
-                        get<std::pair<float, float> >("position");
-                    if (tmp.first <= 0)
-                    {
-                        x = _eList->erase(x);
-                        std::pair<float, float> p(1920, 500);
-                        _eList->push_back(createMob("mob2", p));
-                        has_been_del = true;
-                    }
                 }
-                if (!has_been_del)
-                    ++x;
             }
         }
 
