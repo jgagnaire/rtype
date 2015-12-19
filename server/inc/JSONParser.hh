@@ -16,7 +16,8 @@ public:
   static bool		parseFile(const std::string &);
   static JSONParser	*parse(const std::string & = "");
   static const std::string &getContent();
-  
+  const std::string	&generate(Entity &);
+
 private:
   bool			isFloat(const std::string &str);
   bool			eraseDelimiter(std::string &);
@@ -96,4 +97,5 @@ private:
   static std::fstream	_stream;
   Entity		_main_entity;
   static std::string	s_content;
+  static std::string	_serializedEntity;
 };

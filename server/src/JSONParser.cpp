@@ -4,6 +4,7 @@
 
 std::fstream JSONParser::_stream("");
 std::string  JSONParser::s_content("");
+std::string  JSONParser::_serializedEntity("");
 
 JSONParser::JSONParser() {}
 
@@ -18,6 +19,33 @@ JSONParser	&JSONParser::operator=(const JSONParser &jp) {
   if (this != &jp)
     this->_main_entity = jp._main_entity;
   return (*this);
+}
+
+const std::string	&JSONParser::generate(Entity &monster) {
+  std::vector<std::string>	tmp;
+
+  JSONParser::_serializedEntity.clear();
+  try {
+  JSONParser::_serializedEntity += "\""
+    + monster.manager.get<std::string>("name")
+    + "\"{\"movement\": \""
+    + monster.manager.get<std::string>("movement")
+    + "\",\"fire\":[";
+  tmp = monster.manager.get<std::vector<std::string> >("fire");
+  for (unsigned int i = 0; i < tmp.size(); ++i)
+    {
+      JSONParser::_serializedEntity += "\""
+	+ tmp[i]
+	+ "\",";
+    }
+  JSONParser::_serializedEntity.pop_back();
+  JSONParser::_serializedEntity += "],\"velocity\":"
+    + std::to_string(monster.manager.get<float>("velocity"))
+    + ",\"life\":"
+    + std::to_string(monster.manager.get<int>("life"))
+    + "}";
+  } catch (const ComponentManagerException &e) {}
+  return JSONParser::_serializedEntity;
 }
 
 bool	JSONParser::parseFile(const std::string & pathname) {
