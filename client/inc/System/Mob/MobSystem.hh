@@ -80,6 +80,28 @@ class	MobSystem : public ASystem
                     for (auto &x : e.manager.getAll<Entity>())
                         _monsters[x.first] = x.second;
                 }
+                else if (p->getQuery() == static_cast<uint16_t>(Codes::JsonLevels))
+                {
+                    Entity &e = JSONParser::parse(tmp)->getEntity().manager.get<Entity>("levels");
+                    for (auto &main : e.manager.getAll<Entity>())
+                    {
+                        std::list<Entity*>  l;
+
+                        for (auto &monsters : main.second.manager.get<std::vector<Entity> >("monsters"))
+                        {
+                            for (auto &monster : monsters.manager.getAll<Entity>())
+                            {
+                                Entity *tmp;
+                                Entity &pos = monster.second.manager.get<Entity>("position");
+                                std::pair<float, float> pair(pos.manager.get<int>("x"),
+                                        pos.manager.get<int>("y"));
+                                tmp = createMob(monster.second.manager.get<std::string>("name"), pair);
+                                l.push_back(tmp);
+                            }
+                        }
+                        _waitingmobs.push_back(l);
+                    }
+                }
             }
         }
         virtual bool                    handle(EventSum ev)
@@ -95,6 +117,7 @@ class	MobSystem : public ASystem
         bool                                        isActiv;
         std::list<Entity*>                          *_eList;
         std::unordered_map<std::string, Entity>     _monsters;
+        std::vector<std::list<Entity*> >            _waitingmobs;
 };
 
 #endif
