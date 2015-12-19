@@ -86,7 +86,7 @@ void	JSONParser::addVector<Entity>(std::string &content,
 	+ data[i].first
 	+ "\":[";
       for (std::size_t j = 0; j < data[i].second.size(); ++j)
-	content += generate(data[i].second[j], "lol")
+	content += generate(data[i].second[j], data[i].second[j].manager.get<std::string>(name))
 	  + ",";
       content.pop_back();
       content += "],";
@@ -102,7 +102,6 @@ std::string	JSONParser::generate(Entity &monster, const std::string &name) {
   addContent(content, monster.manager.getAll<int>());
   addContent(content, monster.manager.getAll<float>());
   addContent(content, monster.manager.getAll<std::string>());
-
   auto vectorInt = monster.manager.getAll<std::vector<int> >();
   addVector(content, vectorInt);
   auto vectorFloat = monster.manager.getAll<std::vector<float> >();
@@ -111,18 +110,6 @@ std::string	JSONParser::generate(Entity &monster, const std::string &name) {
   addVector(content, vectorString);
   auto vectorEntity = monster.manager.getAll<std::vector<Entity> >();
   addVector(content, vectorEntity);
-
-
-  // auto tmpStringVector = monster.manager.getAll<std::vector<std::string> >();
-
-  // for (std::size_t i = 0; i < tmpStringVector.size(); ++i)
-  //   {
-  //     for (std::size_t j = 0; j < tmpStringVector[i].second.size(); ++j)
-  // 	addContent(content, tmpString[i][j].first, tmpStringVector[i].second[j]);
-  //   }
-  
-
-
   auto tmpEntity = monster.manager.getAll<Entity>();
   for (std::size_t i = 0; i < tmpEntity.size(); ++i)
     content += generate(tmpEntity[i].second, tmpEntity[i].first) + ",";
