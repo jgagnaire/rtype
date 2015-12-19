@@ -86,7 +86,7 @@ void	JSONParser::addVector<Entity>(std::string &content,
 	+ data[i].first
 	+ "\":[";
       for (std::size_t j = 0; j < data[i].second.size(); ++j)
-	content += generate(data[i].second[j], data[i].second[j].manager.get<std::string>(name))
+	content += generate(data[i].second[j], "")
 	  + ",";
       content.pop_back();
       content += "],";
@@ -96,9 +96,11 @@ void	JSONParser::addVector<Entity>(std::string &content,
 std::string	JSONParser::generate(Entity &monster, const std::string &name) {
   std::string	content;
 
-  content += "\""
-    + name
-    + "\":{";
+  if (!name.empty())
+    content += "\""
+      + name
+      + "\":";
+  content += "{";
   addContent(content, monster.manager.getAll<int>());
   addContent(content, monster.manager.getAll<float>());
   addContent(content, monster.manager.getAll<std::string>());

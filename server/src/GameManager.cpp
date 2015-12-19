@@ -49,6 +49,8 @@ void        GameManager<SCK>::createRoom(const std::string &name, UserManager<SC
       g->content_system[strs[i]] = JSONParser::getContent();
       delete jp;
     }
+    Entity &e = g->entities["levels"];
+    std:: cout << JSONParser::generate(e.manager.get<Entity>("levels"), "levels") << std::endl; // TODO, erase
     _games.push_back(g);
 }
 
