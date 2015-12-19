@@ -1,0 +1,28 @@
+"bonuses": {
+    "force": {
+	"movement": "sinusoidal",
+	"name": "force",
+	"velocity": 2.5,
+	"power": 2,
+	"sprite": "force",
+	"bonus_sprite": "flying_force"
+    },
+
+    "shield": {
+	"movement": "linear",
+	"name": "shield",
+	"velocity": 6,
+	"protection": 50,
+	"sprite": "light_shield",
+	"bonus_sprite": "flying_light_shield"
+    },
+
+    "perfect_shield": {
+	"movement": "linear",
+	"name": "perfect_shield",
+	"velocity": 5.5,
+	"duration": 5,
+	"sprite": "heavy_shield",
+	"bonus_sprite": "flying_heavy_shield"
+    }
+}

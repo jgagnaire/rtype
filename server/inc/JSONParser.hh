@@ -15,6 +15,7 @@ public:
   Entity		&getEntity();
   static bool		parseFile(const std::string &);
   static JSONParser	*parse(const std::string & = "");
+  static const std::string &getContent();
   
 private:
   bool			isFloat(const std::string &str);
@@ -94,4 +95,5 @@ private:
 
   static std::fstream	_stream;
   Entity		_main_entity;
+  static std::string	s_content;
 };
