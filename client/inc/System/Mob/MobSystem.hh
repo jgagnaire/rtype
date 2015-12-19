@@ -56,12 +56,20 @@ class	MobSystem : public ASystem
         }
 
         virtual IPacket                 *out(EventSum&) { return 0;}
+
         virtual void                    in(IPacket *p)
         {
             TcpPacket       *packet;
             if ((packet = dynamic_cast<TcpPacket*>(p)))
             {
-                (void)packet;
+                std::string tmp = std::string(static_cast<const char *>(p->getData()), p->getSize());
+                if (p->getQuery() == static_cast<uint16_t>(Codes::JsonMonsters))
+                {
+                    Entity &e = JSONParser::parse(tmp)->getEntity().manager.get<Entity>("monsters");
+                    for (auto &x : e.manager.getAll<Entity>())
+                        _monsters[x.first] = x.second;
+
+                }
             }
         }
         virtual bool                    handle(EventSum ev)
@@ -74,8 +82,9 @@ class	MobSystem : public ASystem
         virtual EventSum                getEvent() {return noEvent;}
 
     protected:
-        bool					isActiv;
-        std::list<Entity*>	*_eList;
+        bool                                        isActiv;
+        std::list<Entity*>                          *_eList;
+        std::unordered_map<std::string, Entity>     _monsters;
 };
 
 #endif

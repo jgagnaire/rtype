@@ -92,7 +92,6 @@ class ColliderSystem : public ASystem
                     && p->getQuery() == static_cast<uint16_t>(Codes::JsonHitboxes))
             {
                 std::string tmp =std::string(static_cast<const char *>(p->getData()), p->getSize());
-                std::cout << tmp << std::endl;
                 Entity &e = JSONParser::parse(tmp)->getEntity().manager.get<Entity>("hitboxes");
                 for (auto &x : e.manager.getAll<Entity>())
                 {
