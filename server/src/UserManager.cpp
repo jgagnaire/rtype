@@ -59,8 +59,6 @@ void	UserManager<T>::clearData() {
   packet.clearAll();
   init_memory(reinterpret_cast<char *>(&tmp_packet), sizeof(TCPDataHeader));
   init_memory(reinterpret_cast<char *>(&udp_packet), sizeof(UDPDataHeader));
-  std::cout << tmp_packet.header.query << std::endl;
-  std::cout << tmp_packet.header.packet_size << std::endl;
 }
 
 template<typename T>
@@ -368,7 +366,6 @@ Enum::ServerAnswers     UserManager<T>::keyPressed() {
     std::istringstream  is(udp_packet.data);
 
     is >> keypressed;
-    std::cout << name << ": " << keypressed << std::endl;
     game_mutex.unlock();
     return (Enum::OK);
 }
