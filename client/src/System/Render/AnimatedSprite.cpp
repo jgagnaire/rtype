@@ -5,7 +5,7 @@
 
 AnimatedSprite::AnimatedSprite():
     _current(0), _width(0), _height(0), _random(0), _save(0),
-    _numberPlayed(0)
+    _numberPlayed(0), _repeat(true)
 {
     _buffer = this;
 }
@@ -28,18 +28,27 @@ bool AnimatedSprite::load(const std::string &path,
     _random = random;
     _texture->setSmooth(true);
     int nbFrame = _texture->getSize().x / width;
-    int height = _texture->getSize().y;
+    int totheight = _texture->getSize().y;
+    int height = totheight > 1080 ? 1080 : totheight;
     _sprites.reserve(nbFrame);
-    for (int i = 0; i < nbFrame; ++i)
+    for (int h = 0; h < totheight; h += 1080)
     {
-        _sprites.push_back(sf::Sprite(*_texture,
-                    sf::IntRect(i * width, 0, width, height)));
+        for (int i = 0; i < nbFrame; ++i)
+        {
+            _sprites.push_back(sf::Sprite(*_texture,
+                        sf::IntRect(i * width, h, width, height)));
+        }
     }
     _position.x = 0;
     _position.y = 0;
     _width = width;
     _height = _texture->getSize().y;
     return (true);
+}
+
+void        AnimatedSprite::setRepeat(bool r)
+{
+    _repeat = r;
 }
 
 void        AnimatedSprite::setPosition(const sf::Vector2f &pos)
@@ -54,7 +63,7 @@ void        AnimatedSprite::setPosition(const sf::Vector2f &pos)
     if (_position.x + _width > 1920)
         _position.x = 1920.0f - _width;
     if (_position.y + _height > 1080)
-		_position.y = 1080.0f - _height;
+        _position.y = 1080.0f - _height;
 }
 
 void    AnimatedSprite::update(std::size_t duration)
@@ -74,6 +83,8 @@ void    AnimatedSprite::update(std::size_t duration)
                 _current = (_current + _save / (1000 / _frameBySec)) % _sprites.size();
                 if (_current < savecur)
                     ++_numberPlayed;
+                if (_repeat == false && _numberPlayed)
+                    _current = _sprites.size() - 1;
             }
             _save = 0;
         }
@@ -83,7 +94,7 @@ void    AnimatedSprite::update(std::size_t duration)
 
 std::size_t AnimatedSprite::getNbPlayed() const
 {
-     return _numberPlayed;
+    return _numberPlayed;
 }
 
 void    AnimatedSprite::draw(sf::RenderTarget &target,
