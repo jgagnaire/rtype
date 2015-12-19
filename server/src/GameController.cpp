@@ -29,11 +29,11 @@ template <typename T>
 void            GameController<T>::sendJSON(UserManager<T> *cl, Game<T> *game) const {
   auto		    &content = game->content_system;
   const std::pair<std::string, Enum::ServerNotification> strs[] =
-    {{"levels", Enum::SEND_JSON_LEVEL},
-     {"bonuses", Enum::SEND_JSON_BONUS},
+    {{"bonuses", Enum::SEND_JSON_BONUS},
      {"fires", Enum::SEND_JSON_FIRE},
      {"monsters", Enum::SEND_JSON_MONSTER},
-     {"hitboxes", Enum::SEND_JSON_HITBOX}};
+     {"hitboxes", Enum::SEND_JSON_HITBOX},
+     {"levels", Enum::SEND_JSON_LEVEL}};
 
   for (std::size_t i = 0; i < sizeof(strs) / sizeof(strs[0]); ++i) {
     cl->writeStruct({static_cast<uint16_t>(content[strs[i].first].size()),
