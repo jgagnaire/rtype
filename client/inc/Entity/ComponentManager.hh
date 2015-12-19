@@ -48,7 +48,7 @@ class ComponentManager
   }
 
   template<typename Type>
-  Type &get(const std::string& name)
+  const Type &get(const std::string& name) const
   {
     if (components.find(name) != components.end())
       {
