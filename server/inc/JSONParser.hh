@@ -16,7 +16,7 @@ public:
   static bool		parseFile(const std::string &);
   static JSONParser	*parse(const std::string & = "");
   static const std::string &getContent();
-  const std::string	&generate(Entity &);
+  static const std::string	&generate(Entity &);
 
 private:
   bool			isFloat(const std::string &str);

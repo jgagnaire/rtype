@@ -55,7 +55,11 @@ template<typename T>
 bool	UserManager<T>::IsFilled() const { return (packet.isFilled()); }
 
 template<typename T>
-void	UserManager<T>::clearData() { packet.clearAll(); }
+void	UserManager<T>::clearData() { 
+  packet.clearAll();
+  init_memory(reinterpret_cast<char *>(&tmp_packet), sizeof(TCPDataHeader));
+  init_memory(reinterpret_cast<char *>(&udp_packet), sizeof(UDPDataHeader));
+}
 
 template<typename T>
 void	UserManager<T>::fillPacketStruct() { tmp_packet = packet.retrievePacket(); }

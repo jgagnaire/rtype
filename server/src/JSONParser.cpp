@@ -27,8 +27,8 @@ const std::string	&JSONParser::generate(Entity &monster) {
   JSONParser::_serializedEntity.clear();
   try {
   JSONParser::_serializedEntity += "\""
-    + monster.manager.get<std::string>("name")
-    + "\"{\"movement\": \""
+      "monster1:" //TODO, fix it ! monster.manager.get<std::string>("name") 
+    "\"{\"movement\": \""
     + monster.manager.get<std::string>("movement")
     + "\",\"fire\":[";
   tmp = monster.manager.get<std::vector<std::string> >("fire");
