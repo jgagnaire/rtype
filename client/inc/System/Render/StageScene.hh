@@ -67,6 +67,7 @@ class StageScene : public Scene
         _changeScene.manager.add<ADrawable*>("stage", &_stage);
         _changeScene.manager.add<ADrawable*>("numero", &(_numstage[0]));
         _guiMobs.manager.add<ADrawable*>("sprite", &(_pSprites[4]));
+        _guiExplosion.manager.add<ADrawable*>("explosion", 0);
     }
 
         void            switchStage()
@@ -137,13 +138,15 @@ class StageScene : public Scene
             _win.draw(_b2);
             _win.draw(_b3);
             _win.draw(_b4);
-            for (auto x : *_entities)
+            bool    has_been_del;
+            for (auto x = _entities->begin(); x != _entities->end();)
             {
-                if (x->manager.get<std::string>("type") == "shoot")
+                has_been_del = false;
+                if ((*x)->manager.get<std::string>("type") == "shoot")
                 {
-                    _shoot.setPosition(sf::Vector2f(x->manager.get<std::pair<float, float> >("position").first,
-                                x->manager.get<std::pair<float, float> >("position").second));
-                    if (x->manager.get<Pattern::Side>("direction") == Pattern::Side::RIGHT)
+                    _shoot.setPosition(sf::Vector2f((*x)->manager.get<std::pair<float, float> >("position").first,
+                                (*x)->manager.get<std::pair<float, float> >("position").second));
+                    if ((*x)->manager.get<Pattern::Side>("direction") == Pattern::Side::RIGHT)
                     {
                         _shoot.update(duration);
                         _win.draw(_guiShoots);
@@ -154,24 +157,55 @@ class StageScene : public Scene
                         _win.draw(_guiShootsEnnemy);
                     }
                 }
-                else if (x->manager.get<std::string>("type") == "mob")
+                else if ((*x)->manager.get<std::string>("type") == "mob")
                 {
-                    if (x->manager.get<std::string>("name") == "mob-1")
+                    if ((*x)->manager.get<std::string>("name") == "mob-1")
                         _guiMobs.manager.set<ADrawable*>("sprite", &(_pSprites[4]));
-                    else if (x->manager.get<std::string>("name") == "mob-2")
+                    else if ((*x)->manager.get<std::string>("name") == "mob-2")
                         _guiMobs.manager.set<ADrawable*>("sprite", &(_pSprites[5]));
-                    else if (x->manager.get<std::string>("name") == "mob-3")
+                    else if ((*x)->manager.get<std::string>("name") == "mob-3")
                         _guiMobs.manager.set<ADrawable*>("sprite", &(_pSprites[6]));
-                    static_cast<AnimatedSprite*>(_guiMobs.manager.get<ADrawable*>("sprite"))->setPosition(sf::Vector2f(x->manager.get<std::pair<float, float> >("position").first,
-                                x->manager.get<std::pair<float, float> >("position").second));
+                    static_cast<AnimatedSprite*>(_guiMobs.manager.get<ADrawable*>("sprite"))->setPosition(sf::Vector2f((*x)->manager.get<std::pair<float, float> >("position").first,
+                                (*x)->manager.get<std::pair<float, float> >("position").second));
                     _guiMobs.manager.get<ADrawable*>("sprite")->update(duration);
                     _win.draw(_guiMobs);
                 }
-                else if (x->manager.get<std::string>("name") == "player1")
+                else if ((*x)->manager.get<std::string>("type") == "explosion")
                 {
-                    _pSprites[0].setPosition(sf::Vector2f(x->manager.get<std::pair<float, float> >("position").first,
-                                x->manager.get<std::pair<float, float> >("position").second));
+                    AnimatedSprite *ex = new AnimatedSprite;
+
+                    if (ex->load("client/res/explosion_128.png"))
+                    {
+                        _explosions.push_back(ex);
+
+                        ex->setPosition(sf::Vector2f((*x)->manager.get<std::pair<float, float> >("position").first,
+                                    (*x)->manager.get<std::pair<float, float> >("position").second));
+                    }
+                    else
+                        delete ex;
+                    x = _entities->erase(x);
+                    has_been_del = true;
                 }
+                else if ((*x)->manager.get<std::string>("name") == "player1")
+                {
+                    _pSprites[0].setPosition(sf::Vector2f((*x)->manager.get<std::pair<float, float> >("position").first,
+                                (*x)->manager.get<std::pair<float, float> >("position").second));
+                }
+                if (!has_been_del)
+                    ++x;
+            }
+            for (std::size_t i = 0; i < _explosions.size(); ++i)
+            {
+                _explosions[i]->update(duration);
+                if (static_cast<AnimatedSprite*>(_explosions[i])->getNbPlayed())
+                {
+                    delete _explosions[i];
+                    _explosions[i] = 0;
+                    _explosions.erase(_explosions.begin() + i);
+                    continue ;
+                }
+                _guiExplosion.manager.set<ADrawable*>("explosion", _explosions[i]);
+                _win.draw(_guiExplosion);
             }
             for (auto x : _players)
                 x.second->update(duration);
@@ -230,6 +264,7 @@ class StageScene : public Scene
         Entity                                              _guiShoots;
         Entity                                              _guiShootsEnnemy;
         Entity                                              _guiMobs;
+        Entity                                              _guiExplosion;
         Entity                                              _changeScene;
 
         View                                                _view;
@@ -242,6 +277,7 @@ class StageScene : public Scene
         std::vector<AnimatedSprite>                         _pSprites;
         AnimatedSprite                                      _shoot;
         AnimatedSprite                                      _shootEnnemy;
+        std::vector<AnimatedSprite*>                        _explosions;
 
         EventSum                                            _direction;
         uint64_t                                            _lastId;
