@@ -13,10 +13,11 @@ class StageScene : public Scene
 {
     public:
         StageScene(IWindow &win, std::list<Entity*> *e):
-            Scene(win, e), _stageNb(4), _pSprites(7), _direction(noEvent),
+            Scene(win, e), _stageNb(1), _pSprites(7), _direction(noEvent),
             _numstage(5)
     {
         _pSprites[0].load("client/res/ship/player-ship-blue2_111.png");
+        //_pSprites[0].load("client/res/force_38.png");
         //_pSprites[0].load("client/res/boss/boss-5_535.png");
         _pSprites[1].load("client/res/ship/player-ship-green2_111.png");
         _pSprites[2].load("client/res/ship/player-ship-red2_111.png");
@@ -26,7 +27,9 @@ class StageScene : public Scene
         _pSprites[6].load("client/res/mobs/mob-3.png");
         _shoot.load("client/res/bullet.png");
         _shootEnnemy.load("client/res/bullet2.png");
-
+        _transition.load("client/res/transition_1920.png", false, 5);
+        _transition.setRepeat(false);
+        _hud.load("client/res/HUD.png");
         for (int i = 1; i <= 5; ++i)
         {
             ScrollingSprite *s1 = new ScrollingSprite();
@@ -64,15 +67,17 @@ class StageScene : public Scene
         _stage.setPosition(sf::Vector2f(960 - 576 / 2 - 100, 540 - 123 / 2));
         for (auto &x : _numstage)
             x.setPosition(sf::Vector2f(960 - 576 / 2 + 576, 540 - 123 / 2));
-        _changeScene.manager.add<ADrawable*>("stage", &_stage);
-        _changeScene.manager.add<ADrawable*>("numero", &(_numstage[0]));
+        _changeScene.manager.add<ADrawable*>("2stage", &_stage);
+        _changeScene.manager.add<ADrawable*>("2numero", &(_numstage[0]));
+        _changeScene.manager.add<ADrawable*>("1", &_transition);
         _guiMobs.manager.add<ADrawable*>("sprite", &(_pSprites[4]));
         _guiExplosion.manager.add<ADrawable*>("explosion", 0);
+        _b5.manager.add<ADrawable*>("hud", &_hud);
     }
 
         void            switchStage()
         {
-            _durationAnimation = 5000;
+            _durationAnimation = 7000;
             _changing = true;
         }
 
@@ -83,7 +88,8 @@ class StageScene : public Scene
             _b3.manager.set<ADrawable*>("background", _s3[_stageNb - 1]);
             _b4.manager.set<ADrawable*>("background", _s4[_stageNb - 1]);
             _b5.manager.set<ADrawable*>("background", _s5[_stageNb - 1]);
-            _changeScene.manager.set<ADrawable*>("numero", &(_numstage[_stageNb - 1]));
+            _changeScene.manager.set<ADrawable*>("2numero", &(_numstage[_stageNb - 1]));
+            _changeScene.manager.set<ADrawable*>("1", &_transition);
         }
 
         virtual void    init()
@@ -278,6 +284,8 @@ class StageScene : public Scene
         std::vector<AnimatedSprite>                         _pSprites;
         AnimatedSprite                                      _shoot;
         AnimatedSprite                                      _shootEnnemy;
+        AnimatedSprite                                      _transition;
+        AnimatedSprite                                      _hud;
         std::vector<AnimatedSprite*>                        _explosions;
 
         EventSum                                            _direction;

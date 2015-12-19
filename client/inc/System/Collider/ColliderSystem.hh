@@ -43,17 +43,17 @@ class ColliderSystem : public ASystem
             }
             else if (type == "mob")
             {
-                if (name == "mob-1")
+                if (name == "mob1")
                 {
                     s.first = 97;
                     s.second = 72;
                 }
-                else if (name == "mob-2")
+                else if (name == "mob2")
                 {
                     s.first = 114;
                     s.second = 39;
                 }
-                else if (name == "mob-3")
+                else if (name == "mob3")
                 {
                     s.first = 58;
                     s.second = 87;

@@ -20,7 +20,9 @@ public:
   virtual void update(int);
   virtual bool handle(EventSum e)
   {
-    if (e & Key_Sound)
+    if (e == E_Stage)
+      _isActive = true;
+    if (e & Key_Sound && _isActive == true)
       this->_recorder.changeState();
     return true;
   }
@@ -45,6 +47,7 @@ private:
   Recorder			_recorder;
   std::vector <Entity *>	_users;
   std::list <IPacket *>		_packets;
+  bool				_isActive;
 };
 
 #endif //!AUDIOCALLSYSTEM_HH_

@@ -20,6 +20,7 @@ class AnimatedSprite : public sf::Drawable, public ADrawable
         virtual void    draw(sf::RenderTarget &target,
                 sf::RenderStates states) const;
         std::size_t     getNbPlayed() const;
+        void            setRepeat(bool);
 
     private:
         std::vector<sf::Sprite>         _sprites;
@@ -32,6 +33,7 @@ class AnimatedSprite : public sf::Drawable, public ADrawable
         unsigned                        _frameBySec;
         std::size_t                     _save;
         std::size_t                     _numberPlayed;
+        bool                            _repeat;
 };
 
 #endif /* end of include guard: ANIMATEDSPRITE_HH_VTLZOWBQ */
