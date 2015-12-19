@@ -66,7 +66,7 @@ float			JSONParser::floatParse(std::string &content) {
   content.erase(0, val);
   is.str(tmp);
   is >> stock;
-  return (stock);
+  return (static_cast<float>(stock));
 }
 
 int			JSONParser::valParse(std::string &content) {
