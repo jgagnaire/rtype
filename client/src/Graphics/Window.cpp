@@ -132,16 +132,15 @@ EventSum Window::getEvent()
 
 void  Window::draw(Entity &e)
 {
-    std::vector<ADrawable*> vec = e.manager.getAll<ADrawable*>();
+    auto vec = e.manager.getAll<ADrawable*>();
 
     try {
         _window.setView(*(static_cast<const sf::View*>(e.manager.get<AView*>("view")->getBuffer())));
     } catch (const ComponentManagerException &)
     {}
-    for (std::vector<ADrawable*>::iterator it = vec.begin();
-            it != vec.end(); ++it)
+    for (auto it = vec.begin(); it != vec.end(); ++it)
     {
-        const sf::Drawable *d = static_cast<const sf::Drawable *>((*it)->getBuffer());
+        const sf::Drawable *d = static_cast<const sf::Drawable *>(it->second->getBuffer());
         if (d)
             _window.draw(*d);
     }

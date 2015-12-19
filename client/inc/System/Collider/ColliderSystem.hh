@@ -3,6 +3,7 @@
 
 #include "System/ASystem.hh"
 #include "System/Shoot/Pattern.hh"
+#include "Utility/JSONParser.hh"
 
 class ColliderSystem : public ASystem
 {
@@ -28,36 +29,13 @@ class ColliderSystem : public ASystem
             return e;
         }
 
-        void                            getSize(std::pair<int, int> &s,
-                const std::string &type, const std::string &name)
+        void                            setSize(std::pair<int, int> &s,
+                const std::string &name)
         {
-            if (type == "player")
+           if (_hitboxes.find(name) != _hitboxes.end())
             {
-                s.first = 111;
-                s.second = 39;
-            }
-            else if (type == "shoot")
-            {
-                s.first = 20;
-                s.second = 12;
-            }
-            else if (type == "mob")
-            {
-                if (name == "mob1")
-                {
-                    s.first = 97;
-                    s.second = 72;
-                }
-                else if (name == "mob2")
-                {
-                    s.first = 114;
-                    s.second = 39;
-                }
-                else if (name == "mob3")
-                {
-                    s.first = 58;
-                    s.second = 87;
-                }
+                s.first = _hitboxes[name].first;
+                s.second = _hitboxes[name].second;
             }
             else
             {
@@ -78,9 +56,8 @@ class ColliderSystem : public ASystem
                 for (auto a = _eList->begin(); a != _eList->end(); ++a)
                 {
                     p1 = (*a)->manager.get<std::pair<float, float> >("position");
-                    t1 = (*a)->manager.get<std::string>("type");
 					d1 = (*a)->manager.get<Pattern::Side>("direction");
-                    getSize(s1, t1, (*a)->manager.get<std::string>("name"));
+                    setSize(s1, (*a)->manager.get<std::string>("name"));
                     for (auto b = _eList->begin(); b != _eList->end(); ++b)
                     {
                         if (*a != *b)
@@ -88,7 +65,7 @@ class ColliderSystem : public ASystem
                             p2 = (*b)->manager.get<std::pair<float, float> >("position");
                             t2 = (*b)->manager.get<std::string>("type");
 							d2 = (*b)->manager.get<Pattern::Side>("direction");
-                            getSize(s2, t2, (*b)->manager.get<std::string>("name"));
+                            setSize(s2, (*b)->manager.get<std::string>("name"));
                             if (t1 != t2 && d1 != d2 && p1.first < p2.first + s2.first &&
                                     p1.first + s1.first > p2.first &&
                                     p1.second < p2.second + s2.second &&
@@ -107,7 +84,23 @@ class ColliderSystem : public ASystem
             }
         }
         virtual IPacket                 *out(EventSum &) { return 0; }
-        virtual void                    in(IPacket*) {}
+        virtual void                    in(IPacket *p)
+        {
+            TcpPacket                   *packet;
+
+            if ((packet = dynamic_cast<TcpPacket*>(p))
+                    && p->getQuery() == static_cast<uint16_t>(Codes::JsonHitboxes))
+            {
+                std::string tmp =std::string(static_cast<const char *>(p->getData()), p->getSize());
+                Entity &e = JSONParser::parse(tmp)->getEntity().manager.get<Entity>("hitboxes");
+                for (auto &x : e.manager.getAll<Entity>())
+                {
+                    _hitboxes[x.first] = std::pair<int, int>(
+                            x.second.manager.get<int>("x"),
+                            x.second.manager.get<int>("y"));
+                }
+            }
+        }
 
         virtual bool                    handle(EventSum e) {
             if (e == E_Stage)
@@ -119,8 +112,9 @@ class ColliderSystem : public ASystem
 
         virtual EventSum                getEvent() { return noEvent; }
     private:
-        bool	                        _isActiv;
-        std::list<Entity*>              *_eList;
+        bool	                                                    _isActiv;
+        std::list<Entity*>                                          *_eList;
+        std::unordered_map<std::string, std::pair<int, int> >       _hitboxes;
 
 };
 

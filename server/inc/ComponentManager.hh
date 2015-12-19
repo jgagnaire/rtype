@@ -98,7 +98,7 @@ type for compenents \"" + name + "\" is : " + components[name]->getType());
   template<typename Type>
   std::vector<std::pair<std::string, Type> >	getAll(void)
   {
-    std::vector<std::pair<std::string, Type> > v;
+    std::vector<std::pair<std::string, Type> >	v;
 
     for (std::unordered_map<std::string, IComponent*>::iterator it
 	   = components.begin();

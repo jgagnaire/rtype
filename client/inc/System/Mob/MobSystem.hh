@@ -7,23 +7,33 @@
 class	MobSystem : public ASystem
 {
     private:
-        Entity *createMob(void)
+        Entity *createMob(const std::string &name, const std::pair<float, float> &pos)
         {
             Entity *e = new Entity;
-            e->manager.add<std::string>("name", "mob1");
+            e->manager.add<std::string>("name", name);
             e->manager.add<std::string>("type", "mob");
-            e->manager.add<float>("velocity", 0.30f);
-            e->manager.add("position",
-                    std::pair<float, float>(1850, rand() % 1000));
-            e->manager.add<std::function<void (Entity&, Pattern::Side, int)> >
-                ("pattern", Pattern::line);
+            // TODO REMOVE THE IFS
+            if (_monsters.size())
+                e->manager.add<float>("velocity", _monsters[name].manager.get<float>("velocity"));
+            else
+                e->manager.add<float>("velocity", 2.0f);
+            e->manager.add<std::pair<float, float> >("position", pos);
+            if (_monsters.size())
+                e->manager.add<std::function<void (Entity&, Pattern::Side, int)> >
+                    ("pattern",
+                     Pattern::getPattern(
+                         _monsters[name].manager.get<std::string>("movement")));
+            else
+                e->manager.add<std::function<void (Entity&, Pattern::Side, int)> >
+                    ("pattern", &Pattern::line);
             e->manager.add<Pattern::Side>("direction", Pattern::Side::LEFT);
             return e;
         }
     public:
         MobSystem() {}
         MobSystem(std::list<Entity*> *list) : isActiv(false), _eList(list) {
-            _eList->push_back(createMob());
+            std::pair<float, float> p(1920, 500);
+            _eList->push_back(createMob("mob2", p));
             _eventList.push_back(E_Stage);
         }
         virtual ~MobSystem() {}
@@ -46,7 +56,8 @@ class	MobSystem : public ASystem
                     if (tmp.first <= 0)
                     {
                         x = _eList->erase(x);
-                        _eList->push_back(createMob());
+                        std::pair<float, float> p(1920, 500);
+                        _eList->push_back(createMob("mob2", p));
                         has_been_del = true;
                     }
                 }
@@ -54,8 +65,23 @@ class	MobSystem : public ASystem
                     ++x;
             }
         }
-        virtual IPacket                 *out(EventSum&) { return NULL;}
-        virtual void                    in(IPacket*) {}
+
+        virtual IPacket                 *out(EventSum&) { return 0;}
+
+        virtual void                    in(IPacket *p)
+        {
+            TcpPacket       *packet;
+            if ((packet = dynamic_cast<TcpPacket*>(p)))
+            {
+                std::string tmp = std::string(static_cast<const char *>(p->getData()), p->getSize());
+                if (p->getQuery() == static_cast<uint16_t>(Codes::JsonMonsters))
+                {
+                    Entity &e = JSONParser::parse(tmp)->getEntity().manager.get<Entity>("monsters");
+                    for (auto &x : e.manager.getAll<Entity>())
+                        _monsters[x.first] = x.second;
+                }
+            }
+        }
         virtual bool                    handle(EventSum ev)
         {
             if (ev == E_Stage)
@@ -66,8 +92,9 @@ class	MobSystem : public ASystem
         virtual EventSum                getEvent() {return noEvent;}
 
     protected:
-        bool					isActiv;
-        std::list<Entity*>	*_eList;
+        bool                                        isActiv;
+        std::list<Entity*>                          *_eList;
+        std::unordered_map<std::string, Entity>     _monsters;
 };
 
 #endif

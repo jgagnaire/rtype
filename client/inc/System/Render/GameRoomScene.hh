@@ -166,7 +166,7 @@ class GameRoomScene : public Scene
                 _update = false;
                 _rooms.clear();
                 for (auto x : _changingText.manager.getAll<ADrawable*>())
-                    delete x;
+                    delete x.second;
                 _changingText.manager.removeAll();
                 _currentR = 0;
                 return (&_packet);

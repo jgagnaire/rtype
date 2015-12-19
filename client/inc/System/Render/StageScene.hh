@@ -27,8 +27,8 @@ class StageScene : public Scene
         _pSprites[6].load("client/res/mobs/mob-3.png");
         _shoot.load("client/res/bullet.png");
         _shootEnnemy.load("client/res/bullet2.png");
-        _transition.load("client/res/transition_1920.png", false, 5);
-        _transition.setRepeat(false);
+        //TODO, animation does not work _transition.load("client/res/transition_1920.png", false, 5);
+	_transition.setRepeat(false);
         _hud.load("client/res/HUD.png");
         for (int i = 1; i <= 5; ++i)
         {
@@ -165,11 +165,11 @@ class StageScene : public Scene
                 }
                 else if ((*x)->manager.get<std::string>("type") == "mob")
                 {
-                    if ((*x)->manager.get<std::string>("name") == "mob-1")
+                    if ((*x)->manager.get<std::string>("name") == "mob1")
                         _guiMobs.manager.set<ADrawable*>("sprite", &(_pSprites[4]));
-                    else if ((*x)->manager.get<std::string>("name") == "mob-2")
+                    else if ((*x)->manager.get<std::string>("name") == "mob2")
                         _guiMobs.manager.set<ADrawable*>("sprite", &(_pSprites[5]));
-                    else if ((*x)->manager.get<std::string>("name") == "mob-3")
+                    else if ((*x)->manager.get<std::string>("name") == "mob3")
                         _guiMobs.manager.set<ADrawable*>("sprite", &(_pSprites[6]));
                     static_cast<AnimatedSprite*>(_guiMobs.manager.get<ADrawable*>("sprite"))->setPosition(sf::Vector2f((*x)->manager.get<std::pair<float, float> >("position").first,
                                 (*x)->manager.get<std::pair<float, float> >("position").second));
@@ -232,7 +232,7 @@ class StageScene : public Scene
                     _durationAnimation = 0;
                 }
                 for (auto x : _changeScene.manager.getAll<ADrawable*>())
-                    x->update(duration);
+                    x.second->update(duration);
                 if (_durationAnimation > 0)
                     _win.draw(_changeScene);
             }
