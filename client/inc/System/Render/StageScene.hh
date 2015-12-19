@@ -232,7 +232,7 @@ class StageScene : public Scene
                     _durationAnimation = 0;
                 }
                 for (auto x : _changeScene.manager.getAll<ADrawable*>())
-                    x->update(duration);
+                    x.second->update(duration);
                 if (_durationAnimation > 0)
                     _win.draw(_changeScene);
             }

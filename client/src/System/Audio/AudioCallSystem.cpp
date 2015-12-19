@@ -35,7 +35,7 @@ void	AudioCallSystem::update(int)
 	    catch (std::exception const &) {}
 	    if (!((*it)->manager.getAll<ISoundBuffer *>().empty()))
 	      {
-		tmp = (*it)->manager.getAll<ISoundBuffer *>().front();
+		tmp = (*it)->manager.getAll<ISoundBuffer *>()[0].second;
 		break ;
 	      }
 	  }
