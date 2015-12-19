@@ -2,6 +2,7 @@
 # define COLLIDER_HH_
 
 #include "System/ASystem.hh"
+#include "System/Shoot/Pattern.hh"
 
 class ColliderSystem : public ASystem
 {
@@ -13,6 +14,19 @@ class ColliderSystem : public ASystem
             }
         virtual ~ColliderSystem() {}
 
+
+        Entity          *createExplosion(const std::pair<float, float> &pos)
+        {
+            Entity *e = new Entity;
+            e->manager.add<std::string>("name", "explosion");
+            e->manager.add<std::string>("type", "explosion");
+            e->manager.add<float>("velocity", 0.0f);
+            e->manager.add<std::pair<float, float> >("position", pos);
+            e->manager.add<std::function<void (Entity&, Pattern::Side, int)> >
+                ("pattern", Pattern::line);
+            e->manager.add<Pattern::Side>("direction", Pattern::Side::LEFT);
+            return e;
+        }
 
         void                            getSize(std::pair<int, int> &s,
                 const std::string &type, const std::string &name)
@@ -45,6 +59,11 @@ class ColliderSystem : public ASystem
                     s.second = 87;
                 }
             }
+            else
+            {
+                s.first = 0;
+                s.second = 0;
+            }
         }
 
         virtual void                    update(int)
@@ -56,28 +75,33 @@ class ColliderSystem : public ASystem
 
             if (_isActiv)
             {
-                for (auto a : *_eList)
+                for (auto a = _eList->begin(); a != _eList->end(); ++a)
                 {
-                    p1 = a->manager.get<std::pair<float, float> >("position");
-                    t1 = a->manager.get<std::string>("type");
-					d1 = a->manager.get<Pattern::Side>("direction");
-                    getSize(s1, t1, a->manager.get<std::string>("name"));
-                    for (auto b : *_eList)
+                    p1 = (*a)->manager.get<std::pair<float, float> >("position");
+                    t1 = (*a)->manager.get<std::string>("type");
+					d1 = (*a)->manager.get<Pattern::Side>("direction");
+                    getSize(s1, t1, (*a)->manager.get<std::string>("name"));
+                    for (auto b = _eList->begin(); b != _eList->end(); ++b)
                     {
-                        if (a != b)
+                        if (*a != *b)
                         {
-                            p2 = b->manager.get<std::pair<float, float> >("position");
-                            t2 = b->manager.get<std::string>("type");
-							d2 = b->manager.get<Pattern::Side>("direction");
-                            getSize(s2, t2, b->manager.get<std::string>("name"));
+                            p2 = (*b)->manager.get<std::pair<float, float> >("position");
+                            t2 = (*b)->manager.get<std::string>("type");
+							d2 = (*b)->manager.get<Pattern::Side>("direction");
+                            getSize(s2, t2, (*b)->manager.get<std::string>("name"));
                             if (t1 != t2 && d1 != d2 && p1.first < p2.first + s2.first &&
                                     p1.first + s1.first > p2.first &&
                                     p1.second < p2.second + s2.second &&
-                                    s1.second + p1.second > p2.second) {
-                                std::cout << "Allah u akbar" << std::endl;
+                                    s1.second + p1.second > p2.second)
+                            {
+                                _eList->push_back(createExplosion(p2));
+                                b = _eList->erase(b);
+                                a = _eList->erase(a);
+                                if (a != _eList->end())
+                                    --a;
+                                break ;
                             }
                         }
-
                     }
                 }
             }

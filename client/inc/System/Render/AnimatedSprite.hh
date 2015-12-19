@@ -19,10 +19,11 @@ class AnimatedSprite : public sf::Drawable, public ADrawable
         const sf::Vector2f &getPosition() const;
         virtual void    draw(sf::RenderTarget &target,
                 sf::RenderStates states) const;
+        std::size_t     getNbPlayed() const;
 
     private:
         std::vector<sf::Sprite>         _sprites;
-        sf::Texture                     _texture;
+        sf::Texture                     *_texture;
         sf::Vector2f                    _position;
         int                             _current;
         int                             _width;
@@ -30,6 +31,7 @@ class AnimatedSprite : public sf::Drawable, public ADrawable
         bool                            _random;
         unsigned                        _frameBySec;
         std::size_t                     _save;
+        std::size_t                     _numberPlayed;
 };
 
 #endif /* end of include guard: ANIMATEDSPRITE_HH_VTLZOWBQ */

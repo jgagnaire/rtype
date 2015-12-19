@@ -10,10 +10,8 @@ public:
     virtual int	    newData(UserManager<T> *);
 
     bool            quitGame(UserManager<T> *);
-    bool            currentPosition(UserManager<T> *);
     bool            keyPressed(UserManager<T> *);
     bool            audioPacket(UserManager<T> *);
-    bool            takeForce(UserManager<T> *);
 
 private:
     GameplayController	&operator=(GameplayController const &) { return *this; }

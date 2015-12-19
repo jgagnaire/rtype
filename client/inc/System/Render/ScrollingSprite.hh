@@ -18,7 +18,7 @@ class ScrollingSprite : public sf::Drawable, public ADrawable
                 sf::RenderStates states) const;
 
     private:
-        sf::Texture         _texture;
+        sf::Texture         *_texture;
         sf::Sprite          _sprite;
         unsigned            _speed;
         unsigned            _frameBySec;
