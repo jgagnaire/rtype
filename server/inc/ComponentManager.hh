@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <vector>
 #include <iostream>
+#include <utility>
 
 class ComponentManager
 {
@@ -95,16 +96,17 @@ type for compenents \"" + name + "\" is : " + components[name]->getType());
 		}
   
   template<typename Type>
-  std::vector<Type>	getAll(void)
+  std::vector<std::pair<std::string, Type> >	getAll(void)
   {
-    std::vector<Type> v;
-    
+    std::vector<std::pair<std::string, Type> > v;
+
     for (std::unordered_map<std::string, IComponent*>::iterator it
 	   = components.begin();
 	 it != components.end();++it)
       {
 	if (it->second->getType() == typeid(Type).name())
-	  v.push_back((static_cast<Component<Type>* >(it->second))->getValue());
+	  v.push_back(std::make_pair(it->first,
+				     (static_cast<Component<Type>* >(it->second))->getValue()));
       }
     return (v);
   }
