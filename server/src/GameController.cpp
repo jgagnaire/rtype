@@ -30,7 +30,7 @@ void            GameController<T>::sendJSON(UserManager<T> *cl) const {
   const std::string strs[] = {"levels", "bonuses", "fires", "monsters", "hitboxes"};
   auto		    content = GameManager<T>::instance().getContent();
 
-  for (int i = 0; i < sizeof(strs) / sizeof(strs[0]); ++i) {
+  for (std::size_t i = 0; i < sizeof(strs) / sizeof(strs[0]); ++i) {
     cl->writeStruct({static_cast<uint16_t>(content[strs[i]].size()),
 	  Enum::SEND_JSON});
     cl->writeMsg(content[strs[i]]);

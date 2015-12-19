@@ -12,7 +12,7 @@ GameManager<SCK>::GameManager() {
   const std::string strs[] = {"fires", "levels", "monsters",
       "bonuses", "hitboxes"};
 
-  for (int i = 0; i < sizeof(strs) / sizeof(strs[0]); ++i) {
+  for (std::size_t i = 0; i < sizeof(strs) / sizeof(strs[0]); ++i) {
     JSONParser::parseFile(GameManager<SCK>::configuration.manager.get<std::string>(strs[i]));
     _game_system[strs[i]] = JSONParser::parse();
     _content_system[strs[i]] = JSONParser::getContent();
