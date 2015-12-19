@@ -8,18 +8,7 @@ template <typename SCK>
 Entity GameManager<SCK>::configuration;
 
 template <typename SCK>
-GameManager<SCK>::GameManager() {
-  const std::string strs[] = {"fires", "levels", "monsters",
-      "bonuses", "hitboxes"};
-
-  for (std::size_t i = 0; i < sizeof(strs) / sizeof(strs[0]); ++i) {
-    JSONParser::parseFile(GameManager<SCK>::configuration.manager.get<std::string>(strs[i]));
-    _game_system[strs[i]] = JSONParser::parse();
-    _content_system[strs[i]] = JSONParser::getContent();
-  }
-  Entity e = _game_system["levels"]->getEntity().manager.get<Entity>("levels");
-  std::cout << JSONParser::generate(e, "levels") << std::endl;
-}
+GameManager<SCK>::GameManager() {}
 
 template <typename SCK>
 GameManager<SCK>     &GameManager<SCK>::instance() {
