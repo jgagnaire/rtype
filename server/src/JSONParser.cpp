@@ -21,31 +21,114 @@ JSONParser	&JSONParser::operator=(const JSONParser &jp) {
   return (*this);
 }
 
-const std::string	&JSONParser::generate(Entity &monster) {
-  std::vector<std::string>	tmp;
+template <typename T>
+void	JSONParser::addContent(std::string &content,
+			       const std::vector<std::pair<std::string, T> > &data) {
+  for (std::size_t i = 0; i < data.size(); ++i)
+    content += "\""
+      + data[i].first
+      + "\":"
+      + std::to_string(data[i].second)
+      + ",";
+}
 
-  JSONParser::_serializedEntity.clear();
-  try {
-  JSONParser::_serializedEntity += "\""
-      "monster1:" //TODO, fix it ! monster.manager.get<std::string>("name") 
-    "\"{\"movement\": \""
-    + monster.manager.get<std::string>("movement")
-    + "\",\"fire\":[";
-  tmp = monster.manager.get<std::vector<std::string> >("fire");
-  for (unsigned int i = 0; i < tmp.size(); ++i)
+template <>
+void	JSONParser::addContent<std::string>(std::string &content,
+					    const std::vector<std::pair<std::string, std::string> > &data) {
+  for (std::size_t i = 0; i < data.size(); ++i)
+    content += "\""
+      + data[i].first
+      + "\":\""
+      + data[i].second
+      + "\",";
+}
+
+template <typename T>
+void	JSONParser::addVector(std::string &content,
+			      std::vector<std::pair<std::string, std::vector<T> > > &data) {
+  for (std::size_t i = 0; i < data.size(); ++i)
     {
-      JSONParser::_serializedEntity += "\""
-	+ tmp[i]
-	+ "\",";
+      content += "\""
+	+ data[i].first
+	+ "\":[";
+      for (std::size_t j = 0; j < data[i].second.size(); ++j)
+	  content += "\""
+	    + std::to_string(data[i].second[j])
+	    + "\",";
+      content.pop_back();
+      content += "],";
     }
-  JSONParser::_serializedEntity.pop_back();
-  JSONParser::_serializedEntity += "],\"velocity\":"
-    + std::to_string(monster.manager.get<float>("velocity"))
-    + ",\"life\":"
-    + std::to_string(monster.manager.get<int>("life"))
-    + "}";
-  } catch (const ComponentManagerException &e) {}
-  return JSONParser::_serializedEntity;
+}
+
+template <>
+void	JSONParser::addVector<std::string>(std::string &content,
+					   std::vector<std::pair<std::string, std::vector<std::string> > > &data) {
+  for (std::size_t i = 0; i < data.size(); ++i)
+    {
+      content += "\""
+	+ data[i].first
+	+ "\":[";
+      for (std::size_t j = 0; j < data[i].second.size(); ++j)
+	  content += "\""
+	    + data[i].second[j]
+	    + "\",";
+      content.pop_back();
+      content += "],";
+    }
+}
+
+template <>
+void	JSONParser::addVector<Entity>(std::string &content,
+				      std::vector<std::pair<std::string, std::vector<Entity> > > &data) {
+  for (std::size_t i = 0; i < data.size(); ++i)
+    {
+      content += "\""
+	+ data[i].first
+	+ "\":[";
+      for (std::size_t j = 0; j < data[i].second.size(); ++j)
+	content += generate(data[i].second[j], "lol")
+	  + ",";
+      content.pop_back();
+      content += "],";
+    }
+}
+
+std::string	JSONParser::generate(Entity &monster, const std::string &name) {
+  std::string	content;
+
+  content += "\""
+    + name
+    + "\":{";
+  addContent(content, monster.manager.getAll<int>());
+  addContent(content, monster.manager.getAll<float>());
+  addContent(content, monster.manager.getAll<std::string>());
+
+  auto vectorInt = monster.manager.getAll<std::vector<int> >();
+  addVector(content, vectorInt);
+  auto vectorFloat = monster.manager.getAll<std::vector<float> >();
+  addVector(content, vectorFloat);
+  auto vectorString = monster.manager.getAll<std::vector<std::string> >();
+  addVector(content, vectorString);
+  auto vectorEntity = monster.manager.getAll<std::vector<Entity> >();
+  addVector(content, vectorEntity);
+
+
+  // auto tmpStringVector = monster.manager.getAll<std::vector<std::string> >();
+
+  // for (std::size_t i = 0; i < tmpStringVector.size(); ++i)
+  //   {
+  //     for (std::size_t j = 0; j < tmpStringVector[i].second.size(); ++j)
+  // 	addContent(content, tmpString[i][j].first, tmpStringVector[i].second[j]);
+  //   }
+  
+
+
+  auto tmpEntity = monster.manager.getAll<Entity>();
+  for (std::size_t i = 0; i < tmpEntity.size(); ++i)
+    content += generate(tmpEntity[i].second, tmpEntity[i].first) + ",";
+  content.pop_back();
+  content += "}";
+  return content;
 }
 
 bool	JSONParser::parseFile(const std::string & pathname) {
