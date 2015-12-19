@@ -21,6 +21,7 @@ namespace Enum
         IS_STRING,
         IS_TAB,
         IS_NUM,
+        IS_FLOAT,
     };
 
     enum ProtocolIndex {

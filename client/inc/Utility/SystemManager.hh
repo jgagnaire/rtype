@@ -66,6 +66,11 @@ class SystemManager
             UdpPacket       lastEvent;
             std::string     tmp;
 
+            if (_networkManager.isConnected() == false)
+            {
+                std::cerr << "Can't connect" << std::endl;
+                return ;
+            }
             lastEvent.setQuery(static_cast<uint16_t>(UdpCodes::KeyPressed));
             while (ea->getWin()->isOpen())
             {
