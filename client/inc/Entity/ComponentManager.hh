@@ -1,11 +1,12 @@
 #ifndef COMPENENTMANAGER_H_
 # define COMPENENTMANAGER_H_
 
-#include "Component/Component.hh"
-#include "Entity/ManagerException.hh"
+#include "Component.hh"
+#include "ManagerException.hh"
 #include <unordered_map>
 #include <vector>
 #include <iostream>
+#include <utility>
 
 class ComponentManager
 {
@@ -43,9 +44,9 @@ class ComponentManager
   {
     if (components.find(name) != components.end())
       return (components[name]->getType());
-    throw ComponentManagerException("No such component to get : [invalid name] : " + name);
+    throw ComponentManagerException("No such component to get : [invalid name]");
   }
-  
+
   template<typename Type>
   Type &get(const std::string& name)
   {
@@ -54,18 +55,12 @@ class ComponentManager
 	if (components[name]->getType() == typeid(Type).name())
 	  return (static_cast<Component<Type>*>(components[name])->getValue());
 	else
-	  throw ComponentManagerException("No such component to get : [invalid type] "
-					  "type for compenents \"" + name + "\" is : " + components[name]->getType());
+	  throw ComponentManagerException("No such component to get : [invalid type] \
+type for compenents \"" + name + "\" is : " + components[name]->getType());
       }
-    throw ComponentManagerException("No such component to get : [invalid name] " + name);
+    throw ComponentManagerException("No such component to get : [invalid name]");
   }
 
-  template<typename Type>
-  Type const &get(const std::string& name) const
-  {
-    return this->get<Type>(name);
-  }
-  
   template<typename Type>
   bool	remove(const std::string& name = "")
   {
@@ -101,16 +96,17 @@ class ComponentManager
 		}
   
   template<typename Type>
-  std::vector<Type>	getAll(void)
+  std::vector<std::pair<std::string, Type> >	getAll(void)
   {
-    std::vector<Type> v;
-    
+    std::vector<std::pair<std::string, Type> > v;
+
     for (std::unordered_map<std::string, IComponent*>::iterator it
 	   = components.begin();
 	 it != components.end();++it)
       {
 	if (it->second->getType() == typeid(Type).name())
-	  v.push_back((static_cast<Component<Type>* >(it->second))->getValue());
+	  v.push_back(std::make_pair(it->first,
+				     (static_cast<Component<Type>* >(it->second))->getValue()));
       }
     return (v);
   }

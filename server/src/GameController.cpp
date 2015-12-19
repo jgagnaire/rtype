@@ -27,13 +27,18 @@ int	            GameController<T>::newData(UserManager<T> *cl) {
 
 template <typename T>
 void            GameController<T>::sendJSON(UserManager<T> *cl) const {
-  const std::string strs[] = {"levels", "bonuses", "fires", "monsters", "hitboxes"};
   auto		    content = GameManager<T>::instance().getContent();
+  const std::pair<std::string, Enum::ServerNotification> strs[] =
+    {{"levels", Enum::SEND_JSON_LEVEL},
+     {"bonuses", Enum::SEND_JSON_BONUS},
+     {"fires", Enum::SEND_JSON_FIRE},
+     {"monsters", Enum::SEND_JSON_MONSTER},
+     {"hitboxes", Enum::SEND_JSON_HITBOX}};
 
   for (std::size_t i = 0; i < sizeof(strs) / sizeof(strs[0]); ++i) {
-    cl->writeStruct({static_cast<uint16_t>(content[strs[i]].size()),
-	  Enum::SEND_JSON});
-    cl->writeMsg(content[strs[i]]);
+    cl->writeStruct({static_cast<uint16_t>(content[strs[i].first].size()),
+	  strs[i].second});
+    cl->writeMsg(content[strs[i].first]);
   }
 }
 
