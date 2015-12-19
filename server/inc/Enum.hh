@@ -85,6 +85,7 @@ namespace Enum
         PLAYER_KILLED = 403,
         BROADCAST_AUDIO = 404,
         USER_TAKE_FORCE = 405,
+	SEND_JSON = 405,
         USER_QUIT_GAME = 406,
         USER_KEYPRESS = 407,
 	PLAYER_POS = 408,

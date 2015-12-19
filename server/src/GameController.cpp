@@ -26,14 +26,27 @@ int	            GameController<T>::newData(UserManager<T> *cl) {
 }
 
 template <typename T>
+void            GameController<T>::sendJSON(UserManager<T> *cl) const {
+  const std::string strs[] = {"levels", "bonuses", "fires", "monsters"};
+  auto  content = GameManager<T>::instance().getContent();
+
+  for (int i = 0; i < 4; ++i) {
+    cl->writeStruct({static_cast<uint16_t>(content[strs[i]].size()),
+	  Enum::SEND_JSON});
+    cl->writeMsg(content[strs[i]]);
+  }
+}
+
+template <typename T>
 bool            GameController<T>::joinNamedRoom(UserManager<T> *cl) const {
   Enum::ServerAnswers		sa = cl->joinNamedRoom();
-    GameManager<T>              &g = GameManager<T>::instance();
-    Game<T>                     *game;
+    GameManager<T>		&g = GameManager<T>::instance();
+    Game<T>			*game;
 
     cl->writeStruct({0, static_cast<uint16_t>(sa)});
     if (sa == Enum::OK) {
-        game = g.getGameByName(cl->getGameroomName());
+        sendJSON(cl);
+	game = g.getGameByName(cl->getGameroomName());
         if (!game)
             return (true);
         for (auto it = game->players.begin(); it != game->players.end(); ++it) {
@@ -56,6 +69,7 @@ template <typename T>
 inline
 bool            GameController<T>::createGameRoom(UserManager<T> *cl) const {
     std::cout << cl->getName() << " veut creer "  << cl->getPacketData() << std::endl;
+    sendJSON(cl);
     cl->writeStruct({0, static_cast<uint16_t>(cl->createGameRoom())});
     return (true);
 }

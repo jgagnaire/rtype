@@ -2,15 +2,23 @@
 #include "GameManager.hh"
 
 template <typename SCK>
+GameManager<SCK> *GameManager<SCK>::game_manager = 0;
+
+template <typename SCK>
 GameManager<SCK>::GameManager() {
   JSONParser::parseFile("./entities/fires.json"); // TODO, no magic string
   _game_system["fires"] = JSONParser::parse();
+  _content_system["fires"] = JSONParser::getContent();
   JSONParser::parseFile("./entities/levels.json"); // TODO, no magic string
   _game_system["levels"] = JSONParser::parse();
+  _content_system["levels"] = JSONParser::getContent();
+  JSONParser::parseFile("./entities/monsters.json"); // TODO, no magic string
+  _game_system["monsters"] = JSONParser::parse();
+  _content_system["monsters"] = JSONParser::getContent();
+  JSONParser::parseFile("./entities/bonuses.json"); // TODO, no magic string
+  _game_system["bonuses"] = JSONParser::parse();
+  _content_system["bonuses"] = JSONParser::getContent();
 }
-
-template <typename SCK>
-GameManager<SCK> *GameManager<SCK>::game_manager = 0;
 
 template <typename SCK>
 GameManager<SCK>     &GameManager<SCK>::instance() {
@@ -208,6 +216,10 @@ void		GameManager<SCK>::sendPosition(Game<SCK> *game, UserManager<SCK> *user) {
       packet.sendPacket<IServerSocket<SCK> *>(this->_udp_socket, (*it)->getIP(), "1726"); // TODO, no magic string
   }
 }
+
+template <typename SCK>
+const std::unordered_map<std::string, std::string> &
+GameManager<SCK>::getContent() const { return (_content_system); }
 
 template <typename SCK>
 bool        GameManager<SCK>::isPlaying(const std::string &roomname) {

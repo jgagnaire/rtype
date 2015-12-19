@@ -3,6 +3,7 @@
 #include "JSONParser.hh"
 
 std::fstream JSONParser::_stream("");
+std::string  JSONParser::s_content("");
 
 JSONParser::JSONParser() {}
 
@@ -152,6 +153,8 @@ void	JSONParser::getValueForArray(Entity &entity, const std::string &key,
   }
 }
 
+const std::string	&JSONParser::getContent() { return (JSONParser::s_content); }
+
 JSONParser		*JSONParser::parse(const std::string &str) {
   std::string	        content;
   std::string		tmp;
@@ -172,6 +175,7 @@ JSONParser		*JSONParser::parse(const std::string &str) {
 		 [](const char c) {
 		   return ((c == ' ') || (c == '\t') || (c == '\n'));
 			       }), content.end());
+  JSONParser::s_content = content;
   j->hashParse(content, j->_main_entity);
   return (j);
 }

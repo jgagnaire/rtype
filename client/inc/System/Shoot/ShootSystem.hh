@@ -38,8 +38,7 @@ class ShootSystem : public ASystem
             _frequency += duration;
             if (!isActiv)
                 return ;
-            if ((this->fireRate -= duration) <= 0)
-                this->fireRate = 250;
+			this->fireRate += duration;
 			bool has_been_del = false;
             for (auto x = _eList->begin(); x != _eList->end();)
             {
@@ -122,6 +121,7 @@ class ShootSystem : public ASystem
             if (ev & Key_Fire && this->fireRate >= 250 && isActiv)
             {
 				lastEvent = ev;
+				fireRate = 0;
 			}
             else if (ev & Key_Change && isActiv)
             {

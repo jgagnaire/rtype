@@ -54,6 +54,8 @@ public:
     void                            setUdpSocket(IServerSocket<SCK> *);
     void			    sendPosition(Game<SCK> *, UserManager<SCK> *);
     void			    fireBall(Game<SCK> *, UserManager<SCK> *, bool);
+    const std::unordered_map<std::string, std::string> &
+    getContent() const;
 
 private:
     bool                            update(Game<SCK> *game, std::size_t);
@@ -65,6 +67,7 @@ private:
     ThreadPool<void, Game<SCK> *>		  _threadpool;
     IServerSocket<SCK>				  *_udp_socket;
     std::unordered_map<std::string, JSONParser *> _game_system;
+    std::unordered_map<std::string, std::string>  _content_system;
 
     GameManager();
     ~GameManager() {}

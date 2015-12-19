@@ -107,23 +107,43 @@ public:
 				&& (playlist[idx]->isRepeat()) == false)
 			{
 				++idx;
+				playlist[idx]->setVolume(70);
 				playlist[idx]->play();
 			}
 		}
 	virtual IPacket                 *out(EventSum &) {return NULL;}
-	virtual void                    in(IPacket*) {};
-	virtual bool                    handle(EventSum e)
+	virtual void                    in(IPacket *p)
 		{
-			if (e == E_Stage)
-				isActiv = !isActiv;
-			if (isActiv)
-			{
+			UdpPacket   *packet;
+			
+            if ((packet = dynamic_cast<UdpPacket*>(p)) &&
+				packet->getQuery() == static_cast<uint16_t>(UdpCodes::ServeKeyPressed))
+            {
+                std::string tmp = std::string(
+                        static_cast<const char *>(packet->getData()), packet->getSize());
+				std::string name = tmp.substr(0, tmp.find(":"));
+                std::string code = tmp.substr(name.size() + 1);
+                EventSum e = static_cast<EventSum>(std::atof(code.c_str()));
 				if (e & Key_Fire)
 				{
 					std::cout << "fire" << std::endl;
 					fire->setVolume(70);
 					fire->play();
 				}
+			}
+		}
+	virtual bool                    handle(EventSum e)
+		{
+			if (e == E_Stage)
+				isActiv = !isActiv;
+			if (isActiv)
+			{
+				// if (e & Key_Fire)
+				// {
+				// 	std::cout << "fire" << std::endl;
+				// 	fire->setVolume(70);
+				// 	fire->play();
+				// }
 			}
 			return true;
 		}
