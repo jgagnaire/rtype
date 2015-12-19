@@ -59,6 +59,8 @@ void	UserManager<T>::clearData() {
   packet.clearAll();
   init_memory(reinterpret_cast<char *>(&tmp_packet), sizeof(TCPDataHeader));
   init_memory(reinterpret_cast<char *>(&udp_packet), sizeof(UDPDataHeader));
+  std::cout << tmp_packet.header.query << std::endl;
+  std::cout << tmp_packet.header.packet_size << std::endl;
 }
 
 template<typename T>
