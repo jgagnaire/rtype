@@ -20,7 +20,7 @@ public:
   virtual void update(int);
   virtual bool handle(EventSum e)
   {
-    if (e & E_Stage)
+    if (e == E_Stage)
       _isActive = true;
     if (e & Key_Sound && _isActive == true)
       this->_recorder.changeState();
