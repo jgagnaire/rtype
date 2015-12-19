@@ -1,15 +1,22 @@
 "monsters": {
     "mob1": {
-	"movement": "linear",
+	"movement": "line",
 	"fire": ["ichiro_laser_beam"],
-	"velocity": 3.5,
+	"velocity": 1.3,
 	"life": 30
     },
 
     "mob2": {
-	"movement": "sinusoidal",
+	"movement": "sinusoid",
 	"fire": ["normal"],
-	"velocity": 7.5,
+	"velocity": 1.0,
 	"life": 50
-    }
+    },
+
+    "mob3": {
+	"movement": "sinusoid",
+	"fire": ["normal"],
+	"velocity": 0.5,
+	"life": 50
+    
 }
