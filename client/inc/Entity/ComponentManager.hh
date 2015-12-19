@@ -48,7 +48,7 @@ class ComponentManager
   }
 
   template<typename Type>
-  const Type &get(const std::string& name) const
+  Type &get(const std::string& name) // TODO, it should work with a const Entity
   {
     if (components.find(name) != components.end())
       {
