@@ -12,14 +12,19 @@ NetworkManager::NetworkManager(const std::string &ip,
     _tcpIp(ip), _udpIp(udpIp)
 {
     _packets.reserve(200);
-    _tcp->connect(ip, 1119);
-    _udp->bind(1726);
+    _connected = _tcp->connect(ip, 1119);
+    _connected = _connected || _udp->bind(1726);
 }
 
 NetworkManager::~NetworkManager()
 {
     delete _udp;
     delete _tcp;
+}
+
+bool    NetworkManager::isConnected()
+{
+    return _connected;
 }
 
 void    NetworkManager::send(const IPacket &packet)
