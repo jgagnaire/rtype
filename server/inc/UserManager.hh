@@ -88,7 +88,6 @@ public:
     Enum::ServerAnswers     quitGame();
     Enum::ServerAnswers     currentPosition();
     Enum::ServerAnswers     keyPressed();
-    Enum::ServerAnswers     audioPacket();
     Enum::ServerAnswers     takeForce();
     std::mutex              destroy_client_mutex;
 

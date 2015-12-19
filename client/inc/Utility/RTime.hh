@@ -9,7 +9,8 @@
 class RTime : public IRTime
 {
 public:
-  RTime() {}
+	RTime() : IRTime() {}
+	RTime(sf::Time t) : IRTime(),  _time(t) {}
   virtual ~RTime() {}
 
   virtual std::size_t getTimeMicro() const
