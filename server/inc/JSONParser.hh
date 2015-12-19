@@ -16,7 +16,6 @@ public:
   static bool		parseFile(const std::string &);
   static JSONParser	*parse(const std::string & = "");
   static const std::string &getContent();
-  static std::string	generate(Entity &, const std::string &);
 
 private:
   bool			isFloat(const std::string &str);
@@ -97,13 +96,4 @@ private:
   static std::fstream	_stream;
   Entity		_main_entity;
   static std::string	s_content;
-  static std::string	_serializedEntity;
-
-  template <typename T>
-  static void  addContent(std::string &content,
-		   const std::vector<std::pair<std::string, T> > &data);
-  
-  template <typename T>
-  static void	addVector(std::string &content,
-			  std::vector<std::pair<std::string, std::vector<T> > > &data);
 };
