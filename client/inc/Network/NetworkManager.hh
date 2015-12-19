@@ -50,6 +50,7 @@ class NetworkManager
         void            send(const IPacket &packet);
         IPacket         *getPacket();
 
+        bool            isConnected();
     private:
         void            receiveUdp();
         void            receiveTcp();
@@ -59,6 +60,7 @@ class NetworkManager
         ITcpSocket                  *_tcp;
         std::string                 _tcpIp;
         std::string                 _udpIp;
+        bool                        _connected;
 };
 
 #endif /* ifndef NETWORKMANAGER_HH_ */
