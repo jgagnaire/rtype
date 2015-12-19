@@ -1,4 +1,3 @@
-
 #ifndef IRTIME_HH_
 #define IRTIME_HH_
 
@@ -8,6 +7,8 @@
 class IRTime
 {
 public:
+	IRTime() {};
+	IRTime(sf::Time) {};
   virtual ~IRTime() {}
 
   virtual std::size_t getTimeMicro() const = 0;
