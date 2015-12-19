@@ -21,30 +21,40 @@ JSONParser	&JSONParser::operator=(const JSONParser &jp) {
   return (*this);
 }
 
-const std::string	&JSONParser::generate(Entity &monster) {
-  std::vector<std::string>	tmp;
-
+const std::string	&JSONParser::generate(const Entity &monster, const std::string &name) {
   JSONParser::_serializedEntity.clear();
-  try {
+
   JSONParser::_serializedEntity += "\""
-      "monster1:" //TODO, fix it ! monster.manager.get<std::string>("name") 
-    "\"{\"movement\": \""
-    + monster.manager.get<std::string>("movement")
-    + "\",\"fire\":[";
-  tmp = monster.manager.get<std::vector<std::string> >("fire");
-  for (unsigned int i = 0; i < tmp.size(); ++i)
+    + name
+    + "\"{";
+  auto tmpString = monster.manager.getAll<std::string>();
+  for (unsigned int i = 0; i < tmpString.size(); ++i)
     {
       JSONParser::_serializedEntity += "\""
-	+ tmp[i]
+	+ tmpString[i].first
+	+ "\":\""
+	+ tmpString[i].second
 	+ "\",";
     }
-  JSONParser::_serializedEntity.pop_back();
-  JSONParser::_serializedEntity += "],\"velocity\":"
-    + std::to_string(monster.manager.get<float>("velocity"))
-    + ",\"life\":"
-    + std::to_string(monster.manager.get<int>("life"))
-    + "}";
-  } catch (const ComponentManagerException &e) {}
+  auto tmpInt = monster.manager.getAll<int>();
+  for (unsigned int i = 0; i < tmpInt.size(); ++i)
+    {
+      JSONParser::_serializedEntity += "\""
+	+ tmpInt[i].first
+	+ "\":\""
+	+ std::to_string(tmpInt[i].second)
+	+ "\",";
+    }
+  auto tmpFloat = monster.manager.getAll<float>();
+  for (unsigned int i = 0; i < tmpFloat.size(); ++i)
+    {
+      JSONParser::_serializedEntity += "\""
+	+ tmpFloat[i].first
+	+ "\":\""
+	+ std::to_string(tmpFloat[i].second)
+	+ "\",";
+    }
+  JSONParser::_serializedEntity += "}"
   return JSONParser::_serializedEntity;
 }
 

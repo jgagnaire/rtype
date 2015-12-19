@@ -18,7 +18,7 @@ GameManager<SCK>::GameManager() {
     _content_system[strs[i]] = JSONParser::getContent();
   }
   Entity e = _game_system["monsters"]->getEntity().manager.get<Entity>("monsters");
-  std::cout << JSONParser::generate(e.manager.get<Entity>("monster1")) << std::endl;
+  std::cout << JSONParser::generate(e, "monsters") << std::endl;
 }
 
 template <typename SCK>
