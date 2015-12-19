@@ -3,6 +3,7 @@
 
 #include "System/ASystem.hh"
 #include "System/Shoot/Pattern.hh"
+#include "Utility/JSONParser.hh"
 
 class ColliderSystem : public ASystem
 {
@@ -107,7 +108,19 @@ class ColliderSystem : public ASystem
             }
         }
         virtual IPacket                 *out(EventSum &) { return 0; }
-        virtual void                    in(IPacket*) {}
+        virtual void                    in(IPacket *p)
+        {
+            TcpPacket                   *packet;
+
+            if ((packet = dynamic_cast<TcpPacket*>(p))
+                    && p->getQuery() == static_cast<uint16_t>(Codes::JsonHitboxes))
+            {
+                std::string tmp =std::string(static_cast<const char *>(p->getData()), p->getSize());
+                std::cout << tmp << std::endl;
+                Entity &e = JSONParser::parse(tmp)->getEntity();
+                std::cout << e.manager.get<Entity>("hitboxes").manager.get<Entity>("user").manager.get<int>("x") << std::endl;
+            }
+        }
 
         virtual bool                    handle(EventSum e) {
             if (e == E_Stage)

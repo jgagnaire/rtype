@@ -4,8 +4,8 @@
 	"background": "level1_bg",
 	"music": "starfish",
 	"monsters": [
-	    {"monster1": {
-		"name": "monster1",
+	    {"mob1": {
+		"name": "mob1",
 		"appear_at_sec": 2,
 		"timeval": 1000,
 		"time": 5,
@@ -15,8 +15,8 @@
 		}
 	    }},
 	    
-	    {"monster3": {
-		"name": "monster3", 
+	    {"mob2": {
+		"name": "mob2",
 		"appear_at_sec": 10,
 		"timeval": 1500,
 		"time": 10,
@@ -26,8 +26,8 @@
 		}
 	    }},
 	    
-	    {"monster9": {
-		"name": "monster9",
+	    {"mob3": {
+		"name": "mob3",
 		"appear_at_sec": 12,
 		"timeval": 500,
 		"time": 3,

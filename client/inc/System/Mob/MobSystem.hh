@@ -54,8 +54,16 @@ class	MobSystem : public ASystem
                     ++x;
             }
         }
-        virtual IPacket                 *out(EventSum&) { return NULL;}
-        virtual void                    in(IPacket*) {}
+
+        virtual IPacket                 *out(EventSum&) { return 0;}
+        virtual void                    in(IPacket *p)
+        {
+            TcpPacket       *packet;
+            if ((packet = dynamic_cast<TcpPacket*>(p)))
+            {
+                (void)packet;
+            }
+        }
         virtual bool                    handle(EventSum ev)
         {
             if (ev == E_Stage)

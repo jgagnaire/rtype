@@ -32,6 +32,11 @@ enum class Codes
     Begin = 402,
     PlayerJoined = 400,
     PlayerLeft = 401,
+    JsonLevels = 405,
+    JsonBonuses = 406,
+    JsonShoots = 407,
+    JsonMonsters = 408,
+    JsonHitboxes = 409
 };
 
 enum class UdpCodes
