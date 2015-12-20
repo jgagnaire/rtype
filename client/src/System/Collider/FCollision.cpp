@@ -7,9 +7,24 @@ bool        Collision::explosion(Entity&, Entity &, std::pair<float, float>&)
 
 bool        Collision::player(Entity &me, Entity &e, std::pair<float, float> &pos)
 {
+    int     shield;
+
     if (e.manager.get<std::string>("type") == "bonus" ||
             e.manager.get<std::string>("type") == "shoot")
         return false;
+    if (me.manager.get<int>("perfect_shield"))
+        return false;
+    if ((shield = me.manager.get<int>("shield")) > 0)
+    {
+        if (e.manager.get<std::string>("type") == "mobshoot")
+            shield -= e.manager.get<int>("damage");
+        else
+            shield -= 50;
+        if (shield < 0)
+            shield = 0;
+        me.manager.set<int>("shield", shield);
+        return false;
+    }
     pos = me.manager.get<std::pair<float, float> >("position");
     return true;
 }
