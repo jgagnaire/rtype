@@ -31,7 +31,7 @@ class SystemManager
         e->manager.add<fCollision>("collision", &Collision::player);
         e->manager.add<bool>("force", false);
         e->manager.add<int>("shield", 0);
-        e->manager.add<int>("perfect-shield", 0);
+        e->manager.add<int>("perfect_shield", 0);
         shr_entities->push_back(e);
 
         ASystem *render = new RenderSystem(shr_entities);

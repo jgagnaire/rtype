@@ -9,24 +9,24 @@ BOOL APIENTRY DllMain(HINSTANCE, DWORD, LPVOID)
     return TRUE;
 }
 
-extern "C" __declspec(dllexport) Entity *dl_entry_point(void)
+extern "C" __declspec(dllexport)
 #else
-	extern "C"
-	{
-		Entity *dl_entry_point(void)
+extern "C"
+{
 #endif
+Entity *dl_entry_point(void)
 {
 	Entity *e = new Entity;
     e->manager.add<std::string>("name", "mob1");
     e->manager.add<std::string>("type", "mob");
     e->manager.add<float>("velocity", 0.30f);
     e->manager.add("position",
-            std::pair<float, float>(0, 0));
+            std::pair<float, float>(0.0f, 0.0f));
     e->manager.add<std::function<void (Entity&, Pattern::Side, int)> >
         ("pattern", Pattern::line);
     e->manager.add<Pattern::Side>("direction", Pattern::Side::LEFT);
     return e;
 }
 #if !defined(WIN32) && !defined(_WIN32) && !defined(WIN64) && !defined(_WIN64)
-	}
+}
 #endif
