@@ -26,7 +26,8 @@ bool        Collision::shoot(Entity &e)
 
 bool        Collision::mob(Entity &e)
 {
-    if (e.manager.get<std::string>("type") == "player")
+    if (e.manager.get<std::string>("type") == "player"
+            || e.manager.get<std::string>("type") == "shoot")
     {
         // TODO check shields
         return true;

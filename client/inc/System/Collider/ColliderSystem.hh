@@ -74,19 +74,15 @@ class ColliderSystem : public ASystem
                                     p1.second < p2.second + s2.second &&
                                     s1.second + p1.second > p2.second)
                             {
-                                bool hasPlayer = (*a)->manager.get<std::string>("type") == "player"
-                                    || (*b)->manager.get<std::string>("type") == "player";
-                                bool hasBonus = (*a)->manager.get<std::string>("type") == "bonus"
-                                    || (*b)->manager.get<std::string>("type") == "bonus";
-                                bool hasShoot = (*a)->manager.get<std::string>("type") == "shoot"
-                                    || (*b)->manager.get<std::string>("type") == "shoot";
-                                if (!((hasPlayer && hasBonus) || (hasBonus && hasShoot)))
+                                bool delA = (*a)->manager.get<fCollision>("collision")(**b);
+                                bool delB = (*a)->manager.get<fCollision>("collision")(**a);
+                                if (delA)
                                 {
                                     _eList->push_back(createExplosion(p2));
                                     a = _eList->erase(a);
                                     has_been_del = true;
                                 }
-                                if (!(hasShoot && hasBonus))
+                                if (delB)
                                 {
                                     if (a == b)
                                         a = _eList->erase(b);
