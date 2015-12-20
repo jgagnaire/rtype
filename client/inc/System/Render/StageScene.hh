@@ -13,11 +13,10 @@ class StageScene : public Scene
 {
     public:
         StageScene(IWindow &win, std::list<Entity*> *e):
-            Scene(win, e), _stageNb(1), _pSprites(7), _direction(noEvent),
+            Scene(win, e), _stageNb(1), _pSprites(10), _direction(noEvent),
             _numstage(5)
     {
-        //_pSprites[0].load("client/res/ship/player-ship-blue2_111.png");
-        _pSprites[0].load("client/res/ship/test+shield-player-ship-blue2_111.png");
+        _pSprites[0].load("client/res/ship/player-ship-blue2_111.png");
         //_pSprites[0].load("client/res/force_38.png");
         //_pSprites[0].load("client/res/boss/boss-5_535.png");
         _pSprites[1].load("client/res/ship/player-ship-green2_111.png");
@@ -26,10 +25,13 @@ class StageScene : public Scene
         _pSprites[4].load("client/res/mobs/mob-1_97.png");
         _pSprites[5].load("client/res/mobs/mob-2_114.png");
         _pSprites[6].load("client/res/mobs/mob-3.png");
+        _pSprites[7].load("client/res/bonuses/force_38.png");
+        _pSprites[8].load("client/res/bonuses/classic-shield_150.png");
+        _pSprites[9].load("client/res/bonuses/perfect-shield_87.png");
         _shoot.load("client/res/bullet.png");
         _shootEnnemy.load("client/res/bullet2.png");
         //TODO, animation does not work _transition.load("client/res/transition_1920.png", false, 5);
-	_transition.setRepeat(false);
+        _transition.setRepeat(false);
         _hud.load("client/res/HUD.png");
         for (int i = 1; i <= 5; ++i)
         {
@@ -177,6 +179,20 @@ class StageScene : public Scene
                     _guiMobs.manager.get<ADrawable*>("sprite")->update(duration);
                     _win.draw(_guiMobs);
                 }
+                else if ((*x)->manager.get<std::string>("type") == "bonus")
+                {
+                    if ((*x)->manager.get<std::string>("name") == "force")
+                        _guiMobs.manager.set<ADrawable*>("sprite", &(_pSprites[7]));
+                    else if ((*x)->manager.get<std::string>("name") == "shield")
+                        _guiMobs.manager.set<ADrawable*>("sprite", &(_pSprites[8]));
+                    else if ((*x)->manager.get<std::string>("name") == "perfect_shield")
+                        _guiMobs.manager.set<ADrawable*>("sprite", &(_pSprites[9]));
+                    static_cast<AnimatedSprite*>(_guiMobs.manager.get<ADrawable*>("sprite"))->setPosition(
+                            sf::Vector2f((*x)->manager.get<std::pair<float, float> >("position").first,
+                                (*x)->manager.get<std::pair<float, float> >("position").second));
+                    _guiMobs.manager.get<ADrawable*>("sprite")->update(duration);
+                    _win.draw(_guiMobs);
+                }
                 else if ((*x)->manager.get<std::string>("type") == "explosion")
                 {
                     AnimatedSprite *ex = new AnimatedSprite;
@@ -273,6 +289,7 @@ class StageScene : public Scene
         Entity                                              _guiShootsEnnemy;
         Entity                                              _guiMobs;
         Entity                                              _guiExplosion;
+        Entity                                              _guiBonuses;
         Entity                                              _changeScene;
 
         View                                                _view;

@@ -63,7 +63,8 @@ class	MobSystem : public ASystem
             }
             for (auto x = _eList->begin(); x != _eList->end(); ++x)
             {
-                if ((*x)->manager.get<std::string>("type") == "mob")
+                if ((*x)->manager.get<std::string>("type") == "mob"
+                        || (*x)->manager.get<std::string>("type") == "bonus")
                 {
                     (*x)->manager.get<std::function<void (Entity&, Pattern::Side, int)> >
                         ("pattern")(**x, (*x)->manager.
