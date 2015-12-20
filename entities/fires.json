@@ -1,13 +1,15 @@
 "fires": {
     "normal": {
-	"name": "normal", 
+	"type": "line",
+	"name": "shoot", 
 	"velocity": 4.5,
 	"damage": 5,
 	"sprite": "normal_ball"
     },
 
     "rotate": {
-	"name": "rotate",
+	"type": "sinusoid",
+	"name": "shoot",
 	"velocity": 4.5,
 	"damage": 5,
 	"sprite": "normal_ball"

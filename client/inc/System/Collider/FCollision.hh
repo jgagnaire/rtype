@@ -3,16 +3,16 @@
 
 # include "Entity/Entity.hh"
 
-typedef std::function<bool (Entity&, Entity&)>   fCollision;
+typedef std::function<bool (Entity&, Entity&, std::pair<float, float>&)>   fCollision;
 
 namespace Collision
 {
-    bool        explosion(Entity&, Entity &e);
-    bool        player(Entity&, Entity &e);
-    bool        shoot(Entity&, Entity &e);
-    bool        mob(Entity&, Entity &e);
-    bool        mobShoot(Entity&, Entity &e);
-    bool        bonus(Entity&, Entity &e);
+    bool        explosion(Entity&, Entity &e, std::pair<float, float>&);
+    bool        player(Entity&, Entity &e, std::pair<float, float>&);
+    bool        shoot(Entity&, Entity &e, std::pair<float, float>&);
+    bool        mob(Entity&, Entity &e, std::pair<float, float>&);
+    bool        mobShoot(Entity&, Entity &e, std::pair<float, float>&);
+    bool        bonus(Entity&, Entity &e, std::pair<float, float>&);
 }
 
 #endif /* end of include guard: FCOLLISION_HH_WPBKQ7AY */

@@ -112,8 +112,8 @@ class	MobSystem : public ASystem
 
                                 Entity *tmp;
                                 Entity &pos = monster.second.manager.get<Entity>("position");
-                                std::pair<float, float> pair(pos.manager.get<int>("x"),
-                                        pos.manager.get<int>("y"));
+                                std::pair<float, float> pair(pos.manager.get<float>("x"),
+                                        pos.manager.get<float>("y"));
                                 numbers = monster.second.manager.get<int>("time");
                                 firstTime = monster.second.manager.get<int>("appear_at_sec");
                                 interval = monster.second.manager.get<int>("timeval");
@@ -133,8 +133,8 @@ class	MobSystem : public ASystem
 
                                 Entity *tmp;
                                 Entity &pos = bonus.second.manager.get<Entity>("position");
-                                std::pair<float, float> pair(pos.manager.get<int>("x"),
-                                        pos.manager.get<int>("y"));
+                                std::pair<float, float> pair(pos.manager.get<float>("x"),
+                                        pos.manager.get<float>("y"));
                                 firstTime = bonus.second.manager.get<int>("appear_at_sec");
                                 tmp = createBonus(bonus.first, pair);
                                 tmp->manager.add<int>("appearIn", firstTime * 1000);

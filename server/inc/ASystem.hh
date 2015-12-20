@@ -10,9 +10,12 @@ public:
   typedef std::unordered_map<std::string, ASystem *>	System;
   typedef std::unordered_map<std::string, Entity>       AllEntity;
 #if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined (_WIN64)
+#  define _USE_MATH_DEFINES
+#  include <math.h>
   typedef std::list<UserManager<SOCKET> *>		Players;
   typedef UserManager<SOCKET>				User;
 # else
+#  include <cmath>
   typedef std::list<UserManager<int> *>			Players;
   typedef UserManager<int>				User;
 #endif
@@ -95,6 +98,7 @@ private:
 	  player_pos.x + player_hitbox_x > monster_pos.first &&
 	  player_pos.y < monster_pos.second + monster_hitbox_y &&
 	  player_hitbox_y + player_pos.y > monster_pos.second) {
+	std::cout << "MONSTER-PLAYER => TOUCHEY !" << std::endl;
 	delete *m;
 	player->isTouched();
 	system["monsters"]->_entities.erase(m++);
@@ -124,6 +128,7 @@ private:
 	  player_pos.x + player_hitbox_x > fire_pos.first &&
 	  player_pos.y < fire_pos.second + fire_hitbox_y &&
 	  player_hitbox_y + player_pos.y > fire_pos.second) {
+	std::cout << "FIRE-PLAYER => TOUCHEY !" << std::endl;
 	(*p)->isTouched();
 	delete fire;
 	return (true);
@@ -151,6 +156,7 @@ private:
 	  monster_pos.first + monster_hitbox_x > fire_pos.first &&
 	  monster_pos.second < fire_pos.second + fire_hitbox_y &&
 	  monster_hitbox_y + monster_pos.second > fire_pos.second) {
+	std::cout << "MONSTER-FIRE => TOUCHEY !" << std::endl;
 	delete *m;
 	delete fire;
 	system["monsters"]->_entities.erase(m);
