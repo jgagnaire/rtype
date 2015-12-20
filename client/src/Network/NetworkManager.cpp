@@ -125,7 +125,6 @@ IPacket     *NetworkManager::getPacket()
 {
     IPacket *tmp = 0;
 
-
     if (_packets.empty())
     {
         this->receiveUdp();

@@ -80,21 +80,23 @@ std::string     JSONSerializer::generate(Entity &monster, const std::string &nam
       + name
       + "\":";
   content += "{";
-  addContent(content, monster.manager.getAll<int>());
-  addContent(content, monster.manager.getAll<float>());
-  addContent(content, monster.manager.getAll<std::string>());
-  auto vectorInt = monster.manager.getAll<std::vector<int> >();
-  addVector(content, vectorInt);
-  auto vectorFloat = monster.manager.getAll<std::vector<float> >();
-  addVector(content, vectorFloat);
-  auto vectorString = monster.manager.getAll<std::vector<std::string> >();
-  addVector(content, vectorString);
-  auto vectorEntity = monster.manager.getAll<std::vector<Entity> >();
-  addVector(content, vectorEntity);
-  auto tmpEntity = monster.manager.getAll<Entity>();
-  for (std::size_t i = 0; i < tmpEntity.size(); ++i)
-    content += generate(tmpEntity[i].second, tmpEntity[i].first) + ",";
-  content.pop_back();
+  try {
+    addContent(content, monster.manager.getAll<int>());
+    addContent(content, monster.manager.getAll<float>());
+    addContent(content, monster.manager.getAll<std::string>());
+    auto vectorInt = monster.manager.getAll<std::vector<int> >();
+    addVector(content, vectorInt);
+    auto vectorFloat = monster.manager.getAll<std::vector<float> >();
+    addVector(content, vectorFloat);
+    auto vectorString = monster.manager.getAll<std::vector<std::string> >();
+    addVector(content, vectorString);
+    auto vectorEntity = monster.manager.getAll<std::vector<Entity> >();
+    addVector(content, vectorEntity);
+    auto tmpEntity = monster.manager.getAll<Entity>();
+    for (std::size_t i = 0; i < tmpEntity.size(); ++i)
+      content += generate(tmpEntity[i].second, tmpEntity[i].first) + ",";
+    content.pop_back();
+  } catch (ComponentManagerException) {}
   content += "}";
   return content;
 }

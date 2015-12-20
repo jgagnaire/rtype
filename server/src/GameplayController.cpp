@@ -70,7 +70,7 @@ bool            GameplayController<T>::audioPacket(UserManager<T> *cl) {
       }
     }
   }
-  delete data;
+  delete [] data;
   return (true);
 }
 
