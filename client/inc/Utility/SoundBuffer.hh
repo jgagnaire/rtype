@@ -26,6 +26,10 @@ public:
   {
     return this->_buffer.getSamples();
   }
+	virtual bool	loadFromFile(const std::string &file)
+		{
+			return (_buffer.loadFromFile(file));
+		}
   virtual bool loadFromSamples (const short int *samples, std::size_t sampleCount,
 			unsigned int channelCount, unsigned int sampleRate)
   {

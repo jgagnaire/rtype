@@ -5,6 +5,32 @@
 #include "System/ASystem.hh"
 #include "Utility/RTime.hh"
 
+class	SFX
+{
+public:
+	SFX(const std::string& file) :_buffer(new SoundBuffer), _sound(new Sound)
+		{
+			_buffer->loadFromFile(file);
+			_sound->setBuffer(*_buffer);
+		}
+	~SFX()
+		{
+			delete (_buffer);
+			delete (_sound);
+		}
+	void	play(void)
+		{
+			_sound->play();
+		}
+	void	stop(void)
+		{
+			_sound->stop();
+		}
+private:
+	ISoundBuffer *_buffer;
+	ISound		*_sound;
+};
+
 class AMusic
 {
 public:
@@ -82,7 +108,12 @@ private:
 class SoundSystem : public ASystem
 {
 public:
-	SoundSystem() :idx(0), isActiv(false), isLogin(false), lvlIdx(0) {
+	SoundSystem() : typing("./client/res/sound/typing.flac"),
+					fire("./client/res/sound/shoot.flac"),
+					menuMove("./client/res/sound/menu_move.flac"),
+					xplosion("./client/res/sound/explosion.flac"),
+					idx(0), isActiv(false), isLogin(false), lvlIdx(0)
+		{
 		    _eventList.push_back(Key_Up);
 			_eventList.push_back(Key_Down);
 			_eventList.push_back(Key_Left);
@@ -94,18 +125,7 @@ public:
 			_eventList.push_back(E_Stage);
 			_eventList.push_back(E_GameRoom);
 			_eventList.push_back(E_Ready);
-
-		fire = new Music();
-		fire->setTrack("./client/res/sound/shoot.flac");
-		typing = new Music;
-		typing->setTrack("./client/res/sound/typing.flac");
-		typing->setVolume(100);
-		menuMove = new Music;
-		menuMove->setTrack("./client/res/sound/menu_move.flac");
-		menuMove->setVolume(100);
-		xplosion = new Music;
-		xplosion->setTrack("./client/res/sound/explosion.flac");
-		xplosion->setVolume(100);
+	
 		Music *menu1 = new Music;
 		Music *menu2 = new Music;
 
@@ -118,7 +138,6 @@ public:
 		menu1->play();
 	}
 	
-	SoundSystem(std::list<Entity*> *) {}
 	virtual ~SoundSystem() {}
 
 	virtual void                    update(int)
@@ -146,8 +165,7 @@ public:
                 EventSum e = static_cast<EventSum>(std::atof(code.c_str()));
 				if (e & Key_Fire)
 				{
-					fire->setVolume(70);
-					fire->play();
+					fire.play();
 				}
 			}
 			else if ((tpacket = dynamic_cast<TcpPacket*>(p)))
@@ -185,15 +203,15 @@ public:
 			if (isLogin)
 			{
 				if (e & Key_Change)
-					typing->play();
+					typing.play();
 			}
 			else if (!isLogin && !isActiv)
 				if (e == Key_Up || e == Key_Down || e == Key_Left
 					|| e == Key_Right || e == Key_Select)
-					menuMove->play();
+					menuMove.play();
 			if (isActiv && e == E_Explosion)
 			{
-				xplosion->play();
+				xplosion.play();
 			}
 			return true;
 		}
@@ -204,10 +222,10 @@ protected:
 	std::vector<REvent> _eventList;
 	std::vector<AMusic*> playlist;
 	std::vector<AMusic*> levels;
-	AMusic				*fire;
-	AMusic				*xplosion;
-	AMusic				*menuMove;
-	AMusic				*typing;
+	SFX					typing;
+	SFX					fire;
+	SFX					menuMove;
+	SFX					xplosion;
 	int					idx;
 	bool				isActiv;
 	bool				isLogin;
