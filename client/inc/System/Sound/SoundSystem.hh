@@ -82,11 +82,27 @@ private:
 class SoundSystem : public ASystem
 {
 public:
-	SoundSystem() :idx(0), isActiv(false), lvlIdx(0) {
+	SoundSystem() :idx(0), isActiv(false), isLogin(false), lvlIdx(0) {
+		    _eventList.push_back(Key_Up);
+			_eventList.push_back(Key_Down);
+			_eventList.push_back(Key_Left);
+			_eventList.push_back(Key_Right);
+			_eventList.push_back(Key_Select);
+			_eventList.push_back(Key_Fire);
+			_eventList.push_back(Key_Change);
+			_eventList.push_back(E_Login);
+			_eventList.push_back(E_Stage);
+			_eventList.push_back(E_GameRoom);
+			_eventList.push_back(E_Ready);
+
 		fire = new Music();
 		fire->setTrack("./client/res/sound/shoot.flac");
-		_eventList.push_back(Key_Fire);
-		_eventList.push_back(E_Stage);
+		typing = new Music;
+		typing->setVolume(100);
+		typing->setTrack("./client/res/sound/typing.flac");
+		menuMove = new Music;
+		menuMove->setVolume(100);
+		menuMove->setTrack("./client/res/sound/menu_move.flac");
 		Music *menu1 = new Music;
 		Music *menu2 = new Music;
 
@@ -95,6 +111,7 @@ public:
 		menu2->repeat(true);
 		playlist.push_back(menu1);
 		playlist.push_back(menu2);
+		menu1->setVolume(10);
 		menu1->play();
 	}
 	
@@ -107,7 +124,7 @@ public:
 				&& (playlist[idx]->isRepeat()) == false)
 			{
 				++idx;
-				playlist[idx]->setVolume(70);
+				playlist[idx]->setVolume(10);
 				playlist[idx]->play();
 			}
 		}
@@ -126,7 +143,6 @@ public:
                 EventSum e = static_cast<EventSum>(std::atof(code.c_str()));
 				if (e & Key_Fire)
 				{
-					std::cout << "fire" << std::endl;
 					fire->setVolume(70);
 					fire->play();
 				}
@@ -152,16 +168,25 @@ public:
 		}
 	virtual bool                    handle(EventSum e)
 		{
+			if (e == E_Login)
+				isLogin = true;
 			if (e == E_Stage)
 			{
 				playlist[idx]->pause();
 				levels[lvlIdx]->play();
 				++lvlIdx;
+				isLogin = false;
 				isActiv = !isActiv;
 			}
-			if (isActiv)
+			if (isLogin)
 			{
+				if (e & Key_Change)
+					typing->play();
 			}
+			else if (!isLogin && !isActiv)
+				if (e == Key_Up || e == Key_Down || e == Key_Left
+					|| e == Key_Right || e == Key_Select)
+					menuMove->play();
 			return true;
 		}
 	virtual std::vector<REvent>     &broadcast(void) { return _eventList; }
@@ -174,8 +199,10 @@ protected:
 	AMusic				*fire;
 	AMusic				*xplosion;
 	AMusic				*menuMove;
+	AMusic				*typing;
 	int					idx;
 	bool				isActiv;
+	bool				isLogin;
 	int					lvlIdx;
 };
 
