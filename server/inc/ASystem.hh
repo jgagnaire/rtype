@@ -10,9 +10,12 @@ public:
   typedef std::unordered_map<std::string, ASystem *>	System;
   typedef std::unordered_map<std::string, Entity>       AllEntity;
 #if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined (_WIN64)
+#  define _USE_MATH_DEFINES
+#  include <math.h>
   typedef std::list<UserManager<SOCKET> *>		Players;
   typedef UserManager<SOCKET>				User;
 # else
+#  include <cmath>
   typedef std::list<UserManager<int> *>			Players;
   typedef UserManager<int>				User;
 #endif
