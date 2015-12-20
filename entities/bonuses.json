@@ -1,6 +1,6 @@
 "bonuses": {
     "force": {
-	"movement": "sinusoid",
+	"movement": "line",
 	"name": "force",
 	"velocity": 0.5,
 	"power": 2,

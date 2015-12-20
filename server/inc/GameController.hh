@@ -17,5 +17,5 @@ public:
     bool            notReady(UserManager<T> *) const;
     virtual int	    newData(UserManager<T> *);
 private:
-    GameController	&operator=(GameController const &) { return *this; }
+	GameController	&operator=(GameController const &rhs) { if (&rhs != this) {} return *this; }
 };
