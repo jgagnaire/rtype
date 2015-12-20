@@ -7,33 +7,33 @@
             {"mob1": {
                 "name": "mob1",
                 "appear_at_sec": 2,
-                "timeval": 1000,
-                "time": 5,
+                "timeval": 2000,
+                "time": 30,
                 "position": {
-                    "x": 1920,
-                    "y": 0
+                    "x":  1920,
+                    "y": 270
                 }
             }},
 
-            {"mob2": {
-                "name": "mob2",
-                "appear_at_sec": 10,
-                "timeval": 1500,
-                "time": 10,
+            {"mob1": {
+                "name": "mob1",
+                "appear_at_sec": 2,
+                "timeval": 1440,
+                "time": 30,
                 "position": {
                     "x": 1920,
-                    "y": 10
+                    "y": 540
                 }
             }},
 
-            {"mob3": {
-                "name": "mob3",
-                "appear_at_sec": 12,
-                "timeval": 500,
-                "time": 3,
+            {"mob1": {
+                "name": "mob1",
+                "appear_at_sec": 3,
+                "timeval": 2000,
+                "time": 30,
                 "position": {
                     "x": 1920,
-                    "y": 400
+                    "y": 810
                 }
             }}
         ],
