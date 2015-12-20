@@ -1,6 +1,6 @@
 "bonuses": {
     "force": {
-	"movement": "sinusoidal",
+	"movement": "sinusoid",
 	"name": "force",
 	"velocity": 2.5,
 	"power": 2,
@@ -9,7 +9,7 @@
     },
 
     "shield": {
-	"movement": "linear",
+	"movement": "line",
 	"name": "shield",
 	"velocity": 6,
 	"protection": 50,
@@ -18,7 +18,7 @@
     },
 
     "perfect_shield": {
-	"movement": "linear",
+	"movement": "line",
 	"name": "perfect_shield",
 	"velocity": 5.5,
 	"duration": 5,
