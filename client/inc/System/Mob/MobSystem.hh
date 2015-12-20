@@ -105,9 +105,9 @@ class	MobSystem : public ASystem
                                 for (int i = 0; i < numbers; ++i)
                                 {
                                     tmp = createMob(monster.first, pair);
-                                    tmp->manager.add<int>("appearIn", firstTime + interval * i);
+                                    tmp->manager.add<int>("appearIn", firstTime * 1000 + interval * i);
+                                    l.push_back(tmp);
                                 }
-                                l.push_back(tmp);
                             }
                         }
                         _waitingmobs.push_back(l);
