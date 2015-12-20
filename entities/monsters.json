@@ -9,7 +9,7 @@
     "mob2": {
 	"movement": "sinusoid",
 	"fire": ["normal"],
-	"velocity": 1.0,
+	"velocity": 0.8,
 	"life": 50
     },
 

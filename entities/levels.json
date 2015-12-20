@@ -4,8 +4,8 @@
         "background": "level1_bg",
         "music": "starfish",
         "monsters": [
-            {"mob1": {
-                "name": "mob1",
+            {"mob2": {
+                "name": "mob2",
                 "appear_at_sec": 2,
                 "timeval": 2000,
                 "time": 15,
@@ -55,18 +55,29 @@
                 "time": 15,
                 "position": {
                     "x": 1920,
-                    "y": 400
+                    "y": 100
                 }
             }},
 
-            {"mob1": {
-                "name": "mob1",
+            {"mob3": {
+                "name": "mob3",
                 "appear_at_sec": 30,
                 "timeval": 2000,
-                "time": 15,
+                "time": 8,
                 "position": {
                     "x": 1920,
                     "y": 950
+                }
+            }},
+
+            {"mob3": {
+                "name": "mob3",
+                "appear_at_sec": 45,
+                "timeval": 2000,
+                "time": 7,
+                "position": {
+                    "x": 1920,
+                    "y": 0
                 }
             }}
         ],
