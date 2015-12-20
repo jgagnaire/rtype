@@ -2,6 +2,7 @@
 # define SHOOTSYSTEM_HH_
 
 # include "Pattern.hh"
+# include "System/Collider/FCollision.hh"
 
 class ShootSystem : public ASystem
 {
@@ -19,6 +20,10 @@ class ShootSystem : public ASystem
             e->manager.add<std::function<void (Entity&, Pattern::Side, int)> >
                 ("pattern", patterns[pattern]);
             e->manager.add<Pattern::Side>("direction", side);
+            if (side == Pattern::Side::RIGHT)
+                e->manager.add<fCollision>("collision", Collision::shoot);
+            else
+                e->manager.add<fCollision>("collision", Collision::mobShoot);
             return (e);
         }
     public:

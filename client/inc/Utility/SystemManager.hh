@@ -28,6 +28,7 @@ class SystemManager
         e->manager.add<bool>("isShared", true);
         e->manager.add<Pattern::MovePattern>("pattern", Pattern::MovePattern::LINE);
 		e->manager.add<Pattern::Side>("direction", Pattern::Side::RIGHT);
+        e->manager.add<fCollision>("collision", &Collision::player);
         shr_entities->push_back(e);
 
         ASystem *render = new RenderSystem(shr_entities);

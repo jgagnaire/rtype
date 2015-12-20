@@ -26,6 +26,7 @@ class ColliderSystem : public ASystem
             e->manager.add<std::function<void (Entity&, Pattern::Side, int)> >
                 ("pattern", Pattern::line);
             e->manager.add<Pattern::Side>("direction", Pattern::Side::LEFT);
+            e->manager.add<fCollision>("collision", &Collision::explosion);
             return e;
         }
 
