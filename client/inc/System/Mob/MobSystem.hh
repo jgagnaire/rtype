@@ -63,9 +63,10 @@ class	MobSystem : public ASystem
                 else
                     ++x;
             }
-            bool has_been_del = false;
+            bool has_been_del;
             for (auto x = _eList->begin(); x != _eList->end();)
             {
+                has_been_del = false;
                 if ((*x)->manager.get<std::string>("type") == "mob"
                         || (*x)->manager.get<std::string>("type") == "bonus")
                 {
