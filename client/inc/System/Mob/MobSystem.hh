@@ -12,12 +12,12 @@ class	MobSystem : public ASystem
             Entity *e = new Entity;
             e->manager.add<std::string>("name", name);
             e->manager.add<std::string>("type", "mob");
-            e->manager.add<float>("velocity", _monsters[name].manager.get<float>("velocity"));
+            e->manager.add<float>("velocity", _jsonEntities[name].manager.get<float>("velocity"));
             e->manager.add<std::pair<float, float> >("position", pos);
             e->manager.add<std::function<void (Entity&, Pattern::Side, int)> >
                 ("pattern",
                  Pattern::getPattern(
-                     _monsters[name].manager.get<std::string>("movement")));
+                     _jsonEntities[name].manager.get<std::string>("movement")));
             e->manager.add<Pattern::Side>("direction", Pattern::Side::LEFT);
             return e;
         }
@@ -27,12 +27,12 @@ class	MobSystem : public ASystem
             Entity *e = new Entity;
             e->manager.add<std::string>("name", name);
             e->manager.add<std::string>("type", "bonus");
-            e->manager.add<float>("velocity", _bonuses[name].manager.get<float>("velocity"));
+            e->manager.add<float>("velocity", _jsonEntities[name].manager.get<float>("velocity"));
             e->manager.add<std::pair<float, float> >("position", pos);
             e->manager.add<std::function<void (Entity&, Pattern::Side, int)> >
                 ("pattern",
                  Pattern::getPattern(
-                     _bonuses[name].manager.get<std::string>("movement")));
+                     _jsonEntities[name].manager.get<std::string>("movement")));
             e->manager.add<Pattern::Side>("direction", Pattern::Side::LEFT);
             return e;
         }
@@ -53,13 +53,13 @@ class	MobSystem : public ASystem
                 int tmp = (*x)->manager.get<int>("appearIn");
                 tmp -= duration;
                 (*x)->manager.set<int>("appearIn", tmp);
-				if (tmp <= 0)
-				{
-					_eList->push_back(*x);
-					x = _waitingmobs[0].erase(x);
-				}
-				else
-					++x;
+                if (tmp <= 0)
+                {
+                    _eList->push_back(*x);
+                    x = _waitingmobs[0].erase(x);
+                }
+                else
+                    ++x;
             }
             for (auto x = _eList->begin(); x != _eList->end(); ++x)
             {
@@ -84,13 +84,13 @@ class	MobSystem : public ASystem
                 {
                     Entity &e = JSONParser::parse(tmp)->getEntity().manager.get<Entity>("monsters");
                     for (auto &x : e.manager.getAll<Entity>())
-                        _monsters[x.first] = x.second;
+                        _jsonEntities[x.first] = x.second;
                 }
                 else if (p->getQuery() == static_cast<uint16_t>(Codes::JsonBonuses))
                 {
                     Entity &e = JSONParser::parse(tmp)->getEntity().manager.get<Entity>("bonuses");
                     for (auto &x : e.manager.getAll<Entity>())
-                        _bonuses[x.first] = x.second;
+                        _jsonEntities[x.first] = x.second;
                 }
                 else if (p->getQuery() == static_cast<uint16_t>(Codes::JsonLevels))
                 {
@@ -126,23 +126,16 @@ class	MobSystem : public ASystem
                         {
                             for (auto &bonus: bonuses.manager.getAll<Entity>())
                             {
-                                int     numbers;
                                 int     firstTime;
-                                int     interval;
 
                                 Entity *tmp;
                                 Entity &pos = bonus.second.manager.get<Entity>("position");
                                 std::pair<float, float> pair(pos.manager.get<int>("x"),
                                         pos.manager.get<int>("y"));
-                                numbers = bonus.second.manager.get<int>("time");
                                 firstTime = bonus.second.manager.get<int>("appear_at_sec");
-                                interval = bonus.second.manager.get<int>("timeval");
-                                for (int i = 0; i < numbers; ++i)
-                                {
-                                    tmp = createBonus(bonus.first, pair);
-                                    tmp->manager.add<int>("appearIn", firstTime * 1000 + interval * i);
-                                    l.push_back(tmp);
-                                }
+                                tmp = createBonus(bonus.first, pair);
+                                tmp->manager.add<int>("appearIn", firstTime * 1000);
+                                l.push_back(tmp);
                             }
                         }
                         _waitingmobs.push_back(l);
@@ -162,7 +155,7 @@ class	MobSystem : public ASystem
     protected:
         bool                                        isActiv;
         std::list<Entity*>                          *_eList;
-        std::unordered_map<std::string, Entity>     _monsters;
+        std::unordered_map<std::string, Entity>     _jsonEntities;
         std::vector<std::list<Entity*> >            _waitingmobs;
 };
 
