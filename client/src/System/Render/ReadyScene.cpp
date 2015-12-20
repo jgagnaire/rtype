@@ -1,5 +1,6 @@
 #include "System/Render/ReadyScene.hh"
 #include "System/Shoot/Pattern.hh"
+#include "System/Collider/FCollision.hh"
 
 ReadyScene::ReadyScene(IWindow &win, std::list<Entity*> *e):
     Scene(win, e), _isReady(false), _send(false),
@@ -98,6 +99,10 @@ void    ReadyScene::in(IPacket *p)
 					pl->manager.add<Pattern::Side>("direction", Pattern::Side::RIGHT);
                     pl->manager.add<Pattern::MovePattern>
                         ("pattern", Pattern::MovePattern::LINE);
+                    pl->manager.add<fCollision>("collision", &Collision::player);
+                    pl->manager.add<bool>("force", false);
+                    pl->manager.add<int>("shield", 0);
+                    pl->manager.add<int>("perfect-shield", 0);
                     _entities->push_back(pl);
                 }
                 _event = E_Stage;
