@@ -12,6 +12,7 @@ virtual ~ISoundBuffer() {}
   virtual std::size_t getSampleCount() const = 0;
   virtual unsigned int getSampleRate() const = 0;
   virtual const short int *getSamples() const = 0;
+	virtual bool	loadFromFile(const std::string &file) = 0;
   virtual bool loadFromSamples (const short int *samples, std::size_t sampleCount,
 			unsigned int channelCount, unsigned int sampleRate) = 0;
 

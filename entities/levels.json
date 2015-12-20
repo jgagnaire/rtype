@@ -7,8 +7,8 @@
             {"mob1": {
                 "name": "mob1",
                 "appear_at_sec": 2,
-                "timeval": 2000,
-                "time": 15,
+                "timeval": 4000,
+                "time": 2,
                 "position": {
                     "x":  1920.0,
                     "y": 270.0

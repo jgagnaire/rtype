@@ -135,7 +135,7 @@ bool        GameManager<SCK>::updateTime(Game<SCK> *game) {
 
     entity.manager.set<int>("time_tmp", entity.manager.get<int>("time_tmp") - tmp_time);
     entity.manager.set<int>("timeleft", entity.manager.get<int>("timeleft") + tmp_time);
-    return (true);
+    return (entity.manager.get<int>("timeleft") == entity.manager.get<int>("time"));
 }
 
 
@@ -186,6 +186,8 @@ bool        GameManager<SCK>::updateMonstersSighting(Game<SCK> *game, std::size_
   auto		&monsters = entity.manager.get<std::vector<Entity> >("monsters");
 
   for (auto monster = monsters.begin(); monster != monsters.end();) {
+    if (monsters.size() == 0)
+      return (true);
     auto m = monster->manager.getAll<Entity>();
     std::pair<std::string, Entity&> tmp_monster = {m[0].first,
 						   monster->manager.get<Entity>(m[0].first)}; 
