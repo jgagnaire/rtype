@@ -28,32 +28,36 @@ class SystemManager
         e->manager.add<bool>("isShared", true);
         e->manager.add<Pattern::MovePattern>("pattern", Pattern::MovePattern::LINE);
 		e->manager.add<Pattern::Side>("direction", Pattern::Side::RIGHT);
+        e->manager.add<fCollision>("collision", &Collision::player);
+        e->manager.add<bool>("force", false);
+        e->manager.add<int>("shield", 0);
+        e->manager.add<int>("perfect-shield", 0);
         shr_entities->push_back(e);
 
         ASystem *render = new RenderSystem(shr_entities);
-		ASystem *audioCall = new AudioCallSystem();
+        ASystem *audioCall = new AudioCallSystem();
         ASystem *mvt = new MovementSystem(shr_entities);
         ASystem *shot = new ShootSystem(shr_entities);
-		ASystem *mob = new MobSystem(shr_entities);
-		ASystem *col = new ColliderSystem(shr_entities);
-		ASystem *sound = new SoundSystem();
+        ASystem *mob = new MobSystem(shr_entities);
+        ASystem *col = new ColliderSystem(shr_entities);
+        ASystem *sound = new SoundSystem();
 
         systemList["1mov"] = mvt;
         systemList["2mob"] = mob;
         systemList["3Shoot"] = shot;
         systemList["4col"] = col;
         systemList["5audioCall"] = audioCall;
-		systemList["6sound"] = sound;
+        systemList["6sound"] = sound;
         systemList["7render"] = render;
         ea = new EventAggregator(static_cast<RenderSystem*>(render)->getWindow());
         clk = new Clock();
         ea->add(mvt);
-		ea->add(mob);
+        ea->add(mob);
         ea->add(shot);
         ea->add(col);
-		ea->add(audioCall);
+        ea->add(audioCall);
         ea->add(render);
-		ea->add(sound);
+        ea->add(sound);
     }
 
         ~SystemManager()
@@ -91,7 +95,7 @@ class SystemManager
                 }
                 tmp = std::to_string(event);
                 lastEvent.setData(tmp.c_str());
-				lastEvent.setSize(static_cast<uint16_t>(tmp.size()));
+                lastEvent.setSize(static_cast<uint16_t>(tmp.size()));
                 _networkManager.send(lastEvent);
                 IPacket *p;
                 while (dynamic_cast<UdpPacket*>(p = _networkManager.getPacket()))

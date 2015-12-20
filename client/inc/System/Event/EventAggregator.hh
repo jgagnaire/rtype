@@ -22,7 +22,8 @@ enum REvent
     E_Login,
     E_GameRoom,
     E_Ready,
-	E_Stage
+	E_Stage,
+	E_Explosion
 };
 
 typedef uint64_t EventSum;

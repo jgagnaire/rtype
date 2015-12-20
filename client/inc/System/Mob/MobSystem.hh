@@ -3,6 +3,7 @@
 
 #include "System/ASystem.hh"
 #include "System/Shoot/Pattern.hh"
+#include "System/Collider/FCollision.hh"
 
 class	MobSystem : public ASystem
 {
@@ -19,21 +20,22 @@ class	MobSystem : public ASystem
                  Pattern::getPattern(
                      _jsonEntities[name].manager.get<std::string>("movement")));
             e->manager.add<Pattern::Side>("direction", Pattern::Side::LEFT);
+            e->manager.add<fCollision>("collision", &Collision::mob);
             return e;
         }
 
         Entity *createBonus(const std::string &name, const std::pair<float, float> &pos)
         {
             Entity *e = new Entity;
-            e->manager.add<std::string>("name", name);
+            *e = _jsonEntities[name];
             e->manager.add<std::string>("type", "bonus");
-            e->manager.add<float>("velocity", _jsonEntities[name].manager.get<float>("velocity"));
             e->manager.add<std::pair<float, float> >("position", pos);
             e->manager.add<std::function<void (Entity&, Pattern::Side, int)> >
                 ("pattern",
                  Pattern::getPattern(
                      _jsonEntities[name].manager.get<std::string>("movement")));
             e->manager.add<Pattern::Side>("direction", Pattern::Side::LEFT);
+            e->manager.add<fCollision>("collision", &Collision::bonus);
             return e;
         }
 
