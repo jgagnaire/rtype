@@ -98,11 +98,14 @@ public:
 		fire = new Music();
 		fire->setTrack("./client/res/sound/shoot.flac");
 		typing = new Music;
-		typing->setVolume(100);
 		typing->setTrack("./client/res/sound/typing.flac");
+		typing->setVolume(100);
 		menuMove = new Music;
-		menuMove->setVolume(100);
 		menuMove->setTrack("./client/res/sound/menu_move.flac");
+		menuMove->setVolume(100);
+		xplosion = new Music;
+		xplosion->setTrack("./client/res/sound/explosion.flac");
+		xplosion->setVolume(100);
 		Music *menu1 = new Music;
 		Music *menu2 = new Music;
 
@@ -111,7 +114,7 @@ public:
 		menu2->repeat(true);
 		playlist.push_back(menu1);
 		playlist.push_back(menu2);
-		menu1->setVolume(10);
+		menu1->setVolume(30);
 		menu1->play();
 	}
 	
@@ -124,7 +127,7 @@ public:
 				&& (playlist[idx]->isRepeat()) == false)
 			{
 				++idx;
-				playlist[idx]->setVolume(10);
+				playlist[idx]->setVolume(30);
 				playlist[idx]->play();
 			}
 		}
@@ -187,6 +190,10 @@ public:
 				if (e == Key_Up || e == Key_Down || e == Key_Left
 					|| e == Key_Right || e == Key_Select)
 					menuMove->play();
+			if (isActiv && e == E_Explosion)
+			{
+				xplosion->play();
+			}
 			return true;
 		}
 	virtual std::vector<REvent>     &broadcast(void) { return _eventList; }
