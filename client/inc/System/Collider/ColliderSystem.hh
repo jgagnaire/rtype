@@ -82,6 +82,7 @@ class ColliderSystem : public ASystem
                                 if (!((hasPlayer && hasBonus) || (hasBonus && hasShoot)))
                                 {
                                     _eList->push_back(createExplosion(p2));
+									_event = E_Explosion;
                                     a = _eList->erase(a);
                                     has_been_del = true;
                                 }
@@ -128,11 +129,22 @@ class ColliderSystem : public ASystem
 
         virtual std::vector<REvent>     &broadcast(void) { return _eventList; }
 
-        virtual EventSum                getEvent() { return noEvent; }
+        virtual EventSum                getEvent()
+		{
+			    EventSum          tmp = 0;
+
+				if (_event != noEvent)
+				{
+					tmp = _event;
+					_event = noEvent;
+				}
+				return tmp;
+		}
     private:
         bool	                                                    _isActiv;
         std::list<Entity*>                                          *_eList;
         std::unordered_map<std::string, std::pair<int, int> >       _hitboxes;
+	EventSum														_event;
 
 };
 
