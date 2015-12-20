@@ -37,7 +37,6 @@ public:
     float vel = static_cast<float>(duration * e.manager.get<float>("velocity"));
     if (e.manager.get<bool>("is_a_monster"))
       vel *= -1;
-    std::cout << duration << std::endl;
     pos.first += vel;
     pos.second += static_cast<float>(sin(pos.first * 0.5f * M_PI / 90.0f));
     e.manager.set("position", pos);
