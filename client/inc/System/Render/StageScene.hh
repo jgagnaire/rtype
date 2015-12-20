@@ -217,6 +217,15 @@ class StageScene : public Scene
                     _players[(*x)->manager.get<std::string>("pseudo")]->update(duration);
                     _guiPlayers.manager.set<ADrawable*>("player", _players[(*x)->manager.get<std::string>("pseudo")]);
                     _win.draw(_guiPlayers);
+                    if ((*x)->manager.get<bool>("force"))
+                    {
+                        _pSprites[7].setPosition(
+                                sf::Vector2f((*x)->manager.get<std::pair<float, float> >("position").first + 111,
+                                    (*x)->manager.get<std::pair<float, float> >("position").second - 5));
+                        _pSprites[7].update(duration);
+                        _guiPlayers.manager.set<ADrawable*>("player", &(_pSprites[7]));
+                        _win.draw(_guiPlayers);
+                    }
                 }
                 if (!has_been_del)
                     ++x;
