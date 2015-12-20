@@ -42,18 +42,18 @@ class	MobSystem : public ASystem
         {
             if (!isActiv)
                 return ;
-            for (auto x = _waitingmobs[0].begin(); x != _waitingmobs[0].end();
-                    ++x)
+            for (auto x = _waitingmobs[0].begin(); x != _waitingmobs[0].end();)
             {
                 int tmp = (*x)->manager.get<int>("appearIn");
                 tmp -= duration;
                 (*x)->manager.set<int>("appearIn", tmp);
-                if (tmp <= 0)
-                {
-                    _eList->push_back(*x);
-                    x = _waitingmobs[0].erase(x);
-                    --x;
-                }
+				if (tmp <= 0)
+				{
+					_eList->push_back(*x);
+					x = _waitingmobs[0].erase(x);
+				}
+				else
+					++x;
             }
             for (auto x = _eList->begin(); x != _eList->end(); ++x)
             {

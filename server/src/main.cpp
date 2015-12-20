@@ -40,9 +40,13 @@ int main(int, char **av)
 	netmgr.launch();
   }
 
+  catch (std::runtime_error const &e) {
+	  std::cerr << e.what() << std::endl;
+	  return (-1);
+  }
   catch (std::exception const &e) {
     std::cerr << e.what() << std::endl;
-    return -1;
+    return (-1);
   }
   return (0);
 }
