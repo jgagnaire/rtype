@@ -1,4 +1,4 @@
-#include "ShootSystem.hh"
+#include "MobSystem.hh"
 
 # if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
 #  define _USE_MATH_DEFINES
@@ -7,11 +7,11 @@
 #  include <cmath>
 # endif
 
-ShootSystem::ShootSystem() : ASystem() {}
+MobSystem::MobSystem() : ASystem() {}
 
-ShootSystem::~ShootSystem() {}
+MobSystem::~MobSystem() {}
 
-void                    ShootSystem::update(int duration) {
+void                    MobSystem::update(int duration) {
     for (auto x = _entities.begin(); x != _entities.end();)
     {
         std::string name = (*x)->manager.get<std::string>("name");
@@ -30,13 +30,13 @@ void                    ShootSystem::update(int duration) {
     }
 }
 
-bool                    ShootSystem::handle(const std::string &name,
-					    Entity *e,
-					    bool monster,
-					    const Position &p) {
-  e->manager.add("fired_by", name);
-  e->manager.add("is_a_monster", monster);
+bool                    MobSystem::handle(const std::string &name,
+					  Entity *e,
+					  bool monster,
+					  const Position &p) {
+  e->manager.add("name", name);
   e->manager.add("position", std::pair<float, float>(p.x + 105.0f, p.y + 9.0f));
+  e->manager.add("is_a_monster", monster);
   _entities.push_back(e);
   return (true);
 }
