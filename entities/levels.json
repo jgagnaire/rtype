@@ -1,7 +1,7 @@
 "levels": {
     "level1": {
         "time": 60,
-        "background": "level1_bg",
+        "background": "city",
         "music": "starfish",
         "monsters": [
             {"mob1": {
@@ -85,7 +85,7 @@
 
     "level2": {
         "time": 60,
-        "background": "level2_bg",
+        "background": "destroy",
         "music": "experts",
         "monsters": [
             {"mob1": {
@@ -191,7 +191,7 @@
 
     "level3": {
         "time": 60,
-        "background": "level3_bg",
+        "background": "nectar",
         "music": "pumpitup",
         "monsters": [
             {"mob1": {
@@ -297,7 +297,7 @@
 
     "level4": {
         "time": 60,
-        "background": "level4_bg",
+        "background": "terror",
         "music": "attack",
         "monsters": [
             {"mob1": {
@@ -414,7 +414,7 @@
 
     "level5": {
         "time": 60,
-        "background": "level5_bg",
+        "background": "reborn",
         "music": "bosswave",
         "monsters": [
             {"mob2": {
