@@ -85,10 +85,13 @@ class ColliderSystem : public ASystem
                                     a = _eList->erase(a);
                                     has_been_del = true;
                                 }
-                                if (a == b)
-                                    a = _eList->erase(b);
-                                else
-                                    _eList->erase(b);
+                                if (!(hasShoot && hasBonus))
+                                {
+                                    if (a == b)
+                                        a = _eList->erase(b);
+                                    else
+                                        _eList->erase(b);
+                                }
                                 break ;
                             }
                         }
