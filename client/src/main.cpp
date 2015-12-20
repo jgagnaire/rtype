@@ -1,5 +1,7 @@
 #include <iostream>
 #include <cstdint>
+#include <stdexcept>
+#include <exception>
 #include "Network/NetworkManager.hh"
 #include "Network/UdpSocket.hh"
 #include "Network/TcpSocket.hh"
@@ -21,17 +23,27 @@
 
 int main(int ac, char **av)
 {
-    std::srand(static_cast<unsigned int>(std::time(0)));
-    if (ac == 1)
-    {
-        std::cout << "Usage : ./client_rtype <serverIp>" << std::endl;
-        return 0;
-    }
-    else
-    {
-        SystemManager   sm(av[1]);
+	try {
+		std::srand(static_cast<unsigned int>(std::time(0)));
+		if (ac == 1)
+		{
+			std::cout << "Usage : ./client_rtype <serverIp>" << std::endl;
+			return 0;
+		}
+		else
+		{
+			SystemManager   sm(av[1]);
 
-        sm.gameLoop();
-    }
+			sm.gameLoop();
+		}
+	}
+	catch (std::runtime_error const &e) {
+		std::cerr << e.what() << std::endl;
+		return -1;
+	}
+	catch (std::exception const &e) {
+		std::cerr << e.what() << std::endl;
+		return -1;
+	}
     return 0;
 }

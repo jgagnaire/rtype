@@ -50,17 +50,19 @@ class ColliderSystem : public ASystem
             std::pair<int, int>     s1, s2;
             std::string             t1, t2;
 			Pattern::Side			d1, d2;
+			bool					has_been_del = false;
 
             if (_isActiv)
             {
-                for (auto a = _eList->begin(); a != _eList->end(); ++a)
+                for (auto a = _eList->begin(); a != _eList->end();)
                 {
+					has_been_del = false;
                     p1 = (*a)->manager.get<std::pair<float, float> >("position");
 					d1 = (*a)->manager.get<Pattern::Side>("direction");
                     setSize(s1, (*a)->manager.get<std::string>("name"));
-                    for (auto b = _eList->begin(); b != _eList->end(); ++b)
+					for (auto b = _eList->begin(); b != _eList->end(); ++b)
                     {
-                        if (*a != *b)
+						if (*a != *b)
                         {
                             p2 = (*b)->manager.get<std::pair<float, float> >("position");
                             t2 = (*b)->manager.get<std::string>("type");
@@ -74,12 +76,13 @@ class ColliderSystem : public ASystem
                                 _eList->push_back(createExplosion(p2));
                                 b = _eList->erase(b);
                                 a = _eList->erase(a);
-                                if (a != _eList->end())
-                                    --a;
+								has_been_del = true;
                                 break ;
                             }
                         }
                     }
+					if (!has_been_del)
+						++a;
                 }
             }
         }
