@@ -196,6 +196,7 @@ bool        GameManager<SCK>::update(Game<SCK> *game, std::size_t time) {
     updateTime(game);
     updatePositions(game, time);
     game->system["shoot"]->update(time);
+    updateMonstersSighting(game, time);
     return (!game->players.empty());
 }
 
