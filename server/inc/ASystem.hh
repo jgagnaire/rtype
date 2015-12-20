@@ -34,6 +34,7 @@ public:
     float vel = static_cast<float>(duration * e.manager.get<float>("velocity"));
     if (e.manager.get<bool>("is_a_monster"))
       vel *= -1;
+    std::cout << duration << std::endl;
     pos.first += vel;
     pos.second += static_cast<float>(sin(pos.first * 0.5f * M_PI / 90.0f));
     e.manager.set("position", pos);
@@ -95,6 +96,7 @@ private:
 	  player_pos.x + player_hitbox_x > monster_pos.first &&
 	  player_pos.y < monster_pos.second + monster_hitbox_y &&
 	  player_hitbox_y + player_pos.y > monster_pos.second) {
+	std::cout << "MONSTER-PLAYER => TOUCHEY !" << std::endl;
 	delete *m;
 	player->isTouched();
 	system["monsters"]->_entities.erase(m++);
@@ -124,6 +126,7 @@ private:
 	  player_pos.x + player_hitbox_x > fire_pos.first &&
 	  player_pos.y < fire_pos.second + fire_hitbox_y &&
 	  player_hitbox_y + player_pos.y > fire_pos.second) {
+	std::cout << "FIRE-PLAYER => TOUCHEY !" << std::endl;
 	(*p)->isTouched();
 	delete fire;
 	return (true);
@@ -151,6 +154,7 @@ private:
 	  monster_pos.first + monster_hitbox_x > fire_pos.first &&
 	  monster_pos.second < fire_pos.second + fire_hitbox_y &&
 	  monster_hitbox_y + monster_pos.second > fire_pos.second) {
+	std::cout << "MONSTER-FIRE => TOUCHEY !" << std::endl;
 	delete *m;
 	delete fire;
 	system["monsters"]->_entities.erase(m);

@@ -140,19 +140,19 @@ bool        GameManager<SCK>::updateTime(Game<SCK> *game) {
 
 
 template <typename SCK>
-void
+bool
 GameManager<SCK>::checkMonsters(Game<SCK> *game,
-				std::pair<std::string, Entity> monster,
+				std::pair<std::string, Entity&> monster,
 				int time,
 				std::size_t duration) {
   Entity	&tmp = game->entities["monsters"];
-  Entity	monster_pos = monster.second.manager.get<Entity>("position");
+  Entity	&monster_pos = monster.second.manager.get<Entity>("position");
   Position	pos = {monster_pos.manager.get<float>("x"),
 		       monster_pos.manager.get<float>("y")};
 
-  if (time > monster.second.manager.get<int>("appear_at_sec")) {
+  if (time >= monster.second.manager.get<int>("appear_at_sec")) {
     if (monster.second.manager.exist<int>("refresh")) {
-      if (monster.second.manager.get<int>("appear_at_sec") <=
+      if (monster.second.manager.get<int>("timeval") <=
 	  monster.second.manager.get<int>("refresh")) {
 	Entity	*ent =
 	  new Entity(tmp.manager.get<Entity>("monsters").manager.get<Entity>(monster.first));
@@ -160,10 +160,11 @@ GameManager<SCK>::checkMonsters(Game<SCK> *game,
 	monster.second.manager.set<int>("time", monster.second.manager.get<int>("time") - 1);
 	game->system["monsters"]->handle(monster.first, ent, true, pos);
       }
-      else
+      else {
 	monster.second.manager.set<int>("refresh",
 					monster.second.manager.get<int>("refresh")
 					+ duration);
+      }
     }
     else {
       Entity	*ent =
@@ -174,6 +175,7 @@ GameManager<SCK>::checkMonsters(Game<SCK> *game,
       game->system["monsters"]->handle(monster.first, ent, true, pos);
     }
   }
+  return (monster.second.manager.get<int>("time") <= 0);
 }
 
 template <typename SCK>
@@ -183,10 +185,15 @@ bool        GameManager<SCK>::updateMonstersSighting(Game<SCK> *game, std::size_
     tmp.manager.get<Entity>("levels").manager.get<Entity>(game->lvl_name);
   auto		&monsters = entity.manager.get<std::vector<Entity> >("monsters");
 
-  for (auto monster = monsters.begin(); monster != monsters.end(); ++monster) {
+  for (auto monster = monsters.begin(); monster != monsters.end();) {
     auto m = monster->manager.getAll<Entity>();
-    if (!m.empty())
-      checkMonsters(game, m[0], entity.manager.get<int>("timeleft"), time);
+    std::pair<std::string, Entity&> tmp_monster = {m[0].first,
+						   monster->manager.get<Entity>(m[0].first)}; 
+    if (!m.empty() && checkMonsters(game, tmp_monster,
+				    entity.manager.get<int>("timeleft"), time))
+      monsters.erase(monster++);
+    else
+      ++monster;
   }
   return (true);
 }
@@ -196,7 +203,9 @@ bool        GameManager<SCK>::update(Game<SCK> *game, std::size_t time) {
     updateTime(game);
     updatePositions(game, time);
     game->system["shoot"]->update(time);
+    game->system["monsters"]->update(time);
     updateMonstersSighting(game, time);
+    ASystem::collision(game->system, game->players, game->entities);
     return (!game->players.empty());
 }
 

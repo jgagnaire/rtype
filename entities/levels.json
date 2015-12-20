@@ -7,68 +7,14 @@
             {"mob1": {
                 "name": "mob1",
                 "appear_at_sec": 2,
-                "timeval": 2000,
+                "timeval": 8000,
                 "time": 15,
                 "position": {
                     "x":  1920.0,
                     "y": 270.0
                 }
-            }},
-
-            {"mob1": {
-                "name": "mob1",
-                "appear_at_sec": 2,
-                "timeval": 1440,
-                "time": 15,
-                "position": {
-                    "x": 1920.0,
-                    "y": 540.0
-                }
-            }},
-
-            {"mob1": {
-                "name": "mob1",
-                "appear_at_sec": 3,
-                "timeval": 2000,
-                "time": 15,
-                "position": {
-                    "x": 1920.0,
-                    "y": 810.0
-                }
-            }},
-
-            {"mob1": {
-                "name": "mob1",
-                "appear_at_sec": 31,
-                "timeval": 2000,
-                "time": 15,
-                "position": {
-                    "x":  1920.0,
-                    "y": 600.0
-                }
-            }},
-
-            {"mob1": {
-                "name": "mob1",
-                "appear_at_sec": 31,
-                "timeval": 1440,
-                "time": 15,
-                "position": {
-                    "x": 1920.0,
-                    "y": 400.0
-                }
-            }},
-
-            {"mob1": {
-                "name": "mob1",
-                "appear_at_sec": 30,
-                "timeval": 2000,
-                "time": 15,
-                "position": {
-                    "x": 1920.0,
-                    "y": 810.0
-                }
             }}
+
         ],
 
         "bonuses": [
