@@ -37,7 +37,7 @@ void            GameController<T>::sendJSON(UserManager<T> *cl, Game<T> *game) c
 
   for (std::size_t i = 0; i < sizeof(strs) / sizeof(strs[0]); ++i) {
     cl->writeStruct({static_cast<uint16_t>(content[strs[i].first].size()),
-	  strs[i].second});
+		static_cast<uint16_t>(strs[i].second)});
     cl->writeMsg(content[strs[i].first]);
   }
 }

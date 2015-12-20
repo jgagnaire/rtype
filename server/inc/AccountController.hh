@@ -17,5 +17,5 @@ public:
     int		        closeConnection(UserManager<T> *) const;
     virtual int	    newData(UserManager<T> *);
 private:
-	AccountController &operator=(AccountController const &) { return *this; }
+	AccountController &operator=(AccountController const &rhs) { if (&rhs != this) {} return *this; }
 };

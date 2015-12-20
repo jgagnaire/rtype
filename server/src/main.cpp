@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stdexcept>
 #include "JSONParser.hh"
 #include "AccountController.hh"
 #include "NetworkManager.hh"
@@ -15,7 +16,7 @@ int main(int, char **av)
 {
   try {
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-	CreateDirectory("./server/.database", NULL);
+	CreateDirectory("./server/.database", 0);
 	NetworkManager<SOCKET, AController<SOCKET> > netmgr(av[1], Enum::BOTH_PROTO);
 	netmgr.triggerConnection(&AController<SOCKET>::newConnection);
 	netmgr.triggerNewData(&AController<SOCKET>::newData);
@@ -42,7 +43,7 @@ int main(int, char **av)
 
   catch (std::exception const &e) {
     std::cerr << e.what() << std::endl;
-    return -1;
+    return (-1);
   }
   return (0);
 }
