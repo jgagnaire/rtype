@@ -121,6 +121,7 @@ class StageScene : public Scene
                         _guiPlayers.manager.add<ADrawable*>("player" + std::to_string(i + 1),
                                 &(_pSprites[i]));
                     }
+                    x->manager.set("position", std::pair<float, float>(0, 1080 / 2));
                 }
             }
             _players[_entities->front()->manager.get<std::string>("pseudo")] = &(_pSprites[0]);
