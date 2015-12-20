@@ -69,8 +69,8 @@ private:
     bool			    updateTime(Game<SCK> *);
     bool		            updateMonstersSighting(Game<SCK> *game,
 							   std::size_t time);
-    void			    checkMonsters(Game<SCK> *, 
-						  std::pair<std::string, Entity>,
+    bool			    checkMonsters(Game<SCK> *, 
+						  std::pair<std::string, Entity&>,
 						  int,
 						  std::size_t);
 
