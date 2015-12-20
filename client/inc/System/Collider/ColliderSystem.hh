@@ -46,7 +46,7 @@ class ColliderSystem : public ASystem
             }
         }
 
-        virtual void                    update(int)
+        virtual void                    update(int duration)
         {
             std::pair<float, float> p1, p2;
             std::pair<int, int>     s1, s2;
@@ -60,8 +60,17 @@ class ColliderSystem : public ASystem
                 {
                     has_been_del = false;
                     p1 = (*a)->manager.get<std::pair<float, float> >("position");
+                    t1 = (*a)->manager.get<std::string>("type");
                     d1 = (*a)->manager.get<Pattern::Side>("direction");
                     setSize(s1, (*a)->manager.get<std::string>("name"));
+                    int time;
+                    if (t1 == "player" && (time = (*a)->manager.get<int>("perfect_shield")) > 0)
+                    {
+                        time -= duration;
+                        if (time < 0)
+                            time = 0;
+                        (*a)->manager.set<int>("perfect_shield", time);
+                    }
                     for (auto b = _eList->begin(); b != _eList->end(); ++b)
                     {
                         if (*a != *b)
