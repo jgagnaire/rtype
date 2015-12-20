@@ -163,6 +163,7 @@ public:
                         std::string music = main.second.manager.get<std::string>("music");
 						Music *level = new Music;
 						level->setTrack("./client/res/sound/" + music +".flac");
+						level->setVolume(30);
 						levels.push_back(level);
 						++idx;
 					}
