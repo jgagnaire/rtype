@@ -16,6 +16,12 @@ class StageScene : public Scene
             Scene(win, e), _stageNb(1), _pSprites(10), _direction(noEvent),
             _numstage(5)
     {
+        std::vector<std::string>    stages;
+        stages.push_back("city");
+        stages.push_back("destroy");
+        stages.push_back("nectar");
+        stages.push_back("terror");
+        stages.push_back("reborn");
         _pSprites[0].load("client/res/ship/player-ship-blue2_111.png");
         //_pSprites[0].load("client/res/force_38.png");
         //_pSprites[0].load("client/res/boss/boss-5_535.png");
@@ -33,18 +39,18 @@ class StageScene : public Scene
         //TODO, animation does not work _transition.load("client/res/transition_1920.png", false, 5);
         _transition.setRepeat(false);
         _hud.load("client/res/HUD.png");
-        for (int i = 1; i <= 5; ++i)
+        for (auto &x : stages)
         {
             ScrollingSprite *s1 = new ScrollingSprite();
             ScrollingSprite *s2 = new ScrollingSprite();
             ScrollingSprite *s3 = new ScrollingSprite();
             ScrollingSprite *s4 = new ScrollingSprite();
             ScrollingSprite *s5 = new ScrollingSprite();
-            s1->load("client/res/stages/stage" + std::to_string(i) + "/background_7680.png", 1);
-            s2->load("client/res/stages/stage" + std::to_string(i) + "/middle_7680.png", 2);
-            s3->load("client/res/stages/stage" + std::to_string(i) + "/middle2_7680.png", 3);
-            s4->load("client/res/stages/stage" + std::to_string(i) + "/top2_7680.png", 4);
-            s5->load("client/res/stages/stage" + std::to_string(i) + "/top_7680.png", 4);
+            s1->load("client/res/stages/" + x + "/background_7680.png", 1);
+            s2->load("client/res/stages/" + x + "/middle_7680.png", 2);
+            s3->load("client/res/stages/" + x + "/middle2_7680.png", 3);
+            s4->load("client/res/stages/" + x + "/top2_7680.png", 4);
+            s5->load("client/res/stages/" + x + "/top_7680.png", 4);
             _s1.push_back(s1);
             _s2.push_back(s2);
             _s3.push_back(s3);
