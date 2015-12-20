@@ -50,7 +50,7 @@ class NetworkManager
 {
     public:
         NetworkManager(const std::string &ip, const std::string &udpIp);
-        virtual ~NetworkManager();
+        ~NetworkManager();
 
         void            send(const IPacket &packet);
         IPacket         *getPacket();
