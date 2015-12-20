@@ -82,7 +82,7 @@ private:
 class SoundSystem : public ASystem
 {
 public:
-	SoundSystem() :idx(0), isActiv(false) {
+	SoundSystem() :idx(0), isActiv(false), lvlIdx(0) {
 		fire = new Music();
 		fire->setTrack("./client/res/sound/shoot.flac");
 		_eventList.push_back(Key_Fire);
@@ -115,7 +115,7 @@ public:
 	virtual void                    in(IPacket *p)
 		{
 			UdpPacket   *packet;
-			
+			TcpPacket       *tpacket;
             if ((packet = dynamic_cast<UdpPacket*>(p)) &&
 				packet->getQuery() == static_cast<uint16_t>(UdpCodes::ServeKeyPressed))
             {
@@ -131,19 +131,36 @@ public:
 					fire->play();
 				}
 			}
+			else if ((tpacket = dynamic_cast<TcpPacket*>(p)))
+			{
+				std::string tmp = std::string(
+					static_cast<const char *>(tpacket->getData()), tpacket->getSize());
+				if (p->getQuery() == static_cast<uint16_t>(Codes::JsonLevels))
+				{
+					Entity &e = JSONParser::parse(tmp)->getEntity().manager.get<Entity>("levels");
+					std::size_t			idx = 0;
+                    for (auto &main : e.manager.getAll<Entity>())
+                    {
+                        std::string music = main.second.manager.get<std::string>("music");
+						Music *level = new Music;
+						level->setTrack("./client/res/sound/" + music +".flac");
+						levels.push_back(level);
+						++idx;
+					}
+				}	
+			}
 		}
 	virtual bool                    handle(EventSum e)
 		{
 			if (e == E_Stage)
+			{
+				playlist[idx]->pause();
+				levels[lvlIdx]->play();
+				++lvlIdx;
 				isActiv = !isActiv;
+			}
 			if (isActiv)
 			{
-				// if (e & Key_Fire)
-				// {
-				// 	std::cout << "fire" << std::endl;
-				// 	fire->setVolume(70);
-				// 	fire->play();
-				// }
 			}
 			return true;
 		}
@@ -153,11 +170,13 @@ public:
 protected:
 	std::vector<REvent> _eventList;
 	std::vector<AMusic*> playlist;
+	std::vector<AMusic*> levels;
 	AMusic				*fire;
 	AMusic				*xplosion;
 	AMusic				*menuMove;
 	int					idx;
 	bool				isActiv;
+	int					lvlIdx;
 };
 
 #endif
