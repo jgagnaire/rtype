@@ -1,30 +1,31 @@
 # include "System/Collider/FCollision.hh"
 
-bool        Collision::explosion(Entity&, Entity &)
+bool        Collision::explosion(Entity&, Entity &, std::pair<float, float>&)
 {
     return false;
 }
 
-bool        Collision::player(Entity&, Entity &e)
+bool        Collision::player(Entity &me, Entity &e, std::pair<float, float> &pos)
 {
     if (e.manager.get<std::string>("type") == "bonus" ||
             e.manager.get<std::string>("type") == "shoot")
         return false;
-    //TODO check things
+    pos = me.manager.get<std::pair<float, float> >("position");
     return true;
 }
 
-bool        Collision::shoot(Entity&, Entity &e)
+bool        Collision::shoot(Entity &, Entity &e, std::pair<float, float> &p)
 {
     if (e.manager.get<std::string>("type") == "mob")
     {
+        p = e.manager.get<std::pair<float, float> >("position");
         // TODO check life
         return true;
     }
     return false;
 }
 
-bool        Collision::mob(Entity&, Entity &e)
+bool        Collision::mob(Entity&, Entity &e, std::pair<float, float>&)
 {
     if (e.manager.get<std::string>("type") == "player"
             || e.manager.get<std::string>("type") == "shoot")
@@ -35,7 +36,7 @@ bool        Collision::mob(Entity&, Entity &e)
     return false;
 }
 
-bool        Collision::mobShoot(Entity&, Entity &e)
+bool        Collision::mobShoot(Entity&, Entity &e, std::pair<float, float>&)
 {
     if (e.manager.get<std::string>("type") == "player")
     {
@@ -45,7 +46,7 @@ bool        Collision::mobShoot(Entity&, Entity &e)
     return false;
 }
 
-bool        Collision::bonus(Entity &me, Entity &e)
+bool        Collision::bonus(Entity &me, Entity &e, std::pair<float, float>&)
 {
     if (e.manager.get<std::string>("type") == "player")
     {

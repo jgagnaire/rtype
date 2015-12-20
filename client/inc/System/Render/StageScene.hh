@@ -25,7 +25,7 @@ class StageScene : public Scene
         _pSprites[4].load("client/res/mobs/mob-1_97.png");
         _pSprites[5].load("client/res/mobs/mob-2_114.png");
         _pSprites[6].load("client/res/mobs/mob-3.png");
-        _pSprites[7].load("client/res/bonuses/force_38.png");
+        _pSprites[7].load("client/res/bonus/force_38.png");
         _pSprites[8].load("client/res/bonuses/classic-shield_150.png");
         _pSprites[9].load("client/res/bonuses/perfect-shield_87.png");
         _shoot.load("client/res/bullet.png");
