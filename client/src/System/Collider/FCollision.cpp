@@ -57,9 +57,9 @@ bool        Collision::bonus(Entity &me, Entity &e)
         {
             e.manager.set<int>("shield", me.manager.get<int>("protection"));
         }
-        else if (me.manager.get<std::string>("name") == "perfect-shield")
+        else if (me.manager.get<std::string>("name") == "perfect_shield")
         {
-            e.manager.set<int>("perfect-shield",
+            e.manager.set<int>("perfect_shield",
                     me.manager.get<int>("duration") * 1000);
         }
         return true;

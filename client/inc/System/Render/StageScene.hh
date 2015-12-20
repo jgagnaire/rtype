@@ -188,7 +188,7 @@ class StageScene : public Scene
                     else if ((*x)->manager.get<std::string>("name") == "perfect_shield")
                         _guiMobs.manager.set<ADrawable*>("sprite", &(_pSprites[9]));
                     static_cast<AnimatedSprite*>(_guiMobs.manager.get<ADrawable*>("sprite"))->setPosition(
-                            sf::Vector2f((*x)->manager.get<std::pair<float, float> >("position").first,
+                            sf::Vector2f((*x)->manager.get<std::pair<float, float> >("position").first + 115,
                                 (*x)->manager.get<std::pair<float, float> >("position").second));
                     _guiMobs.manager.get<ADrawable*>("sprite")->update(duration);
                     _win.draw(_guiMobs);
@@ -226,6 +226,25 @@ class StageScene : public Scene
                         _guiPlayers.manager.set<ADrawable*>("player", &(_pSprites[7]));
                         _win.draw(_guiPlayers);
                     }
+                    if ((*x)->manager.get<int>("shield") > 0)
+                    {
+                        _pSprites[8].setPosition(
+                                sf::Vector2f((*x)->manager.get<std::pair<float, float> >("position").first - 10,
+                                    (*x)->manager.get<std::pair<float, float> >("position").second - 35));
+                        _pSprites[8].update(duration);
+                        _guiPlayers.manager.set<ADrawable*>("player", &(_pSprites[8]));
+                        _win.draw(_guiPlayers);
+                    }
+                    if ((*x)->manager.get<int>("perfect_shield") > 0)
+                    {
+                        _pSprites[9].setPosition(
+                                sf::Vector2f((*x)->manager.get<std::pair<float, float> >("position").first + 22,
+                                    (*x)->manager.get<std::pair<float, float> >("position").second));
+                        _pSprites[9].update(duration);
+                        _guiPlayers.manager.set<ADrawable*>("player", &(_pSprites[9]));
+                        _win.draw(_guiPlayers);
+                    }
+
                 }
                 if (!has_been_del)
                     ++x;
