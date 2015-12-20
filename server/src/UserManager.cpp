@@ -309,6 +309,8 @@ void                    UserManager<T>::clearGameData() {
     switch_weapon = false;
     is_dead = false;
     life = 10;
+    position.x = 0;
+    position.y = Enum::GAME_SIZE_HEIGHT / 2;
 }
 
 

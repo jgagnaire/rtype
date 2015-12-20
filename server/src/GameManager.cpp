@@ -189,6 +189,8 @@ bool        GameManager<SCK>::updateMonstersSighting(Game<SCK> *game, std::size_
     if (monsters.size() == 0)
       return (true);
     auto m = monster->manager.getAll<Entity>();
+    if (m.empty())
+      return (true);
     std::pair<std::string, Entity&> tmp_monster = {m[0].first,
 						   monster->manager.get<Entity>(m[0].first)}; 
     if (!m.empty() && checkMonsters(game, tmp_monster,
