@@ -4,68 +4,63 @@
 	"background": "level1_bg",
 	"music": "starfish",
 	"monsters": [
-	    {"mob1": {
-		"name": "mob1",
-		"appear_at_sec": 2,
-		"timeval": 1000,
-		"time": 5,
-		"position": {
-		    "x": 1920,
-		    "y": 0
-		}
-	    }},
 	    
 	    {"mob2": {
-		"name": "mob2",
 		"appear_at_sec": 10,
 		"timeval": 1500,
 		"time": 10,
 		"position": {
-		    "x": 1920,
-		    "y": 10
+		    "x": 1920.0,
+		    "y": 10.0
+		}
+	    }},
+
+	    {"mob1": {
+		"appear_at_sec": 2,
+		"timeval": 1000,
+		"time": 5,
+		"position": {
+		    "x": 1920.0,
+		    "y": 0.0
 		}
 	    }},
 	    
 	    {"mob3": {
-		"name": "mob3",
 		"appear_at_sec": 12,
 		"timeval": 500,
 		"time": 3,
 		"position": {
-		    "x": 1920,
-		    "y": 400
+		    "x": 1920.0,
+		    "y": 400.0
 		}
 	    }}
 	],
 	
 	"bonus": [
 	    {"bonus1": {
-		"name": "bonus1",
 		"appear_at_sec": 2,
 		"for_everyone": 0,
 		"position": {
-		    "x": 1920,
-		    "y": 350
+		    "x": 1920.0,
+		    "y": 350.0
 		}
 	    }},
 	    
 	    {"bonus4": {
-		"name": "bonus4",
 		"appear_at_sec": 7,
 		"for_everyone": 0,
 		"position": {
-		    "x": 1920,
-		    "y": 150
+		    "x": 1920.0,
+		    "y": 150.0
 		}
 	    }},
 	    
 	    {"bonus3": {
-		"name": "bonus3",
 		"appear_at_sec": 14,
 		"for_everyone": 1,
 		"position": {
-		    "x": 1920,
-		    "y": 700
+		    "x": 1920.0,
+		    "y": 700.0
 		}
 	    }}
 	],

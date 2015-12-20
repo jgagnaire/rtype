@@ -49,7 +49,7 @@ class ColliderSystem : public ASystem
             std::pair<float, float> p1, p2;
             std::pair<int, int>     s1, s2;
             std::string             t1, t2;
-			Pattern::Side			d1, d2;
+	    Pattern::Side			d1, d2;
 
             if (_isActiv)
             {

@@ -4,17 +4,15 @@
 #include "ASystem.hh"
 #include "Entity.hh"
 
-class ShootSystem : public ASystem
+class MobSystem : public ASystem
 {
 public:
-  ShootSystem();
-  virtual ~ShootSystem();
+  MobSystem();
+  virtual ~MobSystem();
 
   virtual void                    update(int duration);
   virtual bool                    handle(const std::string &name,
 					 Entity *e,
 					 bool monster,
 					 const Position &p);
-private:
-  int				_fire_rate;
 };

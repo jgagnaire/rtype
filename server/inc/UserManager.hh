@@ -72,7 +72,9 @@ public:
     const UDPData	    &getUdpBinaryPacketStruct() const;
     void                    clearGameData();
     uint64_t                getUDPPacketId();
-    bool                    isFiring();
+    bool                    isFiring() const;
+    bool                    isDead() const;
+    void                    isTouched();
     void                    changePosition(std::size_t);
     const Position	    &getPosition() const;
     const std::size_t	    &getKeypressed() const;
@@ -115,6 +117,7 @@ private:
   bool					  switch_weapon;
   Position                                position;
   bool					  is_dead;
+  char					  life;
 
   bool					hasBadFormat(std::string *) const;
   bool					alreadyExist(std::string *);

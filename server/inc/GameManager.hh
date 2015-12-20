@@ -4,13 +4,14 @@
 # include <iostream>
 # include <unordered_map>
 # include "ShootSystem.hh"
+# include "MobSystem.hh"
 # include "JSONParser.hh"
 # include "UserManager.hh"
 # include "ThreadPool.hh"
 
 # if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
 #  include <windows.h>
-#  define portable_sleep(x) Sleep(x);
+#  define portable_sleep(x) Sleep(x / 1000);
 # else
 #  include <unistd.h>
 #  define portable_sleep(x) usleep(x)
@@ -19,11 +20,16 @@
 template <typename SCK>
 struct Game {
   ~Game() {
-    if (system["shoot"])
+    if (system["shoot"]) {
       delete system["shoot"];
+      delete system["monsters"];
+    }
   }
 
-  Game() { system["shoot"] = new ShootSystem; }
+  Game() {
+    system["shoot"] = new ShootSystem;
+    system["monsters"] = new MobSystem; 
+  }
 
     std::unordered_map<std::string, ASystem *>  system;
     std::string                                 name;
@@ -61,6 +67,12 @@ private:
     bool                            update(Game<SCK> *game, std::size_t);
     void                            updatePositions(Game<SCK> *, std::size_t);
     bool			    updateTime(Game<SCK> *);
+    bool		            updateMonstersSighting(Game<SCK> *game,
+							   std::size_t time);
+    void			    checkMonsters(Game<SCK> *, 
+						  std::pair<std::string, Entity>,
+						  int,
+						  std::size_t);
 
     static  GameManager				  *game_manager;
     static  Entity				  configuration;
