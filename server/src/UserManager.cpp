@@ -290,7 +290,13 @@ Enum::ServerAnswers      UserManager<T>::ready() {
 }
 
 template <typename T>
-bool                    UserManager<T>::isFiring() { return (fire); }
+bool                    UserManager<T>::isFiring() const { return (fire); }
+
+template <typename T>
+bool                    UserManager<T>::isDead() const { return (life <= 10); }
+
+template <typename T>
+void                    UserManager<T>::isTouched() { --life; }
 
 template <typename T>
 void                    UserManager<T>::clearGameData() {
@@ -302,7 +308,10 @@ void                    UserManager<T>::clearGameData() {
     fire = false;
     switch_weapon = false;
     is_dead = false;
+    life = 10;
 }
+
+
 
 template <typename T>
 uint64_t                UserManager<T>::getUDPPacketId() { return (udp_packet_id++); }

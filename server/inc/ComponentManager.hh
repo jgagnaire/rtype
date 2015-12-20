@@ -62,6 +62,19 @@ type for compenents \"" + name + "\" is : " + components[name]->getType());
   }
 
   template<typename Type>
+  bool exist(const std::string& name)
+  {
+    if (components.find(name) != components.end())
+      {
+	if (components[name]->getType() == typeid(Type).name())
+	  return (true);
+	else
+	  return (false);
+      }
+    return (false);
+  }
+
+  template<typename Type>
   bool	remove(const std::string& name = "")
   {
     if (!name.empty() && components.find(name) != components.end())
