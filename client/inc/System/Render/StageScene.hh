@@ -100,7 +100,7 @@ class StageScene : public Scene
             std::string     name;
             std::string     me;
 
-            switchStage();
+//            switchStage();
             int i = 0;
             for (auto x : *_entities)
             {
