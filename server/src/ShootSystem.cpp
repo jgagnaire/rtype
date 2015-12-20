@@ -21,7 +21,7 @@ void                    ShootSystem::update(int duration) {
 	  ASystem::line(**x, duration);
         std::pair<float, float> tmp = (*x)->manager.
             get<std::pair<float, float> >("position");
-        if (tmp.first > 1920 || tmp.first < 0) {
+        if (tmp.first > 1920 || tmp.first < -100) {
             delete *x;
             _entities.erase(x++);
         }
