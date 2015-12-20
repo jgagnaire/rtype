@@ -1,7 +1,6 @@
 #include <iostream>
 #include <cstdint>
 #include <stdexcept>
-#include <exception>
 #include "Network/NetworkManager.hh"
 #include "Network/UdpSocket.hh"
 #include "Network/TcpSocket.hh"
@@ -37,10 +36,6 @@ int main(int ac, char **av)
 			sm.gameLoop();
 		}
    /* }*/
-	//catch (std::runtime_error const &e) {
-		//std::cerr << e.what() << std::endl;
-		//return -1;
-	//}
 	//catch (std::exception const &e) {
 		//std::cerr << e.what() << std::endl;
 		//return -1;
