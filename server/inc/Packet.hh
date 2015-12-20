@@ -66,7 +66,7 @@ private:
 public:
       Packet() :  _wr_buff(0) { clearAll(); }
 
-      virtual ~Packet() {};
+      ~Packet() {};
 
       bool     packetEmpty() const { return (_rd_buff.empty()); }
 
