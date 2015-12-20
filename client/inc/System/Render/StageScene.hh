@@ -16,7 +16,8 @@ class StageScene : public Scene
             Scene(win, e), _stageNb(1), _pSprites(7), _direction(noEvent),
             _numstage(5)
     {
-        _pSprites[0].load("client/res/ship/player-ship-blue2_111.png");
+        //_pSprites[0].load("client/res/ship/player-ship-blue2_111.png");
+        _pSprites[0].load("client/res/ship/test+shield-player-ship-blue2_111.png");
         //_pSprites[0].load("client/res/force_38.png");
         //_pSprites[0].load("client/res/boss/boss-5_535.png");
         _pSprites[1].load("client/res/ship/player-ship-green2_111.png");

@@ -22,7 +22,7 @@
 
 int main(int ac, char **av)
 {
-	try {
+	//try {
 		std::srand(static_cast<unsigned int>(std::time(0)));
 		if (ac == 1)
 		{
@@ -35,10 +35,10 @@ int main(int ac, char **av)
 
 			sm.gameLoop();
 		}
-	}
-	catch (std::exception const &e) {
-		std::cerr << e.what() << std::endl;
-		return -1;
-	}
+   /* }*/
+	//catch (std::exception const &e) {
+		//std::cerr << e.what() << std::endl;
+		//return -1;
+	/*}*/
     return 0;
 }
