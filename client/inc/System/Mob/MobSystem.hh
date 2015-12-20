@@ -63,15 +63,26 @@ class	MobSystem : public ASystem
                 else
                     ++x;
             }
-            for (auto x = _eList->begin(); x != _eList->end(); ++x)
+            bool has_been_del;
+            for (auto x = _eList->begin(); x != _eList->end();)
             {
+                has_been_del = false;
                 if ((*x)->manager.get<std::string>("type") == "mob"
                         || (*x)->manager.get<std::string>("type") == "bonus")
                 {
                     (*x)->manager.get<std::function<void (Entity&, Pattern::Side, int)> >
                         ("pattern")(**x, (*x)->manager.
                                     get<Pattern::Side>("direction"), duration);
+                    auto tmp = (*x)->manager.get<std::pair<float, float> >("position");
+                    if (tmp.first < -100)
+                    {
+                        delete *x;
+                        x = _eList->erase(x);
+                        has_been_del = true;
+                    }
                 }
+                if (!has_been_del)
+                    ++x;
             }
         }
 

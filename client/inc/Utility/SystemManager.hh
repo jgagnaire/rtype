@@ -27,7 +27,7 @@ class SystemManager
         e->manager.add<float>("velocity", 1.75f);
         e->manager.add<bool>("isShared", true);
         e->manager.add<Pattern::MovePattern>("pattern", Pattern::MovePattern::LINE);
-		e->manager.add<Pattern::Side>("direction", Pattern::Side::RIGHT);
+        e->manager.add<Pattern::Side>("direction", Pattern::Side::RIGHT);
         e->manager.add<fCollision>("collision", &Collision::player);
         e->manager.add<bool>("force", false);
         e->manager.add<int>("shield", 0);
@@ -50,7 +50,6 @@ class SystemManager
         systemList["6sound"] = sound;
         systemList["7render"] = render;
         ea = new EventAggregator(static_cast<RenderSystem*>(render)->getWindow());
-        clk = new Clock();
         ea->add(mvt);
         ea->add(mob);
         ea->add(shot);
@@ -65,7 +64,6 @@ class SystemManager
             for(auto x : systemList)
                 delete(x.second);
             delete ea;
-            delete clk;
         }
 
         void gameLoop()
@@ -73,6 +71,9 @@ class SystemManager
             EventSum        event;
             UdpPacket       lastEvent;
             std::string     tmp;
+            std::size_t s = 0;
+            auto start = std::chrono::steady_clock::now();
+            auto end = std::chrono::steady_clock::now();
 
             if (_networkManager.isConnected() == false)
             {
@@ -82,23 +83,34 @@ class SystemManager
             lastEvent.setQuery(static_cast<uint16_t>(UdpCodes::KeyPressed));
             while (ea->getWin()->isOpen())
             {
+                start = std::chrono::steady_clock::now();
                 event = 0;
-                std::size_t s = this->clk->getElapsedTimeMilli();
-                this->clk->restart();
-                ea->update();
-                for (auto x : systemList)
+                std::chrono::duration<double> diff = start - end;
+                s = diff.count() * 1000;
+                if (s > 30)
                 {
-                    IPacket *m = x.second->out(event);
-                    if (m != 0)
-                        _networkManager.send(*m);
-                    x.second->update(s);
-                }
-                tmp = std::to_string(event);
-                lastEvent.setData(tmp.c_str());
-                lastEvent.setSize(static_cast<uint16_t>(tmp.size()));
-                _networkManager.send(lastEvent);
-                IPacket *p;
-                while (dynamic_cast<UdpPacket*>(p = _networkManager.getPacket()))
+                    end = start;
+                    ea->update();
+                    for (auto x : systemList)
+                    {
+                        IPacket *m = x.second->out(event);
+                        if (m != 0)
+                            _networkManager.send(*m);
+                        x.second->update(s);
+                    }
+                    tmp = std::to_string(event);
+                    lastEvent.setData(tmp.c_str());
+                    lastEvent.setSize(static_cast<uint16_t>(tmp.size()));
+                    _networkManager.send(lastEvent);
+                    IPacket *p;
+                    while (dynamic_cast<UdpPacket*>(p = _networkManager.getPacket()))
+                        if (p)
+                        {
+                            for (auto x : systemList)
+                                x.second->in(p);
+                            delete[] static_cast<const char*>(p->getData());
+                            delete p;
+                        }
                     if (p)
                     {
                         for (auto x : systemList)
@@ -106,12 +118,6 @@ class SystemManager
                         delete[] static_cast<const char*>(p->getData());
                         delete p;
                     }
-                if (p)
-                {
-                    for (auto x : systemList)
-                        x.second->in(p);
-                    delete[] static_cast<const char*>(p->getData());
-                    delete p;
                 }
             }
         }
@@ -119,7 +125,6 @@ class SystemManager
     private:
         std::unordered_map<std::string, ASystem*>	systemList;
         EventAggregator								*ea;
-        IClock										*clk;
         NetworkManager								_networkManager;
         std::list<Entity*>							*shr_entities;
 };
