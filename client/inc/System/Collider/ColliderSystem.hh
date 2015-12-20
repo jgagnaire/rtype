@@ -74,8 +74,8 @@ class ColliderSystem : public ASystem
                                     p1.second < p2.second + s2.second &&
                                     s1.second + p1.second > p2.second)
                             {
-                                bool delA = (*a)->manager.get<fCollision>("collision")(**b);
-                                bool delB = (*a)->manager.get<fCollision>("collision")(**a);
+                                bool delA = (*a)->manager.get<fCollision>("collision")(**a, **b);
+                                bool delB = (*b)->manager.get<fCollision>("collision")(**b, **a);
                                 if (delA)
                                 {
                                     _eList->push_back(createExplosion(p2));

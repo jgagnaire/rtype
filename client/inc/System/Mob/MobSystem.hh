@@ -27,9 +27,8 @@ class	MobSystem : public ASystem
         Entity *createBonus(const std::string &name, const std::pair<float, float> &pos)
         {
             Entity *e = new Entity;
-            e->manager.add<std::string>("name", name);
+            *e = _jsonEntities[name];
             e->manager.add<std::string>("type", "bonus");
-            e->manager.add<float>("velocity", _jsonEntities[name].manager.get<float>("velocity"));
             e->manager.add<std::pair<float, float> >("position", pos);
             e->manager.add<std::function<void (Entity&, Pattern::Side, int)> >
                 ("pattern",
