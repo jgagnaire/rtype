@@ -2,7 +2,7 @@
 #include "System/Shoot/Pattern.hh"
 #include "System/Collider/FCollision.hh"
 
-ReadyScene::ReadyScene(IWindow &win, std::list<Entity*> *e):
+ReadyScene::ReadyScene(IWindow &win, std::unordered_map<std::size_t, Entity*> *e):
     Scene(win, e), _isReady(false), _send(false),
     _new(false), _quit(false), _lastCode(0), _event(0)
 {
@@ -59,18 +59,20 @@ void    ReadyScene::handle(EventSum e, EventSum &send)
     }
 }
 
-void    ReadyScene::in(IPacket *p)
+void    ReadyScene::in(IPacket *p, std::string &pseudo)
 {
     TcpPacket   *packet;
+    std::string data;
     std::string name;
+    std::size_t id;
     std::string tmp;
-    std::pair<float, float> pos;
+    std::pair<float, float> pos(0, 1080 / 2);
     Entity *pl;
 
     if ((packet = dynamic_cast<TcpPacket*>(p)))
     {
         if (packet->getSize())
-            name = std::string(static_cast<const char*>(packet->getData()),
+            data = std::string(static_cast<const char*>(packet->getData()),
                     packet->getSize());
         switch (static_cast<Codes>(packet->getQuery()))
         {
@@ -89,32 +91,37 @@ void    ReadyScene::in(IPacket *p)
                 }
                 break ;
             case Codes::Begin:
-                for (auto x : _players)
-                {
-                    pl = new Entity;
-                    pl->manager.add<std::string>("type", "player");
-                    pl->manager.add<std::string>("pseudo", x.first);
-                    pl->manager.add<std::string>("name", x.first);
-                    pl->manager.add<std::pair<float, float> >("position", pos);
-					pl->manager.add<Pattern::Side>("direction", Pattern::Side::RIGHT);
-                    pl->manager.add<Pattern::MovePattern>
-                        ("pattern", Pattern::MovePattern::LINE);
-                    pl->manager.add<fCollision>("collision", &Collision::player);
-                    pl->manager.add<bool>("force", false);
-                    pl->manager.add<int>("shield", 0);
-                    pl->manager.add<int>("perfect_shield", 0);
-                    _entities->push_back(pl);
-                }
                 _event = E_Stage;
                 break ;
             case Codes::PlayerJoined:
+                name = data.substr(0, data.find(":"));
+                id = std::stoi(data.substr(data.find(":") + 1));
+                pl = new Entity;
+                pl->manager.add<std::string>("type", "player");
+                pl->manager.add<std::string>("pseudo", name);
+                pl->manager.add<std::string>("name", (name == pseudo ? "player1" : name));
+                pl->manager.add<std::pair<float, float> >("position", pos);
+                pl->manager.add<Pattern::Side>("direction", Pattern::Side::RIGHT);
+                pl->manager.add<float>("velocity", 1.75f);
+                pl->manager.add<Pattern::MovePattern>
+                    ("pattern", Pattern::MovePattern::LINE);
+                pl->manager.add<fCollision>("collision", &Collision::player);
+                pl->manager.add<bool>("force", false);
+                pl->manager.add<int>("shield", 0);
+                pl->manager.add<int>("perfect_shield", 0);
+                (*_entities)[id] = pl;
+                (*_entities)[-1]->manager.set<std::size_t>("last", id + 1);
                 _players[name] = true;
                 for (auto x : _players)
                     tmp += x.first + "\n";
                 _playersText.setText(tmp);
                 break ;
             case Codes::PlayerLeft:
-                _players.erase(name);
+                _players.erase(data);
+
+                for (auto x : *_entities)
+                    if (x.second->manager.get<std::string>("pseudo") == data)
+                        _entities->erase(x.first);
                 for (auto x : _players)
                     tmp += x.first + "\n";
                 _playersText.setText(tmp);

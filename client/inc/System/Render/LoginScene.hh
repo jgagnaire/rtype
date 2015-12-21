@@ -19,7 +19,7 @@ enum class LoginState
 class LoginScene : public Scene
 {
     public:
-        LoginScene(IWindow &win, std::list<Entity*> *e):
+        LoginScene(IWindow &win, std::unordered_map<std::size_t, Entity*> *e):
             Scene(win, e), _titleLogin("Login :", 0xff0000ff),
             _titlePassword("Password :", 0xff0000ff),
             _finish(LoginState::NotConnected), _event(noEvent)
@@ -62,7 +62,7 @@ class LoginScene : public Scene
             _lastCode = Codes::nothing;
         }
 
-        virtual void    in(IPacket *p)
+        virtual void    in(IPacket *p, std::string &pseudo)
         {
             TcpPacket   *packet;
             if ((packet = dynamic_cast<TcpPacket*>(p)))
@@ -72,8 +72,8 @@ class LoginScene : public Scene
                     switch (static_cast<Codes>(packet->getQuery()))
                     {
                         case Codes::Ok:
+                            pseudo = _login;
                             _event = E_GameRoom;
-                            _entities->front()->manager.set<std::string>("pseudo", _login);
                             break ;
                         case Codes::WrongUserPass:
                             reset();

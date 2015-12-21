@@ -11,7 +11,7 @@
 class GameRoomScene : public Scene
 {
     public:
-        GameRoomScene(IWindow &win, std::list<Entity*> *e):
+        GameRoomScene(IWindow &win, std::unordered_map<std::size_t, Entity*> *e):
             Scene(win, e), _buttons(2), _update(true),
             _new(false), _current(0), _currentR(0),
             _event(0), _lastCode(Codes::nothing)
@@ -116,7 +116,7 @@ class GameRoomScene : public Scene
             }
         }
 
-        virtual void    in(IPacket *p)
+        virtual void    in(IPacket *p, std::string&)
         {
             std::string tmp, name, nb;
             TcpPacket   *packet;

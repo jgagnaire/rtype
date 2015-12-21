@@ -1,6 +1,7 @@
 #ifndef MOBSYSTEM_HH_
 # define MOBSYSTEM_HH_
 
+#include <list>
 #include "System/ASystem.hh"
 #include "System/Shoot/Pattern.hh"
 #include "System/Collider/FCollision.hh"
@@ -42,7 +43,7 @@ class	MobSystem : public ASystem
 
     public:
         MobSystem() {}
-        MobSystem(std::list<Entity*> *list) : isActiv(false), _eList(list) {
+        MobSystem(std::unordered_map<std::size_t, Entity*> *list) : isActiv(false), _eList(list) {
             _eventList.push_back(E_Stage);
         }
         virtual ~MobSystem() {}
@@ -58,7 +59,8 @@ class	MobSystem : public ASystem
                 (*x)->manager.set<int>("appearIn", tmp);
                 if (tmp <= 0)
                 {
-                    _eList->push_back(*x);
+                    (*_eList)[(*_eList)[-1]->manager.get<std::size_t>("last")] = *x;
+                    (*_eList)[-1]->manager.set<std::size_t>("last", (*_eList)[-1]->manager.get<std::size_t>("last") + 1);
                     x = _waitingmobs[1].erase(x);
                 }
                 else
@@ -68,16 +70,16 @@ class	MobSystem : public ASystem
             for (auto x = _eList->begin(); x != _eList->end();)
             {
                 has_been_del = false;
-                if ((*x)->manager.get<std::string>("type") == "mob"
-                        || (*x)->manager.get<std::string>("type") == "bonus")
+                if ((*x).second->manager.get<std::string>("type") == "mob"
+                        || (*x).second->manager.get<std::string>("type") == "bonus")
                 {
-                    (*x)->manager.get<std::function<void (Entity&, Pattern::Side, int)> >
-                        ("pattern")(**x, (*x)->manager.
+                    (*x).second->manager.get<std::function<void (Entity&, Pattern::Side, int)> >
+                        ("pattern")(*((*x).second), (*x).second->manager.
                                     get<Pattern::Side>("direction"), duration);
-                    auto tmp = (*x)->manager.get<std::pair<float, float> >("position");
+                    auto tmp = (*x).second->manager.get<std::pair<float, float> >("position");
                     if (tmp.first < -100)
                     {
-                        delete *x;
+                        delete (*x).second;
                         x = _eList->erase(x);
                         has_been_del = true;
                     }
@@ -170,7 +172,7 @@ class	MobSystem : public ASystem
 
     protected:
         bool                                                    isActiv;
-        std::list<Entity*>                                      *_eList;
+        std::unordered_map<std::size_t, Entity*>                *_eList;
         std::unordered_map<std::string, Entity>                 _jsonEntities;
         std::unordered_map<int, std::list<Entity*> >            _waitingmobs;
 };

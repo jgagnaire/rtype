@@ -10,7 +10,7 @@
 class ReadyScene : public Scene
 {
     public:
-        ReadyScene(IWindow &win, std::list<Entity*> *e);
+        ReadyScene(IWindow &win, std::unordered_map<std::size_t, Entity*> *e);
 
 	virtual ~ReadyScene();
 
@@ -18,7 +18,7 @@ class ReadyScene : public Scene
 
         virtual void    handle(EventSum e, EventSum &send);
 
-        virtual void    in(IPacket *p);
+        virtual void    in(IPacket *p, std::string&);
 
         virtual IPacket *out(EventSum&);
     private:

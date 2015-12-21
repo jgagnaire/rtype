@@ -11,7 +11,7 @@
 class MenuScene : public Scene
 {
     public:
-        MenuScene(IWindow &win, std::list<Entity*> *e):
+        MenuScene(IWindow &win, std::unordered_map<std::size_t, Entity*> *e):
             Scene(win, e), _current(0)
         {
             _b1.manager.add<AView*>("view", &_v1);

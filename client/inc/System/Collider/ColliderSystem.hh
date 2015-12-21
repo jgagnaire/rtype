@@ -9,7 +9,7 @@ class ColliderSystem : public ASystem
 {
     public:
         ColliderSystem() {}
-        ColliderSystem(std::list<Entity*> *list) :
+        ColliderSystem(std::unordered_map<std::size_t, Entity*> *list) :
             _isActiv(false), _eList(list) {
                 _eventList.push_back(E_Stage);
             }
@@ -46,72 +46,8 @@ class ColliderSystem : public ASystem
             }
         }
 
-        virtual void                    update(int duration)
+        virtual void                    update(int)
         {
-            std::pair<float, float> p1, p2;
-            std::pair<int, int>     s1, s2;
-            std::string             t1, t2;
-            Pattern::Side			d1, d2;
-            bool					has_been_del = false;
-
-            if (_isActiv)
-            {
-                for (auto a = _eList->begin(); a != _eList->end();)
-                {
-                    has_been_del = false;
-                    p1 = (*a)->manager.get<std::pair<float, float> >("position");
-                    t1 = (*a)->manager.get<std::string>("type");
-                    d1 = (*a)->manager.get<Pattern::Side>("direction");
-                    setSize(s1, (*a)->manager.get<std::string>("name"));
-                    int time;
-                    if (t1 == "player" && (time = (*a)->manager.get<int>("perfect_shield")) > 0)
-                    {
-                        time -= duration;
-                        if (time < 0)
-                            time = 0;
-                        (*a)->manager.set<int>("perfect_shield", time);
-                    }
-                    for (auto b = _eList->begin(); b != _eList->end(); ++b)
-                    {
-                        if (*a != *b)
-                        {
-                            p2 = (*b)->manager.get<std::pair<float, float> >("position");
-                            t2 = (*b)->manager.get<std::string>("type");
-                            d2 = (*b)->manager.get<Pattern::Side>("direction");
-                            setSize(s2, (*b)->manager.get<std::string>("name"));
-                            if (t1 != t2 && d1 != d2 && p1.first < p2.first + s2.first &&
-                                    p1.first + s1.first > p2.first &&
-                                    p1.second < p2.second + s2.second &&
-                                    s1.second + p1.second > p2.second)
-                            {
-                                std::pair<float, float> ex(-1, -1);
-                                bool delA = (*a)->manager.get<fCollision>("collision")(**a, **b, ex);
-                                if (ex.first > -1)
-                                    _eList->push_back(createExplosion(ex));
-                                ex.first = ex.second = -1;
-                                bool delB = (*b)->manager.get<fCollision>("collision")(**b, **a, ex);
-                                if (ex.first > -1)
-                                    _eList->push_back(createExplosion(ex));
-                                if (delA)
-                                {
-                                    a = _eList->erase(a);
-                                    has_been_del = true;
-                                }
-                                if (delB)
-                                {
-                                    if (a == b)
-                                        a = _eList->erase(b);
-                                    else
-                                        _eList->erase(b);
-                                }
-                                break ;
-                            }
-                        }
-                    }
-                    if (!has_been_del)
-                        ++a;
-                }
-            }
         }
         virtual IPacket                 *out(EventSum &) { return 0; }
         virtual void                    in(IPacket *p)
@@ -153,7 +89,7 @@ class ColliderSystem : public ASystem
         }
     private:
         bool	                                                    _isActiv;
-        std::list<Entity*>                                          *_eList;
+        std::unordered_map<std::size_t, Entity*>                    *_eList;
         std::unordered_map<std::string, std::pair<int, int> >       _hitboxes;
         EventSum														_event;
 
