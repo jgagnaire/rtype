@@ -171,14 +171,17 @@ GameManager<SCK>::checkEntities(Game<SCK> *game,
       Entity	*ent =
 	new Entity(tmp.manager.get<Entity>(ent_name).manager.get<Entity>(entity.first));
       entity.second.manager.add<int>("refresh", duration);
-      entity.second.manager.set<int>("time",
-				      entity.second.manager.get<int>("time") - 1);
       game->system[ent_name]->handle(entity.first, ent, true, pos);
+      if (entity.second.manager.exist<int>("time"))
+	entity.second.manager.set<int>("time",
+				       entity.second.manager.get<int>("time") - 1);
+      else
+	return (true);
     }
   }
   if (entity.second.manager.exist<int>("time"))
     return (entity.second.manager.get<int>("time") <= 0);
-  return (true);
+  return (false);
 }
 
 template <typename SCK>
@@ -210,11 +213,11 @@ template <typename SCK>
 bool        GameManager<SCK>::update(Game<SCK> *game, std::size_t time) {
     updateTime(game);
     updatePositions(game, time);
+    updateObjSighting(game, time, "monsters");
+    updateObjSighting(game, time, "bonuses");
     game->system["shoot"]->update(time);
     game->system["monsters"]->update(time);
     game->system["bonuses"]->update(time);
-    updateObjSighting(game, time, "monsters");
-    updateObjSighting(game, time, "bonuses");
     ASystem::collision(game->system, game->players, game->entities);
     return (!game->players.empty());
 }

@@ -1,7 +1,6 @@
 "bonuses": {
     "force": {
 	"movement": "line",
-	"name": "force",
 	"velocity": 0.5,
 	"power": 2,
 	"sprite": "force",
@@ -10,7 +9,6 @@
 
     "shield": {
 	"movement": "line",
-	"name": "shield",
 	"velocity": 0.3,
 	"protection": 50,
 	"sprite": "light_shield",
@@ -19,7 +17,6 @@
 
     "perfect_shield": {
 	"movement": "line",
-	"name": "perfect_shield",
 	"velocity": 0.5,
 	"duration": 5,
 	"sprite": "heavy_shield",
