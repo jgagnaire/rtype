@@ -120,7 +120,6 @@ void    ReadyScene::in(IPacket *p, std::string &pseudo)
                 break ;
             case Codes::PlayerLeft:
                 _players.erase(data);
-
                 for (auto x : *_entities)
                     if (x.second->manager.get<std::string>("pseudo") == data)
                         _entities->erase(x.first);
@@ -128,6 +127,9 @@ void    ReadyScene::in(IPacket *p, std::string &pseudo)
                     tmp += x.first + "\n";
                 _playersText.setText(tmp);
                 break;
+            case Codes::PingLatency:
+                _sendPongLatency = true;
+                _packet.setQuery(static_cast<uint16_t>(Codes::PongLatency));
             default:
                 ;
         }
@@ -136,6 +138,11 @@ void    ReadyScene::in(IPacket *p, std::string &pseudo)
 
 IPacket *ReadyScene::out(EventSum&)
 {
+    if (_sendPongLatency)
+    {
+         _sendPongLatency = false;
+         return (&_packet);
+    }
     if (_new)
     {
         _lastCode = _packet.getQuery();
