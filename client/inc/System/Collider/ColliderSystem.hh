@@ -98,6 +98,12 @@ class ColliderSystem : public ASystem
                     _untreated.erase(_untreated.begin() + i);
                     --i;
                 }
+                else
+                {
+                    std::cout << "Pas trouve "<<_untreated[i].first  << "-" << _untreated[i].second << "      " <<
+                       (_eList->find(_untreated[i].first) == _eList->end()) << " | " <<
+                       (_eList->find(_untreated[i].second) == _eList->end()) << std::endl;
+                }
                 ++i;
             }
         }
@@ -134,7 +140,7 @@ class ColliderSystem : public ASystem
                 if (_eList->find(id1) == _eList->end()
                         || _eList->find(id2) == _eList->end())
                 {
-                    std::cout << "Pas trouve " <<
+                    std::cout << "ADDED "<< id1<< "-" << id2 << "           " <<
                        (_eList->find(id1) == _eList->end()) << " | " <<
                        (_eList->find(id2) == _eList->end()) << std::endl;
                     _untreated.push_back(std::pair<std::size_t, std::size_t>(id1, id2));

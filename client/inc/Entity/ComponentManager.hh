@@ -4,7 +4,6 @@
 #include "Component.hh"
 #include "ManagerException.hh"
 #include <unordered_map>
-#include <algorithm>
 #include <vector>
 #include <iostream>
 #include <utility>
@@ -16,17 +15,20 @@ class ComponentManager
         std::unordered_map<std::string, IComponent*> components;
 
     public:
-	ComponentManager(const ComponentManager &c) : components(c.components) {}
+  ComponentManager(const ComponentManager &c) {
+    *this = c;
+  }
 	ComponentManager() {}
-	ComponentManager&	operator=(const ComponentManager &c)
-		{
-			if (this != &c)
-			{
-				ComponentManager tmp(c);
-				std::swap(tmp.components, components);
-			}
-			return (*this);
-		}
+  ComponentManager&	operator=(const ComponentManager &c)
+  {
+    if (this != &c)
+      {
+
+	for (auto it = c.components.begin(); it != c.components.end(); ++it)
+	  components[it->first] = it->second->clone();
+      }
+    return (*this);
+  }
 
         template<typename Type>
             void add(const std::string& name, Type value)
@@ -52,7 +54,6 @@ class ComponentManager
     else
       throw ComponentManagerException("Component does not exist");
   }
-
 
   const std::string&	getType(const std::string& name)
   {
@@ -87,7 +88,6 @@ type for compenents \"" + name + "\" is : " + components[name]->getType());
       }
     return (false);
   }
-
 
   template<typename Type>
   bool	remove(const std::string& name = "")
@@ -126,7 +126,7 @@ type for compenents \"" + name + "\" is : " + components[name]->getType());
   template<typename Type>
   std::vector<std::pair<std::string, Type> >	getAll(void)
   {
-    std::vector<std::pair<std::string, Type> > v;
+    std::vector<std::pair<std::string, Type> >	v;
 
     for (std::unordered_map<std::string, IComponent*>::iterator it
 	   = components.begin();

@@ -57,7 +57,7 @@ class ShootSystem : public ASystem
                                     get<Pattern::Side>("direction"), duration);
                     std::pair<float, float> tmp = (*x).second->manager.
                         get<std::pair<float, float> >("position");
-                    if (tmp.first > 1920 || tmp.first < 0)
+                    if (tmp.first > 1920 * 2 || tmp.first < 0)
                     {
                         x = _eList->erase(x);
                         has_been_del = true;
