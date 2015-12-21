@@ -12,9 +12,9 @@ class	MobSystem : public ASystem
         Entity *createMob(const std::string &name, const std::pair<float, float> &pos)
         {
             Entity *e = new Entity;
+            *e = _jsonEntities[name];
             e->manager.add<std::string>("name", name);
             e->manager.add<std::string>("type", "mob");
-            e->manager.add<float>("velocity", _jsonEntities[name].manager.get<float>("velocity"));
             e->manager.add<std::pair<float, float> >("position", pos);
             e->manager.add<std::function<void (Entity&, Pattern::Side, int)> >
                 ("pattern",

@@ -4,6 +4,7 @@
 #include "Component.hh"
 #include "ManagerException.hh"
 #include <unordered_map>
+#include <algorithm> 
 #include <vector>
 #include <iostream>
 #include <utility>
@@ -15,6 +16,18 @@ class ComponentManager
         std::unordered_map<std::string, IComponent*> components;
 
     public:
+	ComponentManager(const ComponentManager &c) : components(c.components) {}
+	ComponentManager() {}
+	ComponentManager&	operator=(const ComponentManager &c)
+		{
+			if (this != &c)
+			{
+				ComponentManager tmp(c);
+				std::swap(tmp.components, components);
+			}
+			return (*this);
+		}
+	
         template<typename Type>
             void add(const std::string& name, Type value)
             {
@@ -40,6 +53,7 @@ class ComponentManager
       throw ComponentManagerException("Component does not exist");
   }
 
+	
   const std::string&	getType(const std::string& name)
   {
     if (components.find(name) != components.end())
@@ -48,7 +62,7 @@ class ComponentManager
   }
 
   template<typename Type>
-  Type &get(const std::string& name) // TODO, it should work with a const Entity
+  Type &get(const std::string& name)
   {
     if (components.find(name) != components.end())
       {
