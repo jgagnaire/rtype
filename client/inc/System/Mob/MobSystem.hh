@@ -50,7 +50,7 @@ class	MobSystem : public ASystem
         {
             if (!isActiv)
                 return ;
-            for (auto x = _waitingmobs[0].begin(); x != _waitingmobs[0].end();)
+            for (auto x = _waitingmobs[1].begin(); x != _waitingmobs[1].end();)
             {
                 int tmp = (*x)->manager.get<int>("appearIn");
                 tmp -= duration;
@@ -58,7 +58,7 @@ class	MobSystem : public ASystem
                 if (tmp <= 0)
                 {
                     _eList->push_back(*x);
-                    x = _waitingmobs[0].erase(x);
+                    x = _waitingmobs[1].erase(x);
                 }
                 else
                     ++x;
@@ -152,7 +152,8 @@ class	MobSystem : public ASystem
                                 l.push_back(tmp);
                             }
                         }
-                        _waitingmobs.push_back(l);
+                        int nb = std::stoi(main.first.substr(5));
+                        _waitingmobs[nb] = l;
                     }
                 }
             }
@@ -167,10 +168,10 @@ class	MobSystem : public ASystem
         virtual EventSum                getEvent() {return noEvent;}
 
     protected:
-        bool                                        isActiv;
-        std::list<Entity*>                          *_eList;
-        std::unordered_map<std::string, Entity>     _jsonEntities;
-        std::vector<std::list<Entity*> >            _waitingmobs;
+        bool                                                    isActiv;
+        std::list<Entity*>                                      *_eList;
+        std::unordered_map<std::string, Entity>                 _jsonEntities;
+        std::unordered_map<int, std::list<Entity*> >            _waitingmobs;
 };
 
 #endif
