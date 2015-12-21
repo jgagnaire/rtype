@@ -59,8 +59,16 @@ class	MobSystem : public ASystem
                 (*x)->manager.set<int>("appearIn", tmp);
                 if (tmp <= 0)
                 {
-                    (*_eList)[(*_eList)[-1]->manager.get<std::size_t>("last")] = *x;
-                    (*_eList)[-1]->manager.set<std::size_t>("last", (*_eList)[-1]->manager.get<std::size_t>("last") + 1);
+                    if ((*x)->manager.get<std::string>("type") == "mob")
+                    {
+                        (*_eList)[(*_eList)[-1]->manager.get<std::size_t>("lastMob")] = *x;
+                        (*_eList)[-1]->manager.set<std::size_t>("lastMob", (*_eList)[-1]->manager.get<std::size_t>("lastMob") + 1);
+                    }
+                    else if ((*x)->manager.get<std::string>("type") == "bonus")
+                    {
+                        (*_eList)[(*_eList)[-1]->manager.get<std::size_t>("lastBonus")] = *x;
+                        (*_eList)[-1]->manager.set<std::size_t>("lastBonus", (*_eList)[-1]->manager.get<std::size_t>("lastBonus") + 1);
+                    }
                     x = _waitingmobs[1].erase(x);
                 }
                 else

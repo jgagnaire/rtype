@@ -42,6 +42,10 @@ enum class Codes
 enum class UdpCodes
 {
     KeyPressed = 301,
+    Collided = 401,
+    BossDeath = 403,
+    AudioPacket = 404,
+    PlayerQuit = 406,
 	ServeKeyPressed = 407,
     NewPos = 408
 };

@@ -4,6 +4,7 @@
 #include "System/ASystem.hh"
 #include "System/Shoot/Pattern.hh"
 #include "Utility/JSONParser.hh"
+#include "Network/NetworkManager.hh"
 
 class ColliderSystem : public ASystem
 {
@@ -46,13 +47,47 @@ class ColliderSystem : public ASystem
             }
         }
 
+        void        collide(std::size_t id1, std::size_t id2)
+        {
+            Entity          *a, *b;
+
+            a = (*_eList)[id1];
+            b = (*_eList)[id2];
+            std::pair<float, float> ex(-1, -1);
+            bool delA = a->manager.get<fCollision>("collision")(*a, *b, ex);
+            //if (ex.first > -1)
+            //_eList->push_back(createExplosion(ex));
+            //ex.first = ex.second = -1;
+            bool delB = b->manager.get<fCollision>("collision")(*b, *a, ex);
+            //if (ex.first > -1)
+            //_eList->push_back(createExplosion(ex));
+            if (delA)
+                _eList->erase(id1);
+            if (delB)
+                _eList->erase(id2);
+        }
+
         virtual void                    update(int)
         {
+            for (std::size_t i = 0; i < _untreated.size();)
+            {
+                if (_eList->find(_untreated[i].first) != _eList->end()
+                        && _eList->find(_untreated[i].second) != _eList->end())
+                {
+                    collide(_untreated[i].first, _untreated[i].second);
+                    _untreated.erase(_untreated.begin() + i);
+                    --i;
+                }
+                ++i;
+            }
         }
+
         virtual IPacket                 *out(EventSum &) { return 0; }
+
         virtual void                    in(IPacket *p)
         {
             TcpPacket                   *packet;
+            UdpPacket                   *up;
 
             if ((packet = dynamic_cast<TcpPacket*>(p))
                     && p->getQuery() == static_cast<uint16_t>(Codes::JsonHitboxes))
@@ -65,6 +100,24 @@ class ColliderSystem : public ASystem
                             x.second.manager.get<int>("x"),
                             x.second.manager.get<int>("y"));
                 }
+            }
+            if ((up = dynamic_cast<UdpPacket*>(p))
+                    && p->getQuery() == static_cast<uint16_t>(UdpCodes::Collided))
+            {
+                std::string data = std::string(
+                        static_cast<const char*>(up->getData()),
+                        up->getSize());
+                std::size_t     id1, id2;
+
+                id1 = std::stoi(data.substr(0, data.find(":")));
+                id2 = std::stoi(data.substr(data.find(":") + 1));
+                if (_eList->find(id1) == _eList->end()
+                        || _eList->find(id2) == _eList->end())
+                {
+                    _untreated.push_back(std::pair<std::size_t, std::size_t>(id1, id2));
+                    return ;
+                }
+                collide(id1, id2);
             }
         }
 
@@ -92,7 +145,7 @@ class ColliderSystem : public ASystem
         std::unordered_map<std::size_t, Entity*>                    *_eList;
         std::unordered_map<std::string, std::pair<int, int> >       _hitboxes;
         EventSum														_event;
-
+        std::vector<std::pair<std::size_t, std::size_t> >           _untreated;
 };
 
 #endif

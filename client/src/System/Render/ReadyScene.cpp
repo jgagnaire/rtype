@@ -110,7 +110,7 @@ void    ReadyScene::in(IPacket *p, std::string &pseudo)
                 pl->manager.add<int>("shield", 0);
                 pl->manager.add<int>("perfect_shield", 0);
                 (*_entities)[id] = pl;
-                (*_entities)[-1]->manager.set<std::size_t>("last", id + 1);
+                (*_entities)[-1]->manager.set<std::size_t>("lastPlayer", id + 1);
                 _players[name] = true;
                 for (auto x : _players)
                     tmp += x.first + "\n";
