@@ -7,6 +7,8 @@ GameplayController<T>::GameplayController(std::list<UserManager<T> *> *cl)
 
 template<typename T>
 int	            GameplayController<T>::newData(UserManager<T> *cl) {
+  if (cl->isDead())
+    return (-1);
     switch (cl->numUDPQuery()) {
         case (Enum::QUIT_GAME):
             return (static_cast<int>(quitGame(cl)));

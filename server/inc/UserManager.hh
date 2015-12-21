@@ -14,6 +14,7 @@
 # include <mutex>
 # include "Enum.hh"
 # include "Packet.hh"
+# include "Entity.hh"
 # include "IServerSocket.hh"
 
 # if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined (_WIN64)
@@ -74,12 +75,15 @@ public:
     uint64_t                getUDPPacketId();
     bool                    isFiring() const;
     bool                    isDead() const;
-    void                    isTouched();
+    void                    isTouched(int damage = Enum::MAX_DAMAGE);
     void                    changePosition(std::size_t);
     const Position	    &getPosition() const;
     const std::size_t	    &getKeypressed() const;
     void		    setId(std::size_t);
     std::size_t		    getId();
+    void	            getBonus(Entity *);
+    bool		    updateBonus(std::size_t);
+    bool		    isRespawning() const;
 
     Enum::ServerAnswers	    verifyUser();
     Enum::ServerAnswers	    newUser();
@@ -120,7 +124,11 @@ private:
   Position                                position;
   bool					  is_dead;
   char					  life;
-  std::size_t				  id;
+  int64_t				  id;
+  int64_t				  force = 0;
+  int64_t				  protection = 0;
+  int64_t				  perfect_shield = 0;
+  int64_t				  respawn = 0;
 
   bool					hasBadFormat(std::string *) const;
   bool					alreadyExist(std::string *);

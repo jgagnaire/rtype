@@ -27,6 +27,9 @@ UserManager<T>::~UserManager() {
 }
 
 template<typename T>
+bool	UserManager<T>::isRespawning() const { return (respawn > 0); }
+
+template<typename T>
 bool	UserManager<T>::isLogged() const { return (stream.is_open()); }
 
 template<typename T>
@@ -47,6 +50,16 @@ bool	UserManager<T>::writeOnMe()
 
 template<typename T>
 bool	UserManager<T>::sendStructEmpty() const { return (packet.sendPackEmpty()); }
+
+template<typename T>
+void	UserManager<T>::getBonus(Entity *bonus) {
+  if (bonus->manager.exist<int>("duration"))
+    perfect_shield = bonus->manager.get<int>("duration") * 1000;
+  else if (bonus->manager.exist<int>("power"))
+    force = bonus->manager.get<int>("power");
+  else if (bonus->manager.exist<int>("protection"))
+    protection = bonus->manager.get<int>("protection");
+}
 
 template<typename T>
 IServerSocket<T>	*UserManager<T>::getServerSocket() { return (this->sock); }
@@ -301,10 +314,24 @@ template <typename T>
 std::size_t		UserManager<T>::getId() { return (id); }
 
 template <typename T>
-bool                    UserManager<T>::isDead() const { return (life <= 10); }
+bool                    UserManager<T>::isDead() const { return (life <= 0); }
 
 template <typename T>
-void                    UserManager<T>::isTouched() { --life; }
+void                    UserManager<T>::isTouched(int damage) {
+  if (perfect_shield > 0)
+    return ;
+  if (protection - damage > 0) {
+    protection -= damage;
+    return ;
+  }
+  perfect_shield = 0;
+  protection = 0;
+  force = 0;
+  position.x = 0;
+  position.y = Enum::GAME_SIZE_HEIGHT / 2;
+  respawn = Enum::RESPAWN_TIME;
+  --life;
+}
 
 template <typename T>
 void                    UserManager<T>::clearGameData() {
@@ -319,9 +346,20 @@ void                    UserManager<T>::clearGameData() {
     life = 10;
     position.x = 0;
     position.y = Enum::GAME_SIZE_HEIGHT / 2;
+    force = 0;
+    protection = 0;
+    perfect_shield = 0;
+    respawn = Enum::RESPAWN_TIME;
 }
 
-
+template <typename T>
+bool                UserManager<T>::updateBonus(std::size_t duration) {
+  if (perfect_shield > 0)
+    perfect_shield -= duration;
+  if (respawn > 0)
+    respawn -= duration;
+  return (true);
+}
 
 template <typename T>
 uint64_t                UserManager<T>::getUDPPacketId() { return (udp_packet_id++); }

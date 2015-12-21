@@ -133,6 +133,9 @@ namespace Enum
         REFRESH_TIME = 15,
         GAME_SIZE_WIDTH = 1920,
         GAME_SIZE_HEIGHT = 1080,
+        MAX_DAMAGE = 1000000000,
+	MAX_ID = 1000000000,
+	RESPAWN_TIME = 3000,
     };
 };
 

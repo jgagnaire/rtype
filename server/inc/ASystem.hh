@@ -36,7 +36,7 @@ protected:
   std::list<Entity *> _entities;
 
 private:
-  static void	sendCollision(int, int, Players &);
+  static void	sendCollision(std::size_t, std::size_t, Players &);
   static void	checkFireCollision(System &, Players &, AllEntity &);
   static void   collisionMonsterPlayer(System &, Players &, AllEntity &);
   static void   collisionBonusPlayer(System &, Players &, AllEntity &);
