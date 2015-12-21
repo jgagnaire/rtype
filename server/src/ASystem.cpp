@@ -207,14 +207,11 @@ bool	ASystem::touchMonster(Entity *fire, System &system, AllEntity &entities, Pl
       (*m)->manager.set<int>("life",
 			     (*m)->manager.get<int>("life") - 
 			     fire->manager.get<int>("damage"));
-      std::cout << "il a: "<< (*m)->manager.get<int>("life")  << std::endl;
+      std::cout << "il a: "<< (*m)->manager.get<int>("life") << ": " <<  &(*m)->manager.get<int>("life") << std::endl;
       if ((*m)->manager.get<int>("life") <=  0) {
-	std::cout << "il est mort: "<< (*m)->manager.get<int>("life")  << std::endl;
 	system["monsters"]->_entities.erase(m);
 	delete *m;
       }
-      else
-	std::cout << "il lui reste: "<< (*m)->manager.get<int>("life")  << std::endl;
       delete fire;
       return (true);
     }

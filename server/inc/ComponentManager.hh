@@ -15,17 +15,20 @@ class ComponentManager
         std::unordered_map<std::string, IComponent*> components;
 
     public:
-	ComponentManager(const ComponentManager &c) : components(c.components) {}
+  ComponentManager(const ComponentManager &c) {
+    *this = c;
+  }
 	ComponentManager() {}
-	ComponentManager&	operator=(const ComponentManager &c)
-		{
-			if (this != &c)
-			{
-				ComponentManager tmp(c);
-				std::swap(tmp.components, components);
-			}
-			return (*this);
-		}
+  ComponentManager&	operator=(const ComponentManager &c)
+  {
+    if (this != &c)
+      {
+
+	for (auto it = c.components.begin(); it != c.components.end(); ++it)
+	  components[it->first] = it->second->clone();
+      }
+    return (*this);
+  }
 
         template<typename Type>
             void add(const std::string& name, Type value)
