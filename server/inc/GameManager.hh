@@ -28,22 +28,28 @@ struct Game {
     }
   }
 
-  Game() {
+  Game() : refresh(Enum::REFRESH_TIME), is_playing(false),
+	   lvl_name("level1"), ids(0) {
     system["shoot"] = new ShootSystem;
     system["monsters"] = new MobSystem; 
     system["bonuses"] = new BonusSystem;
   }
 
+  std::size_t	getId() {
+    return (ids++);
+  }
+
     std::unordered_map<std::string, ASystem *>  system;
     std::string                                 name;
     std::list<UserManager<SCK> *>               players;
-    std::size_t                                 refresh = Enum::REFRESH_TIME;
-    bool                                        is_playing = false;
+    std::size_t                                 refresh;
+    bool                                        is_playing;
     float					time;
-    std::string					lvl_name = "level1";
+    std::string					lvl_name;
     std::unordered_map<std::string, Entity>	entities;
     Entity					*level;
     std::unordered_map<std::string, std::string>  content_system;
+    std::size_t					ids;
 };
 
 template <typename SCK>
@@ -65,6 +71,7 @@ public:
     void                            setUdpSocket(IServerSocket<SCK> *);
     void			    sendPosition(Game<SCK> *, UserManager<SCK> *);
     void			    fireBall(Game<SCK> *, UserManager<SCK> *, bool);
+    IServerSocket<SCK>		    *getUDPSocket();
 
 private:
     bool                            update(Game<SCK> *game, std::size_t);

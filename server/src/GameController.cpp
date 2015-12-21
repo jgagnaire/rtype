@@ -51,20 +51,21 @@ bool            GameController<T>::joinNamedRoom(UserManager<T> *cl) const {
     cl->writeStruct({0, static_cast<uint16_t>(sa)});
     if (sa == Enum::OK) {
 	game = g.getGameByName(cl->getGameroomName());
+	cl->setId(game->getId());
+	std::string tmp = cl->getName() + ":" + std::to_string(cl->getId());
         sendJSON(cl, game);
         if (!game)
             return (true);
         for (auto it = game->players.begin(); it != game->players.end(); ++it) {
 	  if (cl->getName() != (*it)->getName()) {
-	    std::cout << cl->getName() << " sait que " <<  (*it)->getName() << " est rentre" << std::endl;
-            cl->writeStruct({static_cast<uint16_t>((*it)->getName().size()),
+	    std::string tmp2 = (*it)->getName() + ":" + std::to_string((*it)->getId());
+            cl->writeStruct({static_cast<uint16_t>(tmp2.size()),
 		  Enum::PLAYER_JOIN});
-            cl->writeMsg((*it)->getName());
+            cl->writeMsg(tmp2);
 	  }
-	  std::cout << (*it)->getName() << " sait que " << cl->getName() << " est rentre" << std::endl;
-            (*it)->writeStruct({static_cast<uint16_t>(cl->getName().size()),
+            (*it)->writeStruct({static_cast<uint16_t>(tmp.size()),
                                 Enum::PLAYER_JOIN});
-            (*it)->writeMsg(cl->getName());
+            (*it)->writeMsg(tmp);
         }
     }
     return (true);
@@ -78,7 +79,12 @@ bool            GameController<T>::createGameRoom(UserManager<T> *cl) const {
 
     cl->writeStruct({0, static_cast<uint16_t>(sa)});
     if (sa == Enum::OK) {
+      std::string tmp = cl->getName() + ":" + std::to_string(cl->getId());
+      std::cout << "l'id et le name: " << tmp << std::endl;
       std::cout << cl->getName() << " veut creer "  << cl->getPacketData() << std::endl;
+      cl->writeStruct({static_cast<uint16_t>(tmp.size()),
+	    Enum::PLAYER_JOIN});
+      cl->writeMsg(tmp);
       sendJSON(cl, g.getGameByName(cl->getGameroomName()));
     }
     return (true);

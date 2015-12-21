@@ -85,6 +85,7 @@ void        GameManager<SCK>::fireBall(Game<SCK> *game, UserManager<SCK> *u,
     ent = new Entity(tmp.manager.get<Entity>("fires").manager.get<Entity>("rotate"));
   else
     ent = new Entity(tmp.manager.get<Entity>("fires").manager.get<Entity>("normal"));
+  ent->manager.add<std::size_t>("id", game->getId());
   game->system["shoot"]->handle(u->getName(), ent, false, u->getPosition());
 }
 
@@ -157,6 +158,7 @@ GameManager<SCK>::checkEntities(Game<SCK> *game,
 	  entity.second.manager.get<int>("refresh")) {
 	Entity	*ent =
 	  new Entity(tmp.manager.get<Entity>(ent_name).manager.get<Entity>(entity.first));
+	ent->manager.add<std::size_t>("id", game->getId());
 	entity.second.manager.set<int>("refresh", time);
 	entity.second.manager.set<int>("time", entity.second.manager.get<int>("time") - 1);
 	game->system[ent_name]->handle(entity.first, ent, true, pos);
@@ -171,6 +173,7 @@ GameManager<SCK>::checkEntities(Game<SCK> *game,
       Entity	*ent =
 	new Entity(tmp.manager.get<Entity>(ent_name).manager.get<Entity>(entity.first));
       entity.second.manager.add<int>("refresh", duration);
+      ent->manager.add<std::size_t>("id", game->getId());
       game->system[ent_name]->handle(entity.first, ent, true, pos);
       if (entity.second.manager.exist<int>("time"))
 	entity.second.manager.set<int>("time",
@@ -261,6 +264,9 @@ void            GameManager<SCK>::createGame(Game<SCK> *game) {
     }
     game->is_playing = false;
 }
+
+template <typename SCK>
+IServerSocket<SCK>	*GameManager<SCK>::getUDPSocket() { return (_udp_socket); }
 
 template <typename SCK>
 void		GameManager<SCK>::sendPosition(Game<SCK> *game, UserManager<SCK> *user) {

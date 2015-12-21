@@ -258,6 +258,9 @@ Enum::ServerAnswers      UserManager<T>::createGameRoom() {
     std::cout << "La room: " << gameroom << " se cree "<< std::endl;
     gm.createRoom(game_name, this);
     std::cout << "il y a donc " << gm.getGames().size() << " rooms" << std::endl;
+    Game<T> *g = gm.getGameByName(game_name);
+    if (g)
+      id = g->getId();
     status = Enum::GAME_ROOM;
     return (Enum::OK);
 }
@@ -291,6 +294,11 @@ Enum::ServerAnswers      UserManager<T>::ready() {
 
 template <typename T>
 bool                    UserManager<T>::isFiring() const { return (fire); }
+
+template <typename T>
+void                    UserManager<T>::setId(std::size_t i) { id = i; }
+template <typename T>
+std::size_t		UserManager<T>::getId() { return (id); }
 
 template <typename T>
 bool                    UserManager<T>::isDead() const { return (life <= 10); }

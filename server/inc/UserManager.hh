@@ -78,6 +78,8 @@ public:
     void                    changePosition(std::size_t);
     const Position	    &getPosition() const;
     const std::size_t	    &getKeypressed() const;
+    void		    setId(std::size_t);
+    std::size_t		    getId();
 
     Enum::ServerAnswers	    verifyUser();
     Enum::ServerAnswers	    newUser();
@@ -118,6 +120,7 @@ private:
   Position                                position;
   bool					  is_dead;
   char					  life;
+  std::size_t				  id;
 
   bool					hasBadFormat(std::string *) const;
   bool					alreadyExist(std::string *);
