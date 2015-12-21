@@ -73,7 +73,7 @@ class SystemManager
             if (_networkManager.isConnected() == false)
             {
                 std::cerr << "Can't connect" << std::endl;
-                return ;
+				return ;
             }
             lastEvent.setQuery(static_cast<uint16_t>(UdpCodes::KeyPressed));
             while (ea->getWin()->isOpen())
@@ -81,7 +81,7 @@ class SystemManager
                 start = std::chrono::steady_clock::now();
                 event = 0;
                 std::chrono::duration<double> diff = start - end;
-                s = diff.count() * 1000;
+                s = static_cast<std::size_t>(diff.count() * 1000);
                 if (s > 30)
                 {
                     end = start;
