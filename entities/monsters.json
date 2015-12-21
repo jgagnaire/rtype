@@ -19,4 +19,11 @@
 	"velocity": 0.5,
 	"life": 50
     }
+
+    boss1: {
+        "movement": "none",
+        "fire": ["normal"],
+        "velocity": 0.01,
+        "life": 150
+    }
 }
