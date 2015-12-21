@@ -28,6 +28,7 @@ class	MobSystem : public ASystem
         {
             Entity *e = new Entity;
             *e = _jsonEntities[name];
+            e->manager.add<std::string>("name", name);
             e->manager.add<std::string>("type", "bonus");
             e->manager.add<std::pair<float, float> >("position", pos);
             e->manager.add<std::function<void (Entity&, Pattern::Side, int)> >
