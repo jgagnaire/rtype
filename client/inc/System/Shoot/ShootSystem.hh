@@ -100,8 +100,8 @@ class ShootSystem : public ASystem
                             Entity *sht = this->createShoot(x.second->manager.get<std::pair<float, float> >("position"),
                                     x.second->manager.get<Pattern::MovePattern>("pattern"),
                                     Pattern::Side::RIGHT);
-                            (*_eList)[(*_eList)[-1]->manager.get<std::size_t>("last")] = sht;
-                            (*_eList)[-1]->manager.set<std::size_t>("last", (*_eList)[-1]->manager.get<std::size_t>("last") + 1);
+                            (*_eList)[(*_eList)[-1]->manager.get<std::size_t>("lastShoot")] = sht;
+                            (*_eList)[-1]->manager.set<std::size_t>("lastShoot", (*_eList)[-1]->manager.get<std::size_t>("lastShoot") + 1);
                             return ;
                         }
                     }

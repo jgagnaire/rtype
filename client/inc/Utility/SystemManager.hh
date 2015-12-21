@@ -20,7 +20,11 @@ class SystemManager
             _networkManager(ip, ip), shr_entities(new std::unordered_map<std::size_t, Entity*>)
     {
         Entity  *last = new Entity;
-        last->manager.add<std::size_t>("last", 0);
+        last->manager.add<std::size_t>("lastPlayer", 0);
+        last->manager.add<std::size_t>("lastShoot", 1000000000);
+        last->manager.add<std::size_t>("lastMob", 2000000000);
+        last->manager.add<std::size_t>("lastBonus", 3000000000);
+        last->manager.add<std::size_t>("lastMobShoot", 4000000000);
         last->manager.add<std::string>("type", "none");
         last->manager.add<std::string>("name", "none");
         last->manager.add<std::pair<float, float> >("position", std::pair<float,float>(0,0));
