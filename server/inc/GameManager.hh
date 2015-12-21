@@ -5,6 +5,7 @@
 # include <unordered_map>
 # include "ShootSystem.hh"
 # include "MobSystem.hh"
+# include "BonusSystem.hh"
 # include "JSONParser.hh"
 # include "UserManager.hh"
 # include "ThreadPool.hh"
@@ -23,12 +24,14 @@ struct Game {
     if (system["shoot"]) {
       delete system["shoot"];
       delete system["monsters"];
+      delete system["bonuses"];
     }
   }
 
   Game() {
     system["shoot"] = new ShootSystem;
     system["monsters"] = new MobSystem; 
+    system["bonuses"] = new BonusSystem;
   }
 
     std::unordered_map<std::string, ASystem *>  system;
@@ -67,12 +70,14 @@ private:
     bool                            update(Game<SCK> *game, std::size_t);
     void                            updatePositions(Game<SCK> *, std::size_t);
     bool			    updateTime(Game<SCK> *);
-    bool		            updateMonstersSighting(Game<SCK> *game,
-							   std::size_t time);
-    bool			    checkMonsters(Game<SCK> *, 
+    bool		            updateObjSighting(Game<SCK> *game,
+						      std::size_t time,
+						      const std::string &);
+    bool			    checkEntities(Game<SCK> *, 
 						  std::pair<std::string, Entity&>,
 						  int,
-						  std::size_t);
+						  std::size_t,
+						  const std::string &);
 
     static  GameManager				  *game_manager;
     static  Entity				  configuration;

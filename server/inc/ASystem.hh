@@ -29,6 +29,7 @@ public:
   static void	collision(System &system, Players &p, AllEntity &entities) {
     ASystem::checkFireCollision(system, p, entities);
     ASystem::collisionMonsterPlayer(system, p, entities);
+    ASystem::collisionBonusPlayer(system, p, entities);
   }
 
   static void	line(Entity &e, int duration)
@@ -77,6 +78,41 @@ private:
   static void   collisionMonsterPlayer(System &system, Players &player, AllEntity &entities) {
     for (auto p = player.begin(); p != player.end(); ++p)
       ASystem::touchPlayerMonster(system, *p, entities);
+  }
+
+  static void   collisionBonusPlayer(System &system, Players &player, AllEntity &entities) {
+    for (auto p = player.begin(); p != player.end(); ++p)
+      ASystem::touchPlayerBonus(system, *p, entities);
+  }
+
+  static void	touchPlayerBonus(System &system, User *player, AllEntity &entities) {
+    Entity	&tmp_hitboxes = entities["hitboxes"];
+    Entity	&hitboxes = tmp_hitboxes.manager.get<Entity>("hitboxes");
+    Entity	&player_hitbox = hitboxes.manager.get<Entity>("player1");
+    int		player_hitbox_x = player_hitbox.manager.get<int>("x");
+    int		player_hitbox_y = player_hitbox.manager.get<int>("y");
+    Position	player_pos = player->getPosition();
+
+    for (auto m = system["bonuses"]->_entities.begin();
+	 m != system["bonuses"]->_entities.end();) {
+      Entity	&bonus_hitbox = hitboxes.manager.get<Entity>((*m)->manager.get<std::string>("name"));
+      int       bonus_hitbox_x = bonus_hitbox.manager.get<int>("x");
+      int       bonus_hitbox_y = bonus_hitbox.manager.get<int>("y");
+      std::pair<float, float> bonus_pos = (*m)->manager.get<std::pair<float, float> >("position");
+
+      if (player_pos.x < bonus_pos.first + bonus_hitbox_x &&
+	  player_pos.x + player_hitbox_x > bonus_pos.first &&
+	  player_pos.y < bonus_pos.second + bonus_hitbox_y &&
+	  player_hitbox_y + player_pos.y > bonus_pos.second) {
+	std::cout << "BONUS-PLAYER => TOUCHEY !" << std::endl;
+	delete *m;
+	system["bonuses"]->_entities.erase(m++);
+      }
+      else
+	++m;
+      if (player->isDead())
+	return ;
+    }
   }
 
   static void	touchPlayerMonster(System &system, User *player, AllEntity &entities) {
