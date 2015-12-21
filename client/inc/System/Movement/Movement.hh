@@ -9,7 +9,7 @@ class MovementSystem : public ASystem
 {
     public:
         MovementSystem() : lastEvent(noEvent) {};
-	MovementSystem(std::list<Entity*> *eList) : _eList(eList),
+	MovementSystem(std::unordered_map<std::size_t, Entity*> *eList) : _eList(eList),
 												lastEvent(noEvent), isActiv(false) {
             _eventList.push_back(Key_Up);
             _eventList.push_back(Key_Down);
@@ -40,11 +40,11 @@ class MovementSystem : public ASystem
             float move = static_cast<float>(duration);
             for(auto x : *_eList)
             {
-                if (x->manager.get<std::string>("name") == "player1")
+                if (x.second->manager.get<std::string>("name") == "player1")
                 {
-					move *= (x->manager.get<float>("velocity") / k);
+					move *= (x.second->manager.get<float>("velocity") / k);
                     std::pair<float, float> tmp =
-                        x->manager.get<std::pair<float, float> >("position");
+                        x.second->manager.get<std::pair<float, float> >("position");
                     if (lastEvent & Key_Up)
                         tmp.second -= move;
                     if (lastEvent & Key_Down)
@@ -57,7 +57,7 @@ class MovementSystem : public ASystem
                     tmp.first = (tmp.first > 1920 ? 1920 : tmp.first);
                     tmp.second = (tmp.second < 0 ? 0 : tmp.second);
                     tmp.second = (tmp.second > 1080 ? 1080 : tmp.second);
-                    x->manager.set("position", tmp);
+                    x.second->manager.set("position", tmp);
                     break;
                 }
             }
@@ -94,9 +94,9 @@ class MovementSystem : public ASystem
                     for(auto x : *_eList)
                     {
                         try {
-                        if (x->manager.get<std::string>("pseudo") == name)
+                        if (x.second->manager.get<std::string>("pseudo") == name)
                         {
-                            x->manager.set<std::pair<float, float> >
+                            x.second->manager.set<std::pair<float, float> >
 								("position", std::pair<float, float>(px, py));
                         }
                         } catch (ComponentManagerException &) {}
@@ -129,7 +129,7 @@ class MovementSystem : public ASystem
         }
 
     protected:
-        std::list<Entity*>	*_eList;
+        std::unordered_map<std::size_t, Entity*>	*_eList;
         EventSum			lastEvent;
         bool				isActiv;
         UdpPacket           _packet;

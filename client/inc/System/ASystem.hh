@@ -2,7 +2,7 @@
 # define ASYSTEM_HH_
 
 #include <vector>
-#include <list>
+#include <unordered_map>
 #include <Entity/Entity.hh>
 #include "Event/EventAggregator.hh"
 #include "Network/IPacket.hh"
@@ -12,7 +12,7 @@ class ASystem
 {
 public:
 	ASystem() {}
-	ASystem(std::list<Entity*> *) {}
+	ASystem(std::unordered_map<std::size_t, Entity*> *) {}
 	virtual ~ASystem() {}
 
 	virtual void                    update(int duration) = 0;

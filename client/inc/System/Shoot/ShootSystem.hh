@@ -27,7 +27,8 @@ class ShootSystem : public ASystem
             return (e);
         }
     public:
-        ShootSystem(std::list<Entity*> *_list) : _eList(_list), fireRate(250), isActiv(false), _frequency(0), lastEvent(0)
+        ShootSystem(std::unordered_map<std::size_t, Entity*> *_list) :
+            _eList(_list), fireRate(250), isActiv(false), _frequency(0), lastEvent(0)
     {
         _eventList.push_back(Key_Fire);
         _eventList.push_back(Key_Charge);
@@ -48,12 +49,12 @@ class ShootSystem : public ASystem
             for (auto x = _eList->begin(); x != _eList->end();)
             {
                 has_been_del = false;
-                if ((*x)->manager.get<std::string>("type") == "shoot")
+                if ((*x).second->manager.get<std::string>("type") == "shoot")
                 {
-                    (*x)->manager.get<std::function<void (Entity&, Pattern::Side, int)> >
-                        ("pattern")(**x, (*x)->manager.
+                    (*x).second->manager.get<std::function<void (Entity&, Pattern::Side, int)> >
+                        ("pattern")(*((*x).second), (*x).second->manager.
                                     get<Pattern::Side>("direction"), duration);
-                    std::pair<float, float> tmp = (*x)->manager.
+                    std::pair<float, float> tmp = (*x).second->manager.
                         get<std::pair<float, float> >("position");
                     if (tmp.first > 1920 || tmp.first < 0)
                     {
@@ -93,13 +94,14 @@ class ShootSystem : public ASystem
                 {
                     for (auto x : *_eList)
                     {
-						if (x->manager.get<std::string>("type") == "player")
-                        if (x->manager.get<std::string>("pseudo") == name)
+						if (x.second->manager.get<std::string>("type") == "player")
+                        if (x.second->manager.get<std::string>("pseudo") == name)
                         {
-                            Entity *sht = this->createShoot(x->manager.get<std::pair<float, float> >("position"),
-                                    x->manager.get<Pattern::MovePattern>("pattern"),
+                            Entity *sht = this->createShoot(x.second->manager.get<std::pair<float, float> >("position"),
+                                    x.second->manager.get<Pattern::MovePattern>("pattern"),
                                     Pattern::Side::RIGHT);
-                            _eList->push_back(sht);
+                            (*_eList)[(*_eList)[-1]->manager.get<std::size_t>("last")] = sht;
+                            (*_eList)[-1]->manager.set<std::size_t>("last", (*_eList)[-1]->manager.get<std::size_t>("last") + 1);
                             return ;
                         }
                     }
@@ -108,11 +110,11 @@ class ShootSystem : public ASystem
                 {
                     for (auto x : *_eList)
                     {
-                        if (x->manager.get<std::string>("name") == name)
+                        if (x.second->manager.get<std::string>("name") == name)
                         {
-                            x->manager.set<Pattern::MovePattern>
+                            x.second->manager.set<Pattern::MovePattern>
                                 ("pattern", Pattern::incremente
-                                 (x->manager.get<Pattern::MovePattern>("pattern")));
+                                 (x.second->manager.get<Pattern::MovePattern>("pattern")));
                             return ;
                         }
                     }
@@ -132,11 +134,11 @@ class ShootSystem : public ASystem
             {
                 lastEvent = ev;
                 for(auto x : *_eList)
-                    if (x->manager.get<std::string>("name") == "player1")
+                    if (x.second->manager.get<std::string>("name") == "player1")
                     {
-                        x->manager.set<Pattern::MovePattern>
+                        x.second->manager.set<Pattern::MovePattern>
                             ("pattern", Pattern::incremente
-                             (x->manager.get<Pattern::MovePattern>("pattern")));
+                             (x.second->manager.get<Pattern::MovePattern>("pattern")));
                         break ;
                     }
             }
@@ -153,12 +155,12 @@ class ShootSystem : public ASystem
         }
 
     protected:
-        std::list<Entity*>	*_eList;
-        int					fireRate;
-        bool				isActiv;
-        UdpPacket				_packet;
-        int                 _frequency;
-        EventSum			lastEvent;
+        std::unordered_map<std::size_t, Entity*>	*_eList;
+        int					                        fireRate;
+        bool				                        isActiv;
+        UdpPacket				                    _packet;
+        int                                         _frequency;
+        EventSum			                        lastEvent;
         std::function<void (Entity&, Pattern::Side, int)> patterns[2];
         std::string         _tmp;
 };

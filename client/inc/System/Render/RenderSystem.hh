@@ -13,7 +13,7 @@ class ReadyScene;
 class RenderSystem : public ASystem
 {
     public:
-        RenderSystem(std::list<Entity*> *);
+        RenderSystem(std::unordered_map<std::size_t, Entity*> *);
 		RenderSystem() {}
         virtual ~RenderSystem();
 
@@ -27,7 +27,7 @@ class RenderSystem : public ASystem
 
     private:
         std::chrono::time_point<std::chrono::steady_clock>  _last;
-        std::list<Entity*>                                  *_entities;
+        std::unordered_map<std::size_t, Entity*>            *_entities;
         Scene                                               *_current;
         MenuScene                                           *_menu;
         StageScene                                          *_stage;
@@ -36,6 +36,7 @@ class RenderSystem : public ASystem
         ReadyScene                                          *_ready;
         IWindow                                             *_window;
         EventSum                                             _event;
+        std::string                                         _pseudo;
 };
 
 #endif /* end of include guard: RENDERSYSTEM_HH_C8GDRQJ2 */

@@ -5,7 +5,7 @@
 # include "System/Render/ReadyScene.hh"
 # include "System/Shoot/Pattern.hh"
 
-RenderSystem::RenderSystem(std::list<Entity*> *e):
+RenderSystem::RenderSystem(std::unordered_map<std::size_t, Entity*> *e):
     _entities(e), _event(noEvent)
 {
     _eventList.push_back(Key_Up);
@@ -50,7 +50,7 @@ IPacket *RenderSystem::out(EventSum &e)
 
 void    RenderSystem::in(IPacket *p)
 {
-    _current->in(p);
+    _current->in(p, _pseudo);
 }
 
 bool RenderSystem::handle(EventSum e)

@@ -17,23 +17,18 @@ class SystemManager
 {
     public:
         SystemManager(const std::string &ip):
-            _networkManager(ip, ip), shr_entities(new std::list<Entity*>)
+            _networkManager(ip, ip), shr_entities(new std::unordered_map<std::size_t, Entity*>)
     {
-        Entity *e = new Entity;
-        e->manager.add<std::string>("pseudo", "");
-        e->manager.add<std::string>("name", "player1");
-        e->manager.add<std::string>("type", "player");
-        e->manager.add("position", std::pair<float, float>(0, 0));
-        e->manager.add<float>("velocity", 1.75f);
-        e->manager.add<bool>("isShared", true);
-        e->manager.add<Pattern::MovePattern>("pattern", Pattern::MovePattern::LINE);
-        e->manager.add<Pattern::Side>("direction", Pattern::Side::RIGHT);
-        e->manager.add<fCollision>("collision", &Collision::player);
-        e->manager.add<bool>("force", false);
-        e->manager.add<int>("shield", 0);
-        e->manager.add<int>("perfect_shield", 0);
-        shr_entities->push_back(e);
-
+        Entity  *last = new Entity;
+        last->manager.add<std::size_t>("last", 0);
+        last->manager.add<std::string>("type", "none");
+        last->manager.add<std::string>("name", "none");
+        last->manager.add<std::pair<float, float> >("position", std::pair<float,float>(0,0));
+        last->manager.add<Pattern::Side>("direction", Pattern::Side::RIGHT);
+        last->manager.add<Pattern::MovePattern>
+            ("pattern", Pattern::MovePattern::LINE);
+        last->manager.add<fCollision>("collision", &Collision::explosion);
+        (*shr_entities)[-1] = last;
         ASystem *render = new RenderSystem(shr_entities);
         ASystem *audioCall = new AudioCallSystem();
         ASystem *mvt = new MovementSystem(shr_entities);
@@ -78,7 +73,7 @@ class SystemManager
             if (_networkManager.isConnected() == false)
             {
                 std::cerr << "Can't connect" << std::endl;
-                return ;
+				return ;
             }
             lastEvent.setQuery(static_cast<uint16_t>(UdpCodes::KeyPressed));
             while (ea->getWin()->isOpen())
@@ -86,7 +81,7 @@ class SystemManager
                 start = std::chrono::steady_clock::now();
                 event = 0;
                 std::chrono::duration<double> diff = start - end;
-                s = diff.count() * 1000;
+                s = static_cast<std::size_t>(diff.count() * 1000);
                 if (s > 30)
                 {
                     end = start;
@@ -126,7 +121,7 @@ class SystemManager
         std::unordered_map<std::string, ASystem*>	systemList;
         EventAggregator								*ea;
         NetworkManager								_networkManager;
-        std::list<Entity*>							*shr_entities;
+        std::unordered_map<std::size_t, Entity*>	*shr_entities;
 };
 
 #endif //SYSTEMMANAGER_HH_
