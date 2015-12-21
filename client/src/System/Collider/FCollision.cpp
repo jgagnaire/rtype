@@ -25,8 +25,18 @@ bool        Collision::player(Entity &me, Entity &e, std::pair<float, float> &po
         me.manager.set<int>("shield", shield);
         return false;
     }
-    pos = me.manager.get<std::pair<float, float> >("position");
-    return true;
+    int lifes = me.manager.get<int>("lifes");
+    if (me.manager.get<int>("respawn") <= 0)
+    {
+        pos = me.manager.get<std::pair<float, float> >("position");
+        me.manager.set<std::pair<float, float> >("position",
+                std::pair<float, float>(0, 1080 / 2));
+        --lifes;
+        me.manager.set<int>("lifes", lifes);
+        me.manager.set<int>("respawn", 3000);
+        me.manager.set<bool>("force", false);
+    }
+    return lifes == 0;
 }
 
 bool        Collision::shoot(Entity &, Entity &e, std::pair<float, float> &p)

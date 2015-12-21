@@ -98,6 +98,7 @@ void    ReadyScene::in(IPacket *p, std::string &pseudo)
                 id = std::stoi(data.substr(data.find(":") + 1));
                 pl = new Entity;
                 pl->manager.add<std::string>("type", "player");
+                pl->manager.add<int>("lifes", 10);
                 pl->manager.add<std::string>("pseudo", name);
                 pl->manager.add<std::string>("name", (name == pseudo ? "player1" : name));
                 pl->manager.add<std::pair<float, float> >("position", pos);
@@ -109,6 +110,7 @@ void    ReadyScene::in(IPacket *p, std::string &pseudo)
                 pl->manager.add<bool>("force", false);
                 pl->manager.add<int>("shield", 0);
                 pl->manager.add<int>("perfect_shield", 0);
+                pl->manager.add<int>("respawn", 0);
                 (*_entities)[id] = pl;
                 (*_entities)[-1]->manager.set<std::size_t>("lastPlayer", id + 1);
                 _players[name] = true;

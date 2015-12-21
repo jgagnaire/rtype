@@ -67,8 +67,27 @@ class ColliderSystem : public ASystem
                 _eList->erase(id2);
         }
 
-        virtual void                    update(int)
+        virtual void                    update(int duration)
         {
+            int time;
+            int time2;
+
+            for (auto a : *_eList)
+            {
+                if (a.second->manager.get<std::string>("type") == "player" &&
+                        ((time = a.second->manager.get<int>("perfect_shield")) > 0 ||
+                        (time2 = a.second->manager.get<int>("respawn")) > 0))
+                {
+                    time -= duration;
+                    time2 -= duration;
+                    if (time <= 0)
+                        time = 0;
+                    if (time2 <= 0)
+                        time2 = 0;
+                    a.second->manager.set<int>("perfect_shield", time);
+                    a.second->manager.set<int>("respawn", time2);
+                }
+            }
             for (std::size_t i = 0; i < _untreated.size();)
             {
                 if (_eList->find(_untreated[i].first) != _eList->end()
@@ -109,8 +128,8 @@ class ColliderSystem : public ASystem
                         up->getSize());
                 std::size_t     id1, id2;
 
-                id1 = std::stoi(data.substr(0, data.find(":")));
-                id2 = std::stoi(data.substr(data.find(":") + 1));
+                id1 = std::stoll(data.substr(0, data.find(":")));
+                id2 = std::stoll(data.substr(data.find(":") + 1));
                 if (_eList->find(id1) == _eList->end()
                         || _eList->find(id2) == _eList->end())
                 {

@@ -217,7 +217,15 @@ class StageScene : public Scene
                                 (*x).second->manager.get<std::pair<float, float> >("position").second));
                     _players[(*x).second->manager.get<std::string>("pseudo")]->update(duration);
                     _guiPlayers.manager.set<ADrawable*>("player", _players[(*x).second->manager.get<std::string>("pseudo")]);
-                    _win.draw(_guiPlayers);
+                    if ((*x).second->manager.get<int>("respawn") > 0)
+                    {
+                        static bool print = false;
+                        print = !print;
+                        if (print)
+                            _win.draw(_guiPlayers);
+                    }
+                    else
+                        _win.draw(_guiPlayers);
                     if ((*x).second->manager.get<bool>("force"))
                     {
                         _pSprites[7].setPosition(
@@ -245,7 +253,6 @@ class StageScene : public Scene
                         _guiPlayers.manager.set<ADrawable*>("player", &(_pSprites[9]));
                         _win.draw(_guiPlayers);
                     }
-
                 }
                 if (!has_been_del)
                     ++x;
