@@ -204,14 +204,18 @@ bool	ASystem::touchMonster(Entity *fire, System &system, AllEntity &entities, Pl
       ASystem::sendCollision(fire->manager.get<std::size_t>("id"),
 			     (*m)->manager.get<std::size_t>("id"), p);
       std::cout << "MONSTER-FIRE => TOUCHEY !" << std::endl;
-      if ((*m)->manager.get<int>("life") - fire->manager.get<int>("damage")> 0)
-	(*m)->manager.set<int>("life",
-			       (*m)->manager.get<int>("life") - 
-			       fire->manager.get<int>("damage"));
-      else
+      (*m)->manager.set<int>("life",
+			     (*m)->manager.get<int>("life") - 
+			     fire->manager.get<int>("damage"));
+      std::cout << "il a: "<< (*m)->manager.get<int>("life")  << std::endl;
+      if ((*m)->manager.get<int>("life") <=  0) {
+	std::cout << "il est mort: "<< (*m)->manager.get<int>("life")  << std::endl;
+	system["monsters"]->_entities.erase(m);
 	delete *m;
+      }
+      else
+	std::cout << "il lui reste: "<< (*m)->manager.get<int>("life")  << std::endl;
       delete fire;
-      system["monsters"]->_entities.erase(m);
       return (true);
     }
   }    

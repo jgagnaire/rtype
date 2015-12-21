@@ -239,7 +239,7 @@ bool        GameManager<SCK>::update(Game<SCK> *game, std::size_t time) {
       if (!(*p)->isDead())
 	(*p)->updateBonus(time);
     ASystem::collision(game->system, game->players, game->entities);
-    return (!game->players.empty());
+    return (!(game->players.empty() || isAllDead(game)));
 }
 
 template <typename SCK>

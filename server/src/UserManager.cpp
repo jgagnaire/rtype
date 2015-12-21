@@ -318,9 +318,11 @@ bool                    UserManager<T>::isDead() const { return (life <= 0); }
 
 template <typename T>
 void                    UserManager<T>::isTouched(int damage) {
+  GameManager<T>	&g = GameManager<T>::instance();
+
   if (perfect_shield > 0)
     return ;
-  if (protection - damage > 0) {
+  if (protection > 0) {
     protection -= damage;
     return ;
   }
@@ -331,6 +333,7 @@ void                    UserManager<T>::isTouched(int damage) {
   position.y = Enum::GAME_SIZE_HEIGHT / 2;
   respawn = Enum::RESPAWN_TIME;
   --life;
+  g.sendPosition(g.getGameByName(gameroom), this);
 }
 
 template <typename T>
