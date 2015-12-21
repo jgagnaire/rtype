@@ -15,6 +15,18 @@ class ComponentManager
         std::unordered_map<std::string, IComponent*> components;
 
     public:
+	ComponentManager(const ComponentManager &c) : components(c.components) {}
+	ComponentManager() {}
+	ComponentManager&	operator=(const ComponentManager &c)
+		{
+			if (this != &c)
+			{
+				ComponentManager tmp(c);
+				std::swap(tmp.components, components);
+			}
+			return (*this);
+		}
+
         template<typename Type>
             void add(const std::string& name, Type value)
             {
@@ -107,7 +119,7 @@ type for compenents \"" + name + "\" is : " + components[name]->getType());
 		{
 			components.clear();
 		}
-  
+
   template<typename Type>
   std::vector<std::pair<std::string, Type> >	getAll(void)
   {

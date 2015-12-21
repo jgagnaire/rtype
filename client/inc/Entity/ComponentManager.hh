@@ -4,7 +4,7 @@
 #include "Component.hh"
 #include "ManagerException.hh"
 #include <unordered_map>
-#include <algorithm> 
+#include <algorithm>
 #include <vector>
 #include <iostream>
 #include <utility>
@@ -27,7 +27,7 @@ class ComponentManager
 			}
 			return (*this);
 		}
-	
+
         template<typename Type>
             void add(const std::string& name, Type value)
             {
@@ -53,7 +53,7 @@ class ComponentManager
       throw ComponentManagerException("Component does not exist");
   }
 
-	
+
   const std::string&	getType(const std::string& name)
   {
     if (components.find(name) != components.end())
@@ -74,6 +74,20 @@ type for compenents \"" + name + "\" is : " + components[name]->getType());
       }
     throw ComponentManagerException("No such component to get : [invalid name]");
   }
+
+  template<typename Type>
+  bool exist(const std::string& name)
+  {
+    if (components.find(name) != components.end())
+      {
+	if (components[name]->getType() == typeid(Type).name())
+	  return (true);
+	else
+	  return (false);
+      }
+    return (false);
+  }
+
 
   template<typename Type>
   bool	remove(const std::string& name = "")
@@ -108,7 +122,7 @@ type for compenents \"" + name + "\" is : " + components[name]->getType());
 		{
 			components.clear();
 		}
-  
+
   template<typename Type>
   std::vector<std::pair<std::string, Type> >	getAll(void)
   {

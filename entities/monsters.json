@@ -18,12 +18,12 @@
 	"fire": ["normal"],
 	"velocity": 0.5,
 	"life": 50
-    }
+    },
 
-    boss1: {
-        "movement": "none",
+    "boss1": {
+        "movement": "line",
         "fire": ["normal"],
-        "velocity": 0.01,
+        "velocity": 0.001,
         "life": 150
     }
 }
