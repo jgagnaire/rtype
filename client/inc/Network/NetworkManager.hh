@@ -12,6 +12,8 @@ enum class Codes
     nothing = 0,
     Ping = 109,
     Pong = 110,
+    PingLatency = 111,
+    PongLatency = 112,
     Login = 100,
     Register = 101,
     Ok = 104,

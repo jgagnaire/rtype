@@ -35,6 +35,7 @@ class ReadyScene : public Scene
         bool                                                _quit;
         int                                                 _lastCode;
         EventSum                                            _event;
+        bool                                                _sendPongLatency;
 };
 
 

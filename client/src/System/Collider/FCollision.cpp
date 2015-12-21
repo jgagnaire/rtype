@@ -60,7 +60,6 @@ bool        Collision::mob(Entity &me, Entity &e, std::pair<float, float>&)
              int life = me.manager.get<int>("life");
              life -= e.manager.get<int>("damage");
              me.manager.set<int>("life", life);
-             std::cout << "life " << life <<std::endl;
              if (life > 0)
                  return false;
         }
@@ -71,12 +70,7 @@ bool        Collision::mob(Entity &me, Entity &e, std::pair<float, float>&)
 
 bool        Collision::mobShoot(Entity&, Entity &e, std::pair<float, float>&)
 {
-    if (e.manager.get<std::string>("type") == "player")
-    {
-        // TODO CHECK SHIELDS
-        return true;
-    }
-    return false;
+    return (e.manager.get<std::string>("type") == "player");
 }
 
 bool        Collision::bonus(Entity &me, Entity &e, std::pair<float, float>&)
