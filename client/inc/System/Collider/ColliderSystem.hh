@@ -54,7 +54,6 @@ class ColliderSystem : public ASystem
             a = (*_eList)[id1];
             b = (*_eList)[id2];
             std::pair<float, float> ex(-1, -1);
-            std::cout << id1 << " -- " << id2 << std::endl;
             bool delA = a->manager.get<fCollision>("collision")(*a, *b, ex);
             //if (ex.first > -1)
             //_eList->push_back(createExplosion(ex));
@@ -98,12 +97,6 @@ class ColliderSystem : public ASystem
                     _untreated.erase(_untreated.begin() + i);
                     --i;
                 }
-                else
-                {
-                    std::cout << "Pas trouve "<<_untreated[i].first  << "-" << _untreated[i].second << "      " <<
-                       (_eList->find(_untreated[i].first) == _eList->end()) << " | " <<
-                       (_eList->find(_untreated[i].second) == _eList->end()) << std::endl;
-                }
                 ++i;
             }
         }
@@ -140,9 +133,6 @@ class ColliderSystem : public ASystem
                 if (_eList->find(id1) == _eList->end()
                         || _eList->find(id2) == _eList->end())
                 {
-                    std::cout << "ADDED "<< id1<< "-" << id2 << "           " <<
-                       (_eList->find(id1) == _eList->end()) << " | " <<
-                       (_eList->find(id2) == _eList->end()) << std::endl;
                     _untreated.push_back(std::pair<std::size_t, std::size_t>(id1, id2));
                     return ;
                 }

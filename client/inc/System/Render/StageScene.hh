@@ -113,7 +113,6 @@ class StageScene : public Scene
                 if (x.second->manager.get<std::string>("type") == "player")
                 {
                     name = x.second->manager.get<std::string>("pseudo");
-                    std::cout << "pseudo " << name << std::endl;
                     _players[name] = &(_pSprites[++i]);
                     _guiPlayers.manager.add<ADrawable*>(name, &(_pSprites[i]));
                 }
