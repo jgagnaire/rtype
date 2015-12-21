@@ -29,7 +29,7 @@ struct Game {
   }
 
   Game() : refresh(Enum::REFRESH_TIME), is_playing(false),
-	   lvl_name("level1"), ids(0) {
+	   lvl_name("level1") {
     system["shoot"] = new ShootSystem;
     system["monsters"] = new MobSystem; 
     system["bonuses"] = new BonusSystem;
@@ -49,7 +49,11 @@ struct Game {
     std::unordered_map<std::string, Entity>	entities;
     Entity					*level;
     std::unordered_map<std::string, std::string>  content_system;
-    std::size_t					ids;
+    std::size_t					ids = 0;
+    std::size_t					shoot_player_ids = Enum::MAX_ID;
+    std::size_t				        monster_ids = 2 * Enum::MAX_ID;
+    std::size_t		bonus_ids = 3 * static_cast<std::size_t>(Enum::MAX_ID);
+    std::size_t		shoot_mob_ids = 4 * static_cast<std::size_t>(Enum::MAX_ID);
 };
 
 template <typename SCK>
@@ -72,6 +76,7 @@ public:
     void			    sendPosition(Game<SCK> *, UserManager<SCK> *);
     void			    fireBall(Game<SCK> *, UserManager<SCK> *, bool);
     IServerSocket<SCK>		    *getUDPSocket();
+    bool			    isAllDead(Game<SCK> *) const;
 
 private:
     bool                            update(Game<SCK> *game, std::size_t);

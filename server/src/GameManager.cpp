@@ -85,7 +85,7 @@ void        GameManager<SCK>::fireBall(Game<SCK> *game, UserManager<SCK> *u,
     ent = new Entity(tmp.manager.get<Entity>("fires").manager.get<Entity>("rotate"));
   else
     ent = new Entity(tmp.manager.get<Entity>("fires").manager.get<Entity>("normal"));
-  ent->manager.add<std::size_t>("id", game->getId());
+  ent->manager.add<std::size_t>("id", game->shoot_player_ids++);
   game->system["shoot"]->handle(u->getName(), ent, false, u->getPosition());
 }
 
@@ -99,6 +99,15 @@ bool        GameManager<SCK>::joinRoom(const std::string &name, UserManager<SCK>
         return false;
     game->players.push_back(u);
     return true;
+}
+
+template <typename SCK>
+bool        GameManager<SCK>::isAllDead(Game<SCK> *game) const {
+  for (auto p = game->players.begin(); p != game->players.end(); ++p){
+    if (!(*p)->isDead())
+      return (false);
+  }
+  return (true);
 }
 
 template <typename SCK>
@@ -139,7 +148,6 @@ bool        GameManager<SCK>::updateTime(Game<SCK> *game) {
     return (entity.manager.get<int>("timeleft") == entity.manager.get<int>("time"));
 }
 
-
 template <typename SCK>
 bool
 GameManager<SCK>::checkEntities(Game<SCK> *game,
@@ -158,7 +166,10 @@ GameManager<SCK>::checkEntities(Game<SCK> *game,
 	  entity.second.manager.get<int>("refresh")) {
 	Entity	*ent =
 	  new Entity(tmp.manager.get<Entity>(ent_name).manager.get<Entity>(entity.first));
-	ent->manager.add<std::size_t>("id", game->getId());
+	if (ent_name == "bonuses")
+	  ent->manager.add<std::size_t>("id", game->bonus_ids++);
+	else
+	  ent->manager.add<std::size_t>("id", game->monster_ids++);
 	entity.second.manager.set<int>("refresh", time);
 	entity.second.manager.set<int>("time", entity.second.manager.get<int>("time") - 1);
 	game->system[ent_name]->handle(entity.first, ent, true, pos);
@@ -173,7 +184,10 @@ GameManager<SCK>::checkEntities(Game<SCK> *game,
       Entity	*ent =
 	new Entity(tmp.manager.get<Entity>(ent_name).manager.get<Entity>(entity.first));
       entity.second.manager.add<int>("refresh", duration);
-      ent->manager.add<std::size_t>("id", game->getId());
+      if (ent_name == "bonuses")
+	ent->manager.add<std::size_t>("id", game->bonus_ids++);
+      else
+	ent->manager.add<std::size_t>("id", game->monster_ids++);
       game->system[ent_name]->handle(entity.first, ent, true, pos);
       if (entity.second.manager.exist<int>("time"))
 	entity.second.manager.set<int>("time",
@@ -221,6 +235,9 @@ bool        GameManager<SCK>::update(Game<SCK> *game, std::size_t time) {
     game->system["shoot"]->update(time);
     game->system["monsters"]->update(time);
     game->system["bonuses"]->update(time);
+    for (auto p = game->players.begin(); p != game->players.end(); ++p)
+      if (!(*p)->isDead())
+	(*p)->updateBonus(time);
     ASystem::collision(game->system, game->players, game->entities);
     return (!game->players.empty());
 }
