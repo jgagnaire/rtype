@@ -77,7 +77,7 @@ public:
     void			    fireBall(Game<SCK> *, UserManager<SCK> *, bool);
     IServerSocket<SCK>		    *getUDPSocket();
     bool			    isAllDead(Game<SCK> *) const;
-
+  void			    synchronisation(Game<SCK> *);
 private:
     bool                            update(Game<SCK> *game, std::size_t);
     void                            updatePositions(Game<SCK> *, std::size_t);

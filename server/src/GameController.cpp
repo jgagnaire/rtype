@@ -20,9 +20,17 @@ int	            GameController<T>::newData(UserManager<T> *cl) {
             return (static_cast<int>(notReady(cl)));
         case (Enum::GET_ROOM):
             return (static_cast<int>(getRoomList(cl)));
-        default:
+        case (Enum::LATENCY):
+	  return (static_cast<int>(latency(cl)));
+    default:
             return (-1);
     }
+}
+
+template <typename T>
+bool            GameController<T>::latency(UserManager<T> *cl) const {
+  cl->writeStruct({0, static_cast<uint16_t>(cl->setLatency())});
+  return (true);
 }
 
 template <typename T>
@@ -50,6 +58,7 @@ bool            GameController<T>::joinNamedRoom(UserManager<T> *cl) const {
 
     cl->writeStruct({0, static_cast<uint16_t>(sa)});
     if (sa == Enum::OK) {
+      cl->writeStruct({0, Enum::GET_LATENCY});
 	game = g.getGameByName(cl->getGameroomName());
 	cl->setId(game->getId());
 	std::string tmp = cl->getName() + ":" + std::to_string(cl->getId());
@@ -79,6 +88,7 @@ bool            GameController<T>::createGameRoom(UserManager<T> *cl) const {
 
     cl->writeStruct({0, static_cast<uint16_t>(sa)});
     if (sa == Enum::OK) {
+      cl->writeStruct({0, Enum::GET_LATENCY});
       std::string tmp = cl->getName() + ":" + std::to_string(cl->getId());
       std::cout << "l'id et le name: " << tmp << std::endl;
       std::cout << cl->getName() << " veut creer "  << cl->getPacketData() << std::endl;
@@ -114,25 +124,28 @@ bool            GameController<T>::leaveRoom(UserManager<T> *cl) const {
 
 template <typename T>
 bool            GameController<T>::ready(UserManager<T> *cl) const {
+  Enum::ServerAnswers sa = cl->ready();
     GameManager<T>              &g = GameManager<T>::instance();
     Game<T>                     *game = g.getGameByName(cl->getGameroomName());
 
-    cl->writeStruct({0, static_cast<uint16_t>(cl->ready())});
-    if (g.isPlaying(cl->getGameroomName())) {
+    cl->writeStruct({0, static_cast<uint16_t>(sa)});
+    if (sa == Enum::OK) {
+      if (g.isPlaying(cl->getGameroomName())) {
         cl->inGame();
         cl->clearGameData();
         cl->writeStruct({0, Enum::GAME_START});
-    }
-    else if (g.isAllReady(cl->getGameroomName())) {
+      }
+      else if (g.isAllReady(cl->getGameroomName())) {
         if (game) {
-            for (auto it = game->players.begin(); it != game->players.end(); ++it) {
-	      std::cout << "je clean: " << (*it)->getName() << std::endl;
-                (*it)->inGame();
-                (*it)->clearGameData();
-                (*it)->writeStruct({0, Enum::GAME_START});
-            }
-            g.launchGame(cl->getGameroomName());
+	  for (auto it = game->players.begin(); it != game->players.end(); ++it) {
+	    std::cout << "je clean: " << (*it)->getName() << std::endl;
+	    (*it)->inGame();
+	    (*it)->clearGameData();
+	    //(*it)->writeStruct({0, Enum::GAME_START});
+	  }
+	  g.launchGame(cl->getGameroomName());
         }
+      }
     }
     return (true);
 }

@@ -62,6 +62,7 @@ namespace Enum
         DISCONNECTION = 102,
         GET_ROOM = 103,
         PONG = 110,
+	LATENCY = 112,
         JOIN_RANDOM_ROOM = 200,
         JOIN_GAME_ROOM = 201,
         CREATE_ROOM = 202,
@@ -75,6 +76,7 @@ namespace Enum
 
     enum ServerNotification {
         PING	= 109,
+	GET_LATENCY = 111,
         PLAYER_JOIN = 400,
 	COLLISION = 401,
         PLAYER_LEFT = 401,
@@ -95,6 +97,7 @@ namespace Enum
 
     enum ServerAnswers {
         OK = 104,
+	GET_LAT = 111,
         EUSERPASS = 500,
         EALREADY_LOGGED = 501,
         EUSER_EXIST = 502,

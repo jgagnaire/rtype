@@ -84,6 +84,7 @@ public:
     void	            getBonus(Entity *);
     bool		    updateBonus(std::size_t);
     bool		    isRespawning() const;
+    const std::size_t       *getLatency();
 
     Enum::ServerAnswers	    verifyUser();
     Enum::ServerAnswers	    newUser();
@@ -97,6 +98,7 @@ public:
     Enum::ServerAnswers     currentPosition();
     Enum::ServerAnswers     keyPressed();
     Enum::ServerAnswers     takeForce();
+    Enum::ServerAnswers	    setLatency();
     std::mutex              destroy_client_mutex;
 
 private:
@@ -129,6 +131,7 @@ private:
   int64_t				  protection = 0;
   int64_t				  perfect_shield = 0;
   int64_t				  respawn = 0;
+  std::size_t				  latency[4];
 
   bool					hasBadFormat(std::string *) const;
   bool					alreadyExist(std::string *);

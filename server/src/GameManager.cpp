@@ -255,8 +255,20 @@ std::size_t   GameManager<SCK>::getTime() {
 }
 
 template <typename SCK>
+void            GameManager<SCK>::synchronisation(Game<SCK> *game) {
+  const std::size_t   *latency = (*game->players.begin())->getLatency();
+  std::size_t	duration = ((latency[1] - latency[0]) + (latency[3] - latency[2])) / 2;
+  std::cout << "latency " << duration << std::endl;
+  duration = 180 + duration + GameManager<SCK>::getTime();
+ 
+  (*game->players.begin())->writeStruct({0, Enum::GAME_START});
+  while (duration > GameManager<SCK>::getTime());
+}
+
+template <typename SCK>
 void            GameManager<SCK>::createGame(Game<SCK> *game) {
     GameManager<SCK>	&g = GameManager<SCK>::instance();
+	g.synchronisation(game);
     bool		is_not_finished = true;
     std::size_t		duration;
     auto		start = std::chrono::steady_clock::now();
