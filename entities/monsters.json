@@ -24,14 +24,14 @@
         "movement": "line",
         "fire": ["normal"],
         "velocity": 0.1,
-        "life": 200
+        "life": 100
     },
 
     "boss2": {
         "movement": "line",
         "fire": ["normal"],
         "velocity": 0.1,
-        "life": 200
+        "life": 100
     },
 
     "boss3": {

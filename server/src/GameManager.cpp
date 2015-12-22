@@ -306,6 +306,7 @@ bool            GameManager<SCK>::gameTransition(Game<SCK> *game) {
   std::size_t	time = GameManager<SCK>::getTimeInSecond() + 10;
   char		lvl = game->lvl_name.back();
 
+  std::cout << "test" << std::endl;
   game->system["shoot"]->clear();
   game->system["monsters"]->clear();
   game->system["bonuses"]->clear();
@@ -352,7 +353,7 @@ void            GameManager<SCK>::createGame(Game<SCK> *game) {
       }
       start = std::chrono::steady_clock::now();
       if (g.bossIsDead(game) && g.gameTransition(game))
-	return g.createGame(game);
+	return createGame(game);
     }
     game->is_playing = false;
     for (auto p = game->players.begin(); p != game->players.end(); ++p)
