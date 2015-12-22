@@ -13,7 +13,7 @@ class StageScene : public Scene
 {
     public:
         StageScene(IWindow &win, std::unordered_map<std::size_t, Entity*> *e):
-            Scene(win, e), _stageNb(1), _pSprites(10), _direction(noEvent),
+            Scene(win, e), _stageNb(1), _pSprites(15), _direction(noEvent),
             _numstage(5)
     {
         std::vector<std::string>    stages;
@@ -34,6 +34,11 @@ class StageScene : public Scene
         _pSprites[7].load("client/res/bonus/force_38.png");
         _pSprites[8].load("client/res/bonuses/classic-shield_150.png");
         _pSprites[9].load("client/res/bonuses/perfect-shield_87.png");
+        _pSprites[10].load("client/res/boss/boss-1_327.png");
+        _pSprites[11].load("client/res/boss/boss-2_643.png");
+        _pSprites[12].load("client/res/boss/boss-2_643.png");
+        _pSprites[13].load("client/res/boss/boss-2_643.png");
+        _pSprites[14].load("client/res/boss/boss-5_535.png");
         _shoot.load("client/res/bullet.png");
         _shootEnnemy.load("client/res/bullet2.png");
         //TODO, animation does not work _transition.load("client/res/transition_1920.png", false, 5);
@@ -164,6 +169,24 @@ class StageScene : public Scene
                         _shootEnnemy.update(duration);
                         _win.draw(_guiShootsEnnemy);
                     }
+                }
+                else if ((*x).second->manager.get<std::string>("type") == "boss")
+                {
+                    if ((*x).second->manager.get<std::string>("name") == "boss1")
+                        _guiMobs.manager.set<ADrawable*>("sprite", &(_pSprites[10]));
+                    else if ((*x).second->manager.get<std::string>("name") == "boss2")
+                        _guiMobs.manager.set<ADrawable*>("sprite", &(_pSprites[11]));
+                    else if ((*x).second->manager.get<std::string>("name") == "boss3")
+                        _guiMobs.manager.set<ADrawable*>("sprite", &(_pSprites[12]));
+                    else if ((*x).second->manager.get<std::string>("name") == "boss4")
+                        _guiMobs.manager.set<ADrawable*>("sprite", &(_pSprites[13]));
+                    else if ((*x).second->manager.get<std::string>("name") == "boss5")
+                        _guiMobs.manager.set<ADrawable*>("sprite", &(_pSprites[14]));
+                    static_cast<AnimatedSprite*>(_guiMobs.manager.get<ADrawable*>("sprite"))->setPosition(
+                            sf::Vector2f((*x).second->manager.get<std::pair<float, float> >("position").first,
+                                (*x).second->manager.get<std::pair<float, float> >("position").second));
+                    _guiMobs.manager.get<ADrawable*>("sprite")->update(duration);
+                    _win.draw(_guiMobs);
                 }
                 else if ((*x).second->manager.get<std::string>("type") == "mob")
                 {

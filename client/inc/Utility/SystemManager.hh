@@ -25,6 +25,7 @@ class SystemManager
         last->manager.add<std::size_t>("lastMob", 2000000000);
         last->manager.add<std::size_t>("lastBonus", 3000000000);
         last->manager.add<std::size_t>("lastMobShoot", 4000000000);
+        last->manager.add<std::size_t>("lastBoss", 5000000000);
         last->manager.add<std::string>("type", "none");
         last->manager.add<std::string>("name", "none");
         last->manager.add<std::pair<float, float> >("position", std::pair<float,float>(0,0));

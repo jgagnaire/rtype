@@ -69,6 +69,11 @@ class	MobSystem : public ASystem
                         (*_eList)[(*_eList)[-1]->manager.get<std::size_t>("lastBonus")] = *x;
                         (*_eList)[-1]->manager.set<std::size_t>("lastBonus", (*_eList)[-1]->manager.get<std::size_t>("lastBonus") + 1);
                     }
+                    else if ((*x)->manager.get<std::string>("type") == "boss")
+                    {
+                        (*_eList)[(*_eList)[-1]->manager.get<std::size_t>("lastBoss")] = *x;
+                        (*_eList)[-1]->manager.set<std::size_t>("lastBoss", (*_eList)[-1]->manager.get<std::size_t>("lastBoss") + 1);
+                    }
                     x = _waitingmobs[1].erase(x);
                 }
                 else
@@ -79,7 +84,8 @@ class	MobSystem : public ASystem
             {
                 has_been_del = false;
                 if ((*x).second->manager.get<std::string>("type") == "mob"
-                        || (*x).second->manager.get<std::string>("type") == "bonus")
+                        || (*x).second->manager.get<std::string>("type") == "bonus"
+                        || (*x).second->manager.get<std::string>("type") == "boss")
                 {
                     (*x).second->manager.get<std::function<void (Entity&, Pattern::Side, int)> >
                         ("pattern")(*((*x).second), (*x).second->manager.
@@ -163,6 +169,14 @@ class	MobSystem : public ASystem
                                 l.push_back(tmp);
                             }
                         }
+                        Entity &tmp = main.second.manager.get<Entity>("boss");
+                        Entity &pos = tmp.manager.get<Entity>("position");
+                        std::pair<float, float> pair(pos.manager.get<float>("x"),
+                                pos.manager.get<float>("y"));
+                        Entity *boss = createMob(tmp.manager.get<std::string>("name"), pair);
+                        boss->manager.add<int>("appearIn", main.second.manager.get<int>("time") * 1000);
+                        boss->manager.set<std::string>("type", "boss");
+                        l.push_back(boss);
                         int nb = std::stoi(main.first.substr(5));
                         _waitingmobs[nb] = l;
                     }
