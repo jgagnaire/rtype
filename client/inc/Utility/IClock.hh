@@ -8,8 +8,8 @@ class IClock
     public:
         virtual ~IClock() {}
 
-        virtual uint64_t     getElapsedTimeMicro() const = 0;
-        virtual uint64_t     getElapsedTimeMilli() const = 0;
+        virtual std::size_t     getElapsedTimeMicro() const = 0;
+        virtual std::size_t     getElapsedTimeMilli() const = 0;
         virtual void            restart() = 0;
 };
 

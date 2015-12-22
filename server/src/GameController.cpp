@@ -43,7 +43,7 @@ void            GameController<T>::sendJSON(UserManager<T> *cl, Game<T> *game) c
      {"hitboxes", Enum::SEND_JSON_HITBOX},
      {"levels", Enum::SEND_JSON_LEVEL}};
 
-  for (uint64_t i = 0; i < sizeof(strs) / sizeof(strs[0]); ++i) {
+  for (std::size_t i = 0; i < sizeof(strs) / sizeof(strs[0]); ++i) {
     cl->writeStruct({static_cast<uint16_t>(content[strs[i].first].size()),
 		static_cast<uint16_t>(strs[i].second)});
     cl->writeMsg(content[strs[i].first]);

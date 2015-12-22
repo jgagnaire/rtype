@@ -67,7 +67,7 @@ Enum::ServerAnswers	UserManager<T>::setLatency() {
 }
 
 template<typename T>
-const uint64_t    *UserManager<T>::getLatency() { return (latency); }
+const std::size_t    *UserManager<T>::getLatency() { return (latency); }
 
 template<typename T>
 bool	UserManager<T>::writeOnMe()
@@ -339,9 +339,9 @@ template <typename T>
 bool                    UserManager<T>::isFiring() const { return (fire); }
 
 template <typename T>
-void                    UserManager<T>::setId(uint64_t i) { id = i; }
+void                    UserManager<T>::setId(std::size_t i) { id = i; }
 template <typename T>
-uint64_t		UserManager<T>::getId() { return (id); }
+std::size_t		UserManager<T>::getId() { return (id); }
 
 template <typename T>
 bool                    UserManager<T>::isDead() const { return (life <= 0); }
@@ -386,7 +386,7 @@ void                    UserManager<T>::clearGameData() {
 }
 
 template <typename T>
-bool                UserManager<T>::updateBonus(uint64_t duration) {
+bool                UserManager<T>::updateBonus(std::size_t duration) {
   if (perfect_shield > 0)
     perfect_shield -= duration;
   if (respawn > 0)
@@ -461,35 +461,35 @@ Enum::ServerAnswers     UserManager<T>::keyPressed() {
 }
 
 template <typename T>
-const uint64_t	    &UserManager<T>::getKeypressed() const { return (keypressed); }
+const std::size_t	    &UserManager<T>::getKeypressed() const { return (keypressed); }
 
 template <typename T>
-void                    UserManager<T>::changePosition(uint64_t time) {
+void                    UserManager<T>::changePosition(std::size_t time) {
     game_mutex.lock();
     float	move = static_cast<float>(time * 1.75);
 
-    if (static_cast<uint64_t>(Enum::LEFT) & keypressed) {
+    if (static_cast<std::size_t>(Enum::LEFT) & keypressed) {
         position.x -= move;
         if (position.x < 0.01)
             position.x = 0;
     }
-    if (static_cast<uint64_t>(Enum::RIGHT) & keypressed) {
+    if (static_cast<std::size_t>(Enum::RIGHT) & keypressed) {
         position.x += move;
         if (position.x > static_cast<float>(Enum::GAME_SIZE_WIDTH))
             position.x = static_cast<float>(Enum::GAME_SIZE_WIDTH);
     }
-    if (static_cast<uint64_t>(Enum::UP) & keypressed) {
+    if (static_cast<std::size_t>(Enum::UP) & keypressed) {
         position.y -= move;
         if (position.y < 0.01)
             position.y = 0;
     }
-    if (static_cast<uint64_t>(Enum::DOWN) & keypressed) {
+    if (static_cast<std::size_t>(Enum::DOWN) & keypressed) {
         position.y += move;
         if (position.y > static_cast<float>(Enum::GAME_SIZE_HEIGHT))
             position.y = static_cast<float>(Enum::GAME_SIZE_HEIGHT);
     }
-    fire = !!(static_cast<uint64_t>(Enum::FIRE) & keypressed);
-    if (static_cast<uint64_t>(Enum::SWITCH) & keypressed)
+    fire = !!(static_cast<std::size_t>(Enum::FIRE) & keypressed);
+    if (static_cast<std::size_t>(Enum::SWITCH) & keypressed)
       switch_weapon = !switch_weapon; 
 
     GameManager<T>	&g = GameManager<T>::instance();

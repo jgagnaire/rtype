@@ -66,7 +66,7 @@ void        AnimatedSprite::setPosition(const sf::Vector2f &pos)
         /*_position.y = 1080.0f - _height;*/
 }
 
-void    AnimatedSprite::update(uint64_t duration)
+void    AnimatedSprite::update(std::size_t duration)
 {
     if (_sprites.empty() || _texture == 0)
         return ;
@@ -92,7 +92,7 @@ void    AnimatedSprite::update(uint64_t duration)
     }
 }
 
-uint64_t AnimatedSprite::getNbPlayed() const
+std::size_t AnimatedSprite::getNbPlayed() const
 {
     return _numberPlayed;
 }

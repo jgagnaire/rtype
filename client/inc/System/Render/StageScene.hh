@@ -12,7 +12,7 @@
 class StageScene : public Scene
 {
     public:
-        StageScene(IWindow &win, std::unordered_map<uint64_t, Entity*> *e):
+        StageScene(IWindow &win, std::unordered_map<std::size_t, Entity*> *e):
             Scene(win, e), _stageNb(1), _pSprites(15), _direction(noEvent),
             _numstage(5)
     {
@@ -279,7 +279,7 @@ class StageScene : public Scene
                 if (!has_been_del)
                     ++x;
             }
-            for (uint64_t i = 0; i < _explosions.size(); ++i)
+            for (std::size_t i = 0; i < _explosions.size(); ++i)
             {
                 _explosions[i]->update(duration);
                 if (static_cast<AnimatedSprite*>(_explosions[i])->getNbPlayed())

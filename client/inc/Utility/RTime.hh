@@ -13,9 +13,9 @@ public:
 	RTime(sf::Time t) : IRTime(),  _time(t) {}
   virtual ~RTime() {}
 
-  virtual uint64_t getTimeMicro() const
+  virtual std::size_t getTimeMicro() const
   {
-    return static_cast<uint64_t>(_time.asMicroseconds());
+    return static_cast<std::size_t>(_time.asMicroseconds());
   }
   virtual IRTime	&operator=(const ISoundBuffer &rhs)
   {

@@ -6,7 +6,7 @@ bool    UdpSocket::bind(unsigned short int port)
     return (_socket.bind(port) == sf::Socket::Done);
 }
 
-uint64_t     UdpSocket::receive(void *buf, uint64_t size,
+std::size_t     UdpSocket::receive(void *buf, std::size_t size,
         std::string &ip, unsigned short &port)
 {
     sf::IpAddress   ipa;

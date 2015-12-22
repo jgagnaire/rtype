@@ -10,7 +10,7 @@
 class ReadyScene : public Scene
 {
     public:
-        ReadyScene(IWindow &win, std::unordered_map<uint64_t, Entity*> *e);
+        ReadyScene(IWindow &win, std::unordered_map<std::size_t, Entity*> *e);
 
 	virtual ~ReadyScene();
 

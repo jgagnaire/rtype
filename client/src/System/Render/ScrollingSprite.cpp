@@ -22,7 +22,7 @@ bool    ScrollingSprite::load(const std::string &path,
     return true;
 }
 
-void    ScrollingSprite::update(uint64_t duration)
+void    ScrollingSprite::update(std::size_t duration)
 {
     if (_texture == 0)
         return ;

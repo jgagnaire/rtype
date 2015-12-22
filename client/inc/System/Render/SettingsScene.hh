@@ -10,7 +10,7 @@
 class SettingsScene : public Scene
 {
     public:
-        SettingsScene(IWindow &win, std::unordered_map<uint64_t, Entity*> *e):
+        SettingsScene(IWindow &win, std::unordered_map<std::size_t, Entity*> *e):
             Scene(win, e), _current(0)
         {
             _b1.manager.add<AView*>("view", &_v1);
@@ -18,7 +18,7 @@ class SettingsScene : public Scene
             _textVec.push_back(new Text("Option1"));
             _textVec.push_back(new Text("Option2"));
             _textVec.push_back(new Text("Option3"));
-            for (uint64_t i = 0; i < _textVec.size(); ++i)
+            for (std::size_t i = 0; i < _textVec.size(); ++i)
             {
                 _textVec[i]->setCenter();
                 _textVec[i]->setY(400 + i * 100);
@@ -80,7 +80,7 @@ class SettingsScene : public Scene
         View                _v1;
 
         std::vector<Text*>  _textVec;
-        uint64_t         _current;
+        std::size_t         _current;
 };
 
 

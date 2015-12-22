@@ -19,7 +19,7 @@ enum class LoginState
 class LoginScene : public Scene
 {
     public:
-        LoginScene(IWindow &win, std::unordered_map<uint64_t, Entity*> *e):
+        LoginScene(IWindow &win, std::unordered_map<std::size_t, Entity*> *e):
             Scene(win, e), _titleLogin("Login :", 0xff0000ff),
             _titlePassword("Password :", 0xff0000ff),
             _finish(LoginState::NotConnected), _event(noEvent)
