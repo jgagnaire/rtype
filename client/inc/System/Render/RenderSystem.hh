@@ -15,7 +15,7 @@ class ReadyScene;
 class RenderSystem : public ASystem
 {
     public:
-        RenderSystem(std::unordered_map<std::size_t, Entity*> *);
+        RenderSystem(std::unordered_map<uint64_t, Entity*> *);
 		RenderSystem() {}
         virtual ~RenderSystem();
 
@@ -29,7 +29,7 @@ class RenderSystem : public ASystem
 
     private:
         std::chrono::time_point<std::chrono::steady_clock>  _last;
-        std::unordered_map<std::size_t, Entity*>            *_entities;
+        std::unordered_map<uint64_t, Entity*>            *_entities;
         Scene                                               *_current;
         MenuScene                                           *_menu;
         StageScene                                          *_stage;
