@@ -19,6 +19,7 @@ enum REvent
     Key_Select = 256,
     Key_Back = 512,
     Key_Close = 1024,
+    NewStage,
     E_Login,
     E_GameRoom,
     E_Ready,

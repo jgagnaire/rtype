@@ -18,6 +18,7 @@ RenderSystem::RenderSystem(std::unordered_map<std::size_t, Entity*> *e):
     _eventList.push_back(E_Stage);
     _eventList.push_back(E_GameRoom);
     _eventList.push_back(E_Ready);
+    _eventList.push_back(NewStage);
     _window = new Window();
     _menu = new MenuScene(*_window, _entities);
     _stage = new StageScene(*_window, _entities);

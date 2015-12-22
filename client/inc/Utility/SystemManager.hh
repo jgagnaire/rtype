@@ -26,6 +26,7 @@ class SystemManager
         last->manager.add<std::size_t>("lastBonus", 3000000000);
         last->manager.add<std::size_t>("lastMobShoot", 4000000000);
         last->manager.add<std::size_t>("lastBoss", 5000000000);
+        last->manager.add<int>("changeDuration", 10000);
         last->manager.add<std::string>("type", "none");
         last->manager.add<std::string>("name", "none");
         last->manager.add<std::pair<float, float> >("position", std::pair<float,float>(0,0));
@@ -42,13 +43,13 @@ class SystemManager
         ASystem *col = new ColliderSystem(shr_entities);
         ASystem *sound = new SoundSystem();
 
-        systemList["1mov"] = mvt;
-        systemList["2mob"] = mob;
-        systemList["3Shoot"] = shot;
-        systemList["4col"] = col;
-        systemList["5audioCall"] = audioCall;
-        systemList["6sound"] = sound;
-        systemList["7render"] = render;
+        systemList.push_back(mvt);
+        systemList.push_back(shot);
+        systemList.push_back(col);
+        systemList.push_back(mob);
+        systemList.push_back(audioCall);
+        systemList.push_back(sound);
+        systemList.push_back(render);
         ea = new EventAggregator(static_cast<RenderSystem*>(render)->getWindow());
         ea->add(mvt);
         ea->add(mob);
@@ -62,7 +63,7 @@ class SystemManager
         ~SystemManager()
         {
             for(auto x : systemList)
-                delete(x.second);
+                delete(x);
             delete ea;
         }
 
@@ -93,10 +94,10 @@ class SystemManager
                     ea->update();
                     for (auto x : systemList)
                     {
-                        IPacket *m = x.second->out(event);
+                        IPacket *m = x->out(event);
                         if (m != 0)
                             _networkManager.send(*m);
-                        x.second->update(s);
+                        x->update(s);
                     }
                     tmp = std::to_string(event);
                     lastEvent.setData(tmp.c_str());
@@ -107,14 +108,14 @@ class SystemManager
                         if (p)
                         {
                             for (auto x : systemList)
-                                x.second->in(p);
+                                x->in(p);
                             delete[] static_cast<const char*>(p->getData());
                             delete p;
                         }
                     if (p)
                     {
                         for (auto x : systemList)
-                            x.second->in(p);
+                            x->in(p);
                         delete[] static_cast<const char*>(p->getData());
                         delete p;
                     }
@@ -123,7 +124,7 @@ class SystemManager
         }
 
     private:
-        std::unordered_map<std::string, ASystem*>	systemList;
+        std::vector<ASystem*>	systemList;
         EventAggregator								*ea;
         NetworkManager								_networkManager;
         std::unordered_map<std::size_t, Entity*>	*shr_entities;

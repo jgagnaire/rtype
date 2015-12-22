@@ -35,13 +35,21 @@ class ShootSystem : public ASystem
         _eventList.push_back(Key_Charge);
         _eventList.push_back(Key_Change);
         _eventList.push_back(E_Stage);
+        _eventList.push_back(NewStage);
         patterns[0] = Pattern::line;
         patterns[1] = Pattern::sinusoid;
+        _durationAnimation = 0;
     }
         virtual ~ShootSystem() {}
 
         virtual void                    update(int duration)
         {
+            if (_durationAnimation > 0)
+            {
+                _durationAnimation -= duration;
+                _durationAnimation = (_durationAnimation <= 0 ? 0 : _durationAnimation);
+                return ;
+            }
             _frequency += duration;
             if (!isActiv)
                 return ;
@@ -124,6 +132,8 @@ class ShootSystem : public ASystem
         }
         virtual bool                    handle(EventSum ev)
         {
+            if (ev == NewStage)
+                _durationAnimation = (*_eList)[-1]->manager.get<int>("changeDuration");
             if (ev == E_Stage)
                 isActiv = !isActiv;
             if (ev & Key_Fire && this->fireRate >= 250 && isActiv)
@@ -164,6 +174,7 @@ class ShootSystem : public ASystem
         EventSum			                        lastEvent;
         std::function<void (Entity&, Pattern::Side, int)> patterns[2];
         std::string         _tmp;
+        int                                         _durationAnimation;
 };
 
 #endif //SHOOTSYSTEM_HH_

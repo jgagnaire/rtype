@@ -91,7 +91,7 @@ class StageScene : public Scene
 
         void            switchStage()
         {
-            _durationAnimation = 7000;
+            _durationAnimation = (*_entities)[-1]->manager.get<int>("changeDuration");
             _changing = true;
         }
 
@@ -104,6 +104,11 @@ class StageScene : public Scene
             _b5.manager.set<ADrawable*>("background", _s5[_stageNb - 1]);
             _changeScene.manager.set<ADrawable*>("2numero", &(_numstage[_stageNb - 1]));
             _changeScene.manager.set<ADrawable*>("1", &_transition);
+            (*_entities)[-1]->manager.set<std::size_t>("lastShoot", 1000000000);
+            (*_entities)[-1]->manager.set<std::size_t>("lastMob", 2000000000);
+            (*_entities)[-1]->manager.set<std::size_t>("lastBonus", 3000000000);
+            (*_entities)[-1]->manager.set<std::size_t>("lastMobShoot", 4000000000);
+            (*_entities)[-1]->manager.set<std::size_t>("lastBoss", 5000000000);
         }
 
         virtual void    init()
@@ -111,7 +116,6 @@ class StageScene : public Scene
             std::string     name;
             std::string     me;
 
-//            switchStage();
             int i = -1;
             for (auto x : *_entities)
             {
@@ -135,6 +139,8 @@ class StageScene : public Scene
 
         virtual void    handle(EventSum e, EventSum&)
         {
+            if (e == NewStage)
+                switchStage();
             if (e & Key_Up || e & Key_Down || e & Key_Left || e & Key_Right)
                 _direction = e;
         }
@@ -142,6 +148,25 @@ class StageScene : public Scene
         virtual void    update(int duration)
         {
             _win.setMenuMode(false);
+            if (_durationAnimation > 0)
+            {
+                if (_durationAnimation < 2500 && _changing)
+                {
+                    _changing = false;
+                    ++_stageNb;
+                    setStage();
+                }
+                _durationAnimation -= duration;
+                if (_durationAnimation < 0)
+                {
+                    _durationAnimation = 0;
+                }
+                for (auto x : _changeScene.manager.getAll<ADrawable*>())
+                    x.second->update(duration);
+                if (_durationAnimation > 0)
+                    _win.draw(_changeScene);
+                return ;
+            }
             _s1[_stageNb - 1]->update(duration);
             _s2[_stageNb - 1]->update(duration);
             _s3[_stageNb - 1]->update(duration);
@@ -293,24 +318,6 @@ class StageScene : public Scene
                 _win.draw(_guiExplosion);
             }
             _win.draw(_b5);
-            if (_durationAnimation > 0)
-            {
-                if (_durationAnimation < 2500 && _changing)
-                {
-                    _changing = false;
-                    ++_stageNb;
-                    setStage();
-                }
-                _durationAnimation -= duration;
-                if (_durationAnimation < 0)
-                {
-                    _durationAnimation = 0;
-                }
-                for (auto x : _changeScene.manager.getAll<ADrawable*>())
-                    x.second->update(duration);
-                if (_durationAnimation > 0)
-                    _win.draw(_changeScene);
-            }
         }
 
         virtual void        in(IPacket *p, std::string&)
@@ -334,7 +341,7 @@ class StageScene : public Scene
                         _players[name]->setPosition(sf::Vector2f(px, py));
                 }
             }
-        }
+       }
 
     private:
         Entity                                              _b1;
