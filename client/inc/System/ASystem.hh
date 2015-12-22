@@ -12,7 +12,7 @@ class ASystem
 {
 public:
 	ASystem() {}
-	ASystem(std::unordered_map<std::size_t, Entity*> *) {}
+	ASystem(std::unordered_map<uint64_t, Entity*> *) {}
 	virtual ~ASystem() {}
 
 	virtual void                    update(int duration) = 0;

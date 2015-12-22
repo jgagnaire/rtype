@@ -28,7 +28,7 @@ class ShootSystem : public ASystem
             return (e);
         }
     public:
-        ShootSystem(std::unordered_map<std::size_t, Entity*> *_list) :
+        ShootSystem(std::unordered_map<uint64_t, Entity*> *_list) :
             _eList(_list), fireRate(250), isActiv(false), _frequency(0), lastEvent(0)
     {
         _eventList.push_back(Key_Fire);
@@ -156,7 +156,7 @@ class ShootSystem : public ASystem
         }
 
     protected:
-        std::unordered_map<std::size_t, Entity*>	*_eList;
+        std::unordered_map<uint64_t, Entity*>	*_eList;
         int					                        fireRate;
         bool				                        isActiv;
         UdpPacket				                    _packet;

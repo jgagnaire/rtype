@@ -4,7 +4,7 @@
 # include "System/Render/RenderSystem.hh"
 # include "System/Shoot/Pattern.hh"
 
-RenderSystem::RenderSystem(std::unordered_map<std::size_t, Entity*> *e):
+RenderSystem::RenderSystem(std::unordered_map<uint64_t, Entity*> *e):
     _entities(e), _event(noEvent)
 {
     _eventList.push_back(Key_Up);
