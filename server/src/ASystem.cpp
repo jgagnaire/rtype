@@ -62,16 +62,11 @@ void	ASystem::checkFireCollision(System &system, Players &p, AllEntity &entities
   for (auto shoot = system["shoot"]->_entities.begin();
        shoot != system["shoot"]->_entities.end();) {
     if (!(*shoot)->manager.get<bool>("is_a_monster")) {
-      if (ASystem::touchMonster(*shoot, system, entities, p))
+      if (ASystem::touchMonster(*shoot, system, entities, p) ||
+	  (ASystem::touchBoss(*shoot, system, entities, p)))
 	system["shoot"]->_entities.erase(shoot++);
       else
 	++shoot;
-      if (shoot != system["shoot"]->_entities.end()) {
-	if (ASystem::touchBoss(*shoot, system, entities, p))
-	  system["shoot"]->_entities.erase(shoot++);
-	else
-	  ++shoot;
-      }
     }
     else {
       if (ASystem::touchPlayer(*shoot, p, entities))

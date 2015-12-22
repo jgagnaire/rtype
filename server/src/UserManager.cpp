@@ -367,6 +367,23 @@ void                    UserManager<T>::isTouched(int damage) {
 }
 
 template <typename T>
+void                    UserManager<T>::clearLevel() {
+    keypressed = 0;
+    has_force = 0;
+    position.clear();
+    has_force = false;
+    fire = false;
+    switch_weapon = false;
+    is_dead = false;
+    position.x = 0;
+    position.y = Enum::GAME_SIZE_HEIGHT / 2;
+    force = 0;
+    protection = 0;
+    perfect_shield = 0;
+    respawn = Enum::RESPAWN_TIME;
+}
+
+template <typename T>
 void                    UserManager<T>::clearGameData() {
     keypressed = 0;
     has_force = 0;

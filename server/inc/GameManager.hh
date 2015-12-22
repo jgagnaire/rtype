@@ -82,7 +82,7 @@ public:
     IServerSocket<SCK>		    *getUDPSocket();
     bool			    isAllDead(Game<SCK> *) const;
     void			    synchronisation(Game<SCK> *);
-    bool			    bossIsDead(Game<SCK> *);
+  
 private:
     bool                            update(Game<SCK> *game, std::size_t);
     void                            updatePositions(Game<SCK> *, std::size_t);
@@ -96,6 +96,8 @@ private:
 						  int,
 						  std::size_t,
 						  const std::string &);
+    bool			    bossIsDead(Game<SCK> *);
+    bool			    gameTransition(Game<SCK> *);
 
     static  GameManager				  *game_manager;
     static  Entity				  configuration;

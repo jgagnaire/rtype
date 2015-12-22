@@ -85,6 +85,7 @@ public:
     bool		    updateBonus(std::size_t);
     bool		    isRespawning() const;
     const std::size_t       *getLatency();
+    void                    clearLevel();
 
     Enum::ServerAnswers	    verifyUser();
     Enum::ServerAnswers	    newUser();
