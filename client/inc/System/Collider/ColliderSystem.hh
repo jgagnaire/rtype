@@ -65,6 +65,7 @@ class ColliderSystem : public ASystem
                 _eList->erase(id1);
             if (delB)
                 _eList->erase(id2);
+            std::cout << "COLLIDE "<< id1 << " -- " << id2 << std::endl;
         }
 
         virtual void                    update(int duration)
@@ -76,7 +77,7 @@ class ColliderSystem : public ASystem
             {
                 if (a.second->manager.get<std::string>("type") == "player" &&
                         ((time = a.second->manager.get<int>("perfect_shield")) > 0 ||
-                        (time2 = a.second->manager.get<int>("respawn")) > 0))
+                         (time2 = a.second->manager.get<int>("respawn")) > 0))
                 {
                     time -= duration;
                     time2 -= duration;
@@ -90,9 +91,13 @@ class ColliderSystem : public ASystem
             }
             for (std::size_t i = 0; i < _untreated.size();)
             {
+                std::cout << "ifExis= " << _untreated[i].first << " = " << _untreated[i].second << std::endl;
+                std::cout << "ifExist " << (_eList->find(_untreated[i].first) != _eList->end()) <<" = " <<
+                    (_eList->find(_untreated[i].second) != _eList->end()) << std::endl;
                 if (_eList->find(_untreated[i].first) != _eList->end()
                         && _eList->find(_untreated[i].second) != _eList->end())
                 {
+                    std::cout << "retest "<< _untreated[i].first << " -- " << _untreated[i].second << std::endl;
                     collide(_untreated[i].first, _untreated[i].second);
                     _untreated.erase(_untreated.begin() + i);
                     --i;
@@ -130,6 +135,9 @@ class ColliderSystem : public ASystem
 
                 id1 = std::stoll(data.substr(0, data.find(":")));
                 id2 = std::stoll(data.substr(data.find(":") + 1));
+                std::cout << id1 << " -- " << id2 << std::endl;
+                std::cout << "NOP" << (_eList->find(id1) != _eList->end()) <<" = " <<
+                    (_eList->find(id2) != _eList->end()) << std::endl;
                 if (_eList->find(id1) == _eList->end()
                         || _eList->find(id2) == _eList->end())
                 {
