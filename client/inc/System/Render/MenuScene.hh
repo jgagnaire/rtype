@@ -37,7 +37,6 @@ class MenuScene : public Scene
             _gui.manager.add<ADrawable*>("selector", &_selector);
 
             _textVec.push_back(new Text("Play Online", 0xd12323ff));
-            _textVec.push_back(new Text("Play Offline", 0xd12323ff));
             _textVec.push_back(new Text("Settings", 0xd12323ff));
             _textVec.push_back(new Text("Quit", 0xd12323ff));
             for (std::size_t i = 0; i < _textVec.size(); ++i)
@@ -85,11 +84,9 @@ class MenuScene : public Scene
                             send = E_Login;
                             break ;
                         case 1:
-                            send = E_Stage;
+                            send = E_Settings;
                             break ;
                         case 2:
-                            break ;
-                        case 3:
                             send = Key_Close;
                             break ;
                     }

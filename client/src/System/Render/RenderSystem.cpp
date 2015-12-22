@@ -2,7 +2,6 @@
 #define RENDERSYSTEM_CPP_ZPTSKFN8
 
 # include "System/Render/RenderSystem.hh"
-# include "System/Render/ReadyScene.hh"
 # include "System/Shoot/Pattern.hh"
 
 RenderSystem::RenderSystem(std::unordered_map<std::size_t, Entity*> *e):
@@ -25,6 +24,7 @@ RenderSystem::RenderSystem(std::unordered_map<std::size_t, Entity*> *e):
     _login = new LoginScene(*_window, _entities);
     _gameRoom = new GameRoomScene(*_window, _entities);
     _ready = new ReadyScene(*_window, _entities);
+    _settings = new SettingsScene(*_window, _entities);
     _current = _menu;
 }
 
@@ -72,6 +72,12 @@ bool RenderSystem::handle(EventSum e)
             break;
         case E_Ready:
             _current = _ready;
+            break;
+        case E_Settings:
+            _current = _settings;
+            break;
+        case E_Menu:
+            _current = _menu;
             break;
         default:
             _current->handle(e, _event);

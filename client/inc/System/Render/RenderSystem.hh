@@ -6,6 +6,8 @@
 # include "System/Render/StageScene.hh"
 # include "System/Render/LoginScene.hh"
 # include "System/Render/GameRoomScene.hh"
+# include "System/Render/SettingsScene.hh"
+# include "System/Render/ReadyScene.hh"
 # include "Window.hh"
 
 class ReadyScene;
@@ -34,6 +36,7 @@ class RenderSystem : public ASystem
         LoginScene                                          *_login;
         GameRoomScene                                       *_gameRoom;
         ReadyScene                                          *_ready;
+        SettingsScene                                       *_settings;
         IWindow                                             *_window;
         EventSum                                             _event;
         std::string                                         _pseudo;
