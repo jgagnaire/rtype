@@ -1,6 +1,6 @@
 "levels": {
     "level1": {
-        "time": 60,
+        "time": 10,
         "background": "city",
         "music": "starfish",
         "monsters": [
