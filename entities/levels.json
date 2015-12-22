@@ -90,7 +90,7 @@
     },
 
     "level2": {
-        "time": 60,
+        "time": 10,
         "background": "destroy",
         "music": "experts",
         "monsters": [
