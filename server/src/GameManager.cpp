@@ -311,6 +311,7 @@ bool            GameManager<SCK>::gameTransition(Game<SCK> *game) {
   game->system["monsters"]->clear();
   game->system["bonuses"]->clear();
   game->system["boss"]->clear();
+  game->shoot_player_ids = Enum::MAX_ID;
   game->monster_ids = 2 * Enum::MAX_ID;
   game->bonus_ids = 3 * static_cast<std::size_t>(Enum::MAX_ID);
   game->shoot_mob_ids = 4 * static_cast<std::size_t>(Enum::MAX_ID);

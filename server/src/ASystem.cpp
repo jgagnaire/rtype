@@ -142,14 +142,13 @@ void	ASystem::touchPlayerBoss(System &system, User *player, AllEntity &entities,
 	player_pos.x + player_hitbox_x > monster_pos.first &&
 	player_pos.y < monster_pos.second + monster_hitbox_y &&
 	player_hitbox_y + player_pos.y > monster_pos.second) {
-      std::cout << "BOSS-PLAYER => TOUCHEY !" << std::endl;
+      std::cout << "BOSS-PLAYER => TOUCHEY ! " << std::endl;
       ASystem::sendCollision(player->getId(), (*m)->manager.get<std::size_t>("id"), p);
       player->isTouched();
     }
     else
       ++m;
-    if (player->isDead())
-      return ;
+    return ;
   }
 }
 
