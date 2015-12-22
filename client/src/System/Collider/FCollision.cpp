@@ -60,9 +60,13 @@ bool        Collision::mob(Entity &me, Entity &e, std::pair<float, float>&)
              int life = me.manager.get<int>("life");
              life -= e.manager.get<int>("damage");
              me.manager.set<int>("life", life);
+             if (me.manager.get<std::string>("type") == "boss")
+                 std::cout << "LIFE " << life << std::endl;
              if (life > 0)
                  return false;
         }
+        if (me.manager.get<std::string>("type") == "boss")
+            return false;
         return true;
     }
     return false;
