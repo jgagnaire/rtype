@@ -167,17 +167,19 @@ bool            GameController<T>::getRoomList(UserManager<T> *cl) const {
 
     cl->writeStruct({0, static_cast<uint16_t>(sa)});
     if (sa == Enum::OK) {
-        for (auto it = game.begin(); it != game.end(); ++it) {
-            tmp.clear();
-            os.clear();
-            os.str("");
-            os <<  (Enum::MAX_PLAYER - (*it)->players.size());
-            tmp = (*it)->name + ":" + os.str();
-            std::cout << "Nom de room: " << tmp << std::endl;
-            cl->writeStruct({static_cast<uint16_t>(tmp.size()),
-                             Enum::GAME_NAME});
-            cl->writeMsg(tmp);
-        }
+      for (auto it = game.begin(); it != game.end(); ++it) {
+	if ((*it)->players.size() != 4) {
+	  tmp.clear();
+	  os.clear();
+	  os.str("");
+	  os <<  (Enum::MAX_PLAYER - (*it)->players.size());
+	  tmp = (*it)->name + ":" + os.str();
+	  std::cout << "Nom de room: " << tmp << std::endl;
+	  cl->writeStruct({static_cast<uint16_t>(tmp.size()),
+		Enum::GAME_NAME});
+	  cl->writeMsg(tmp);
+	}
+      }
     }
     return (true);
 }

@@ -303,18 +303,25 @@ void            GameManager<SCK>::synchronisation(Game<SCK> *game) {
 
 template <typename SCK>
 bool            GameManager<SCK>::gameTransition(Game<SCK> *game) {
+  std::size_t	time = GameManager<SCK>::getTimeInSecond() + 10;
   char		lvl = game->lvl_name.back();
 
-  if (lvl >= '5')
-    return (false);
-  game->lvl_name.pop_back();
-  game->lvl_name.push_back(lvl + 1);
   game->system["shoot"]->clear();
   game->system["monsters"]->clear();
   game->system["bonuses"]->clear();
   game->system["boss"]->clear();
+  game->monster_ids = 2 * Enum::MAX_ID;
+  game->bonus_ids = 3 * static_cast<std::size_t>(Enum::MAX_ID);
+  game->shoot_mob_ids = 4 * static_cast<std::size_t>(Enum::MAX_ID);
+  game->boss_ids = 5 * static_cast<std::size_t>(Enum::MAX_ID);
+  if (lvl >= '5')
+    return (false);
+  game->lvl_name.pop_back();
+  game->lvl_name.push_back(lvl + 1);
   for (auto p = game->players.begin(); p != game->players.end(); ++p)
     (*p)->clearLevel();
+  std::cout << "le " << game->lvl_name << " va bientot commencer..." << std::endl;
+  for(; time > GameManager<SCK>::getTimeInSecond(););
   return (true);
 }
 
@@ -345,9 +352,11 @@ void            GameManager<SCK>::createGame(Game<SCK> *game) {
       }
       start = std::chrono::steady_clock::now();
       if (g.bossIsDead(game) && g.gameTransition(game))
-	g.createGame(game);
+	return g.createGame(game);
     }
     game->is_playing = false;
+    for (auto p = game->players.begin(); p != game->players.end(); ++p)
+      (*p)->onGameRoom();
     std::cout << "c'est fini" << std::endl;
 }
 

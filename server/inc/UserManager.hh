@@ -86,6 +86,7 @@ public:
     bool		    isRespawning() const;
     void                    clearLevel();
     const std::size_t       *getLatency();
+    void		    onGameRoom();
 
     Enum::ServerAnswers	    verifyUser();
     Enum::ServerAnswers	    newUser();

@@ -309,6 +309,12 @@ Enum::ServerAnswers      UserManager<T>::createGameRoom() {
 }
 
 template <typename T>
+void      UserManager<T>::onGameRoom() {
+  status = Enum::GAME_ROOM;
+  is_ready = false;
+}
+
+template <typename T>
 Enum::ServerAnswers      UserManager<T>::leaveRoom() {
     GameManager<T>             &gm = GameManager<T>::instance();
 
@@ -368,6 +374,8 @@ void                    UserManager<T>::isTouched(int damage) {
 
 template <typename T>
 void                    UserManager<T>::clearLevel() {
+    GameManager<T>          &g = GameManager<T>::instance();
+
     keypressed = 0;
     has_force = 0;
     position.clear();
@@ -381,6 +389,7 @@ void                    UserManager<T>::clearLevel() {
     protection = 0;
     perfect_shield = 0;
     respawn = Enum::RESPAWN_TIME;
+    g.sendPosition(g.getGameByName(gameroom), this);
 }
 
 template <typename T>
