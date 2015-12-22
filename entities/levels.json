@@ -80,7 +80,13 @@
                 }
             }}
         ],
-        "boss": "boss1"
+        "boss": {
+            "name": "boss1",
+            "position": {
+                 "x": 1920.0,
+                 "y": 540.0
+            }
+        }
     },
 
     "level2": {
@@ -186,7 +192,13 @@
                 }
             }}
         ],
-        "boss": "boss2"
+        "boss": {
+            "name": "boss2",
+            "position": {
+                 "x": 1920.0,
+                 "y": 540.0
+            }
+        }
     },
 
     "level3": {
@@ -292,7 +304,13 @@
                 }
             }}
         ],
-        "boss": "boss3"
+        "boss": {
+            "name": "boss3",
+            "position": {
+                 "x": 1920.0,
+                 "y": 540.0
+            }
+        }
     },
 
     "level4": {
@@ -409,7 +427,13 @@
                 }
             }}
         ],
-        "boss": "boss4"
+        "boss": {
+            "name": "boss4",
+            "position": {
+                 "x": 1920.0,
+                 "y": 540.0
+            }
+        }
     },
 
     "level5": {
@@ -526,6 +550,12 @@
                 }
             }}
         ],
-        "boss": "boss5"
+        "boss": {
+            "name": "boss4",
+            "position": {
+                 "x": 1920.0,
+                 "y": 540.0
+            }
+        }
     }
 }
