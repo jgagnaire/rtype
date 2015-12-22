@@ -29,6 +29,12 @@ public:
   virtual void	update(int duration) = 0;
   virtual bool	handle(const std::string &name, Entity *e,
 		       bool monster, const Position &p) = 0;
+  virtual std::list<Entity *> &getEntities() { return(_entities); }
+  virtual void clear() {
+    for (auto it = _entities.begin(); it != _entities.end(); ++it)
+      delete *it;
+    _entities.clear();
+  }
   static void	collision(System &system, Players &p, AllEntity &entities);
   static void	line(Entity &e, int duration);
   static void	sinusoid(Entity &e, int duration);
@@ -42,6 +48,8 @@ private:
   static void   collisionBonusPlayer(System &, Players &, AllEntity &);
   static void	touchPlayerBonus(System &, User *, AllEntity &, Players &);
   static void	touchPlayerMonster(System &, User *, AllEntity &, Players &);
+  static void	touchPlayerBoss(System &, User *, AllEntity &, Players &);
   static bool	touchPlayer(Entity *, Players &, AllEntity &);
   static bool	touchMonster(Entity *, System &, AllEntity &, Players &);
+  static bool	touchBoss(Entity *, System &, AllEntity &, Players &);
 };

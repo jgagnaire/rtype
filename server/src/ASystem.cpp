@@ -66,6 +66,12 @@ void	ASystem::checkFireCollision(System &system, Players &p, AllEntity &entities
 	system["shoot"]->_entities.erase(shoot++);
       else
 	++shoot;
+      if (shoot != system["shoot"]->_entities.end()) {
+	if (ASystem::touchBoss(*shoot, system, entities, p))
+	  system["shoot"]->_entities.erase(shoot++);
+	else
+	  ++shoot;
+      }
     }
     else {
       if (ASystem::touchPlayer(*shoot, p, entities))
@@ -77,8 +83,10 @@ void	ASystem::checkFireCollision(System &system, Players &p, AllEntity &entities
 }
 
 void   ASystem::collisionMonsterPlayer(System &system, Players &player, AllEntity &entities) {
-  for (auto p = player.begin(); p != player.end(); ++p)
+  for (auto p = player.begin(); p != player.end(); ++p) {
     ASystem::touchPlayerMonster(system, *p, entities, player);
+    ASystem::touchPlayerBoss(system, *p, entities, player);
+  }
 }
 
 void   ASystem::collisionBonusPlayer(System &system, Players &player, AllEntity &entities) {
@@ -110,6 +118,38 @@ void	ASystem::touchPlayerBonus(System &system, User *player, AllEntity &entities
       player->getBonus(*m);
       delete *m;
       system["bonuses"]->_entities.erase(m++);
+    }
+    else
+      ++m;
+    if (player->isDead())
+      return ;
+  }
+}
+
+void	ASystem::touchPlayerBoss(System &system, User *player, AllEntity &entities, Players &p) {
+  if (player->isRespawning())
+    return ;
+  Entity	&tmp_hitboxes = entities["hitboxes"];
+  Entity	&hitboxes = tmp_hitboxes.manager.get<Entity>("hitboxes");
+  Entity	&player_hitbox = hitboxes.manager.get<Entity>("player1");
+  int		player_hitbox_x = player_hitbox.manager.get<int>("x");
+  int		player_hitbox_y = player_hitbox.manager.get<int>("y");
+  Position	player_pos = player->getPosition();
+
+  for (auto m = system["boss"]->_entities.begin();
+       m != system["boss"]->_entities.end();) {
+    Entity	&monster_hitbox = hitboxes.manager.get<Entity>((*m)->manager.get<std::string>("name"));
+    int       monster_hitbox_x = monster_hitbox.manager.get<int>("x");
+    int       monster_hitbox_y = monster_hitbox.manager.get<int>("y");
+    std::pair<float, float> monster_pos = (*m)->manager.get<std::pair<float, float> >("position");
+
+    if (player_pos.x < monster_pos.first + monster_hitbox_x &&
+	player_pos.x + player_hitbox_x > monster_pos.first &&
+	player_pos.y < monster_pos.second + monster_hitbox_y &&
+	player_hitbox_y + player_pos.y > monster_pos.second) {
+      std::cout << "BOSS-PLAYER => TOUCHEY !" << std::endl;
+      ASystem::sendCollision(player->getId(), (*m)->manager.get<std::size_t>("id"), p);
+      player->isTouched();
     }
     else
       ++m;
@@ -201,13 +241,12 @@ bool	ASystem::touchMonster(Entity *fire, System &system, AllEntity &entities, Pl
 	monster_pos.first + monster_hitbox_x > fire_pos.first &&
 	monster_pos.second < fire_pos.second + fire_hitbox_y &&
 	monster_hitbox_y + monster_pos.second > fire_pos.second) {
+      std::cout << "FIRE-MONSTER => TOUCHEY !" << std::endl;
       ASystem::sendCollision(fire->manager.get<std::size_t>("id"),
 			     (*m)->manager.get<std::size_t>("id"), p);
-      std::cout << "MONSTER-FIRE => TOUCHEY !" << std::endl;
       (*m)->manager.set<int>("life",
 			     (*m)->manager.get<int>("life") - 
 			     fire->manager.get<int>("damage"));
-      std::cout << "il a: "<< (*m)->manager.get<int>("life") << ": " <<  &(*m)->manager.get<int>("life") << std::endl;
       if ((*m)->manager.get<int>("life") <=  0) {
 	system["monsters"]->_entities.erase(m);
 	delete *m;
@@ -217,4 +256,38 @@ bool	ASystem::touchMonster(Entity *fire, System &system, AllEntity &entities, Pl
     }
   }    
   return (false);
+}
+
+bool	ASystem::touchBoss(Entity *fire, System &system, AllEntity &entities, Players &p) {
+  Entity	&tmp_hitboxes = entities["hitboxes"];
+  Entity	&hitboxes = tmp_hitboxes.manager.get<Entity>("hitboxes");
+  Entity	&fire_hitbox = hitboxes.manager.get<Entity>(fire->manager.get<std::string>("name"));
+  int		fire_hitbox_x = fire_hitbox.manager.get<int>("x");
+  int		fire_hitbox_y = fire_hitbox.manager.get<int>("y");
+  std::pair<float, float> fire_pos = fire->manager.get<std::pair<float, float> >("position");
+
+  for (auto m = system["boss"]->_entities.begin();
+       m != system["boss"]->_entities.end(); ++m) {
+    Entity	&monster_hitbox = hitboxes.manager.get<Entity>((*m)->manager.get<std::string>("name"));
+    int       monster_hitbox_x = monster_hitbox.manager.get<int>("x");
+    int       monster_hitbox_y = monster_hitbox.manager.get<int>("y");
+    std::pair<float, float> monster_pos = (*m)->manager.get<std::pair<float, float> >("position");
+
+    if (monster_pos.first < fire_pos.first + fire_hitbox_x &&
+	monster_pos.first + monster_hitbox_x > fire_pos.first &&
+	monster_pos.second < fire_pos.second + fire_hitbox_y &&
+	monster_hitbox_y + monster_pos.second > fire_pos.second) {
+      std::cout << "FIRE-BOSS => TOUCHEY !" << std::endl;
+      ASystem::sendCollision(fire->manager.get<std::size_t>("id"),
+			     (*m)->manager.get<std::size_t>("id"), p);
+      (*m)->manager.set<int>("life",
+			     (*m)->manager.get<int>("life") - 
+			     fire->manager.get<int>("damage"));
+      if ((*m)->manager.get<int>("life") <=  0)
+        (*m)->manager.add<bool>("is_dead", true);
+      delete fire;
+      return (true);
+    }
+  }    
+  return (false);  
 }

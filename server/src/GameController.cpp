@@ -141,7 +141,7 @@ bool            GameController<T>::ready(UserManager<T> *cl) const {
 	    std::cout << "je clean: " << (*it)->getName() << std::endl;
 	    (*it)->inGame();
 	    (*it)->clearGameData();
-	    //(*it)->writeStruct({0, Enum::GAME_START});
+	    (*it)->writeStruct({0, Enum::GAME_START});
 	  }
 	  g.launchGame(cl->getGameroomName());
         }
