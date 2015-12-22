@@ -24,7 +24,7 @@
         "movement": "line",
         "fire": ["normal"],
         "velocity": 0.1,
-        "life": 10
+        "life": 200
     },
 
     "boss2": {

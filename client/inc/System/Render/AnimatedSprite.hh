@@ -14,12 +14,12 @@ class AnimatedSprite : public sf::Drawable, public ADrawable
 
         bool            load(const std::string &path,
                 bool random = false, unsigned frameBySec = 10);
-        virtual void    update(uint64_t);
+        virtual void    update(std::size_t);
         void            setPosition(const sf::Vector2f &pos);
         const sf::Vector2f &getPosition() const;
         virtual void    draw(sf::RenderTarget &target,
                 sf::RenderStates states) const;
-        uint64_t     getNbPlayed() const;
+        std::size_t     getNbPlayed() const;
         void            setRepeat(bool);
 
     private:
@@ -31,8 +31,8 @@ class AnimatedSprite : public sf::Drawable, public ADrawable
         int                             _height;
         bool                            _random;
         unsigned                        _frameBySec;
-        uint64_t                     _save;
-        uint64_t                     _numberPlayed;
+        std::size_t                     _save;
+        std::size_t                     _numberPlayed;
         bool                            _repeat;
 };
 

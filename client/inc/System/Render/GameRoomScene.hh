@@ -11,7 +11,7 @@
 class GameRoomScene : public Scene
 {
     public:
-        GameRoomScene(IWindow &win, std::unordered_map<uint64_t, Entity*> *e):
+        GameRoomScene(IWindow &win, std::unordered_map<std::size_t, Entity*> *e):
             Scene(win, e), _buttons(2), _update(true),
             _new(false), _current(0), _currentR(0),
             _event(0), _lastCode(Codes::nothing)
@@ -23,7 +23,7 @@ class GameRoomScene : public Scene
 
         _b1.manager.add<View*>("view", &_view);
         _texts.manager.add<ADrawable*>("buffer", &_bufferText);
-        for (uint64_t i = 0; i < _buttons.size(); ++i)
+        for (std::size_t i = 0; i < _buttons.size(); ++i)
             _texts.manager.add<ADrawable*>("button" + std::to_string(i),
                     &_buttons[i]);
     }
@@ -69,7 +69,7 @@ class GameRoomScene : public Scene
                 _bufferText.setCenter();
                 if (tmp == 126)
                 {
-                    uint64_t i = 0;
+                    std::size_t i = 0;
                     switch (_current)
                     {
                         case 0:
@@ -102,10 +102,10 @@ class GameRoomScene : public Scene
                 --_currentR;
             else if (e & Key_Down && _currentR < _rooms.size() - 1)
                 ++_currentR;
-            for (uint64_t i = 0; i <  _buttons.size(); ++i)
+            for (std::size_t i = 0; i <  _buttons.size(); ++i)
                 _buttons[i].setColor(0xffffffff);
             _buttons[_current].setColor(0xff0000ff);
-            uint64_t i = 0;
+            std::size_t i = 0;
             for (auto x : _rooms)
             {
                 if (i == _currentR)
@@ -120,7 +120,7 @@ class GameRoomScene : public Scene
         {
             std::string tmp, name, nb;
             TcpPacket   *packet;
-            uint64_t i = 0;
+            std::size_t i = 0;
 
             if ((packet = dynamic_cast<TcpPacket*>(p)))
             {
@@ -186,8 +186,8 @@ class GameRoomScene : public Scene
         bool                                                _new;
         std::string                                         _buffer;
         Text                                                _bufferText;
-        uint64_t                                         _current;
-        uint64_t                                         _currentR;
+        std::size_t                                         _current;
+        std::size_t                                         _currentR;
         EventSum                                            _event;
         Codes                                               _lastCode;
         std::string                                         _name;

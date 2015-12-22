@@ -22,7 +22,7 @@ class Text : public ADrawable
         virtual ~Text() {
         }
 
-        virtual void    update(uint64_t)
+        virtual void    update(std::size_t)
         {
 
         }
@@ -43,12 +43,12 @@ class Text : public ADrawable
                     _text.getPosition().y);
         }
 
-        void            setPosition(const uint64_t x, const uint64_t y)
+        void            setPosition(const std::size_t x, const std::size_t y)
         {
 			_text.setPosition(static_cast<float>(x), static_cast<float>(y));
         }
 
-        void            setY(const uint64_t y)
+        void            setY(const std::size_t y)
         {
 			_text.setPosition(static_cast<float>(_text.getPosition().x), static_cast<float>(y));
         }

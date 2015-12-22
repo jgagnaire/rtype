@@ -13,7 +13,7 @@ class ScrollingSprite : public sf::Drawable, public ADrawable
         bool    load(const std::string &path,
                 unsigned scrollingSpeed = 10,
                 unsigned frameBySec = 24);
-        virtual void    update(uint64_t);
+        virtual void    update(std::size_t);
         virtual void    draw(sf::RenderTarget &target,
                 sf::RenderStates states) const;
 
@@ -23,7 +23,7 @@ class ScrollingSprite : public sf::Drawable, public ADrawable
         unsigned            _speed;
         unsigned            _frameBySec;
         unsigned            _left;
-        uint64_t         _save;
+        std::size_t         _save;
 };
 
 #endif /* end of include guard: SCROLLINGSPRITE_HH_DAMIFJSE */

@@ -38,34 +38,34 @@ struct Game {
     system["boss"] = new BossSystem;
   }
 
-  uint64_t	getId() {
+  std::size_t	getId() {
     return (ids++);
   }
 
     std::unordered_map<std::string, ASystem *>  system;
     std::string                                 name;
     std::list<UserManager<SCK> *>               players;
-    uint64_t                                 refresh;
+    std::size_t                                 refresh;
     bool                                        is_playing;
     float					time;
     std::string					lvl_name;
     std::unordered_map<std::string, Entity>	entities;
     Entity					*level;
     std::unordered_map<std::string, std::string>  content_system;
-    uint64_t		ids = 0;
-    uint64_t		shoot_player_ids = Enum::MAX_ID;
-    uint64_t		monster_ids = 2 * Enum::MAX_ID;
-    uint64_t		bonus_ids = 3 * static_cast<uint64_t>(Enum::MAX_ID);
-    uint64_t		shoot_mob_ids = 4 * static_cast<uint64_t>(Enum::MAX_ID);
-    uint64_t	        boss_ids = 5 * static_cast<uint64_t>(Enum::MAX_ID);
+    std::size_t		ids = 0;
+    std::size_t		shoot_player_ids = Enum::MAX_ID;
+    std::size_t		monster_ids = 2 * Enum::MAX_ID;
+    std::size_t		bonus_ids = 3 * static_cast<std::size_t>(Enum::MAX_ID);
+    std::size_t		shoot_mob_ids = 4 * static_cast<std::size_t>(Enum::MAX_ID);
+    std::size_t	        boss_ids = 5 * static_cast<std::size_t>(Enum::MAX_ID);
 };
 
 template <typename SCK>
 class GameManager {
 public:
     static  GameManager             &instance();
-    static  uint64_t             getTime();
-    static  uint64_t             getTimeInSecond();
+    static  std::size_t             getTime();
+    static  std::size_t             getTimeInSecond();
     Game<SCK>                       *getGameByName(const std::string &);
     void                            createRoom(const std::string &, UserManager<SCK> *);
     void                            deleteUser(UserManager<SCK> *);
@@ -84,17 +84,17 @@ public:
     void			    synchronisation(Game<SCK> *);
   
 private:
-    bool                            update(Game<SCK> *game, uint64_t);
-    void                            updatePositions(Game<SCK> *, uint64_t);
+    bool                            update(Game<SCK> *game, std::size_t);
+    void                            updatePositions(Game<SCK> *, std::size_t);
     bool			    updateTime(Game<SCK> *);
     bool		            updateObjSighting(Game<SCK> *game,
-						      uint64_t time,
+						      std::size_t time,
 						      const std::string &);
     bool				updateBoss(Game<SCK> *);
     bool			    checkEntities(Game<SCK> *, 
 						  std::pair<std::string, Entity&>,
 						  int,
-						  uint64_t,
+						  std::size_t,
 						  const std::string &);
     bool			    bossIsDead(Game<SCK> *);
     bool			    gameTransition(Game<SCK> *);
