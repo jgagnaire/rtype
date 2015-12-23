@@ -378,6 +378,7 @@ void                    UserManager<T>::isTouched(int damage) {
   position.y = Enum::GAME_SIZE_HEIGHT / 2;
   respawn = Enum::RESPAWN_TIME;
   --life;
+  std::cout << "                   " << getName() << " n'a plus que " << (int)(life) << " vie(s) !" << std::endl; 
   g.sendPosition(g.getGameByName(gameroom), this);
 }
 
@@ -409,7 +410,7 @@ void                    UserManager<T>::clearGameData() {
     fire = false;
     switch_weapon = false;
     is_dead = false;
-    life = 10;
+    life = 3;
     position.x = 0;
     position.y = Enum::GAME_SIZE_HEIGHT / 2;
     force = 0;

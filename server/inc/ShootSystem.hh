@@ -10,7 +10,7 @@ public:
   ShootSystem();
   virtual ~ShootSystem();
 
-  virtual void                    update(int duration);
+  virtual void                    update(int duration, GameRoom);
   virtual bool                    handle(const std::string &name,
 					 Entity *e,
 					 bool monster,

@@ -128,13 +128,40 @@ bool        GameManager<SCK>::roomIsFull(const std::string &name) {
 }
 
 template <typename SCK>
-void        GameManager<SCK>::launchGame(const std::string &game_name) {
-    Game<SCK>    *game = getGameByName(game_name);
+void        GameManager<SCK>::reloadJSON(Game<SCK> *game) {
+  const std::pair<std::string, Enum::ServerNotification> strs[] =
+    {{"bonuses", Enum::SEND_JSON_BONUS},
+     {"fires", Enum::SEND_JSON_FIRE},
+     {"monsters", Enum::SEND_JSON_MONSTER},
+     {"hitboxes", Enum::SEND_JSON_HITBOX},
+     {"levels", Enum::SEND_JSON_LEVEL}};
+  JSONParser	    *jp;
 
-    if (game && !game->is_playing) {
-        game->is_playing = true;
-        _threadpool.startThread(_threadpool.add(&GameManager::createGame, game));
+  try {
+    for (uint64_t i = 0; i < sizeof(strs) / sizeof(strs[0]); ++i) {
+      JSONParser::parseFile(GameManager<SCK>::configuration.manager.get<std::string>(strs[i].first));
+      jp = JSONParser::parse();
+      game->entities[strs[i].first] = jp->getEntity();
+      game->content_system[strs[i].first] = JSONParser::getContent();
+      for (auto cl = game->players.begin(); cl != game->players.end(); ++cl) {
+	(*cl)->writeStruct({static_cast<uint16_t>(game->content_system[strs[i].first].size()),
+	      static_cast<uint16_t>(strs[i].second)});
+	(*cl)->writeMsg(game->content_system[strs[i].first]);
+      }
+      delete jp;
     }
+  }
+  catch (...) {}
+}
+
+template <typename SCK>
+void        GameManager<SCK>::launchGame(const std::string &game_name) {
+  Game<SCK>    *game = getGameByName(game_name);
+
+  if (game && !game->is_playing) {
+    game->is_playing = true;
+    _threadpool.startThread(_threadpool.add(&GameManager::createGame, game));
+  }
 }
 
 template <typename SCK>
@@ -151,9 +178,27 @@ bool        GameManager<SCK>::updateTime(Game<SCK> *game) {
     uint64_t	game_time = entity.manager.get<int>("time");
     uint64_t	tmp_time = getTimeInSecond() + entity.manager.get<int>("time_tmp") - game_time;
 
-    entity.manager.set<int>("time_tmp", entity.manager.get<int>("time_tmp") - static_cast<std::size_t>(tmp_time));
-    entity.manager.set<int>("timeleft", entity.manager.get<int>("timeleft") + static_cast<std::size_t>(tmp_time));
+    entity.manager.set<int>("time_tmp", entity.manager.get<int>("time_tmp") -
+			    static_cast<std::size_t>(tmp_time));
+    entity.manager.set<int>("timeleft", entity.manager.get<int>("timeleft") +
+			    static_cast<std::size_t>(tmp_time));
     return (entity.manager.get<int>("time_tmp") <= 0);
+}
+
+template <typename SCK>
+void        GameManager<SCK>::fireMob(Game<SCK> *game, Entity *monster,
+				      const std::string &monster_name, Position &p) {
+  Entity	*ent;
+  Entity	&tmp = game->entities["fires"];
+  auto		&monster_fires = monster->manager.get<std::vector<std::string> >("fire");
+
+  for (auto fires = monster_fires.begin(); fires != monster_fires.end(); ++fires) {
+    if (!(*fires).empty()) {
+      ent = new Entity(tmp.manager.get<Entity>("fires").manager.get<Entity>(*fires));
+      ent->manager.add<uint64_t>("id", game->shoot_mob_ids++);
+      game->system["shoot"]->handle(monster_name, ent, true, p);
+    }
+  }
 }
 
 template <typename SCK>
@@ -174,10 +219,7 @@ GameManager<SCK>::checkEntities(Game<SCK> *game,
 	  entity.second.manager.get<int>("refresh")) {
 	Entity	*ent =
 	  new Entity(tmp.manager.get<Entity>(ent_name).manager.get<Entity>(entity.first));
-	if (ent_name == "bonuses")
-	  ent->manager.add<uint64_t>("id", game->bonus_ids++);
-	else
-	  ent->manager.add<uint64_t>("id", game->monster_ids++);
+	ent->manager.add<uint64_t>("id", game->monster_ids++);
 	entity.second.manager.set<int>("refresh", time);
 	entity.second.manager.set<int>("time", entity.second.manager.get<int>("time") - 1);
 	game->system[ent_name]->handle(entity.first, ent, true, pos);
@@ -275,10 +317,10 @@ bool        GameManager<SCK>::update(Game<SCK> *game, uint64_t time) {
     updatePositions(game, time);
     updateObjSighting(game, time, "monsters");
     updateObjSighting(game, time, "bonuses");
-    game->system["shoot"]->update(static_cast<std::size_t>(time));
-    game->system["monsters"]->update(static_cast<std::size_t>(time));
-    game->system["bonuses"]->update(static_cast<std::size_t>(time));
-    game->system["boss"]->update(static_cast<std::size_t>(time));
+    game->system["shoot"]->update(static_cast<std::size_t>(time), game);
+    game->system["monsters"]->update(static_cast<std::size_t>(time), game);
+    game->system["bonuses"]->update(static_cast<std::size_t>(time), game);
+    game->system["boss"]->update(static_cast<std::size_t>(time), game);
     for (auto p = game->players.begin(); p != game->players.end(); ++p)
       if (!(*p)->isDead())
 	(*p)->updateBonus(time);
@@ -336,7 +378,7 @@ bool            GameManager<SCK>::gameTransition(Game<SCK> *game) {
 
 template <typename SCK>
 void            GameManager<SCK>::createGame(Game<SCK> *game) {
-  try {
+  //  try {
     GameManager<SCK>	&g = GameManager<SCK>::instance();
     //	g.synchronisation(game);
     bool		is_not_finished = true;
@@ -349,7 +391,8 @@ void            GameManager<SCK>::createGame(Game<SCK> *game) {
     std::cout << "C'est partie pour le niveau " << game->lvl_name << std::endl;
     tmp_entity.manager.add<int>("time_tmp", tmp_entity.manager.get<int>("time"));
     tmp_entity.manager.add<int>("timeleft", 0);
-    tmp_entity.manager.set<int>("time", static_cast<int>(getTimeInSecond()) + tmp_entity.manager.get<int>("time_tmp"));
+    tmp_entity.manager.set<int>("time", static_cast<int>(getTimeInSecond()) +
+				tmp_entity.manager.get<int>("time_tmp"));
     std::cout << "Que la partie commence pour la room: " << game->name << std::endl;
     auto end = std::chrono::steady_clock::now();
     while (is_not_finished) {
@@ -365,18 +408,21 @@ void            GameManager<SCK>::createGame(Game<SCK> *game) {
 	return createGame(game);
     }
     game->is_playing = false;
-    for (auto p = game->players.begin(); p != game->players.end(); ++p)
-      (*p)->onGameRoom();
-    std::cout << "c'est fini" << std::endl;
-  }
-  catch (...) {
-    std::cout << "AWWW... erreur critique !" << std::endl;
     for (auto p = game->players.begin(); p != game->players.end(); ++p) {
-      (*p)->writeStruct({0, static_cast<uint16_t>(Enum::GAME_ERROR)});
-      (*p)->onLobby();
+      (*p)->writeStruct({0, static_cast<uint16_t>(Enum::GAME_END)});
+      (*p)->onGameRoom();
     }
-    game->players.clear();
-  }
+    std::cout << "c'est fini" << std::endl;
+    g.reloadJSON(game);
+    //  }
+  // catch (...) {
+  //   std::cout << "AWWW... erreur critique !" << std::endl;
+  //   for (auto p = game->players.begin(); p != game->players.end(); ++p) {
+  //     (*p)->writeStruct({0, static_cast<uint16_t>(Enum::GAME_ERROR)});
+  //     (*p)->onLobby();
+  //   }
+  //   game->players.clear();
+  // }
 }
 
 template <typename SCK>

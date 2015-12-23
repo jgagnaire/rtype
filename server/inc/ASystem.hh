@@ -6,6 +6,9 @@
 #include "Packet.hh"
 #include "Entity.hh"
 
+template <typename SCK>
+struct Game;
+
 class ASystem
 {
 public:
@@ -17,16 +20,18 @@ public:
   typedef std::list<UserManager<SOCKET> *>		Players;
   typedef UserManager<SOCKET>				User;
   typedef IServerSocket<SOCKET>				ServerSocket;
+  typedef Game<SOCKET>*					GameRoom;
 # else
 #  include <cmath>
   typedef std::list<UserManager<int> *>			Players;
   typedef UserManager<int>				User;
   typedef IServerSocket<int>				ServerSocket;
+  typedef Game<int>*					GameRoom;
 #endif
   ASystem();
   virtual ~ASystem();
 
-  virtual void	update(int duration) = 0;
+  virtual void	update(int duration, GameRoom) = 0;
   virtual bool	handle(const std::string &name, Entity *e,
 		       bool monster, const Position &p) = 0;
   virtual std::list<Entity *> &getEntities() { return(_entities); }
@@ -38,6 +43,7 @@ public:
   static void	collision(System &system, Players &p, AllEntity &entities);
   static void	line(Entity &e, int duration);
   static void	sinusoid(Entity &e, int duration);
+  void test(Game<int>);
 protected:
   std::list<Entity *> _entities;
 
