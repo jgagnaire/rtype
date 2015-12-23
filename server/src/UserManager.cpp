@@ -416,7 +416,7 @@ void                    UserManager<T>::clearGameData() {
     fire = false;
     switch_weapon = false;
     is_dead = false;
-    life = 3;
+    life = Enum::NB_lIFE;
     position.x = 0;
     position.y = Enum::GAME_SIZE_HEIGHT / 2;
     force = 0;

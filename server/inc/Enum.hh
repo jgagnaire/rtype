@@ -142,6 +142,7 @@ namespace Enum
         MAX_DAMAGE = 1000000000,
 	MAX_ID = 1000000000,
 	RESPAWN_TIME = 3000,
+	NB_LIFE = 10;
     };
 };
 
