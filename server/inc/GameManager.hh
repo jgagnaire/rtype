@@ -66,8 +66,8 @@ template <typename SCK>
 class GameManager {
 public:
     static  GameManager             &instance();
-    static  uint64_t             getTime();
-    static  uint64_t             getTimeInSecond();
+    static  uint64_t                getTime();
+    static  uint64_t                getTimeInSecond();
     Game<SCK>                       *getGameByName(const std::string &);
     bool                            createRoom(const std::string &, UserManager<SCK> *);
     void                            deleteUser(UserManager<SCK> *);
@@ -86,6 +86,7 @@ public:
     void			    synchronisation(Game<SCK> *);
     void			    fireMob(Game<SCK> *game, Entity *monster,
 					    const std::string &monster_name, Position &p);
+    void			    setPort(const std::string  &);
   
 private:
     bool                            update(Game<SCK> *game, uint64_t);
@@ -105,6 +106,7 @@ private:
     void			    reloadJSON(Game<SCK> *);
     void			    cleanSystem(Game<SCK> *);
 
+    std::string					  port;
     static  GameManager				  *game_manager;
     static  Entity				  configuration;
     static  DLLoader				  *dlloader;

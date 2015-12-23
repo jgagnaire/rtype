@@ -9,6 +9,8 @@ typedef GameManager<int>				Manager;
 
 ASystem::ASystem() {}
 ASystem::~ASystem() {}
+std::string ASystem::_port;
+
 
 void	ASystem::collision(System &system, Players &p, AllEntity &entities) {
   ASystem::checkFireCollision(system, p, entities);
@@ -53,7 +55,7 @@ void	ASystem::sendCollision(uint64_t id1, uint64_t id2, Players &p) {
     packet.stockOnBuff(tmp);
     packet.serialize();
     packet.sendPacket<ServerSocket *>(Manager::instance().getUDPSocket(),
-				      (*it)->getIP(), "1726"); // TODO, no magic string
+				      (*it)->getIP(), ASystem::_port);
   }
 }
 

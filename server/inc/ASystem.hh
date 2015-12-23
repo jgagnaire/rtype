@@ -43,9 +43,11 @@ public:
   static void	collision(System &system, Players &p, AllEntity &entities);
   static void	line(Entity &e, int duration);
   static void	sinusoid(Entity &e, int duration);
+  static void	setPort(const std::string &p) { ASystem::_port = p; }
   void test(Game<int>);
 protected:
   std::list<Entity *> _entities;
+  static std::string  _port;
 
 private:
   static void	sendCollision(uint64_t, uint64_t, Players &);
