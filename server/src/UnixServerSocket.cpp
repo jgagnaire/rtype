@@ -22,7 +22,6 @@ UnixServerSocket::~UnixServerSocket()
   delete this->addr;
 }
 
-inline
 std::string	UnixServerSocket::getIP() const {
   return (std::string(inet_ntoa(addr->sin_addr)));
 }
