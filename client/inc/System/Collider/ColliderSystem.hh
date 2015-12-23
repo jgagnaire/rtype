@@ -21,11 +21,12 @@ class ColliderSystem : public ASystem
         virtual ~ColliderSystem() {}
 
 
-        Entity          *createExplosion(const std::pair<float, float> &pos)
+        Entity          *createExplosion(const std::pair<float, float> &pos, bool little)
         {
             Entity *e = new Entity;
             e->manager.add<std::string>("name", "explosion");
             e->manager.add<std::string>("type", "explosion");
+            e->manager.add<bool>("little", !little);
             e->manager.add<float>("velocity", 0.0f);
             e->manager.add<std::pair<float, float> >("position", pos);
             e->manager.add<std::function<void (Entity&, Pattern::Side, int)> >
@@ -61,14 +62,14 @@ class ColliderSystem : public ASystem
             bool delA = a->manager.get<fCollision>("collision")(*a, *b, ex);
             if (ex.first > -1)
             {
-                (*_eList)[(*_eList)[-1]->manager.get<uint64_t>("lastExplosion")] = createExplosion(ex);
+                (*_eList)[(*_eList)[-1]->manager.get<uint64_t>("lastExplosion")] = createExplosion(ex, delA);
                 (*_eList)[-1]->manager.set<uint64_t>("lastExplosion", (*_eList)[-1]->manager.get<uint64_t>("lastExplosion") + 1);
             }
             ex.first = ex.second = -1;
             bool delB = b->manager.get<fCollision>("collision")(*b, *a, ex);
             if (ex.first > -1)
             {
-                (*_eList)[(*_eList)[-1]->manager.get<uint64_t>("lastExplosion")] = createExplosion(ex);
+                (*_eList)[(*_eList)[-1]->manager.get<uint64_t>("lastExplosion")] = createExplosion(ex, delB);
                 (*_eList)[-1]->manager.set<uint64_t>("lastExplosion", (*_eList)[-1]->manager.get<uint64_t>("lastExplosion") + 1);
             }
             if (delA)

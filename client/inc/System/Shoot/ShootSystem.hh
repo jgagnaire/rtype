@@ -160,7 +160,10 @@ class ShootSystem : public ASystem
             if (ev == E_Stage)
                 isActiv = true;
             if (ev == E_Ready)
+            {
                 isActiv = false;
+                _jsonEntities.clear();
+            }
             if (ev & Key_Fire && this->fireRate >= 250 && isActiv)
             {
                 lastEvent = ev;
@@ -191,16 +194,16 @@ class ShootSystem : public ASystem
         }
 
     protected:
-        std::unordered_map<uint64_t, Entity*>	    *_eList;
-        int					                        fireRate;
-        bool				                        isActiv;
-        UdpPacket				                    _packet;
-        int                                         _frequency;
-        EventSum			                        lastEvent;
+        std::unordered_map<uint64_t, Entity*>		*_eList;
+        int					        fireRate;
+        bool				                isActiv;
+        UdpPacket				        _packet;
+        int						_frequency;
+        EventSum			                lastEvent;
         std::function<void (Entity&, Pattern::Side, int)> patterns[2];
-        std::string                                 _tmp;
-        int                                         _durationAnimation;
-        std::unordered_map<std::string, Entity>     _jsonEntities;
+        std::string					_tmp;
+        int						_durationAnimation;
+        std::unordered_map<std::string, Entity>		_jsonEntities;
 };
 
 #endif //SHOOTSYSTEM_HH_

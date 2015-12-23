@@ -170,6 +170,13 @@ class	MobSystem : public ASystem
                     for (auto &x : e.manager.getAll<Entity>())
                         _jsonEntities[x.first] = x.second;
                 }
+		
+		else if (p->getQuery() == static_cast<uint16_t>(Codes::JsonShoots))
+		  {
+		    Entity &e = JSONParser::parse(tmp)->getEntity().manager.get<Entity>("fires");
+		    for (auto &x : e.manager.getAll<Entity>())
+		      _mobFires[x.first] = x.second;
+		  }
                 else if (p->getQuery() == static_cast<uint16_t>(Codes::JsonLevels))
                 {
                     Entity &e = JSONParser::parse(tmp)->getEntity().manager.get<Entity>("levels");
@@ -263,9 +270,11 @@ class	MobSystem : public ASystem
 
     protected:
         bool                                                    isActiv;
-        std::unordered_map<uint64_t, Entity*>                *_eList;
+        std::unordered_map<uint64_t, Entity*>			*_eList;
         std::unordered_map<std::string, Entity>                 _jsonEntities;
         std::unordered_map<int, std::list<Entity*> >            _waitingmobs;
+	std::unordered_map<std::string, Entity>			_mobFires;
+  
         int                                                     _lvl;
         EventSum                                                _event;
         int                                                     _durationAnimation;
