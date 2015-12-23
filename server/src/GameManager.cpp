@@ -219,7 +219,7 @@ bool        GameManager<SCK>::updateObjSighting(Game<SCK> *game, uint64_t time,
 						   obj->manager.get<Entity>(m[0].first)}; 
     if (!m.empty() && checkEntities(game, tmp_obj,
 				    entity.manager.get<int>("timeleft"), time, ent_name))
-      objs.erase(obj++);
+      obj = objs.erase(obj);
     else
       ++obj;
   }
