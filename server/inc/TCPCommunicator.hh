@@ -80,7 +80,6 @@ public:
     void	checkObserver() {
         if (this->network_monitor->isObserved(dynamic_cast<IServerSocket<SCK>*>(this->srvset),
                                               Enum::ACCEPT)) {
-            std::cout << "Il y a un nouveau client !!" << std::endl;
             IServerSocket<SCK>	*tmp = this->srvset->absAcceptNewClient();
 
             if (!tmp)
@@ -114,7 +113,6 @@ public:
             return (false);
         if (!cli->IsFilled())
             return (true);
-		std::cout << "la taille des controllers vaut: " << this->controllers.size() << std::endl;
         for (auto it = this->controllers.begin(); it != this->controllers.end(); ++it) {
             if ((n = ((*it)->*(this->newData))(cli)) == 1)
             {

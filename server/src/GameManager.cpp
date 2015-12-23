@@ -44,7 +44,7 @@ GameManager<SCK>     &GameManager<SCK>::instance() {
       p = JSONParser::parse();
       GameManager<SCK>::configuration = p->getEntity().manager.get<Entity>("configuration");
     }
-    catch (...) { std::cout << "PARSING ERROR !!" << std::endl; }
+    catch (...) { std::cerr << "PARSING ERROR !!" << std::endl; }
     GameManager<SCK>::game_manager = new GameManager();
     delete p;
   }
@@ -92,7 +92,6 @@ void        GameManager<SCK>::deleteUser(UserManager<SCK> *u) {
         return ;
     for (auto it = g->players.begin(); it != g->players.end(); ++it) {
         if (u->getName() == (*it)->getName()) {
-	    std::cout << u->getName() << " est trouve dans la room " << g->name << std::endl;
             g->players.erase(it);
             break ;
         }
@@ -113,7 +112,6 @@ void        GameManager<SCK>::fireBall(Game<SCK> *game, UserManager<SCK> *u,
   Entity	*ent;
   Entity	&tmp = game->entities["fires"];
 
-  std::cout << "les shoots: " << game->shoot_player_ids<< std::endl;
   if (second_weapon) {
     ent = new Entity(tmp.manager.get<Entity>("fires").manager.get<Entity>("sinusoid"));
     ent->manager.add<uint64_t>("id", game->shoot_player_ids++);
@@ -338,7 +336,7 @@ bool        GameManager<SCK>::updateBoss(Game<SCK> *game) {
   Entity *ent =
     new Entity(monster.manager.get<Entity>(boss_name));
   ent->manager.add<uint64_t>("id", game->boss_ids++);
-  std::cout << "ET LE BOSS: " << boss_name << " EST LA !!" << std::endl;
+  std::cout << "Que le boss " << boss_name << " arrive !!" << std::endl;
   game->system["boss"]->handle(boss_name, ent, true, p);
   return (true);
 }
@@ -448,11 +446,11 @@ void            GameManager<SCK>::createGame(Game<SCK> *game) {
       (*p)->onGameRoom();
     }
     g.reloadJSON(game);
-    std::cout << "c'est fini" << std::endl;
+    std::cout << "Pour la room: " << game->name << ", c'est fini" << std::endl;
     game->is_playing = false;
   }
   catch (...) {
-    std::cout << "AWWW... erreur critique !" << std::endl;
+    std::cerr << "AWWW... erreur critique pour la room: " << game->name << std::endl;
     for (auto p = game->players.begin(); p != game->players.end(); ++p) {
       (*p)->writeStruct({0, static_cast<uint16_t>(Enum::GAME_ERROR)});
       (*p)->onLobby();

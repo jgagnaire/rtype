@@ -29,7 +29,7 @@ void                    MobSystem::update(int duration, ASystem::GameRoom g) {
         std::pair<float, float> tmp = (*x)->manager.
             get<std::pair<float, float> >("position");
 	_fire_rate += duration;
-	if (_fire_rate >= (*x)->manager.get<int>("fire_rate")) {
+	if (_fire_rate >= (*x)->manager.get<int>("fire_rate")) { 
 	  Position p = {tmp.first, tmp.second};
 	  _fire_rate = 0;
 	  gManager::instance().fireMob(g, *x,
