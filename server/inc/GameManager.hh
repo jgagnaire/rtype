@@ -67,7 +67,7 @@ public:
     static  std::size_t             getTime();
     static  std::size_t             getTimeInSecond();
     Game<SCK>                       *getGameByName(const std::string &);
-    void                            createRoom(const std::string &, UserManager<SCK> *);
+    bool                            createRoom(const std::string &, UserManager<SCK> *);
     void                            deleteUser(UserManager<SCK> *);
     bool                            joinRoom(const std::string &, UserManager<SCK> *);
     bool                            roomIsFull(const std::string &);

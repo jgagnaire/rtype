@@ -164,7 +164,7 @@ Enum::ServerAnswers	UserManager<T>::newUser() {
     std::string tok[2];
 
     if (stream.is_open())
-        return (Enum::EALREADY_LOGGED);
+      return (Enum::EALREADY_LOGGED);
     std::getline(is, tok[0], ':');
     std::getline(is, tok[1], ':');
     if (alreadyExist(tok))
@@ -183,7 +183,6 @@ Enum::ServerAnswers	UserManager<T>::newUser() {
         return (Enum::EUSER_EXIST);
     stream.clear();
     stream << tok[0] << ":" << tok[1] << std::flush;
-    name = tok[0];
     stream.close();
     return (Enum::OK);
 }
@@ -298,7 +297,10 @@ Enum::ServerAnswers      UserManager<T>::createGameRoom() {
     is_ready = false;
     gameroom = game_name;
     std::cout << "La room: " << gameroom << " se cree "<< std::endl;
-    gm.createRoom(game_name, this);
+    if (!gm.createRoom(game_name, this)) {
+      gameroom = "";
+      return (Enum::JSON_ERROR);
+    }
     std::cout << "il y a donc " << gm.getGames().size() << " rooms" << std::endl;
     Game<T> *g = gm.getGameByName(game_name);
     if (g)
@@ -311,6 +313,13 @@ Enum::ServerAnswers      UserManager<T>::createGameRoom() {
 template <typename T>
 void      UserManager<T>::onGameRoom() {
   status = Enum::GAME_ROOM;
+  is_ready = false;
+}
+
+template <typename T>
+void	  UserManager<T>::onLobby() {
+  status = Enum::LOBBY;
+  gameroom .clear();
   is_ready = false;
 }
 
@@ -379,7 +388,6 @@ void                    UserManager<T>::clearLevel() {
     keypressed = 0;
     has_force = 0;
     position.clear();
-    has_force = false;
     fire = false;
     switch_weapon = false;
     is_dead = false;
@@ -387,7 +395,6 @@ void                    UserManager<T>::clearLevel() {
     position.y = Enum::GAME_SIZE_HEIGHT / 2;
     force = 0;
     protection = 0;
-    perfect_shield = 0;
     respawn = Enum::RESPAWN_TIME;
     g.sendPosition(g.getGameByName(gameroom), this);
 }

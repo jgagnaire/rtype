@@ -15,9 +15,12 @@ GameManager<SCK>     &GameManager<SCK>::instance() {
   if (GameManager::game_manager == 0) {
     JSONParser	*p;
 
-    JSONParser::parseFile("./entities/configuration.json");
-    p = JSONParser::parse();
-    GameManager<SCK>::configuration = p->getEntity().manager.get<Entity>("configuration");
+    try {
+      JSONParser::parseFile("./entities/configuration.json");
+      p = JSONParser::parse();
+      GameManager<SCK>::configuration = p->getEntity().manager.get<Entity>("configuration");
+    }
+    catch (...) { std::cout << "PARSING ERROR !!" << std::endl; }
     GameManager<SCK>::game_manager = new GameManager();
     delete p;
   }
@@ -34,7 +37,7 @@ Game<SCK>        *GameManager<SCK>::getGameByName(const std::string &name) {
 }
 
 template <typename SCK>
-void        GameManager<SCK>::createRoom(const std::string &name, UserManager<SCK> *s) {
+bool        GameManager<SCK>::createRoom(const std::string &name, UserManager<SCK> *s) {
     Game<SCK>    *g = new Game<SCK>;
     const std::string strs[] = {"fires", "levels", "monsters",
 				"bonuses", "hitboxes"};
@@ -42,16 +45,20 @@ void        GameManager<SCK>::createRoom(const std::string &name, UserManager<SC
 
     g->name = name;
     g->players.push_back(s);
-    for (std::size_t i = 0; i < sizeof(strs) / sizeof(strs[0]); ++i) {
-      JSONParser::parseFile(GameManager<SCK>::configuration.manager.get<std::string>(strs[i]));
-      jp = JSONParser::parse();
-      g->entities[strs[i]] = jp->getEntity();
-      g->content_system[strs[i]] = JSONParser::getContent();
-      delete jp;
+    try {
+      for (std::size_t i = 0; i < sizeof(strs) / sizeof(strs[0]); ++i) {
+	JSONParser::parseFile(GameManager<SCK>::configuration.manager.get<std::string>(strs[i]));
+	jp = JSONParser::parse();
+	g->entities[strs[i]] = jp->getEntity();
+	g->content_system[strs[i]] = JSONParser::getContent();
+	delete jp;
+      }
     }
+    catch (...) { std::cout << "Pas possible de creer la room !" << std::endl; return (false); }
     _games.push_back(g);
+    return (true);
 }
-
+    
 template <typename SCK>
 void        GameManager<SCK>::deleteUser(UserManager<SCK> *u) {
     Game<SCK> *g = getGameByName(u->getGameroomName());
@@ -306,7 +313,6 @@ bool            GameManager<SCK>::gameTransition(Game<SCK> *game) {
   std::size_t	time = GameManager<SCK>::getTimeInSecond() + 10;
   char		lvl = game->lvl_name.back();
 
-  std::cout << "test" << std::endl;
   game->system["shoot"]->clear();
   game->system["monsters"]->clear();
   game->system["bonuses"]->clear();
@@ -329,6 +335,7 @@ bool            GameManager<SCK>::gameTransition(Game<SCK> *game) {
 
 template <typename SCK>
 void            GameManager<SCK>::createGame(Game<SCK> *game) {
+  try {
     GameManager<SCK>	&g = GameManager<SCK>::instance();
     //	g.synchronisation(game);
     bool		is_not_finished = true;
@@ -360,6 +367,15 @@ void            GameManager<SCK>::createGame(Game<SCK> *game) {
     for (auto p = game->players.begin(); p != game->players.end(); ++p)
       (*p)->onGameRoom();
     std::cout << "c'est fini" << std::endl;
+  }
+  catch (...) {
+    std::cout << "AWWW... erreur critique !" << std::endl;
+    for (auto p = game->players.begin(); p != game->players.end(); ++p) {
+      (*p)->writeStruct({0, static_cast<uint16_t>(Enum::GAME_ERROR)});
+      (*p)->onLobby();
+    }
+    game->players.clear();
+  }
 }
 
 template <typename SCK>
