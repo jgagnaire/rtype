@@ -19,7 +19,6 @@ class ShootSystem : public ASystem
             e->manager.add<std::string>("name", "playerShoot");
             e->manager.add<std::string>("type", "shoot");
             e->manager.add("velocity", 4.50f);
-            //TODO by json
             e->manager.add<int>("damage", 5);
             e->manager.add("position",
                     std::pair<float, float>(pos.first + 105.0f, pos.second + 9.0f));

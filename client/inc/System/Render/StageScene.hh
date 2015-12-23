@@ -42,8 +42,6 @@ class StageScene : public Scene
         _pSprites[14].load("client/res/boss/boss-5_535.png");
         _shoot.load("client/res/bullet.png");
         _shootEnnemy.load("client/res/bullet2.png");
-        //TODO, animation does not work _transition.load("client/res/transition_1920.png", false, 5);
-        //_transition.setRepeat(false);
         _hud.load("client/res/HUD.png");
         for (auto &x : stages)
         {
@@ -83,7 +81,6 @@ class StageScene : public Scene
             x.setPosition(sf::Vector2f(960 - 576 / 2 + 576, 540 - 123 / 2));
         _changeScene.manager.add<ADrawable*>("2stage", &_stage);
         _changeScene.manager.add<ADrawable*>("2numero", &(_numstage[0]));
-        _changeScene.manager.add<ADrawable*>("1", &_transition);
         _guiMobs.manager.add<ADrawable*>("sprite", &(_pSprites[4]));
         _guiExplosion.manager.add<ADrawable*>("explosion", 0);
         _b6.manager.add<ADrawable*>("hud", &_hud);
@@ -104,7 +101,6 @@ class StageScene : public Scene
             _b4.manager.set<ADrawable*>("background", _s4[_stageNb - 1]);
             _b5.manager.set<ADrawable*>("background", _s5[_stageNb - 1]);
             _changeScene.manager.set<ADrawable*>("2numero", &(_numstage[_stageNb - 1]));
-            _changeScene.manager.set<ADrawable*>("1", &_transition);
             (*_entities)[-1]->manager.set<uint64_t>("lastShoot", 1000000000);
             (*_entities)[-1]->manager.set<uint64_t>("lastMob", 2000000000);
             (*_entities)[-1]->manager.set<uint64_t>("lastBonus", 3000000000);
@@ -410,7 +406,6 @@ class StageScene : public Scene
         std::vector<AnimatedSprite>                         _pSprites;
         AnimatedSprite                                      _shoot;
         AnimatedSprite                                      _shootEnnemy;
-        AnimatedSprite                                      _transition;
         AnimatedSprite                                      _hud;
         Text                                                _hudText;
         std::vector<AnimatedSprite*>                        _explosions;
