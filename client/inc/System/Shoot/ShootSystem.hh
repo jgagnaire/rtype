@@ -72,9 +72,9 @@ class ShootSystem : public ASystem
                     std::pair<float, float> tmp = (*x).second->manager.
                         get<std::pair<float, float> >("position");
                     if (((*x).second->manager.get<std::string>("type") == "shoot"
-                                && (tmp.first > 1920 * 20 || tmp.first < 0))
+                                && (tmp.first > 1920 * 50 || tmp.first < 0))
                             || ((*x).second->manager.get<std::string>("type") == "mobshoot"
-                                && (tmp.first > 1920 || tmp.first < -1920 * 20)))
+                                && (tmp.first > 1920 || tmp.first < -1920 * 50)))
                     {
                         x = _eList->erase(x);
                         has_been_del = true;
