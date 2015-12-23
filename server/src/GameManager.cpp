@@ -93,6 +93,7 @@ void        GameManager<SCK>::fireBall(Game<SCK> *game, UserManager<SCK> *u,
   else
     ent = new Entity(tmp.manager.get<Entity>("fires").manager.get<Entity>("normal"));
   ent->manager.add<std::size_t>("id", game->shoot_player_ids++);
+  std::cout << "les shoots: " << game->shoot_player_ids<< std::endl;
   game->system["shoot"]->handle(u->getName(), ent, false, u->getPosition());
 }
 
@@ -102,7 +103,7 @@ bool        GameManager<SCK>::joinRoom(const std::string &name, UserManager<SCK>
         return (false);
     Game<SCK> *game = getGameByName(name);
 
-    if (!game)
+    if (!game || game->is_playing)
         return false;
     game->players.push_back(u);
     return true;
@@ -214,7 +215,7 @@ bool        GameManager<SCK>::updateObjSighting(Game<SCK> *game, std::size_t tim
   Entity	&tmp = game->entities["levels"];
   Entity	&entity =
     tmp.manager.get<Entity>("levels").manager.get<Entity>(game->lvl_name);
-  auto		&objs = entity.manager.get<std::vector<Entity> >(ent_name);
+  std::vector<Entity>  &objs = entity.manager.get<std::vector<Entity> >(ent_name);
 
   for (auto obj = objs.begin(); obj != objs.end();) {
     if (objs.size() == 0)
