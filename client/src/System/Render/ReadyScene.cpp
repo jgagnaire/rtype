@@ -109,7 +109,7 @@ void    ReadyScene::in(IPacket *p, std::string &pseudo)
                 id = std::stoi(data.substr(data.find(":") + 1));
                 pl = new Entity;
                 pl->manager.add<std::string>("type", "player");
-                pl->manager.add<int>("lifes", 3);
+                pl->manager.add<int>("lifes", 10);
                 pl->manager.add<std::string>("pseudo", name);
                 pl->manager.add<std::string>("name", (name == pseudo ? "player1" : name));
                 pl->manager.add<std::pair<float, float> >("position", pos);
