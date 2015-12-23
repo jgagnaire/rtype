@@ -15,7 +15,7 @@ enum REvent
     Key_Fire = 16,
     Key_Charge = 32,
     Key_Change = 64,
-	Key_Sound = 128,
+    Key_Sound = 128,
     Key_Select = 256,
     Key_Back = 512,
     Key_Close = 1024,
@@ -23,9 +23,13 @@ enum REvent
     E_Login,
     E_GameRoom,
     E_Ready,
-	E_Stage,
-	E_Explosion,
+    E_Stage,
+    E_Explosion,
     E_Settings,
+    E_MusicDown,
+    E_MusicUp,
+    E_SfxDown,
+    E_SfxUp,
     E_Menu
 };
 
