@@ -99,7 +99,7 @@ void  UnixServerMonitor::setTimeval(unsigned sec, unsigned microsec) {
     return;
   timeout = new struct timeval;
   if (!timeout)
-    throw; //TODO ! Exception
+    return ;
   timeout->tv_sec = sec;
   timeout->tv_usec = microsec;
 }
@@ -115,7 +115,7 @@ void  UnixServerMonitor::addFd(IServerSocket<int> *sock, Enum::Flag socket_flag 
   select_info *s = new select_info;
 
   if (!s)
-    throw; //TODO ! Exception
+    return ;
   s->fd = fd;
   s->flag = socket_flag;
   fds.push_back(s);

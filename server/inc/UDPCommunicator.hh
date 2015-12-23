@@ -44,6 +44,7 @@ public:
 
     virtual void launch(std::list<USER*> *cl) {
         GameManager<SCK>::instance().setUdpSocket(dynamic_cast<IServerSocket<SCK>*>(this->srvset));
+	GameManager<SCK>::instance().setPort(std::to_string(1726));
 	(*this->controllers.begin())->setPort(1726);
         this->cl_list = cl;
         for (auto it = this->controllers.begin(); it != this->controllers.end(); ++it)
