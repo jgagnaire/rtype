@@ -2,7 +2,7 @@
     "force": {
 	"movement": "line",
 	"velocity": 0.5,
-	"power": 2,
+	"power": 3,
 	"sprite": "force",
 	"bonus_sprite": "flying_force"
     },

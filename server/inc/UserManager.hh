@@ -88,6 +88,7 @@ public:
     const uint64_t       *getLatency();
     void		    onGameRoom();
     void		    onLobby();
+    int			    getForce() const;
 
     Enum::ServerAnswers	    verifyUser();
     Enum::ServerAnswers	    newUser();
@@ -100,7 +101,6 @@ public:
     Enum::ServerAnswers     quitGame();
     Enum::ServerAnswers     currentPosition();
     Enum::ServerAnswers     keyPressed();
-    Enum::ServerAnswers     takeForce();
     Enum::ServerAnswers	    setLatency();
     std::mutex              destroy_client_mutex;
 
@@ -123,7 +123,6 @@ private:
   bool                                    is_ready;
   uint64_t                             keypressed;
   uint64_t				  last_duration;
-  bool                                    has_force;
   bool                                    fire;
   bool					  switch_weapon;
   Position                                position;

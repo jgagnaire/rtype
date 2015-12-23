@@ -20,6 +20,11 @@ UserManager<T>::UserManager(IServerSocket<T> *sck) :
     life = 0;
 }
 
+template <typename T>
+int	        UserManager<T>::getForce() const {
+  return (force);
+}
+
 template<typename T>
 UserManager<T>::~UserManager() {
     GameManager<T>             &gm = GameManager<T>::instance();
@@ -380,7 +385,7 @@ void                    UserManager<T>::isTouched(int damage) {
   }
   perfect_shield = 0;
   protection = 0;
-  force = 0;
+  force = 1;
   position.x = 0;
   position.y = Enum::GAME_SIZE_HEIGHT / 2;
   respawn = Enum::RESPAWN_TIME;
@@ -394,14 +399,13 @@ void                    UserManager<T>::clearLevel() {
     GameManager<T>          &g = GameManager<T>::instance();
 
     keypressed = 0;
-    has_force = 0;
     position.clear();
     fire = false;
     switch_weapon = false;
     is_dead = false;
     position.x = 0;
     position.y = Enum::GAME_SIZE_HEIGHT / 2;
-    force = 0;
+    force = 1;
     protection = 0;
     respawn = Enum::RESPAWN_TIME;
     g.sendPosition(g.getGameByName(gameroom), this);
@@ -410,9 +414,7 @@ void                    UserManager<T>::clearLevel() {
 template <typename T>
 void                    UserManager<T>::clearGameData() {
     keypressed = 0;
-    has_force = 0;
     position.clear();
-    has_force = false;
     udp_packet_id = 0;
     fire = false;
     switch_weapon = false;
@@ -420,7 +422,7 @@ void                    UserManager<T>::clearGameData() {
     life = Enum::NB_LIFE;
     position.x = 0;
     position.y = Enum::GAME_SIZE_HEIGHT / 2;
-    force = 0;
+    force = 1;
     protection = 0;
     perfect_shield = 0;
     respawn = Enum::RESPAWN_TIME;
@@ -543,12 +545,6 @@ void                    UserManager<T>::changePosition(uint64_t time) {
     keypressed = 0;
     fire = false;
     game_mutex.unlock();
-}
-
-template <typename T>
-Enum::ServerAnswers     UserManager<T>::takeForce() {
-    has_force = true;
-    return (Enum::OK);
 }
 
 template <typename T>
