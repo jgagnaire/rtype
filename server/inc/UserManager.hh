@@ -87,6 +87,7 @@ public:
     void                    clearLevel();
     const uint64_t       *getLatency();
     void		    onGameRoom();
+    void		    onLobby();
 
     Enum::ServerAnswers	    verifyUser();
     Enum::ServerAnswers	    newUser();

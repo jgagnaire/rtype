@@ -93,6 +93,7 @@ namespace Enum
         USER_QUIT_GAME = 406,
         USER_KEYPRESS = 407,
 	PLAYER_POS = 408,
+	GAME_ERROR = 410,
     };
 
     enum ServerAnswers {
@@ -106,6 +107,7 @@ namespace Enum
         ENOT_LOGGED = 505,
         ENOT_IN_ROOM = 506,
 	EALREADY_IN_GAME = 507,
+	JSON_ERROR = 508,
         ENO_AVAILABLE_ROOM = 509,
         EROOM_NO_EXIST = 510,
     };

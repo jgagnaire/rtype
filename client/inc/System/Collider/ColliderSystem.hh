@@ -5,6 +5,7 @@
 #include "System/Shoot/Pattern.hh"
 #include "Utility/JSONParser.hh"
 #include "Network/NetworkManager.hh"
+#include "System/Collider/FCollision.hh"
 
 class ColliderSystem : public ASystem
 {
@@ -13,6 +14,7 @@ class ColliderSystem : public ASystem
         ColliderSystem(std::unordered_map<uint64_t, Entity*> *list) :
             _isActiv(false), _eList(list) {
                 _eventList.push_back(E_Stage);
+                _eventList.push_back(NewStage);
                 _event = noEvent;
             }
         virtual ~ColliderSystem() {}
@@ -56,23 +58,35 @@ class ColliderSystem : public ASystem
             b = (*_eList)[id2];
             std::pair<float, float> ex(-1, -1);
             bool delA = a->manager.get<fCollision>("collision")(*a, *b, ex);
-            //if (ex.first > -1)
-            //_eList->push_back(createExplosion(ex));
-            //ex.first = ex.second = -1;
+            if (ex.first > -1)
+            {
+                (*_eList)[(*_eList)[-1]->manager.get<uint64_t>("lastExplosion")] = createExplosion(ex);
+                (*_eList)[-1]->manager.set<uint64_t>("lastExplosion", (*_eList)[-1]->manager.get<uint64_t>("lastExplosion") + 1);
+            }
+            ex.first = ex.second = -1;
             bool delB = b->manager.get<fCollision>("collision")(*b, *a, ex);
-            //if (ex.first > -1)
-            //_eList->push_back(createExplosion(ex));
+            if (ex.first > -1)
+            {
+                (*_eList)[(*_eList)[-1]->manager.get<uint64_t>("lastExplosion")] = createExplosion(ex);
+                (*_eList)[-1]->manager.set<uint64_t>("lastExplosion", (*_eList)[-1]->manager.get<uint64_t>("lastExplosion") + 1);
+            }
             if (delA)
+            {
+                delete (*_eList)[id1];
                 _eList->erase(id1);
+            }
             if (delB)
+            {
+                delete (*_eList)[id2];
                 _eList->erase(id2);
+            }
             std::cout << "COLLIDE "<< id1 << " -- " << id2 << std::endl;
         }
 
         virtual void                    update(int duration)
         {
-            int time;
-            int time2;
+            int time = 0;
+            int time2 = 0;
 
             for (auto a : *_eList)
             {
@@ -90,7 +104,7 @@ class ColliderSystem : public ASystem
                     a.second->manager.set<int>("respawn", time2);
                 }
             }
-            for (uint64_t i = 0; i < _untreated.size();)
+            for (std::size_t i = 0; i < _untreated.size();)
             {
                 std::cout << "ifExis= " << _untreated[i].first << " = " << _untreated[i].second << std::endl;
                 std::cout << "ifExist " << (_eList->find(_untreated[i].first) != _eList->end()) <<" = " <<
@@ -150,6 +164,8 @@ class ColliderSystem : public ASystem
         }
 
         virtual bool                    handle(EventSum e) {
+            if (e == NewStage)
+                _untreated.clear();
             if (e == E_Stage)
                 _isActiv = !_isActiv;
             return false;

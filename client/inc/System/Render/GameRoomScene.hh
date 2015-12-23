@@ -23,7 +23,7 @@ class GameRoomScene : public Scene
 
         _b1.manager.add<View*>("view", &_view);
         _texts.manager.add<ADrawable*>("buffer", &_bufferText);
-        for (uint64_t i = 0; i < _buttons.size(); ++i)
+        for (std::size_t i = 0; i < _buttons.size(); ++i)
             _texts.manager.add<ADrawable*>("button" + std::to_string(i),
                     &_buttons[i]);
     }
@@ -102,9 +102,9 @@ class GameRoomScene : public Scene
                 --_currentR;
             else if (e & Key_Down && _currentR < _rooms.size() - 1)
                 ++_currentR;
-            for (uint64_t i = 0; i <  _buttons.size(); ++i)
+            for (std::size_t i = 0; i <  _buttons.size(); ++i)
                 _buttons[i].setColor(0xffffffff);
-            _buttons[_current].setColor(0xff0000ff);
+            _buttons[static_cast<unsigned int>(_current)].setColor(0xff0000ff);
             uint64_t i = 0;
             for (auto x : _rooms)
             {

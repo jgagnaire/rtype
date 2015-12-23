@@ -41,8 +41,16 @@ int    AccountController<T>::newConnection(UserManager<T> *cl) const {
 template<typename T>
 inline
 bool    AccountController<T>::accountLoginFct(UserManager<T> *cl) const {
-    cl->writeStruct({0, static_cast<uint16_t>(cl->verifyUser())});
+  std::istringstream	is(cl->getPacketData());
+  std::string		s;
+
+  std::getline(is, s, ':');
+  if (this->findUserByName(s)) {
+    cl->writeStruct({0, static_cast<uint16_t>(Enum::EALREADY_LOGGED)});
     return (true);
+  }
+  cl->writeStruct({0, static_cast<uint16_t>(cl->verifyUser())});
+  return (true);
 }
 
 template<typename T>

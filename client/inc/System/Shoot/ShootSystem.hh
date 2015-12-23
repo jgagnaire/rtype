@@ -65,7 +65,7 @@ class ShootSystem : public ASystem
                                     get<Pattern::Side>("direction"), duration);
                     std::pair<float, float> tmp = (*x).second->manager.
                         get<std::pair<float, float> >("position");
-                    if (tmp.first > 1920 * 10 || tmp.first < 0)
+                    if (tmp.first > 1920 * 100 || tmp.first < 0)
                     {
                         x = _eList->erase(x);
                         has_been_del = true;
@@ -109,6 +109,7 @@ class ShootSystem : public ASystem
                             Entity *sht = this->createShoot(x.second->manager.get<std::pair<float, float> >("position"),
                                     x.second->manager.get<Pattern::MovePattern>("pattern"),
                                     Pattern::Side::RIGHT);
+                            sht->manager.add<Entity*>("Shooter", x.second);
                             std::cout << "SHOOT " << (*_eList)[-1]->manager.get<uint64_t>("lastShoot") << std::endl;
                             (*_eList)[(*_eList)[-1]->manager.get<uint64_t>("lastShoot")] = sht;
                             (*_eList)[-1]->manager.set<uint64_t>("lastShoot", (*_eList)[-1]->manager.get<uint64_t>("lastShoot") + 1);

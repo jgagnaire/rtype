@@ -111,6 +111,7 @@ void    ReadyScene::in(IPacket *p, std::string &pseudo)
                 pl->manager.add<int>("shield", 0);
                 pl->manager.add<int>("perfect_shield", 0);
                 pl->manager.add<int>("respawn", 0);
+                pl->manager.add<uint64_t>("score", 0);
                 (*_entities)[id] = pl;
                 (*_entities)[-1]->manager.set<uint64_t>("lastPlayer", id + 1);
                 _players[name] = true;
