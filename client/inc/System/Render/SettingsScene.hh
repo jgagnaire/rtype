@@ -17,7 +17,7 @@ class SettingsScene : public Scene
 
             _textVec.push_back(new Text("Music : " + std::to_string(musicVol)));
             _textVec.push_back(new Text("SFX : "+ std::to_string(sfxVol)));
-            for (uint64_t i = 0; i < _textVec.size(); ++i)
+            for (std::size_t i = 0; i < _textVec.size(); ++i)
             {
                 _textVec[i]->setCenter();
                 _textVec[i]->setY(400 + i * 100);
@@ -49,13 +49,13 @@ class SettingsScene : public Scene
 		      if (musicVol > 0)
 			{
 			  send = E_MusicDown;
-			  _textVec[_current]->setText("Music : " + std::to_string(--musicVol));
+			  _textVec[static_cast<std::size_t>(_current)]->setText("Music : " + std::to_string(--musicVol));
 			}
 		    }
 		  else
 		    if (sfxVol > 0)
 		      {
-			_textVec[_current]->setText("SFX : " + std::to_string(--sfxVol));
+			_textVec[static_cast<std::size_t>(_current)]->setText("SFX : " + std::to_string(--sfxVol));
 			send = E_SfxDown;
 		      }
 		  break;
@@ -65,13 +65,13 @@ class SettingsScene : public Scene
 		      if (musicVol < 100)
 			{
 			  send = E_MusicUp;
-			  _textVec[_current]->setText("Music : " + std::to_string(++musicVol));
+			  _textVec[static_cast<std::size_t>(_current)]->setText("Music : " + std::to_string(++musicVol));
 			}
 		    }
 		  else
 		    if (sfxVol < 100)
 		      {
-			_textVec[_current]->setText("SFX : " + std::to_string(++sfxVol));
+			_textVec[static_cast<std::size_t>(_current)]->setText("SFX : " + std::to_string(++sfxVol));
 			send = E_SfxUp;
 		      }
 		  break;
@@ -80,7 +80,7 @@ class SettingsScene : public Scene
             }
             for (auto x : _textVec)
                 x->setColor(0xffffffff);
-            _textVec[_current]->setColor(0xff0000ff);
+            _textVec[static_cast<std::size_t>(_current)]->setColor(0xff0000ff);
             if (e != Key_Change && e & Key_Change)
             {
                 EventSum tmp = (e << 1) >> 1;

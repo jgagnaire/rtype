@@ -98,7 +98,7 @@ class SystemManager
                         IPacket *m = x->out(event);
                         if (m != 0)
                             _networkManager.send(*m);
-                        x->update(s);
+                        x->update(static_cast<int>(s));
                     }
                     tmp = std::to_string(event);
                     lastEvent.setData(tmp.c_str());

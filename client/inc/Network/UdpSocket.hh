@@ -60,7 +60,7 @@ class UdpSocket : public IUdpSocket
         virtual bool        bind(unsigned short int port);
 		virtual void	unbind() { this->_socket.unbind(); }
         virtual uint64_t send(const void *buf, uint64_t size,
-			const std::string &ip, unsigned short int port) { return (this->_socket.send(buf, size, ip, port) == sf::Socket::Done); }
+			const std::string &ip, unsigned short int port) { return (this->_socket.send(buf, static_cast<std::size_t>(size), ip, port) == sf::Socket::Done); }
         virtual uint64_t receive(void *buf, uint64_t size,
                 std::string &ip, unsigned short &port);
 

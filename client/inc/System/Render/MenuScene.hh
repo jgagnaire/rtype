@@ -39,7 +39,7 @@ class MenuScene : public Scene
             _textVec.push_back(new Text("Play Online", 0xd12323ff));
             _textVec.push_back(new Text("Settings", 0xd12323ff));
             _textVec.push_back(new Text("Quit", 0xd12323ff));
-            for (uint64_t i = 0; i < _textVec.size(); ++i)
+            for (std::size_t i = 0; i < _textVec.size(); ++i)
             {
                 _textVec[i]->setCenter();
                 _textVec[i]->setY(400 + i * 100);
