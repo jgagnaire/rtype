@@ -71,7 +71,7 @@ class	MobSystem : public ASystem
                     if ((*x)->manager.get<std::string>("type") == "mob")
                     {
                         (*_eList)[(*_eList)[-1]->manager.get<uint64_t>("lastMob")] = *x;
-			(*x)->manager.add<int>("canIShoot", (*x)->manager.get<int>("fire_rate"));
+                        (*x)->manager.add<int>("canIShoot", (*x)->manager.get<int>("fire_rate"));
                         (*_eList)[-1]->manager.set<uint64_t>("lastMob", (*_eList)[-1]->manager.get<uint64_t>("lastMob") + 1);
                     }
                     else if ((*x)->manager.get<std::string>("type") == "bonus")
@@ -82,7 +82,7 @@ class	MobSystem : public ASystem
                     else if ((*x)->manager.get<std::string>("type") == "boss")
                     {
                         (*_eList)[(*_eList)[-1]->manager.get<uint64_t>("lastBoss")] = *x;
-			(*x)->manager.add<int>("canIShoot", (*x)->manager.get<int>("fire_rate"));
+                        (*x)->manager.add<int>("canIShoot", (*x)->manager.get<int>("fire_rate"));
                         (*_eList)[-1]->manager.set<uint64_t>("lastBoss", (*_eList)[-1]->manager.get<uint64_t>("lastBoss") + 1);
                     }
                     x = _waitingmobs[_lvl].erase(x);
@@ -98,22 +98,24 @@ class	MobSystem : public ASystem
                         || (*x).second->manager.get<std::string>("type") == "bonus"
                         || (*x).second->manager.get<std::string>("type") == "boss")
                 {
-		  if ((*x).second->manager.get<std::string>("type") == "mob"
-                        || (*x).second->manager.get<std::string>("type") == "boss")
-		    {
-		      (*x).second->manager.set<int>("canIShoot", (*x).second->manager.get<int>("fire_rate") + duration);
-		      if ((*x).second->manager.get<int>("canIShoot") >= (*x).second->manager.get<int>("fire_rate"))
-			for (auto shoot : (*x).second->manager.get<std::vector<std::string> >("fire"))
-			  {
-			    Entity *bullet = new Entity(_mobFires[shoot]);
-			    uint64_t tmp = (*_eList)[-1]->manager.get<uint64_t>("lastMobShoot");
-			    (*x).second->manager.set<int>("canIShoot", 0);
-			    (*_eList)[tmp] = bullet;
-			    ++tmp;
-			    (*_eList)[-1]->manager.set<uint64_t>("lastMobShoot", tmp);
-			  }
-		    }
-		  
+                    if ((*x).second->manager.get<std::string>("type") == "mob"
+                            || (*x).second->manager.get<std::string>("type") == "boss")
+                    {
+                        (*x).second->manager.set<int>("canIShoot", (*x).second->manager.get<int>("fire_rate") + duration);
+                        if ((*x).second->manager.get<int>("canIShoot") >= (*x).second->manager.get<int>("fire_rate"))
+                            for (auto shoot : (*x).second->manager.get<std::vector<std::string> >("fire"))
+                            {
+                                Entity *bullet = new Entity(_mobFires[shoot]);
+                                uint64_t tmp = (*_eList)[-1]->manager.get<uint64_t>("lastMobShoot");
+                                (*x).second->manager.set<int>("canIShoot", 0);
+                                bullet->manager.add<std::pair<float, float> >("position",
+                                        (*x).second->manager.get<std::pair<float, float> >("position"));
+                                (*_eList)[tmp] = bullet;
+                                ++tmp;
+                                (*_eList)[-1]->manager.set<uint64_t>("lastMobShoot", tmp);
+                            }
+                    }
+
                     (*x).second->manager.get<std::function<void (Entity&, Pattern::Side, int)> >
                         ("pattern")(*((*x).second), (*x).second->manager.
                                     get<Pattern::Side>("direction"), duration);
@@ -180,9 +182,9 @@ class	MobSystem : public ASystem
                 {
                     Entity &e = JSONParser::parse(tmp)->getEntity().manager.get<Entity>("monsters");
                     for (auto &x : e.manager.getAll<Entity>())
-		      {
+                    {
                         _jsonEntities[x.first] = x.second;
-		      }
+                    }
                 }
                 else if (p->getQuery() == static_cast<uint16_t>(Codes::JsonBonuses))
                 {
@@ -190,15 +192,23 @@ class	MobSystem : public ASystem
                     for (auto &x : e.manager.getAll<Entity>())
                         _jsonEntities[x.first] = x.second;
                 }
-		
-		else if (p->getQuery() == static_cast<uint16_t>(Codes::JsonShoots))
-		  {
-		    Entity &e = JSONParser::parse(tmp)->getEntity().manager.get<Entity>("fires");
-		    for (auto &x : e.manager.getAll<Entity>())
-		      _mobFires[x.first] = x.second;
-		  }
+
+                else if (p->getQuery() == static_cast<uint16_t>(Codes::JsonShoots))
+                {
+                    Entity &e = JSONParser::parse(tmp)->getEntity().manager.get<Entity>("fires");
+                    for (auto &x : e.manager.getAll<Entity>())
+                    {
+                        x.second.manager.add<std::string>("name", "mobShoot");
+                        x.second.manager.add<std::string>("type", "mobshoot");
+                        x.second.manager.add<fCollision>("collision", Collision::mobShoot);
+                        x.second.manager.add<Pattern::Side>("direction", Pattern::Side::LEFT);
+                        x.second.manager.add<std::function<void (Entity&, Pattern::Side, int)> >
+                            ("pattern", Pattern::getPattern(x.first));
+                        _mobFires[x.first] = x.second;
+                    }
+                }
                 else if (p->getQuery() == static_cast<uint16_t>(Codes::JsonLevels))
-		  {
+                {
                     Entity &e = JSONParser::parse(tmp)->getEntity().manager.get<Entity>("levels");
                     for (auto &main : e.manager.getAll<Entity>())
                     {
@@ -293,8 +303,8 @@ class	MobSystem : public ASystem
         std::unordered_map<uint64_t, Entity*>			*_eList;
         std::unordered_map<std::string, Entity>                 _jsonEntities;
         std::unordered_map<int, std::list<Entity*> >            _waitingmobs;
-	std::unordered_map<std::string, Entity>			_mobFires;
-  
+        std::unordered_map<std::string, Entity>			_mobFires;
+
         int                                                     _lvl;
         EventSum                                                _event;
         int                                                     _durationAnimation;

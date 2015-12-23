@@ -64,7 +64,8 @@ class ShootSystem : public ASystem
             for (auto x = _eList->begin(); x != _eList->end();)
             {
                 has_been_del = false;
-                if ((*x).second->manager.get<std::string>("type") == "shoot")
+                if ((*x).second->manager.get<std::string>("type") == "shoot"
+                        || (*x).second->manager.get<std::string>("type") == "mobshoot")
                 {
                     (*x).second->manager.get<std::function<void (Entity&, Pattern::Side, int)> >
                         ("pattern")(*((*x).second), (*x).second->manager.
@@ -97,23 +98,7 @@ class ShootSystem : public ASystem
         virtual void                    in(IPacket *p) {
             UdpPacket   *packet;
 
-            if (dynamic_cast<TcpPacket*>(p) &&
-                    p->getQuery() == static_cast<uint16_t>(Codes::JsonShoots))
-            {
-                std::string tmp = std::string(static_cast<const char *>(p->getData()), p->getSize());
-                Entity &e = JSONParser::parse(tmp)->getEntity().manager.get<Entity>("fires");
-                for (auto &x : e.manager.getAll<Entity>())
-                {
-                    _jsonEntities[x.first] = x.second;
-                    _jsonEntities[x.first].manager.add<std::string>("name", "mobShoot");
-                    _jsonEntities[x.first].manager.add<std::string>("type", "mobshoot");
-                    _jsonEntities[x.first].manager.add<fCollision>("collision", Collision::mobShoot);
-                    _jsonEntities[x.first].manager.add<Pattern::Side>("direction", Pattern::Side::LEFT);
-                    _jsonEntities[x.first].manager.add<std::function<void (Entity&, Pattern::Side, int)> >
-                            ("pattern", Pattern::getPattern(x.first));
-                }
-            }
-            if ((packet = dynamic_cast<UdpPacket*>(p)) &&
+           if ((packet = dynamic_cast<UdpPacket*>(p)) &&
                     packet->getQuery() == static_cast<uint16_t>(UdpCodes::ServeKeyPressed))
             {
                 std::string tmp = std::string(

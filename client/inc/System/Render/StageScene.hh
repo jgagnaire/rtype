@@ -191,17 +191,20 @@ class StageScene : public Scene
             for (auto x = _entities->begin(); x != _entities->end();)
             {
                 has_been_del = false;
-                if ((*x).second->manager.get<std::string>("type") == "shoot")
+                if ((*x).second->manager.get<std::string>("type") == "shoot" ||
+                        (*x).second->manager.get<std::string>("type") == "mobshoot")
                 {
-                    _shoot.setPosition(sf::Vector2f((*x).second->manager.get<std::pair<float, float> >("position").first,
-                                (*x).second->manager.get<std::pair<float, float> >("position").second));
                     if ((*x).second->manager.get<Pattern::Side>("direction") == Pattern::Side::RIGHT)
                     {
+                        _shoot.setPosition(sf::Vector2f((*x).second->manager.get<std::pair<float, float> >("position").first,
+                                    (*x).second->manager.get<std::pair<float, float> >("position").second));
                         _shoot.update(duration);
                         _win.draw(_guiShoots);
                     }
                     else
                     {
+                        _shootEnnemy.setPosition(sf::Vector2f((*x).second->manager.get<std::pair<float, float> >("position").first,
+                                    (*x).second->manager.get<std::pair<float, float> >("position").second));
                         _shootEnnemy.update(duration);
                         _win.draw(_guiShootsEnnemy);
                     }
