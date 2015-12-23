@@ -29,6 +29,11 @@ public:
     this->_sound.setBuffer(this->_buffer);
   }
 
+  virtual void	setVolume(float vol)
+  {
+    this->_sound.setVolume(vol);
+  }
+
 private:
   sf::Sound	_sound;
   sf::SoundBuffer _buffer;
