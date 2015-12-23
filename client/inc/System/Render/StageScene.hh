@@ -8,6 +8,7 @@
 # include "Network/UdpSocket.hh"
 # include "Network/NetworkManager.hh"
 # include "System/Shoot/Pattern.hh"
+# include "System/Render/Text.hh"
 
 class StageScene : public Scene
 {
@@ -23,8 +24,6 @@ class StageScene : public Scene
         stages.push_back("terror");
         stages.push_back("reborn");
         _pSprites[0].load("client/res/ship/player-ship-blue2_111.png");
-        //_pSprites[0].load("client/res/force_38.png");
-        //_pSprites[0].load("client/res/boss/boss-5_535.png");
         _pSprites[1].load("client/res/ship/player-ship-green2_111.png");
         _pSprites[2].load("client/res/ship/player-ship-red2_111.png");
         _pSprites[3].load("client/res/ship/player-ship-purple2_111.png");
@@ -42,7 +41,7 @@ class StageScene : public Scene
         _shoot.load("client/res/bullet.png");
         _shootEnnemy.load("client/res/bullet2.png");
         //TODO, animation does not work _transition.load("client/res/transition_1920.png", false, 5);
-        _transition.setRepeat(false);
+        //_transition.setRepeat(false);
         _hud.load("client/res/HUD.png");
         for (auto &x : stages)
         {

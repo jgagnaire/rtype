@@ -26,6 +26,7 @@ class SystemManager
         last->manager.add<uint64_t>("lastBonus", 3000000000);
         last->manager.add<uint64_t>("lastMobShoot", 4000000000);
         last->manager.add<uint64_t>("lastBoss", 5000000000);
+        last->manager.add<uint64_t>("lastExplosion", 6000000000);
         last->manager.add<int>("changeDuration", 10000);
         last->manager.add<std::string>("type", "none");
         last->manager.add<std::string>("name", "none");

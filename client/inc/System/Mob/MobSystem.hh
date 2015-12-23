@@ -99,7 +99,7 @@ class	MobSystem : public ASystem
                         ("pattern")(*((*x).second), (*x).second->manager.
                                     get<Pattern::Side>("direction"), duration);
                     auto tmp = (*x).second->manager.get<std::pair<float, float> >("position");
-                    if (tmp.first < -1920 * 10)
+                    if (tmp.first < -1920 * 100)
                     {
                         delete (*x).second;
                         x = _eList->erase(x);
