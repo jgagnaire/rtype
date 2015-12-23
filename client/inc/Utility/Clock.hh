@@ -10,8 +10,8 @@ class Clock : public IClock
         Clock();
         virtual ~Clock();
 
-        virtual std::size_t     getElapsedTimeMicro() const;
-        virtual std::size_t     getElapsedTimeMilli() const;
+        virtual uint64_t     getElapsedTimeMicro() const;
+        virtual uint64_t     getElapsedTimeMilli() const;
         virtual void            restart();
 
     private:

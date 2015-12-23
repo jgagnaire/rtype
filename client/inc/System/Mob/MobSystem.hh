@@ -43,7 +43,7 @@ class	MobSystem : public ASystem
 
     public:
         MobSystem() {}
-        MobSystem(std::unordered_map<std::size_t, Entity*> *list) : isActiv(false), _eList(list), _lvl(1) {
+        MobSystem(std::unordered_map<uint64_t, Entity*> *list) : isActiv(false), _eList(list), _lvl(1) {
             _eventList.push_back(E_Stage);
             _durationAnimation = 0;
         }
@@ -68,18 +68,18 @@ class	MobSystem : public ASystem
                 {
                     if ((*x)->manager.get<std::string>("type") == "mob")
                     {
-                        (*_eList)[(*_eList)[-1]->manager.get<std::size_t>("lastMob")] = *x;
-                        (*_eList)[-1]->manager.set<std::size_t>("lastMob", (*_eList)[-1]->manager.get<std::size_t>("lastMob") + 1);
+                        (*_eList)[(*_eList)[-1]->manager.get<uint64_t>("lastMob")] = *x;
+                        (*_eList)[-1]->manager.set<uint64_t>("lastMob", (*_eList)[-1]->manager.get<uint64_t>("lastMob") + 1);
                     }
                     else if ((*x)->manager.get<std::string>("type") == "bonus")
                     {
-                        (*_eList)[(*_eList)[-1]->manager.get<std::size_t>("lastBonus")] = *x;
-                        (*_eList)[-1]->manager.set<std::size_t>("lastBonus", (*_eList)[-1]->manager.get<std::size_t>("lastBonus") + 1);
+                        (*_eList)[(*_eList)[-1]->manager.get<uint64_t>("lastBonus")] = *x;
+                        (*_eList)[-1]->manager.set<uint64_t>("lastBonus", (*_eList)[-1]->manager.get<uint64_t>("lastBonus") + 1);
                     }
                     else if ((*x)->manager.get<std::string>("type") == "boss")
                     {
-                        (*_eList)[(*_eList)[-1]->manager.get<std::size_t>("lastBoss")] = *x;
-                        (*_eList)[-1]->manager.set<std::size_t>("lastBoss", (*_eList)[-1]->manager.get<std::size_t>("lastBoss") + 1);
+                        (*_eList)[(*_eList)[-1]->manager.get<uint64_t>("lastBoss")] = *x;
+                        (*_eList)[-1]->manager.set<uint64_t>("lastBoss", (*_eList)[-1]->manager.get<uint64_t>("lastBoss") + 1);
                     }
                     x = _waitingmobs[_lvl].erase(x);
                 }
@@ -123,15 +123,15 @@ class	MobSystem : public ASystem
                 std::string data = std::string(
                         static_cast<const char*>(p->getData()),
                         p->getSize());
-                std::size_t id1 = std::stoll(data.substr(0, data.find(":")));
-                std::size_t id2 = std::stoll(data.substr(data.find(":") + 1));
-                std::size_t boss = (id1 > id2 ? id1 : id2);
-                if (boss + 1 == (*_eList)[-1]->manager.get<std::size_t>("lastBoss") &&
+                uint64_t id1 = std::stoll(data.substr(0, data.find(":")));
+                uint64_t id2 = std::stoll(data.substr(data.find(":") + 1));
+                uint64_t boss = (id1 > id2 ? id1 : id2);
+                if (boss + 1 == (*_eList)[-1]->manager.get<uint64_t>("lastBoss") &&
                         _eList->find(boss) == _eList->end())
                 {
                     for (auto x = _eList->begin(); x != _eList->end();)
                     {
-                        if (x->first >= 1000000000 && x->first != static_cast<std::size_t>(-1))
+                        if (x->first >= 1000000000 && x->first != static_cast<uint64_t>(-1))
                         {
                             delete x->second;
                             x = _eList->erase(x);
@@ -238,7 +238,7 @@ class	MobSystem : public ASystem
 
     protected:
         bool                                                    isActiv;
-        std::unordered_map<std::size_t, Entity*>                *_eList;
+        std::unordered_map<uint64_t, Entity*>                *_eList;
         std::unordered_map<std::string, Entity>                 _jsonEntities;
         std::unordered_map<int, std::list<Entity*> >            _waitingmobs;
         int                                                     _lvl;

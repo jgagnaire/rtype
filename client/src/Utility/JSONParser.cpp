@@ -24,7 +24,7 @@ JSONParser	&JSONParser::operator=(const JSONParser &jp) {
 template <typename T>
 void	JSONParser::addContent(std::string &content,
 			       const std::vector<std::pair<std::string, T> > &data) {
-  for (std::size_t i = 0; i < data.size(); ++i)
+  for (uint64_t i = 0; i < data.size(); ++i)
     content += "\""
       + data[i].first
       + "\":"
@@ -35,7 +35,7 @@ void	JSONParser::addContent(std::string &content,
 template <>
 void	JSONParser::addContent<std::string>(std::string &content,
 					    const std::vector<std::pair<std::string, std::string> > &data) {
-  for (std::size_t i = 0; i < data.size(); ++i)
+  for (uint64_t i = 0; i < data.size(); ++i)
     content += "\""
       + data[i].first
       + "\":\""
@@ -46,12 +46,12 @@ void	JSONParser::addContent<std::string>(std::string &content,
 template <typename T>
 void	JSONParser::addVector(std::string &content,
 			      std::vector<std::pair<std::string, std::vector<T> > > &data) {
-  for (std::size_t i = 0; i < data.size(); ++i)
+  for (uint64_t i = 0; i < data.size(); ++i)
     {
       content += "\""
 	+ data[i].first
 	+ "\":[";
-      for (std::size_t j = 0; j < data[i].second.size(); ++j)
+      for (uint64_t j = 0; j < data[i].second.size(); ++j)
 	  content += "\""
 	    + std::to_string(data[i].second[j])
 	    + "\",";
@@ -63,12 +63,12 @@ void	JSONParser::addVector(std::string &content,
 template <>
 void	JSONParser::addVector<std::string>(std::string &content,
 					   std::vector<std::pair<std::string, std::vector<std::string> > > &data) {
-  for (std::size_t i = 0; i < data.size(); ++i)
+  for (uint64_t i = 0; i < data.size(); ++i)
     {
       content += "\""
 	+ data[i].first
 	+ "\":[";
-      for (std::size_t j = 0; j < data[i].second.size(); ++j)
+      for (uint64_t j = 0; j < data[i].second.size(); ++j)
 	  content += "\""
 	    + data[i].second[j]
 	    + "\",";
@@ -80,12 +80,12 @@ void	JSONParser::addVector<std::string>(std::string &content,
 template <>
 void	JSONParser::addVector<Entity>(std::string &content,
 				      std::vector<std::pair<std::string, std::vector<Entity> > > &data) {
-  for (std::size_t i = 0; i < data.size(); ++i)
+  for (uint64_t i = 0; i < data.size(); ++i)
     {
       content += "\""
 	+ data[i].first
 	+ "\":[";
-      for (std::size_t j = 0; j < data[i].second.size(); ++j)
+      for (uint64_t j = 0; j < data[i].second.size(); ++j)
 	content += generate(data[i].second[j], "lol")
 	  + ",";
       content.pop_back();
@@ -115,16 +115,16 @@ std::string	JSONParser::generate(Entity &monster, const std::string &name) {
 
   // auto tmpStringVector = monster.manager.getAll<std::vector<std::string> >();
 
-  // for (std::size_t i = 0; i < tmpStringVector.size(); ++i)
+  // for (uint64_t i = 0; i < tmpStringVector.size(); ++i)
   //   {
-  //     for (std::size_t j = 0; j < tmpStringVector[i].second.size(); ++j)
+  //     for (uint64_t j = 0; j < tmpStringVector[i].second.size(); ++j)
   // 	addContent(content, tmpString[i][j].first, tmpStringVector[i].second[j]);
   //   }
 
 
 
   auto tmpEntity = monster.manager.getAll<Entity>();
-  for (std::size_t i = 0; i < tmpEntity.size(); ++i)
+  for (uint64_t i = 0; i < tmpEntity.size(); ++i)
     content += generate(tmpEntity[i].second, tmpEntity[i].first) + ",";
   content.pop_back();
   content += "}";

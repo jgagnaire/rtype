@@ -19,7 +19,7 @@ public:
 	WinServerSocket(SOCKET, sockaddr_in *);
 	virtual ~WinServerSocket();
 	virtual int absReadFromClient(char *&, unsigned, std::string * const) const;
-	virtual bool absWriteOnClient(char *, size_t, const std::string &, const std::string &) const;
+	virtual bool absWriteOnClient(char *, uint64_t, const std::string &, const std::string &) const;
 	virtual std::string   getIP() const;
 private:
 	WSADATA wsaData;

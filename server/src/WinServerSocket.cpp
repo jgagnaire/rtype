@@ -60,7 +60,7 @@ std::string	WinServerSocket::getIP() const {
 	return (std::string(&buf[0]));
 }
 
-bool WinServerSocket::absWriteOnClient(char *to_write, size_t size,
+bool WinServerSocket::absWriteOnClient(char *to_write, uint64_t size,
 									   const std::string &ip,
 									   const std::string &port) const
 {

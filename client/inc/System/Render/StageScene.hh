@@ -12,7 +12,7 @@
 class StageScene : public Scene
 {
     public:
-        StageScene(IWindow &win, std::unordered_map<std::size_t, Entity*> *e):
+        StageScene(IWindow &win, std::unordered_map<uint64_t, Entity*> *e):
             Scene(win, e), _stageNb(1), _pSprites(15), _direction(noEvent),
             _numstage(5)
     {
@@ -104,11 +104,11 @@ class StageScene : public Scene
             _b5.manager.set<ADrawable*>("background", _s5[_stageNb - 1]);
             _changeScene.manager.set<ADrawable*>("2numero", &(_numstage[_stageNb - 1]));
             _changeScene.manager.set<ADrawable*>("1", &_transition);
-            (*_entities)[-1]->manager.set<std::size_t>("lastShoot", 1000000000);
-            (*_entities)[-1]->manager.set<std::size_t>("lastMob", 2000000000);
-            (*_entities)[-1]->manager.set<std::size_t>("lastBonus", 3000000000);
-            (*_entities)[-1]->manager.set<std::size_t>("lastMobShoot", 4000000000);
-            (*_entities)[-1]->manager.set<std::size_t>("lastBoss", 5000000000);
+            (*_entities)[-1]->manager.set<uint64_t>("lastShoot", 1000000000);
+            (*_entities)[-1]->manager.set<uint64_t>("lastMob", 2000000000);
+            (*_entities)[-1]->manager.set<uint64_t>("lastBonus", 3000000000);
+            (*_entities)[-1]->manager.set<uint64_t>("lastMobShoot", 4000000000);
+            (*_entities)[-1]->manager.set<uint64_t>("lastBoss", 5000000000);
         }
 
         virtual void    init()
@@ -304,7 +304,7 @@ class StageScene : public Scene
                 if (!has_been_del)
                     ++x;
             }
-            for (std::size_t i = 0; i < _explosions.size(); ++i)
+            for (uint64_t i = 0; i < _explosions.size(); ++i)
             {
                 _explosions[i]->update(duration);
                 if (static_cast<AnimatedSprite*>(_explosions[i])->getNbPlayed())

@@ -44,8 +44,8 @@ class TcpSocket : public ITcpSocket
 
         virtual bool            connect(const std::string &ip,
                 unsigned short int port);
-        virtual std::size_t     send(const void *buf, std::size_t size);
-        virtual std::size_t     receive(void *buf, std::size_t size);
+        virtual uint64_t     send(const void *buf, uint64_t size);
+        virtual uint64_t     receive(void *buf, uint64_t size);
     private:
         sf::TcpSocket           _socket;
 };

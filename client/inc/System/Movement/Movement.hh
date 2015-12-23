@@ -9,7 +9,7 @@ class MovementSystem : public ASystem
 {
     public:
         MovementSystem() : lastEvent(noEvent) {};
-	MovementSystem(std::unordered_map<std::size_t, Entity*> *eList) : _eList(eList),
+	MovementSystem(std::unordered_map<uint64_t, Entity*> *eList) : _eList(eList),
 												lastEvent(noEvent), isActiv(false) {
             _eventList.push_back(Key_Up);
             _eventList.push_back(Key_Down);
@@ -139,7 +139,7 @@ class MovementSystem : public ASystem
         }
 
     protected:
-        std::unordered_map<std::size_t, Entity*>	*_eList;
+        std::unordered_map<uint64_t, Entity*>	*_eList;
         EventSum			lastEvent;
         bool				isActiv;
         UdpPacket           _packet;

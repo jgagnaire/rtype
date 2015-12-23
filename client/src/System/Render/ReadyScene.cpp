@@ -2,7 +2,7 @@
 #include "System/Shoot/Pattern.hh"
 #include "System/Collider/FCollision.hh"
 
-ReadyScene::ReadyScene(IWindow &win, std::unordered_map<std::size_t, Entity*> *e):
+ReadyScene::ReadyScene(IWindow &win, std::unordered_map<uint64_t, Entity*> *e):
     Scene(win, e), _isReady(false), _send(false),
     _new(false), _quit(false), _lastCode(0), _event(0)
 {
@@ -64,7 +64,7 @@ void    ReadyScene::in(IPacket *p, std::string &pseudo)
     TcpPacket   *packet;
     std::string data;
     std::string name;
-    std::size_t id;
+    uint64_t id;
     std::string tmp;
     std::pair<float, float> pos(0, 1080 / 2);
     Entity *pl;
@@ -112,7 +112,7 @@ void    ReadyScene::in(IPacket *p, std::string &pseudo)
                 pl->manager.add<int>("perfect_shield", 0);
                 pl->manager.add<int>("respawn", 0);
                 (*_entities)[id] = pl;
-                (*_entities)[-1]->manager.set<std::size_t>("lastPlayer", id + 1);
+                (*_entities)[-1]->manager.set<uint64_t>("lastPlayer", id + 1);
                 _players[name] = true;
                 for (auto x : _players)
                     tmp += x.first + "\n";

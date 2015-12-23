@@ -28,7 +28,7 @@ class ShootSystem : public ASystem
             return (e);
         }
     public:
-        ShootSystem(std::unordered_map<std::size_t, Entity*> *_list) :
+        ShootSystem(std::unordered_map<uint64_t, Entity*> *_list) :
             _eList(_list), fireRate(250), isActiv(false), _frequency(0), lastEvent(0)
     {
         _eventList.push_back(Key_Fire);
@@ -109,9 +109,9 @@ class ShootSystem : public ASystem
                             Entity *sht = this->createShoot(x.second->manager.get<std::pair<float, float> >("position"),
                                     x.second->manager.get<Pattern::MovePattern>("pattern"),
                                     Pattern::Side::RIGHT);
-                            std::cout << "SHOOT " << (*_eList)[-1]->manager.get<std::size_t>("lastShoot") << std::endl;
-                            (*_eList)[(*_eList)[-1]->manager.get<std::size_t>("lastShoot")] = sht;
-                            (*_eList)[-1]->manager.set<std::size_t>("lastShoot", (*_eList)[-1]->manager.get<std::size_t>("lastShoot") + 1);
+                            std::cout << "SHOOT " << (*_eList)[-1]->manager.get<uint64_t>("lastShoot") << std::endl;
+                            (*_eList)[(*_eList)[-1]->manager.get<uint64_t>("lastShoot")] = sht;
+                            (*_eList)[-1]->manager.set<uint64_t>("lastShoot", (*_eList)[-1]->manager.get<uint64_t>("lastShoot") + 1);
                             return ;
                         }
                     }
@@ -167,7 +167,7 @@ class ShootSystem : public ASystem
         }
 
     protected:
-        std::unordered_map<std::size_t, Entity*>	*_eList;
+        std::unordered_map<uint64_t, Entity*>	*_eList;
         int					                        fireRate;
         bool				                        isActiv;
         UdpPacket				                    _packet;

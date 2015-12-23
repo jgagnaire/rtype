@@ -76,16 +76,16 @@ public:
     bool                    isFiring() const;
     bool                    isDead() const;
     void                    isTouched(int damage = Enum::MAX_DAMAGE);
-    void                    changePosition(std::size_t);
+    void                    changePosition(uint64_t);
     const Position	    &getPosition() const;
-    const std::size_t	    &getKeypressed() const;
-    void		    setId(std::size_t);
-    std::size_t		    getId();
+    const uint64_t	    &getKeypressed() const;
+    void		    setId(uint64_t);
+    uint64_t		    getId();
     void	            getBonus(Entity *);
-    bool		    updateBonus(std::size_t);
+    bool		    updateBonus(uint64_t);
     bool		    isRespawning() const;
     void                    clearLevel();
-    const std::size_t       *getLatency();
+    const uint64_t       *getLatency();
     void		    onGameRoom();
 
     Enum::ServerAnswers	    verifyUser();
@@ -120,8 +120,8 @@ private:
 
   uint64_t                                udp_packet_id;
   bool                                    is_ready;
-  std::size_t                             keypressed;
-  std::size_t				  last_duration;
+  uint64_t                             keypressed;
+  uint64_t				  last_duration;
   bool                                    has_force;
   bool                                    fire;
   bool					  switch_weapon;
@@ -133,7 +133,7 @@ private:
   int64_t				  protection = 0;
   int64_t				  perfect_shield = 0;
   int64_t				  respawn = 0;
-  std::size_t				  latency[4];
+  uint64_t				  latency[4];
 
   bool					hasBadFormat(std::string *) const;
   bool					alreadyExist(std::string *);

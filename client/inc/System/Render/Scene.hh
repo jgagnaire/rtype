@@ -9,7 +9,7 @@
 class Scene
 {
     public:
-        Scene(IWindow &win, std::unordered_map<std::size_t, Entity*> *entities):
+        Scene(IWindow &win, std::unordered_map<uint64_t, Entity*> *entities):
             _win(win), _entities(entities)
         {}
 
@@ -25,7 +25,7 @@ class Scene
         virtual void draw() {}
     protected:
         IWindow                                     &_win;
-        std::unordered_map<std::size_t, Entity*>    *_entities;
+        std::unordered_map<uint64_t, Entity*>    *_entities;
 };
 
 #endif /* ifndef SCENE_HH_ */

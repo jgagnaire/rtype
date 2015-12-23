@@ -43,12 +43,12 @@ private:
     std::queue<PacketStruct>	_send_pack;
     char				        *_wr_buff;
     std::string			        _rd_buff;
-    size_t			            _comdata_ret;
-    size_t			            _str_ret;
+    uint64_t			            _comdata_ret;
+    uint64_t			            _str_ret;
 
     template <typename SCK>
-    size_t		getMsg(const SCK s, std::string * const p) {
-      size_t	ret;
+    uint64_t		getMsg(const SCK s, std::string * const p) {
+      uint64_t	ret;
       char	    *str = 0;
 
       if (_get_pack.header.packet_size == 0) {
@@ -71,10 +71,10 @@ public:
       bool     packetEmpty() const { return (_rd_buff.empty()); }
 
       template <typename SCK>
-      size_t		getPacket(const SCK s, std::string * const p = NULL, bool max_read = false) {
-        size_t	ret;
+      uint64_t		getPacket(const SCK s, std::string * const p = NULL, bool max_read = false) {
+        uint64_t	ret;
         char    *str = NULL;
-        std::size_t  max_val = sizeof(T) + Enum::MAX_BUFFER_LENGTH;
+        uint64_t  max_val = sizeof(T) + Enum::MAX_BUFFER_LENGTH;
 
         if (!max_read)
           max_val = sizeof(T);
@@ -102,9 +102,9 @@ public:
 
         _wr_buff = new char [sizeof(T) + _send_pack.front().data.size() + 1];
         std::copy(com, com + sizeof(T), _wr_buff);
-        for (std::size_t i = 0;  i < sizeof(T); ++i)
+        for (uint64_t i = 0;  i < sizeof(T); ++i)
           _wr_buff[i] = com[i];
-        for (std::size_t i = 0;  i < _send_pack.front().data.size(); ++i)
+        for (uint64_t i = 0;  i < _send_pack.front().data.size(); ++i)
           _wr_buff[sizeof(T) + i] = str[i];
       }
 

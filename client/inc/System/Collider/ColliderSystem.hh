@@ -10,7 +10,7 @@ class ColliderSystem : public ASystem
 {
     public:
         ColliderSystem() {}
-        ColliderSystem(std::unordered_map<std::size_t, Entity*> *list) :
+        ColliderSystem(std::unordered_map<uint64_t, Entity*> *list) :
             _isActiv(false), _eList(list) {
                 _eventList.push_back(E_Stage);
             }
@@ -47,7 +47,7 @@ class ColliderSystem : public ASystem
             }
         }
 
-        void        collide(std::size_t id1, std::size_t id2)
+        void        collide(uint64_t id1, uint64_t id2)
         {
             Entity          *a, *b;
 
@@ -89,7 +89,7 @@ class ColliderSystem : public ASystem
                     a.second->manager.set<int>("respawn", time2);
                 }
             }
-            for (std::size_t i = 0; i < _untreated.size();)
+            for (uint64_t i = 0; i < _untreated.size();)
             {
                 std::cout << "ifExis= " << _untreated[i].first << " = " << _untreated[i].second << std::endl;
                 std::cout << "ifExist " << (_eList->find(_untreated[i].first) != _eList->end()) <<" = " <<
@@ -131,7 +131,7 @@ class ColliderSystem : public ASystem
                 std::string data = std::string(
                         static_cast<const char*>(up->getData()),
                         up->getSize());
-                std::size_t     id1, id2;
+                uint64_t     id1, id2;
 
                 id1 = std::stoll(data.substr(0, data.find(":")));
                 id2 = std::stoll(data.substr(data.find(":") + 1));
@@ -141,7 +141,7 @@ class ColliderSystem : public ASystem
                 if (_eList->find(id1) == _eList->end()
                         || _eList->find(id2) == _eList->end())
                 {
-                    _untreated.push_back(std::pair<std::size_t, std::size_t>(id1, id2));
+                    _untreated.push_back(std::pair<uint64_t, uint64_t>(id1, id2));
                     return ;
                 }
                 collide(id1, id2);
@@ -169,10 +169,10 @@ class ColliderSystem : public ASystem
         }
     private:
         bool	                                                    _isActiv;
-        std::unordered_map<std::size_t, Entity*>                    *_eList;
+        std::unordered_map<uint64_t, Entity*>                    *_eList;
         std::unordered_map<std::string, std::pair<int, int> >       _hitboxes;
         EventSum														_event;
-        std::vector<std::pair<std::size_t, std::size_t> >           _untreated;
+        std::vector<std::pair<uint64_t, uint64_t> >           _untreated;
 };
 
 #endif
