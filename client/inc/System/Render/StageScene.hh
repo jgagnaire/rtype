@@ -259,20 +259,25 @@ class StageScene : public Scene
                     AnimatedSprite *ex = new AnimatedSprite;
                     static int count = 0;
 
-                    if (++count % 5 && ex->load("client/res/explosion_128.png", false, 24))
-                    {
-                        _explosions.push_back(ex);
-                        ex->setPosition(sf::Vector2f((*x).second->manager.get<std::pair<float, float> >("position").first,
-                                    (*x).second->manager.get<std::pair<float, float> >("position").second));
-                    }
+                    std::cout <<"POPO " << (*x).second->manager.get<bool>("little") << std::endl;
+                    if ((*x).second->manager.get<bool>("little") &&
+                            ex->load("client/res/explosion3_30.png", false, 24))
+                        ;
+                    else if (++count % 3 && ex->load("client/res/explosion_128.png", false, 24))
+                        ;
                     else if (ex->load("client/res/explosion2_260.png", false, 24))
+                        ;
+                    else
                     {
-                        _explosions.push_back(ex);
+                        delete ex;
+                        ex = 0;
+                    }
+                    if (ex)
+                    {
                         ex->setPosition(sf::Vector2f((*x).second->manager.get<std::pair<float, float> >("position").first,
                                     (*x).second->manager.get<std::pair<float, float> >("position").second));
+                        _explosions.push_back(ex);
                     }
-                    else
-                        delete ex;
                     x = _entities->erase(x);
                     has_been_del = true;
                 }
