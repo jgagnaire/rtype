@@ -3,5 +3,6 @@
     "levels": "./entities/levels.json",
     "monsters": "./entities/monsters.json",
     "bonuses": "./entities/bonuses.json",
-    "hitboxes": "./entities/hitboxes.json"
+    "hitboxes": "./entities/hitboxes.json",
+    "sym": "dl_entry_point"
 }

@@ -13,10 +13,10 @@
 
 # if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
 #  include <windows.h>
-#  define portable_sleep(x) Sleep(x / 1000);
+#  include "WinDLLoader.hh"
 # else
 #  include <unistd.h>
-#  define portable_sleep(x) usleep(x)
+#  include "UnixDLLoader.hh"
 # endif
 
 template <typename SCK>
@@ -104,6 +104,7 @@ private:
 
     static  GameManager				  *game_manager;
     static  Entity				  configuration;
+    static  ADLLoader				  *dlloader;
     std::list<Game<SCK> *>			  _games;
     ThreadPool<void, Game<SCK> *>		  _threadpool;
     IServerSocket<SCK>				  *_udp_socket;

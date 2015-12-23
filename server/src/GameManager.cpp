@@ -1,5 +1,6 @@
 #include <chrono>
 #include "GameManager.hh"
+#include "JSONSerializer.hh"
 
 template <typename SCK>
 GameManager<SCK> *GameManager<SCK>::game_manager = 0;
@@ -8,7 +9,21 @@ template <typename SCK>
 Entity GameManager<SCK>::configuration;
 
 template <typename SCK>
-GameManager<SCK>::GameManager() {}
+GameManager<SCK>::GameManager() {
+  const std::string strs[] = { "fires", "levels", "monsters",
+			       "bonuses", "hitboxes" };
+# if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+  dlloader = new WinDLLoader;
+# else
+  dlloader = new UnixDLLoader;
+#endif
+  for (uint64_t i = 0; i < sizeof(strs) / sizeof(strs[0]); ++i) {
+    dlloader.openLib(GameManager<SCK>::configuration.manager.get<std::string>(strs[i]),
+		     strs[i]);
+    dlloader.loadLib(strs[i],
+		     GameManager<SCK>::configuration.manager.get<std::string>("sym"));
+  }
+}
 
 template <typename SCK>
 GameManager<SCK>     &GameManager<SCK>::instance() {
@@ -38,25 +53,25 @@ Game<SCK>        *GameManager<SCK>::getGameByName(const std::string &name) {
 
 template <typename SCK>
 bool        GameManager<SCK>::createRoom(const std::string &name, UserManager<SCK> *s) {
-	Game<SCK>    *g = new Game<SCK>;
-	const std::string strs[] = { "fires", "levels", "monsters",
-				"bonuses", "hitboxes" };
-	JSONParser	*jp;
+  Game<SCK>    *g = new Game<SCK>;
+  const std::string strs[] = { "fires", "levels", "monsters",
+			       "bonuses", "hitboxes" };
+  JSONParser	*jp;
 
-	g->name = name;
-	g->players.push_back(s);
-	try {
-		for (uint64_t i = 0; i < sizeof(strs) / sizeof(strs[0]); ++i) {
-			JSONParser::parseFile(GameManager<SCK>::configuration.manager.get<std::string>(strs[i]));
-			jp = JSONParser::parse();
-			g->entities[strs[i]] = jp->getEntity();
-			g->content_system[strs[i]] = JSONParser::getContent();
-			delete jp;
-		}
-	}
-	catch (...) { std::cout << "Pas possible de creer la room !" << std::endl; return (false); }
-	_games.push_back(g);
-	return (true);
+  g->name = name;
+  g->players.push_back(s);
+  for (uint64_t i = 0; i < sizeof(strs) / sizeof(strs[0]); ++i) {
+    Entity *ent = dlloader(strs[i],
+			   GameManager<SCK>::configuration.manager.get<std::string>("sym"));
+    if (!ent)
+      return (false);
+    g->entities[strs[i]] = *ent;
+    g->content_system[strs[i]] = JSONSerializer::generate(*ent);
+    delete jp;
+    delete ent;
+  }
+  _games.push_back(g);
+  return (true);
 }
     
 template <typename SCK>
@@ -378,7 +393,7 @@ bool            GameManager<SCK>::gameTransition(Game<SCK> *game) {
 
 template <typename SCK>
 void            GameManager<SCK>::createGame(Game<SCK> *game) {
-  //  try {
+  try {
     GameManager<SCK>	&g = GameManager<SCK>::instance();
     //	g.synchronisation(game);
     bool		is_not_finished = true;
@@ -407,22 +422,22 @@ void            GameManager<SCK>::createGame(Game<SCK> *game) {
       if (g.bossIsDead(game) && g.gameTransition(game))
 	return createGame(game);
     }
-    game->is_playing = false;
     for (auto p = game->players.begin(); p != game->players.end(); ++p) {
       (*p)->writeStruct({0, static_cast<uint16_t>(Enum::GAME_END)});
       (*p)->onGameRoom();
     }
-    std::cout << "c'est fini" << std::endl;
     g.reloadJSON(game);
-    //  }
-  // catch (...) {
-  //   std::cout << "AWWW... erreur critique !" << std::endl;
-  //   for (auto p = game->players.begin(); p != game->players.end(); ++p) {
-  //     (*p)->writeStruct({0, static_cast<uint16_t>(Enum::GAME_ERROR)});
-  //     (*p)->onLobby();
-  //   }
-  //   game->players.clear();
-  // }
+    std::cout << "c'est fini" << std::endl;
+    game->is_playing = false;
+  }
+  catch (...) {
+    std::cout << "AWWW... erreur critique !" << std::endl;
+    for (auto p = game->players.begin(); p != game->players.end(); ++p) {
+      (*p)->writeStruct({0, static_cast<uint16_t>(Enum::GAME_ERROR)});
+      (*p)->onLobby();
+    }
+    game->players.clear();
+  }
 }
 
 template <typename SCK>
