@@ -1,11 +1,12 @@
-#ifndef COMPENENTMANAGER_H_
-# define COMPENENTMANAGER_H_
+#ifndef COMPONENTMANAGER_H_
+# define COMPONENTMANAGER_H_
 
 #include "Component/Component.hh"
-#include "Entity/ManagerException.hh"
+#include "ManagerException.hh"
 #include <unordered_map>
 #include <vector>
 #include <iostream>
+#include <utility>
 
 class ComponentManager
 {
@@ -14,6 +15,21 @@ class ComponentManager
         std::unordered_map<std::string, IComponent*> components;
 
     public:
+  ComponentManager(const ComponentManager &c) {
+    *this = c;
+  }
+	ComponentManager() {}
+  ComponentManager&	operator=(const ComponentManager &c)
+  {
+    if (this != &c)
+      {
+		  for (auto it = c.components.begin(); it != c.components.end(); ++it) {
+			  components[it->first] = it->second->clone();
+		  }
+      }
+    return (*this);
+  }
+
         template<typename Type>
             void add(const std::string& name, Type value)
             {
@@ -43,9 +59,9 @@ class ComponentManager
   {
     if (components.find(name) != components.end())
       return (components[name]->getType());
-    throw ComponentManagerException("No such component to get : [invalid name] : " + name);
+    throw ComponentManagerException("No such component to get : [invalid name]");
   }
-  
+
   template<typename Type>
   Type &get(const std::string& name)
   {
@@ -57,9 +73,22 @@ class ComponentManager
 	  throw ComponentManagerException("No such component to get : [invalid type] \
 type for compenents \"" + name + "\" is : " + components[name]->getType());
       }
-    throw ComponentManagerException("No such component to get : [invalid name] " + name);
+    throw ComponentManagerException("No such component to get : [invalid name]");
   }
-  
+
+  template<typename Type>
+  bool exist(const std::string& name)
+  {
+    if (components.find(name) != components.end())
+      {
+	if (components[name]->getType() == typeid(Type).name())
+	  return (true);
+	else
+	  return (false);
+      }
+    return (false);
+  }
+
   template<typename Type>
   bool	remove(const std::string& name = "")
   {
@@ -93,21 +122,22 @@ type for compenents \"" + name + "\" is : " + components[name]->getType());
 		{
 			components.clear();
 		}
-  
+
   template<typename Type>
-  std::vector<Type>	getAll(void)
+  std::vector<std::pair<std::string, Type> >	getAll(void)
   {
-    std::vector<Type> v;
-    
+    std::vector<std::pair<std::string, Type> >	v;
+
     for (std::unordered_map<std::string, IComponent*>::iterator it
 	   = components.begin();
 	 it != components.end();++it)
       {
 	if (it->second->getType() == typeid(Type).name())
-	  v.push_back((static_cast<Component<Type>* >(it->second))->getValue());
+	  v.push_back(std::make_pair(it->first,
+				     (static_cast<Component<Type>* >(it->second))->getValue()));
       }
     return (v);
   }
 };
 
-#endif //COMPENENTMANAGER_H_
+#endif //COMPONENTMANAGER_H_

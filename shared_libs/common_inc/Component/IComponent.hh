@@ -14,6 +14,7 @@ public:
 
   inline const std::string& getType(void) const { return (_type); }
   inline const std::string& getName(void) const { return (_name); }
+  virtual IComponent	*clone() = 0;
 
 protected:
   std::string	_type;
