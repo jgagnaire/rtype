@@ -3,7 +3,7 @@
 	"movement": "line",
 	"fire": ["line", "sinusoid", "line", "sinusoid"],
 	"velocity": 1.3,
-	"fire_rate": 250,
+	"fire_rate": 1000,
 	"life": 5
     },
 
@@ -11,7 +11,7 @@
 	"movement": "sinusoid",
 	"fire": ["line"],
 	"velocity": 0.8,
-	"fire_rate": 250,
+	"fire_rate": 1000,
 	"life": 10
     },
 
@@ -19,7 +19,7 @@
 	"movement": "sinusoid",
 	"fire": ["line"],
 	"velocity": 0.5,
-	"fire_rate": 250,
+	"fire_rate": 750,
 	"life": 20
     },
 
@@ -27,7 +27,7 @@
         "movement": "boss1",
         "fire": ["line"],
         "velocity": 0.1,
-	"fire_rate": 250,
+	"fire_rate": 500,
         "life": 100
     },
 

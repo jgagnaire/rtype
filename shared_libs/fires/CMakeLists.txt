@@ -3,8 +3,6 @@ cmake_minimum_required(VERSION 3.1.0)
 
 set(CMAKE_CXX_STANDARD 11)
 
-set(CMAKE_BUILD_TYPE Debug)
-
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../common_inc/)
 set(fires_SOURCES ${fires_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/fires.cpp ${CMAKE_CURRENT_SOURCE_DIR}/../common_src/JSONParser.cpp)
 set(fires_HEADERS ${fires_HEADERS} ${CMAKE_CURRENT_SOURCE_DIR}/../common_inc/Entity/ComponentManager.hh ${CMAKE_CURRENT_SOURCE_DIR}/../common_inc/Entity/Entity.hh ${CMAKE_CURRENT_SOURCE_DIR}/../common_inc/Entity/ManagerException.hh ${CMAKE_CURRENT_SOURCE_DIR}/../common_inc/Component/Component.hh ${CMAKE_CURRENT_SOURCE_DIR}/../common_inc/Component/IComponent.hh ${CMAKE_CURRENT_SOURCE_DIR}/../common_inc/JSONParser.hh)

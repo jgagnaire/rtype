@@ -3,7 +3,6 @@ cmake_minimum_required(VERSION 3.1.0)
 
 set(CMAKE_CXX_STANDARD 11)
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../)
-set(CMAKE_BUILD_TYPE Debug)
 
 set(client_SOURCES ${client_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/src/Graphics/Window.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/Network/NetworkManager.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/Network/TcpSocket.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/Network/UdpSocket.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/System/Audio/AudioCallSystem.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/System/Audio/Recorder.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/System/Event/EventAggregator.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/System/Render/AnimatedSprite.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/System/Render/RenderSystem.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/System/Render/ReadyScene.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/System/Shoot/Pattern.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/System/Render/ScrollingSprite.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/Utility/Clock.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/Utility/JSONParser.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/System/Collider/FCollision.cpp)
 
