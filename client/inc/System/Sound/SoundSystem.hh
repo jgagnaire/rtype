@@ -8,27 +8,35 @@
 class	SFX
 {
 public:
-	SFX(const std::string& file) :_buffer(new SoundBuffer), _sound(new Sound)
-		{
-			_buffer->loadFromFile(file);
-			_sound->setBuffer(*_buffer);
-		}
-	~SFX()
-		{
-			delete (_buffer);
-			delete (_sound);
-		}
-	void	play(void)
-		{
-			_sound->play();
-		}
-	void	stop(void)
-		{
-			_sound->stop();
-		}
+  SFX(const std::string& file) :_buffer(new SoundBuffer), _sound(new Sound)
+  {
+    _buffer->loadFromFile(file);
+    _sound->setBuffer(*_buffer);
+  }
+  
+  ~SFX()
+  {
+    delete (_buffer);
+    delete (_sound);
+  }
+  
+  void	play(void)
+  {
+    _sound->play();
+  }
+
+  void	stop(void)
+  {
+    _sound->stop();
+  }
+
+  void	setVolume(float vol)
+  {
+    _sound->setVolume(vol);
+  }
 private:
-	ISoundBuffer *_buffer;
-	ISound		*_sound;
+  ISoundBuffer		*_buffer;
+  ISound		*_sound;
 };
 
 class AMusic
@@ -112,7 +120,7 @@ public:
 					fire("./client/res/sound/shoot.flac"),
 					menuMove("./client/res/sound/menu_move.flac"),
 					xplosion("./client/res/sound/explosion.flac"),
-					idx(0), isActiv(false), isLogin(false), lvlIdx(0)
+			idx(0), isActiv(false), isLogin(false), lvlIdx(0), musicLvl(50.0f), sfxLvl(70.0f)
 		{
 		    _eventList.push_back(Key_Up);
 			_eventList.push_back(Key_Down);
@@ -125,7 +133,10 @@ public:
 			_eventList.push_back(E_Stage);
 			_eventList.push_back(E_GameRoom);
 			_eventList.push_back(E_Ready);
-	
+			_eventList.push_back(E_MusicDown);
+			_eventList.push_back(E_MusicUp);
+			_eventList.push_back(E_SfxDown);
+			_eventList.push_back(E_SfxUp);
 		Music *menu1 = new Music;
 		Music *menu2 = new Music;
 
@@ -134,7 +145,7 @@ public:
 		menu2->repeat(true);
 		playlist.push_back(menu1);
 		playlist.push_back(menu2);
-		menu1->setVolume(30);
+		menu1->setVolume(musicLvl);
 		menu1->play();
 	}
 	
@@ -146,7 +157,7 @@ public:
 				&& (playlist[idx]->isRepeat()) == false)
 			{
 				++idx;
-				playlist[idx]->setVolume(30);
+				playlist[idx]->setVolume(musicLvl);
 				playlist[idx]->play();
 			}
 		}
@@ -206,13 +217,40 @@ public:
 					typing.play();
 			}
 			else if (!isLogin && !isActiv)
+			  {
 				if (e == Key_Up || e == Key_Down || e == Key_Left
 					|| e == Key_Right || e == Key_Select)
 					menuMove.play();
+				switch (e) {
+				case (E_MusicDown) :
+				  if (musicLvl > 0)
+				    --musicLvl;
+				  playlist[idx]->setVolume(musicLvl);
+				  break ;
+				case (E_MusicUp) :
+				  if (musicLvl < 100)
+				    ++musicLvl;
+				  playlist[idx]->setVolume(musicLvl);
+				  break ;
+				case (E_SfxDown) :
+				  if (sfxLvl > 0)
+				    --sfxLvl;
+				  break ;
+				case (E_SfxUp) :
+				  if (sfxLvl < 100)
+				    ++sfxLvl;
+				  break ;
+				default :
+				  ;
+				}
+				/*propifier avec un vector de SFX*/
+				typing.setVolume(sfxLvl);
+				xplosion.setVolume(sfxLvl);
+				fire.setVolume(sfxLvl);
+				menuMove.setVolume(sfxLvl);
+			  }
 			if (isActiv && e == E_Explosion)
-			{
 				xplosion.play();
-			}
 			return true;
 		}
 	virtual std::vector<REvent>     &broadcast(void) { return _eventList; }
@@ -227,9 +265,11 @@ protected:
 	SFX					menuMove;
 	SFX					xplosion;
 	int					idx;
-	bool				isActiv;
-	bool				isLogin;
+	bool					isActiv;
+	bool					isLogin;
 	int					lvlIdx;
+	float					musicLvl;
+	float					sfxLvl;
 };
 
 #endif
