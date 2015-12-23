@@ -97,10 +97,11 @@ class ShootSystem : public ASystem
         virtual void                    in(IPacket *p) {
             UdpPacket   *packet;
 
-            if (p->getQuery() == static_cast<uint16_t>(Codes::JsonShoots))
+            if (dynamic_cast<TcpPacket*>(p) &&
+                    p->getQuery() == static_cast<uint16_t>(Codes::JsonShoots))
             {
                 std::string tmp = std::string(static_cast<const char *>(p->getData()), p->getSize());
-                Entity &e = JSONParser::parse(tmp)->getEntity().manager.get<Entity>("monsters");
+                Entity &e = JSONParser::parse(tmp)->getEntity().manager.get<Entity>("fires");
                 for (auto &x : e.manager.getAll<Entity>())
                     _jsonEntities[x.first] = x.second;
             }
