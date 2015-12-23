@@ -13,13 +13,13 @@ public:
     _buffer->loadFromFile(file);
     _sound->setBuffer(*_buffer);
   }
-  
+
   ~SFX()
   {
     delete (_buffer);
     delete (_sound);
   }
-  
+
   void	play(void)
   {
     _sound->play();
@@ -68,7 +68,7 @@ public:
 		{
 			song.openFromFile(track);
 		}
-	
+
 	virtual void  play()
 		{
 			song.play();
@@ -78,7 +78,7 @@ public:
 		{
 			song.pause();
 		}
-	
+
 	virtual void  setVolume(float vol)
 		{
 			song.setVolume(vol);
@@ -103,7 +103,7 @@ public:
 		{
 			return (song.getLoop());
 		}
-	
+
 	virtual bool isStop(void) const
 		{
 			return (song.getStatus() == sf::SoundSource::Status::Stopped);
@@ -140,7 +140,7 @@ public:
 		    _eventList.push_back(NewStage);
 		    Music *menu1 = new Music;
 		    Music *menu2 = new Music;
-		    
+
 		menu1->setTrack("./client/res/sound/menu_part1.flac");
 		menu2->setTrack("./client/res/sound/menu_part2.flac");
 		menu2->repeat(true);
@@ -149,7 +149,7 @@ public:
 		menu1->setVolume(musicLvl);
 		menu1->play();
 	}
-	
+
 	virtual ~SoundSystem() {}
 
 	virtual void                    update(int)
@@ -197,27 +197,29 @@ public:
 		levels.push_back(level);
 		++idx;
 	      }
-	  }	
+	  }
       }
   }
   virtual bool                    handle(EventSum e)
   {
     if (e == E_Login)
       isLogin = true;
+    if (e == E_Ready)
+        isActiv = false;
     if (e == E_Stage)
       {
 	playlist[idx]->pause();
 	levels[lvlIdx]->setVolume(musicLvl);
 	levels[lvlIdx]->play();
 	isLogin = false;
-	isActiv = !isActiv;
+	isActiv = true;
       }
     else if (e == NewStage)
       {
-	levels[lvlIdx]->pause();	
+	levels[lvlIdx]->pause();
 	++lvlIdx;
 	levels[lvlIdx]->setVolume(musicLvl);
-	levels[lvlIdx]->play();	
+	levels[lvlIdx]->play();
       }
     if (isLogin)
       {

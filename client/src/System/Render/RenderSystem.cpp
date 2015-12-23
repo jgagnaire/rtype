@@ -72,6 +72,7 @@ bool RenderSystem::handle(EventSum e)
             break;
         case E_Ready:
             _current = _ready;
+            _current->init();
             break;
         case E_Settings:
             _current = _settings;

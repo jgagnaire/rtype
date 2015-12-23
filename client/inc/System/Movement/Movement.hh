@@ -16,6 +16,7 @@ class MovementSystem : public ASystem
             _eventList.push_back(Key_Left);
             _eventList.push_back(Key_Right);
 			_eventList.push_back(E_Stage);
+			_eventList.push_back(E_Ready);
             _eventList.push_back(NewStage);
             _frequency= 0;
             _lastId = 0;
@@ -117,8 +118,10 @@ class MovementSystem : public ASystem
         {
             if (e == NewStage)
                 _durationAnimation = (*_eList)[-1]->manager.get<int>("changeDuration");
+            if (e == E_Ready)
+                isActiv = false;
             if (e == E_Stage)
-                isActiv = !isActiv;
+                isActiv = true;
             if (e & Key_Up || e & Key_Down || e & Key_Left || e & Key_Right
                     || e & Key_Fire || e & Key_Change)
             {

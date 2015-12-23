@@ -38,7 +38,8 @@ enum class Codes
     JsonBonuses = 406,
     JsonShoots = 407,
     JsonMonsters = 408,
-    JsonHitboxes = 409
+    JsonHitboxes = 409,
+    GameEnded = 404
 };
 
 enum class UdpCodes

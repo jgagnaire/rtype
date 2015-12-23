@@ -14,6 +14,8 @@ class ReadyScene : public Scene
 
 	virtual ~ReadyScene();
 
+
+        virtual void    init();
         virtual void    update(int);
 
         virtual void    handle(EventSum e, EventSum &send);

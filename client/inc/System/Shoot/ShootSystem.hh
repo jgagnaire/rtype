@@ -35,6 +35,7 @@ class ShootSystem : public ASystem
         _eventList.push_back(Key_Charge);
         _eventList.push_back(Key_Change);
         _eventList.push_back(E_Stage);
+        _eventList.push_back(E_Ready);
         _eventList.push_back(NewStage);
         patterns[0] = Pattern::line;
         patterns[1] = Pattern::sinusoid;
@@ -137,7 +138,9 @@ class ShootSystem : public ASystem
             if (ev == NewStage)
                 _durationAnimation = (*_eList)[-1]->manager.get<int>("changeDuration");
             if (ev == E_Stage)
-                isActiv = !isActiv;
+                isActiv = true;
+            if (ev == E_Ready)
+                isActiv = false;
             if (ev & Key_Fire && this->fireRate >= 250 && isActiv)
             {
 				lastEvent = ev;
