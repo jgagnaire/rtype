@@ -13,6 +13,7 @@ class ColliderSystem : public ASystem
         ColliderSystem(std::unordered_map<uint64_t, Entity*> *list) :
             _isActiv(false), _eList(list) {
                 _eventList.push_back(E_Stage);
+                _event = noEvent;
             }
         virtual ~ColliderSystem() {}
 

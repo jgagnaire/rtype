@@ -36,7 +36,7 @@ bool        Collision::player(Entity &me, Entity &e, std::pair<float, float> &po
         me.manager.set<int>("respawn", 3000);
         me.manager.set<bool>("force", false);
     }
-    return lifes == 0;
+    return false;
 }
 
 bool        Collision::shoot(Entity &, Entity &e, std::pair<float, float> &)

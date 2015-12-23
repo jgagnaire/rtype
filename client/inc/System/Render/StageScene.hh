@@ -31,13 +31,13 @@ class StageScene : public Scene
         _pSprites[4].load("client/res/mobs/mob-1_97.png");
         _pSprites[5].load("client/res/mobs/mob-2_114.png");
         _pSprites[6].load("client/res/mobs/mob-3.png");
-        _pSprites[7].load("client/res/bonus/force_38.png");
-        _pSprites[8].load("client/res/bonuses/classic-shield_150.png");
+        _pSprites[7].load("client/res/bonuses/force_38.png");
+        _pSprites[8].load("client/res/bonuses/classic-shield_160.png");
         _pSprites[9].load("client/res/bonuses/perfect-shield_87.png");
         _pSprites[10].load("client/res/boss/boss-1_327.png");
         _pSprites[11].load("client/res/boss/boss-2_643.png");
-        _pSprites[12].load("client/res/boss/boss-2_643.png");
-        _pSprites[13].load("client/res/boss/boss-2_643.png");
+        _pSprites[12].load("client/res/boss/boss-3_300.png");
+        _pSprites[13].load("client/res/boss/boss-4_400.png");
         _pSprites[14].load("client/res/boss/boss-5_535.png");
         _shoot.load("client/res/bullet.png");
         _shootEnnemy.load("client/res/bullet2.png");
@@ -86,7 +86,8 @@ class StageScene : public Scene
         _changeScene.manager.add<ADrawable*>("1", &_transition);
         _guiMobs.manager.add<ADrawable*>("sprite", &(_pSprites[4]));
         _guiExplosion.manager.add<ADrawable*>("explosion", 0);
-        _b5.manager.add<ADrawable*>("hud", &_hud);
+        _b6.manager.add<ADrawable*>("hud", &_hud);
+        _b7.manager.add<ADrawable*>("hudText", &_hudText);
     }
 
         void            switchStage()
@@ -257,7 +258,7 @@ class StageScene : public Scene
                     x = _entities->erase(x);
                     has_been_del = true;
                 }
-                else if ((*x).second->manager.get<std::string>("type") == "player")
+                else if ((*x).second->manager.get<std::string>("type") == "player" && (*x).second->manager.get<int>("lifes") > 0)
                 {
                     _players[(*x).second->manager.get<std::string>("pseudo")]->setPosition(
                             sf::Vector2f((*x).second->manager.get<std::pair<float, float> >("position").first,
@@ -317,7 +318,18 @@ class StageScene : public Scene
                 _guiExplosion.manager.set<ADrawable*>("explosion", _explosions[i]);
                 _win.draw(_guiExplosion);
             }
+            std::string tmp;
+            for (auto x : *_entities)
+                if (x.first < 1000000000)
+                {
+                    if (tmp.empty() == false)
+                        tmp += "    ";
+                    tmp += x.second->manager.get<std::string>("pseudo") + " " + std::to_string(x.second->manager.get<int>("lifes"));
+                }
+            _hudText.setText(tmp);
             _win.draw(_b5);
+            _win.draw(_b6);
+            _win.draw(_b7);
         }
 
         virtual void        in(IPacket *p, std::string&)
@@ -341,7 +353,7 @@ class StageScene : public Scene
                         _players[name]->setPosition(sf::Vector2f(px, py));
                 }
             }
-       }
+        }
 
     private:
         Entity                                              _b1;
@@ -349,6 +361,8 @@ class StageScene : public Scene
         Entity                                              _b3;
         Entity                                              _b4;
         Entity                                              _b5;
+        Entity                                              _b6;
+        Entity                                              _b7;
         Entity                                              _guiPlayers;
         Entity                                              _guiShoots;
         Entity                                              _guiShootsEnnemy;
@@ -369,6 +383,7 @@ class StageScene : public Scene
         AnimatedSprite                                      _shootEnnemy;
         AnimatedSprite                                      _transition;
         AnimatedSprite                                      _hud;
+        Text                                                _hudText;
         std::vector<AnimatedSprite*>                        _explosions;
 
         EventSum                                            _direction;
