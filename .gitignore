@@ -33,3 +33,6 @@ server_rtype.exe
 *.pdb
 *.DS_Store*.opensdf
 \#*
+*exp
+*lib
+*ilk
