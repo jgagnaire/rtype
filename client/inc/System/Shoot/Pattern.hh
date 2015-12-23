@@ -20,7 +20,8 @@ namespace Pattern {
 	Pattern::MovePattern incremente(Pattern::MovePattern m);
 	void	line(Entity &e, Side s, int duration);
 	void	sinusoid(Entity &e, Side s, int duration);
-	void	mob1(Entity &e, Side s, int duration);
+	void	boss1(Entity &e, Side s, int duration);
+	void	boss2(Entity &e, Side s, int duration);
 
     std::function<void (Entity&, Pattern::Side, int)>   getPattern(
             const std::string &name);
