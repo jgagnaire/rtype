@@ -3,7 +3,7 @@
 	"movement": "line",
 	"fire": ["normal", "rotate", "normal", "rotate"],
 	"velocity": 1.3,
-	"fire_rate": 1,
+	"fire_rate": 250,
 	"life": 5
     },
 
@@ -11,7 +11,7 @@
 	"movement": "sinusoid",
 	"fire": ["normal"],
 	"velocity": 0.8,
-	"fire_rate": 1,
+	"fire_rate": 250,
 	"life": 10
     },
 
@@ -19,7 +19,7 @@
 	"movement": "sinusoid",
 	"fire": ["normal"],
 	"velocity": 0.5,
-	"fire_rate": 1,
+	"fire_rate": 250,
 	"life": 20
     },
 
@@ -27,7 +27,7 @@
         "movement": "line",
         "fire": ["normal"],
         "velocity": 0.1,
-	"fire_rate": 1,
+	"fire_rate": 250,
         "life": 100
     },
 
@@ -35,7 +35,7 @@
         "movement": "line",
         "fire": ["normal"],
         "velocity": 0.1,
-	"fire_rate": 1,
+	"fire_rate": 250,
         "life": 100
     },
 
@@ -43,7 +43,7 @@
         "movement": "line",
         "fire": ["normal"],
         "velocity": 0.1,
-	"fire_rate": 1,
+	"fire_rate": 250,
         "life": 200
     },
 

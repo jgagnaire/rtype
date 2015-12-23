@@ -37,7 +37,11 @@ template<typename T>
 bool	UserManager<T>::isLogged() const { return (stream.is_open()); }
 
 template<typename T>
-void	UserManager<T>::writeStruct(const TCPDataHeader &comdata) { packet.stockOnBuff(comdata); }
+void	UserManager<T>::writeStruct(const TCPDataHeader &comdata) {
+  game_mutex.lock();
+  packet.stockOnBuff(comdata);
+  game_mutex.unlock();
+}
 
 template<typename T>
 void	UserManager<T>::readFromMe() { packet.getPacket<IServerSocket<T> *>(sock); }
@@ -72,8 +76,10 @@ const uint64_t    *UserManager<T>::getLatency() { return (latency); }
 template<typename T>
 bool	UserManager<T>::writeOnMe()
 {
-    packet.serialize();
-    return (packet.sendPacket<IServerSocket<T> *>(sock));
+  game_mutex.lock();
+  packet.serialize();
+  game_mutex.unlock();
+  return (packet.sendPacket<IServerSocket<T> *>(sock));
 }
 
 template<typename T>

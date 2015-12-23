@@ -16,10 +16,10 @@ extern "C"
 Entity *dl_entry_point(void)
 {
   try {
-    JSONParser::parseFile("entities/monsters.json");
+    JSONParser::parseFile("entities/bonuses.json");
     return (new Entity(JSONParser::parse()->getEntity()));
   }
-  catch(...) { return (0); }
+  catch(JSONException const &) { return (0); }
 }
 #if !defined(WIN32) && !defined(_WIN32) && !defined(WIN64) && !defined(_WIN64)
 }
