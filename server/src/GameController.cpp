@@ -79,8 +79,6 @@ bool            GameController<T>::createGameRoom(UserManager<T> *cl) const {
     cl->writeStruct({0, static_cast<uint16_t>(sa)});
     if (sa == Enum::OK) {
       std::string tmp = cl->getName() + ":" + std::to_string(cl->getId());
-      std::cout << "l'id et le name: " << tmp << std::endl;
-      std::cout << cl->getName() << " veut creer "  << cl->getPacketData() << std::endl;
       cl->writeStruct({static_cast<uint16_t>(tmp.size()),
 	    Enum::PLAYER_JOIN});
       cl->writeMsg(tmp);
@@ -127,7 +125,6 @@ bool            GameController<T>::ready(UserManager<T> *cl) const {
       else if (g.isAllReady(cl->getGameroomName())) {
         if (game) {
 	  for (auto it = game->players.begin(); it != game->players.end(); ++it) {
-	    std::cout << "je clean: " << (*it)->getName() << std::endl;
 	    (*it)->inGame();
 	    (*it)->clearGameData();
 	    (*it)->writeStruct({0, Enum::GAME_START});

@@ -279,12 +279,11 @@ Enum::ServerAnswers      UserManager<T>::createGameRoom() {
         game_name = generateRoomName();
     is_ready = false;
     gameroom = game_name;
-    std::cout << "La room: " << gameroom << " se cree "<< std::endl;
     if (!gm.createRoom(game_name, this)) {
       gameroom = "";
       return (Enum::JSON_ERROR);
     }
-    std::cout << "il y a donc " << gm.getGames().size() << " rooms" << std::endl;
+    std::cout << "La room: " << gameroom << " se cree "<< std::endl;
     Game<T> *g = gm.getGameByName(game_name);
     if (g)
       id = g->getId();
@@ -360,7 +359,7 @@ void                    UserManager<T>::isTouched(int damage) {
   position.y = Enum::GAME_SIZE_HEIGHT / 2;
   respawn = Enum::RESPAWN_TIME;
   --life;
-  std::cout << "                   " << getName() << " n'a plus que " << (int)(life) << " vie(s) !" << std::endl; 
+  std::cout << getName() << " n'a plus que " << (int)(life) << " vie(s) !" << std::endl; 
   g.sendPosition(g.getGameByName(gameroom), this);
 }
 

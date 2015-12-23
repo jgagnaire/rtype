@@ -82,7 +82,6 @@ void	ASystem::sendCollision(uint64_t id1, uint64_t id2, Players &p) {
   UDPDataHeader		pack;
 
   std::string tmp = std::to_string(id1) + ":" + std::to_string(id2);
-  std::cout << "je send l'id: " << tmp << std::endl;
   for (auto it = p.begin(); it != p.end(); ++it) {
     pack = {static_cast<uint16_t>(tmp.size()),
 	    static_cast<uint16_t>(Enum::COLLISION),
@@ -146,7 +145,6 @@ void	ASystem::touchPlayerBonus(System &system, User *player, AllEntity &entities
 	player_pos.x + player_hitbox_x > bonus_pos.first &&
 	player_pos.y < bonus_pos.second + bonus_hitbox_y &&
 	player_hitbox_y + player_pos.y > bonus_pos.second) {
-      std::cout << "BONUS-PLAYER => TOUCHEY !" << std::endl;
       ASystem::sendCollision(player->getId(), (*m)->manager.get<uint64_t>("id"), p);
       player->getBonus(*m);
       delete *m;
@@ -180,7 +178,6 @@ void	ASystem::touchPlayerBoss(System &system, User *player, AllEntity &entities,
 	player_pos.x + player_hitbox_x > monster_pos.first &&
 	player_pos.y < monster_pos.second + monster_hitbox_y &&
 	player_hitbox_y + player_pos.y > monster_pos.second) {
-      std::cout << "BOSS-PLAYER => TOUCHEY ! " << std::endl;
       ASystem::sendCollision(player->getId(), (*m)->manager.get<uint64_t>("id"), p);
       player->isTouched();
     }
@@ -211,7 +208,6 @@ void	ASystem::touchPlayerMonster(System &system, User *player, AllEntity &entiti
 	player_pos.x + player_hitbox_x > monster_pos.first &&
 	player_pos.y < monster_pos.second + monster_hitbox_y &&
 	player_hitbox_y + player_pos.y > monster_pos.second) {
-      std::cout << "MONSTER-PLAYER => TOUCHEY !" << std::endl;
       ASystem::sendCollision(player->getId(), (*m)->manager.get<uint64_t>("id"), p);
       delete *m;
       player->isTouched();
@@ -244,7 +240,6 @@ bool	ASystem::touchPlayer(Entity *fire, Players &player, AllEntity &entities) {
 	player_pos.y < fire_pos.second + fire_hitbox_y &&
 	player_hitbox_y + player_pos.y > fire_pos.second) {
       ASystem::sendCollision((*p)->getId(), fire->manager.get<uint64_t>("id"), player);
-      std::cout << "FIRE-PLAYER => TOUCHEY !" << std::endl;
       (*p)->isTouched(fire->manager.get<int>("damage"));
       delete fire;
       return (true);
@@ -274,7 +269,6 @@ bool	ASystem::touchMonster(Entity *fire, System &system, AllEntity &entities, Pl
 	monster_pos.first + monster_hitbox_x > fire_pos.first &&
 	monster_pos.second < fire_pos.second + fire_hitbox_y &&
 	monster_hitbox_y + monster_pos.second > fire_pos.second) {
-      std::cout << "FIRE-MONSTER => TOUCHEY !" << std::endl;
       ASystem::sendCollision(fire->manager.get<uint64_t>("id"),
 			     (*m)->manager.get<uint64_t>("id"), p);
       (*m)->manager.set<int>("life",
@@ -313,7 +307,6 @@ bool	ASystem::touchBoss(Entity *fire, System &system, AllEntity &entities, Playe
 	monster_pos.first + monster_hitbox_x > fire_pos.first &&
 	monster_pos.second < fire_pos.second + fire_hitbox_y &&
 	monster_hitbox_y + monster_pos.second > fire_pos.second) {
-      std::cout << "FIRE-BOSS => TOUCHEY !" << std::endl;
       ASystem::sendCollision(fire->manager.get<uint64_t>("id"),
 			     (*m)->manager.get<uint64_t>("id"), p);
       (*m)->manager.set<int>("life",

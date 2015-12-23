@@ -112,7 +112,6 @@ public:
 		void                  deserialize(const char *s, std::string str = "") {
 		std::copy(s, s + sizeof(T), reinterpret_cast<char *>(&_get_pack));
 		_get_pack.data = str;
-		std::cout << "la query: " << _get_pack.header.query << std::endl;
 	}
 
 	inline
