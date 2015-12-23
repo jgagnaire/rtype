@@ -17,6 +17,7 @@ UserManager<T>::UserManager(IServerSocket<T> *sck) :
     latency[1] = 0;
     latency[2] = 0;
     latency[3] = 0;
+    life = 0;
 }
 
 template<typename T>

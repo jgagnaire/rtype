@@ -76,6 +76,7 @@ bool        GameManager<SCK>::createRoom(const std::string &name, UserManager<SC
       g->entities[strs[i]] = *ent;
       ent->manager.get<Entity>(strs[i]);
       g->content_system[strs[i]] = JSONSerializer::generate(ent->manager.get<Entity>(strs[i]), strs[i]);
+      std::cout << g->content_system[strs[i]] << std::endl;
       delete ent;
     }
   }
