@@ -244,11 +244,17 @@ class StageScene : public Scene
                 else if ((*x).second->manager.get<std::string>("type") == "explosion")
                 {
                     AnimatedSprite *ex = new AnimatedSprite;
+                    static int count = 0;
 
-                    if (ex->load("client/res/explosion_128.png", false, 24))
+                    if (++count % 5 && ex->load("client/res/explosion_128.png", false, 24))
                     {
                         _explosions.push_back(ex);
-
+                        ex->setPosition(sf::Vector2f((*x).second->manager.get<std::pair<float, float> >("position").first,
+                                    (*x).second->manager.get<std::pair<float, float> >("position").second));
+                    }
+                    else if (ex->load("client/res/explosion2_260.png", false, 24))
+                    {
+                        _explosions.push_back(ex);
                         ex->setPosition(sf::Vector2f((*x).second->manager.get<std::pair<float, float> >("position").first,
                                     (*x).second->manager.get<std::pair<float, float> >("position").second));
                     }
