@@ -160,7 +160,10 @@ class ShootSystem : public ASystem
             if (ev == E_Stage)
                 isActiv = true;
             if (ev == E_Ready)
+            {
                 isActiv = false;
+                _jsonEntities.clear();
+            }
             if (ev & Key_Fire && this->fireRate >= 250 && isActiv)
             {
                 lastEvent = ev;
