@@ -71,6 +71,7 @@ class	MobSystem : public ASystem
                     if ((*x)->manager.get<std::string>("type") == "mob")
                     {
                         (*_eList)[(*_eList)[-1]->manager.get<uint64_t>("lastMob")] = *x;
+			(*_eList)[-1]->manager.add<int>("canIShoot", (*_eList)[-1]->manager.get<int>("fire_rate"));
                         (*_eList)[-1]->manager.set<uint64_t>("lastMob", (*_eList)[-1]->manager.get<uint64_t>("lastMob") + 1);
                     }
                     else if ((*x)->manager.get<std::string>("type") == "bonus")
@@ -81,6 +82,7 @@ class	MobSystem : public ASystem
                     else if ((*x)->manager.get<std::string>("type") == "boss")
                     {
                         (*_eList)[(*_eList)[-1]->manager.get<uint64_t>("lastBoss")] = *x;
+			(*_eList)[-1]->manager.add<int>("canIShoot", (*_eList)[-1]->manager.get<int>("fire_rate"));
                         (*_eList)[-1]->manager.set<uint64_t>("lastBoss", (*_eList)[-1]->manager.get<uint64_t>("lastBoss") + 1);
                     }
                     x = _waitingmobs[_lvl].erase(x);
@@ -96,6 +98,22 @@ class	MobSystem : public ASystem
                         || (*x).second->manager.get<std::string>("type") == "bonus"
                         || (*x).second->manager.get<std::string>("type") == "boss")
                 {
+		  if ((*x).second->manager.get<std::string>("type") == "mob"
+                        || (*x).second->manager.get<std::string>("type") == "boss")
+		    {
+		      (*x).second->manager.set<int>("canIShoot", (*x).second->manager.get<int>("fire_rate") + duration);
+		      if ((*x).second->manager.get<int>("canIShoot") >= (*x).second->manager.get<int>("fire_rate"))
+			for (auto shoot : (*x).second->manager.get<std::vector<std::string> >("fire"))
+			  {
+			    Entity *bullet = new Entity(_mobFires[shoot]);
+			    uint64_t tmp = (*_eList)[-1]->manager.get<uint64_t>("lastMobShoot");
+			    (*x).second->manager.set<int>("canIShoot", 0);
+			    (*_eList)[-1] = bullet;
+			    ++tmp;
+			    (*_eList)[-1]->manager.set<uint64_t>("lastMobShoot", tmp);
+			  }
+		    }
+		  
                     (*x).second->manager.get<std::function<void (Entity&, Pattern::Side, int)> >
                         ("pattern")(*((*x).second), (*x).second->manager.
                                     get<Pattern::Side>("direction"), duration);
@@ -162,7 +180,9 @@ class	MobSystem : public ASystem
                 {
                     Entity &e = JSONParser::parse(tmp)->getEntity().manager.get<Entity>("monsters");
                     for (auto &x : e.manager.getAll<Entity>())
+		      {
                         _jsonEntities[x.first] = x.second;
+		      }
                 }
                 else if (p->getQuery() == static_cast<uint16_t>(Codes::JsonBonuses))
                 {
@@ -178,7 +198,7 @@ class	MobSystem : public ASystem
 		      _mobFires[x.first] = x.second;
 		  }
                 else if (p->getQuery() == static_cast<uint16_t>(Codes::JsonLevels))
-                {
+		  {
                     Entity &e = JSONParser::parse(tmp)->getEntity().manager.get<Entity>("levels");
                     for (auto &main : e.manager.getAll<Entity>())
                     {
