@@ -145,7 +145,7 @@ class ColliderSystem : public ASystem
                         x->second->manager.set<int>("perfect_shield", 0);
                         x->second->manager.set<int>("respawn", 0);
                         x->second->manager.set<uint64_t>("score", 0);
-                        x->second->manager.set<int>("lifes", 3);
+                        x->second->manager.set<int>("lifes", 10);
                         x->second->manager.set<std::pair<float, float> >("position", pos);
                         ++x;
                     }

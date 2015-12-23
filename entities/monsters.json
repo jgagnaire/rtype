@@ -1,7 +1,7 @@
 "monsters": {
     "mob1": {
 	"movement": "line",
-	"fire": ["normal", "rotate", "normal", "rotate"],
+	"fire": ["line", "sinusoid", "line", "sinusoid"],
 	"velocity": 1.3,
 	"fire_rate": 250,
 	"life": 5
@@ -9,7 +9,7 @@
 
     "mob2": {
 	"movement": "sinusoid",
-	"fire": ["normal"],
+	"fire": ["line"],
 	"velocity": 0.8,
 	"fire_rate": 250,
 	"life": 10
@@ -17,7 +17,7 @@
 
     "mob3": {
 	"movement": "sinusoid",
-	"fire": ["normal"],
+	"fire": ["line"],
 	"velocity": 0.5,
 	"fire_rate": 250,
 	"life": 20
@@ -25,7 +25,7 @@
 
     "boss1": {
         "movement": "boss1",
-        "fire": ["normal"],
+        "fire": ["line"],
         "velocity": 0.1,
 	"fire_rate": 250,
         "life": 100
@@ -33,31 +33,31 @@
 
     "boss2": {
         "movement": "boss2",
-        "fire": ["normal"],
+        "fire": ["line"],
         "velocity": 0.1,
 	"fire_rate": 250,
         "life": 100
     },
 
     "boss3": {
-        "movement": "line",
-        "fire": ["normal"],
+        "movement": "boss1",
+        "fire": ["line"],
         "velocity": 0.1,
 	"fire_rate": 250,
         "life": 200
     },
 
     "boss4": {
-        "movement": "line",
-        "fire": ["normal"],
+        "movement": "boss1",
+        "fire": ["line"],
         "velocity": 0.1,
 	"fire_rate": 1,
         "life": 200
     },
 
     "boss5": {
-        "movement": "line",
-        "fire": ["normal"],
+        "movement": "boss1",
+        "fire": ["line"],
         "velocity": 0.1,
 	"fire_rate": 1,
         "life": 200
