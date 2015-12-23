@@ -118,7 +118,7 @@ void    ReadyScene::in(IPacket *p, std::string &pseudo)
                 pl->manager.add<Pattern::MovePattern>
                     ("pattern", Pattern::MovePattern::LINE);
                 pl->manager.add<fCollision>("collision", &Collision::player);
-                pl->manager.add<bool>("force", false);
+                pl->manager.add<int>("force", 1);
                 pl->manager.add<int>("shield", 0);
                 pl->manager.add<int>("perfect_shield", 0);
                 pl->manager.add<int>("respawn", 0);
