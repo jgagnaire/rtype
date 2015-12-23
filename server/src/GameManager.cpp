@@ -38,24 +38,25 @@ Game<SCK>        *GameManager<SCK>::getGameByName(const std::string &name) {
 
 template <typename SCK>
 bool        GameManager<SCK>::createRoom(const std::string &name, UserManager<SCK> *s) {
-    Game<SCK>    *g = new Game<SCK>;
-    const std::string strs[] = {"fires", "levels", "monsters",
-				"bonuses", "hitboxes"};
-    JSONParser	*jp;
+	Game<SCK>    *g = new Game<SCK>;
+	const std::string strs[] = { "fires", "levels", "monsters",
+				"bonuses", "hitboxes" };
+	JSONParser	*jp;
 
-    g->name = name;
-    g->players.push_back(s);
-    try {
-      for (uint64_t i = 0; i < sizeof(strs) / sizeof(strs[0]); ++i) {
-	JSONParser::parseFile(GameManager<SCK>::configuration.manager.get<std::string>(strs[i]));
-	jp = JSONParser::parse();
-	g->entities[strs[i]] = jp->getEntity();
-	g->content_system[strs[i]] = JSONParser::getContent();
-	delete jp;
-      }
-      catch (...) { std::cout << "Pas possible de creer la room !" << std::endl; return (false); }
-      _games.push_back(g);
-      return (true);
+	g->name = name;
+	g->players.push_back(s);
+	try {
+		for (uint64_t i = 0; i < sizeof(strs) / sizeof(strs[0]); ++i) {
+			JSONParser::parseFile(GameManager<SCK>::configuration.manager.get<std::string>(strs[i]));
+			jp = JSONParser::parse();
+			g->entities[strs[i]] = jp->getEntity();
+			g->content_system[strs[i]] = JSONParser::getContent();
+			delete jp;
+		}
+	}
+	catch (...) { std::cout << "Pas possible de creer la room !" << std::endl; return (false); }
+	_games.push_back(g);
+	return (true);
 }
     
 template <typename SCK>
