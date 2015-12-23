@@ -68,7 +68,6 @@ bool        Collision::mob(Entity &me, Entity &e, std::pair<float, float> &pos)
                  if (e.manager.get<Entity*>("Shooter")->manager.get<bool>("force"))
                      score += 5;
                  score += 5;
-                 std::cout << "SCORE " << score << std::endl;
                  e.manager.get<Entity*>("Shooter")->manager.set<uint64_t>("score", score);
              }
              return life <= 0;
@@ -87,6 +86,7 @@ bool        Collision::mobShoot(Entity&, Entity &e, std::pair<float, float>&)
 
 bool        Collision::bonus(Entity &me, Entity &e, std::pair<float, float>&)
 {
+    uint64_t score = 0;
     if (e.manager.get<std::string>("type") == "player")
     {
         if (me.manager.get<std::string>("name") == "force")
@@ -102,6 +102,9 @@ bool        Collision::bonus(Entity &me, Entity &e, std::pair<float, float>&)
             e.manager.set<int>("perfect_shield",
                     me.manager.get<int>("duration") * 1000);
         }
+        score = e.manager.get<uint64_t>("score");
+        score += 12;
+        e.manager.set<uint64_t>("score", score);
         return true;
     }
     return false;
