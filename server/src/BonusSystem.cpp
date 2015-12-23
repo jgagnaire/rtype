@@ -11,7 +11,7 @@ BonusSystem::BonusSystem() : ASystem() {}
 
 BonusSystem::~BonusSystem() {}
 
-void                    BonusSystem::update(int duration) {
+void                    BonusSystem::update(int duration, ASystem::GameRoom) {
     for (auto x = _entities.begin(); x != _entities.end();)
     {
         std::string movement = (*x)->manager.get<std::string>("movement");

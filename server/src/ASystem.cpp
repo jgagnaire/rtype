@@ -177,11 +177,10 @@ void	ASystem::touchPlayerMonster(System &system, User *player, AllEntity &entiti
       delete *m;
       player->isTouched();
       system["monsters"]->_entities.erase(m++);
+      return ;
     }
     else
       ++m;
-    if (player->isDead())
-      return ;
   }
 }
 

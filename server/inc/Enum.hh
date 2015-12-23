@@ -84,6 +84,7 @@ namespace Enum
         GAME_NAME = 403,
         BOSS_DESTROYED = 403,
         BROADCAST_AUDIO = 404,
+	GAME_END = 404,
         USER_TAKE_FORCE = 405,
 	SEND_JSON_LEVEL = 405,
 	SEND_JSON_BONUS = 406,

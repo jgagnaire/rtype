@@ -10,9 +10,11 @@ public:
   MobSystem();
   virtual ~MobSystem();
 
-  virtual void                    update(int duration);
+  virtual void                    update(int duration, ASystem::GameRoom);
   virtual bool                    handle(const std::string &name,
 					 Entity *e,
 					 bool monster,
 					 const Position &p);
+private:
+  int				_fire_rate;
 };
