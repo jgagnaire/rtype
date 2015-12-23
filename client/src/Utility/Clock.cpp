@@ -6,12 +6,12 @@ Clock::Clock()
 Clock::~Clock()
 {}
 
-std::size_t     Clock::getElapsedTimeMicro() const
+uint64_t     Clock::getElapsedTimeMicro() const
 {
-    return static_cast<std::size_t>(_clock.getElapsedTime().asMicroseconds());
+    return static_cast<uint64_t>(_clock.getElapsedTime().asMicroseconds());
 }
 
-std::size_t     Clock::getElapsedTimeMilli() const
+uint64_t     Clock::getElapsedTimeMilli() const
 {
     return _clock.getElapsedTime().asMilliseconds();
 }

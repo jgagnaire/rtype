@@ -11,7 +11,7 @@
 class GameRoomScene : public Scene
 {
     public:
-        GameRoomScene(IWindow &win, std::unordered_map<std::size_t, Entity*> *e):
+        GameRoomScene(IWindow &win, std::unordered_map<uint64_t, Entity*> *e):
             Scene(win, e), _buttons(2), _update(true),
             _new(false), _current(0), _currentR(0),
             _event(0), _lastCode(Codes::nothing)
@@ -69,7 +69,7 @@ class GameRoomScene : public Scene
                 _bufferText.setCenter();
                 if (tmp == 126)
                 {
-                    std::size_t i = 0;
+                    uint64_t i = 0;
                     switch (_current)
                     {
                         case 0:
@@ -104,8 +104,8 @@ class GameRoomScene : public Scene
                 ++_currentR;
             for (std::size_t i = 0; i <  _buttons.size(); ++i)
                 _buttons[i].setColor(0xffffffff);
-            _buttons[_current].setColor(0xff0000ff);
-            std::size_t i = 0;
+            _buttons[static_cast<unsigned int>(_current)].setColor(0xff0000ff);
+            uint64_t i = 0;
             for (auto x : _rooms)
             {
                 if (i == _currentR)
@@ -120,7 +120,7 @@ class GameRoomScene : public Scene
         {
             std::string tmp, name, nb;
             TcpPacket   *packet;
-            std::size_t i = 0;
+            uint64_t i = 0;
 
             if ((packet = dynamic_cast<TcpPacket*>(p)))
             {
@@ -186,8 +186,8 @@ class GameRoomScene : public Scene
         bool                                                _new;
         std::string                                         _buffer;
         Text                                                _bufferText;
-        std::size_t                                         _current;
-        std::size_t                                         _currentR;
+        uint64_t                                         _current;
+        uint64_t                                         _currentR;
         EventSum                                            _event;
         Codes                                               _lastCode;
         std::string                                         _name;

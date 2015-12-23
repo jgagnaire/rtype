@@ -5,14 +5,17 @@
 #include "System/Shoot/Pattern.hh"
 #include "Utility/JSONParser.hh"
 #include "Network/NetworkManager.hh"
+#include "System/Collider/FCollision.hh"
 
 class ColliderSystem : public ASystem
 {
     public:
         ColliderSystem() {}
-        ColliderSystem(std::unordered_map<std::size_t, Entity*> *list) :
+        ColliderSystem(std::unordered_map<uint64_t, Entity*> *list) :
             _isActiv(false), _eList(list) {
                 _eventList.push_back(E_Stage);
+                _eventList.push_back(NewStage);
+                _event = noEvent;
             }
         virtual ~ColliderSystem() {}
 
@@ -47,7 +50,7 @@ class ColliderSystem : public ASystem
             }
         }
 
-        void        collide(std::size_t id1, std::size_t id2)
+        void        collide(uint64_t id1, uint64_t id2)
         {
             Entity          *a, *b;
 
@@ -55,12 +58,18 @@ class ColliderSystem : public ASystem
             b = (*_eList)[id2];
             std::pair<float, float> ex(-1, -1);
             bool delA = a->manager.get<fCollision>("collision")(*a, *b, ex);
-            //if (ex.first > -1)
-            //_eList->push_back(createExplosion(ex));
-            //ex.first = ex.second = -1;
+            if (ex.first > -1)
+            {
+                (*_eList)[(*_eList)[-1]->manager.get<uint64_t>("lastExplosion")] = createExplosion(ex);
+                (*_eList)[-1]->manager.set<uint64_t>("lastExplosion", (*_eList)[-1]->manager.get<uint64_t>("lastExplosion") + 1);
+            }
+            ex.first = ex.second = -1;
             bool delB = b->manager.get<fCollision>("collision")(*b, *a, ex);
-            //if (ex.first > -1)
-            //_eList->push_back(createExplosion(ex));
+            if (ex.first > -1)
+            {
+                (*_eList)[(*_eList)[-1]->manager.get<uint64_t>("lastExplosion")] = createExplosion(ex);
+                (*_eList)[-1]->manager.set<uint64_t>("lastExplosion", (*_eList)[-1]->manager.get<uint64_t>("lastExplosion") + 1);
+            }
             if (delA)
                 _eList->erase(id1);
             if (delB)
@@ -70,8 +79,8 @@ class ColliderSystem : public ASystem
 
         virtual void                    update(int duration)
         {
-            int time;
-            int time2;
+            int time = 0;
+            int time2 = 0;
 
             for (auto a : *_eList)
             {
@@ -131,7 +140,7 @@ class ColliderSystem : public ASystem
                 std::string data = std::string(
                         static_cast<const char*>(up->getData()),
                         up->getSize());
-                std::size_t     id1, id2;
+                uint64_t     id1, id2;
 
                 id1 = std::stoll(data.substr(0, data.find(":")));
                 id2 = std::stoll(data.substr(data.find(":") + 1));
@@ -141,7 +150,7 @@ class ColliderSystem : public ASystem
                 if (_eList->find(id1) == _eList->end()
                         || _eList->find(id2) == _eList->end())
                 {
-                    _untreated.push_back(std::pair<std::size_t, std::size_t>(id1, id2));
+                    _untreated.push_back(std::pair<uint64_t, uint64_t>(id1, id2));
                     return ;
                 }
                 collide(id1, id2);
@@ -149,6 +158,8 @@ class ColliderSystem : public ASystem
         }
 
         virtual bool                    handle(EventSum e) {
+            if (e == NewStage)
+                _untreated.clear();
             if (e == E_Stage)
                 _isActiv = !_isActiv;
             return false;
@@ -169,10 +180,10 @@ class ColliderSystem : public ASystem
         }
     private:
         bool	                                                    _isActiv;
-        std::unordered_map<std::size_t, Entity*>                    *_eList;
+        std::unordered_map<uint64_t, Entity*>                    *_eList;
         std::unordered_map<std::string, std::pair<int, int> >       _hitboxes;
         EventSum														_event;
-        std::vector<std::pair<std::size_t, std::size_t> >           _untreated;
+        std::vector<std::pair<uint64_t, uint64_t> >           _untreated;
 };
 
 #endif

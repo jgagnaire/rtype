@@ -36,21 +36,18 @@ bool        Collision::player(Entity &me, Entity &e, std::pair<float, float> &po
         me.manager.set<int>("respawn", 3000);
         me.manager.set<bool>("force", false);
     }
-    return lifes == 0;
-}
-
-bool        Collision::shoot(Entity &, Entity &e, std::pair<float, float> &p)
-{
-    if (e.manager.get<std::string>("type") == "mob")
-    {
-        p = e.manager.get<std::pair<float, float> >("position");
-        // TODO check life
-        return true;
-    }
     return false;
 }
 
-bool        Collision::mob(Entity &me, Entity &e, std::pair<float, float>&)
+bool        Collision::shoot(Entity &, Entity &e, std::pair<float, float> &)
+{
+    if (e.manager.get<std::string>("type") == "mob" ||
+            e.manager.get<std::string>("type") == "boss")
+        return true;
+    return false;
+}
+
+bool        Collision::mob(Entity &me, Entity &e, std::pair<float, float> &pos)
 {
     if (e.manager.get<std::string>("type") == "player"
             || e.manager.get<std::string>("type") == "shoot")
@@ -62,8 +59,9 @@ bool        Collision::mob(Entity &me, Entity &e, std::pair<float, float>&)
              me.manager.set<int>("life", life);
              if (me.manager.get<std::string>("type") == "boss")
                  std::cout << "LIFE " << life << std::endl;
-             if (life > 0)
-                 return false;
+             if (life <= 0)
+                 pos = me.manager.get<std::pair<float, float> >("position");
+             return life <= 0;
         }
         if (me.manager.get<std::string>("type") == "boss")
             return false;

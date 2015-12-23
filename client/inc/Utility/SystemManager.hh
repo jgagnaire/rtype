@@ -17,15 +17,16 @@ class SystemManager
 {
     public:
         SystemManager(const std::string &ip):
-            _networkManager(ip, ip), shr_entities(new std::unordered_map<std::size_t, Entity*>)
+            _networkManager(ip, ip), shr_entities(new std::unordered_map<uint64_t, Entity*>)
     {
         Entity  *last = new Entity;
-        last->manager.add<std::size_t>("lastPlayer", 0);
-        last->manager.add<std::size_t>("lastShoot", 1000000000);
-        last->manager.add<std::size_t>("lastMob", 2000000000);
-        last->manager.add<std::size_t>("lastBonus", 3000000000);
-        last->manager.add<std::size_t>("lastMobShoot", 4000000000);
-        last->manager.add<std::size_t>("lastBoss", 5000000000);
+        last->manager.add<uint64_t>("lastPlayer", 0);
+        last->manager.add<uint64_t>("lastShoot", 1000000000);
+        last->manager.add<uint64_t>("lastMob", 2000000000);
+        last->manager.add<uint64_t>("lastBonus", 3000000000);
+        last->manager.add<uint64_t>("lastMobShoot", 4000000000);
+        last->manager.add<uint64_t>("lastBoss", 5000000000);
+        last->manager.add<uint64_t>("lastExplosion", 6000000000);
         last->manager.add<int>("changeDuration", 10000);
         last->manager.add<std::string>("type", "none");
         last->manager.add<std::string>("name", "none");
@@ -72,7 +73,7 @@ class SystemManager
             EventSum        event;
             UdpPacket       lastEvent;
             std::string     tmp;
-            std::size_t s = 0;
+            uint64_t s = 0;
             auto start = std::chrono::steady_clock::now();
             auto end = std::chrono::steady_clock::now();
 
@@ -87,7 +88,7 @@ class SystemManager
                 start = std::chrono::steady_clock::now();
                 event = 0;
                 std::chrono::duration<double> diff = start - end;
-                s = static_cast<std::size_t>(diff.count() * 1000);
+                s = static_cast<uint64_t>(diff.count() * 1000);
                 if (s > 30)
                 {
                     end = start;
@@ -97,7 +98,7 @@ class SystemManager
                         IPacket *m = x->out(event);
                         if (m != 0)
                             _networkManager.send(*m);
-                        x->update(s);
+                        x->update(static_cast<int>(s));
                     }
                     tmp = std::to_string(event);
                     lastEvent.setData(tmp.c_str());
@@ -127,7 +128,7 @@ class SystemManager
         std::vector<ASystem*>	systemList;
         EventAggregator								*ea;
         NetworkManager								_networkManager;
-        std::unordered_map<std::size_t, Entity*>	*shr_entities;
+        std::unordered_map<uint64_t, Entity*>	*shr_entities;
 };
 
 #endif //SYSTEMMANAGER_HH_

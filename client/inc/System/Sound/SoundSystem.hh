@@ -186,7 +186,7 @@ public:
 				if (p->getQuery() == static_cast<uint16_t>(Codes::JsonLevels))
 				{
 					Entity &e = JSONParser::parse(tmp)->getEntity().manager.get<Entity>("levels");
-					std::size_t			idx = 0;
+					uint64_t			idx = 0;
                     for (auto &main : e.manager.getAll<Entity>())
                     {
                         std::string music = main.second.manager.get<std::string>("music");

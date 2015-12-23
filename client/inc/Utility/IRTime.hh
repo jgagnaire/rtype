@@ -11,7 +11,7 @@ public:
 	IRTime(sf::Time) {};
   virtual ~IRTime() {}
 
-  virtual std::size_t getTimeMicro() const = 0;
+  virtual uint64_t getTimeMicro() const = 0;
   virtual IRTime &operator=(const ISoundBuffer &rhs) = 0;
 };
 

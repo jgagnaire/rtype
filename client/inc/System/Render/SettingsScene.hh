@@ -10,7 +10,7 @@
 class SettingsScene : public Scene
 {
     public:
-        SettingsScene(IWindow &win, std::unordered_map<std::size_t, Entity*> *e):
+        SettingsScene(IWindow &win, std::unordered_map<uint64_t, Entity*> *e):
 	  Scene(win, e), _current(0), musicVol(50), sfxVol(70)
         {
             _b1.manager.add<AView*>("view", &_v1);
@@ -49,13 +49,13 @@ class SettingsScene : public Scene
 		      if (musicVol > 0)
 			{
 			  send = E_MusicDown;
-			  _textVec[_current]->setText("Music : " + std::to_string(--musicVol));
+			  _textVec[static_cast<std::size_t>(_current)]->setText("Music : " + std::to_string(--musicVol));
 			}
 		    }
 		  else
 		    if (sfxVol > 0)
 		      {
-			_textVec[_current]->setText("SFX : " + std::to_string(--sfxVol));
+			_textVec[static_cast<std::size_t>(_current)]->setText("SFX : " + std::to_string(--sfxVol));
 			send = E_SfxDown;
 		      }
 		  break;
@@ -65,13 +65,13 @@ class SettingsScene : public Scene
 		      if (musicVol < 100)
 			{
 			  send = E_MusicUp;
-			  _textVec[_current]->setText("Music : " + std::to_string(++musicVol));
+			  _textVec[static_cast<std::size_t>(_current)]->setText("Music : " + std::to_string(++musicVol));
 			}
 		    }
 		  else
 		    if (sfxVol < 100)
 		      {
-			_textVec[_current]->setText("SFX : " + std::to_string(++sfxVol));
+			_textVec[static_cast<std::size_t>(_current)]->setText("SFX : " + std::to_string(++sfxVol));
 			send = E_SfxUp;
 		      }
 		  break;
@@ -80,7 +80,7 @@ class SettingsScene : public Scene
             }
             for (auto x : _textVec)
                 x->setColor(0xffffffff);
-            _textVec[_current]->setColor(0xff0000ff);
+            _textVec[static_cast<std::size_t>(_current)]->setColor(0xff0000ff);
             if (e != Key_Change && e & Key_Change)
             {
                 EventSum tmp = (e << 1) >> 1;
@@ -105,7 +105,7 @@ class SettingsScene : public Scene
         View                _v1;
 
         std::vector<Text*>  _textVec;
-        std::size_t         _current;
+        uint64_t         _current;
   int	musicVol;
   int	sfxVol;
 };

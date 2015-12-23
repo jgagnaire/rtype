@@ -46,17 +46,16 @@ bool        GameManager<SCK>::createRoom(const std::string &name, UserManager<SC
     g->name = name;
     g->players.push_back(s);
     try {
-      for (std::size_t i = 0; i < sizeof(strs) / sizeof(strs[0]); ++i) {
+      for (uint64_t i = 0; i < sizeof(strs) / sizeof(strs[0]); ++i) {
 	JSONParser::parseFile(GameManager<SCK>::configuration.manager.get<std::string>(strs[i]));
 	jp = JSONParser::parse();
 	g->entities[strs[i]] = jp->getEntity();
 	g->content_system[strs[i]] = JSONParser::getContent();
 	delete jp;
       }
-    }
-    catch (...) { std::cout << "Pas possible de creer la room !" << std::endl; return (false); }
-    _games.push_back(g);
-    return (true);
+      catch (...) { std::cout << "Pas possible de creer la room !" << std::endl; return (false); }
+      _games.push_back(g);
+      return (true);
 }
     
 template <typename SCK>
@@ -92,8 +91,8 @@ void        GameManager<SCK>::fireBall(Game<SCK> *game, UserManager<SCK> *u,
     ent = new Entity(tmp.manager.get<Entity>("fires").manager.get<Entity>("rotate"));
   else
     ent = new Entity(tmp.manager.get<Entity>("fires").manager.get<Entity>("normal"));
-  ent->manager.add<std::size_t>("id", game->shoot_player_ids++);
   std::cout << "les shoots: " << game->shoot_player_ids<< std::endl;
+  ent->manager.add<uint64_t>("id", game->shoot_player_ids++);
   game->system["shoot"]->handle(u->getName(), ent, false, u->getPosition());
 }
 
@@ -138,7 +137,7 @@ void        GameManager<SCK>::launchGame(const std::string &game_name) {
 }
 
 template <typename SCK>
-void        GameManager<SCK>::updatePositions(Game<SCK> *game, std::size_t time) {
+void        GameManager<SCK>::updatePositions(Game<SCK> *game, uint64_t time) {
     for (auto it = game->players.begin(); it != game->players.end(); ++it)
         (*it)->changePosition(time);
 }
@@ -148,11 +147,11 @@ bool        GameManager<SCK>::updateTime(Game<SCK> *game) {
     Entity	&tmp = game->entities["levels"];
     Entity	&entity =
       tmp.manager.get<Entity>("levels").manager.get<Entity>(game->lvl_name);
-    std::size_t	game_time = entity.manager.get<int>("time");
-    std::size_t	tmp_time = getTimeInSecond() + entity.manager.get<int>("time_tmp") - game_time;
+    uint64_t	game_time = entity.manager.get<int>("time");
+    uint64_t	tmp_time = getTimeInSecond() + entity.manager.get<int>("time_tmp") - game_time;
 
-    entity.manager.set<int>("time_tmp", entity.manager.get<int>("time_tmp") - tmp_time);
-    entity.manager.set<int>("timeleft", entity.manager.get<int>("timeleft") + tmp_time);
+    entity.manager.set<int>("time_tmp", entity.manager.get<int>("time_tmp") - static_cast<std::size_t>(tmp_time));
+    entity.manager.set<int>("timeleft", entity.manager.get<int>("timeleft") + static_cast<std::size_t>(tmp_time));
     return (entity.manager.get<int>("time_tmp") <= 0);
 }
 
@@ -161,7 +160,7 @@ bool
 GameManager<SCK>::checkEntities(Game<SCK> *game,
 				std::pair<std::string, Entity&> entity,
 				int time,
-				std::size_t duration,
+				uint64_t duration,
 				const std::string &ent_name) {
   Entity	&tmp = game->entities[ent_name];
   Entity	&entity_pos = entity.second.manager.get<Entity>("position");
@@ -175,9 +174,9 @@ GameManager<SCK>::checkEntities(Game<SCK> *game,
 	Entity	*ent =
 	  new Entity(tmp.manager.get<Entity>(ent_name).manager.get<Entity>(entity.first));
 	if (ent_name == "bonuses")
-	  ent->manager.add<std::size_t>("id", game->bonus_ids++);
+	  ent->manager.add<uint64_t>("id", game->bonus_ids++);
 	else
-	  ent->manager.add<std::size_t>("id", game->monster_ids++);
+	  ent->manager.add<uint64_t>("id", game->monster_ids++);
 	entity.second.manager.set<int>("refresh", time);
 	entity.second.manager.set<int>("time", entity.second.manager.get<int>("time") - 1);
 	game->system[ent_name]->handle(entity.first, ent, true, pos);
@@ -193,9 +192,9 @@ GameManager<SCK>::checkEntities(Game<SCK> *game,
 	new Entity(tmp.manager.get<Entity>(ent_name).manager.get<Entity>(entity.first));
       entity.second.manager.add<int>("refresh", duration);
       if (ent_name == "bonuses")
-	ent->manager.add<std::size_t>("id", game->bonus_ids++);
+	ent->manager.add<uint64_t>("id", game->bonus_ids++);
       else
-	ent->manager.add<std::size_t>("id", game->monster_ids++);
+	ent->manager.add<uint64_t>("id", game->monster_ids++);
       game->system[ent_name]->handle(entity.first, ent, true, pos);
       if (entity.second.manager.exist<int>("time"))
 	entity.second.manager.set<int>("time",
@@ -210,7 +209,7 @@ GameManager<SCK>::checkEntities(Game<SCK> *game,
 }
 
 template <typename SCK>
-bool        GameManager<SCK>::updateObjSighting(Game<SCK> *game, std::size_t time,
+bool        GameManager<SCK>::updateObjSighting(Game<SCK> *game, uint64_t time,
 						     const std::string &ent_name) {
   Entity	&tmp = game->entities["levels"];
   Entity	&entity =
@@ -227,7 +226,7 @@ bool        GameManager<SCK>::updateObjSighting(Game<SCK> *game, std::size_t tim
 						   obj->manager.get<Entity>(m[0].first)}; 
     if (!m.empty() && checkEntities(game, tmp_obj,
 				    entity.manager.get<int>("timeleft"), time, ent_name))
-      objs.erase(obj++);
+      obj = objs.erase(obj);
     else
       ++obj;
   }
@@ -253,7 +252,7 @@ bool        GameManager<SCK>::updateBoss(Game<SCK> *game) {
   boss.manager.add<bool>("in_game", true);
   Entity *ent =
     new Entity(monster.manager.get<Entity>(boss_name));
-  ent->manager.add<std::size_t>("id", game->boss_ids++);
+  ent->manager.add<uint64_t>("id", game->boss_ids++);
   std::cout << "ET LE BOSS: " << boss_name << " EST LA !!" << std::endl;
   game->system["boss"]->handle(boss_name, ent, true, p);
   return (true);
@@ -269,16 +268,16 @@ bool        GameManager<SCK>::bossIsDead(Game<SCK> *game) {
 }
 
 template <typename SCK>
-bool        GameManager<SCK>::update(Game<SCK> *game, std::size_t time) {
+bool        GameManager<SCK>::update(Game<SCK> *game, uint64_t time) {
   if (updateTime(game))
     updateBoss(game);
     updatePositions(game, time);
     updateObjSighting(game, time, "monsters");
     updateObjSighting(game, time, "bonuses");
-    game->system["shoot"]->update(time);
-    game->system["monsters"]->update(time);
-    game->system["bonuses"]->update(time);
-    game->system["boss"]->update(time);
+    game->system["shoot"]->update(static_cast<std::size_t>(time));
+    game->system["monsters"]->update(static_cast<std::size_t>(time));
+    game->system["bonuses"]->update(static_cast<std::size_t>(time));
+    game->system["boss"]->update(static_cast<std::size_t>(time));
     for (auto p = game->players.begin(); p != game->players.end(); ++p)
       if (!(*p)->isDead())
 	(*p)->updateBonus(time);
@@ -288,21 +287,21 @@ bool        GameManager<SCK>::update(Game<SCK> *game, std::size_t time) {
 }
 
 template <typename SCK>
-std::size_t   GameManager<SCK>::getTimeInSecond() {
-    return (static_cast<std::size_t>(std::chrono::system_clock::now().time_since_epoch() /
+uint64_t   GameManager<SCK>::getTimeInSecond() {
+    return (static_cast<uint64_t>(std::chrono::system_clock::now().time_since_epoch() /
            std::chrono::seconds(1)));
 }
 
 template <typename SCK>
-std::size_t   GameManager<SCK>::getTime() {
-    return (static_cast<std::size_t>(std::chrono::system_clock::now().time_since_epoch() /
+uint64_t   GameManager<SCK>::getTime() {
+    return (static_cast<uint64_t>(std::chrono::system_clock::now().time_since_epoch() /
             std::chrono::milliseconds(1)));
 }
 
 template <typename SCK>
 void            GameManager<SCK>::synchronisation(Game<SCK> *game) {
-  const std::size_t   *latency = (*game->players.begin())->getLatency();
-  std::size_t	duration = ((latency[1] - latency[0]) + (latency[3] - latency[2])) / 2;
+  const uint64_t   *latency = (*game->players.begin())->getLatency();
+  uint64_t	duration = ((latency[1] - latency[0]) + (latency[3] - latency[2])) / 2;
 
   duration = duration + GameManager<SCK>::getTime();
   (*game->players.begin())->writeStruct({0, Enum::GAME_START});
@@ -311,7 +310,7 @@ void            GameManager<SCK>::synchronisation(Game<SCK> *game) {
 
 template <typename SCK>
 bool            GameManager<SCK>::gameTransition(Game<SCK> *game) {
-  std::size_t	time = GameManager<SCK>::getTimeInSecond() + 10;
+  uint64_t	time = GameManager<SCK>::getTimeInSecond() + 10;
   char		lvl = game->lvl_name.back();
 
   game->system["shoot"]->clear();
@@ -320,9 +319,9 @@ bool            GameManager<SCK>::gameTransition(Game<SCK> *game) {
   game->system["boss"]->clear();
   game->shoot_player_ids = Enum::MAX_ID;
   game->monster_ids = 2 * Enum::MAX_ID;
-  game->bonus_ids = 3 * static_cast<std::size_t>(Enum::MAX_ID);
-  game->shoot_mob_ids = 4 * static_cast<std::size_t>(Enum::MAX_ID);
-  game->boss_ids = 5 * static_cast<std::size_t>(Enum::MAX_ID);
+  game->bonus_ids = 3 * static_cast<uint64_t>(Enum::MAX_ID);
+  game->shoot_mob_ids = 4 * static_cast<uint64_t>(Enum::MAX_ID);
+  game->boss_ids = 5 * static_cast<uint64_t>(Enum::MAX_ID);
   if (lvl >= '5')
     return (false);
   game->lvl_name.pop_back();
@@ -340,7 +339,7 @@ void            GameManager<SCK>::createGame(Game<SCK> *game) {
     GameManager<SCK>	&g = GameManager<SCK>::instance();
     //	g.synchronisation(game);
     bool		is_not_finished = true;
-    std::size_t		duration;
+    uint64_t		duration;
     auto		start = std::chrono::steady_clock::now();
     Entity		&tmp = game->entities["levels"];
     Entity		&tmp_entity =
@@ -349,13 +348,13 @@ void            GameManager<SCK>::createGame(Game<SCK> *game) {
     std::cout << "C'est partie pour le niveau " << game->lvl_name << std::endl;
     tmp_entity.manager.add<int>("time_tmp", tmp_entity.manager.get<int>("time"));
     tmp_entity.manager.add<int>("timeleft", 0);
-    tmp_entity.manager.set<int>("time", getTimeInSecond() + tmp_entity.manager.get<int>("time_tmp"));
+    tmp_entity.manager.set<int>("time", static_cast<int>(getTimeInSecond()) + tmp_entity.manager.get<int>("time_tmp"));
     std::cout << "Que la partie commence pour la room: " << game->name << std::endl;
     auto end = std::chrono::steady_clock::now();
     while (is_not_finished) {
       std::chrono::duration<double> diff = start - end;
 
-      duration = static_cast<std::size_t>(diff.count() * 1000);
+      duration = static_cast<uint64_t>(diff.count() * 1000);
       if (duration > Enum::REFRESH_TIME) {
 	end = start;
 	is_not_finished = g.update(game, duration);

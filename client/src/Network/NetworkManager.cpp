@@ -30,7 +30,7 @@ bool    NetworkManager::isConnected()
 void    NetworkManager::send(const IPacket &packet)
 {
 	bool    isTcp = false;
-	std::size_t totalSize = packet.getSize();
+	uint64_t totalSize = packet.getSize();
 	char *buf = 0;
 
 	try
@@ -66,7 +66,7 @@ void        NetworkManager::receiveUdp()
     char *buf = new char[std::numeric_limits<unsigned short>::max()];
     char *tmp;
 
-    std::size_t read = _udp->receive(buf,
+    uint64_t read = _udp->receive(buf,
             std::numeric_limits<unsigned short>::max(),
             ip, port);
     if (read)
@@ -92,7 +92,7 @@ void        NetworkManager::receiveTcp()
     TcpPacket *packet = new TcpPacket();
     char *buf = 0;
 
-    std::size_t read = _tcp->receive(&(packet->getHeader()),
+    uint64_t read = _tcp->receive(&(packet->getHeader()),
             sizeof(TcpHeader));
     if (read)
     {

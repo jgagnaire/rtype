@@ -11,7 +11,7 @@
 class MenuScene : public Scene
 {
     public:
-        MenuScene(IWindow &win, std::unordered_map<std::size_t, Entity*> *e):
+        MenuScene(IWindow &win, std::unordered_map<uint64_t, Entity*> *e):
             Scene(win, e), _current(0)
         {
             _b1.manager.add<AView*>("view", &_v1);
@@ -128,7 +128,7 @@ class MenuScene : public Scene
         AnimatedSprite      _selector;
         std::vector<Text*>  _textVec;
 
-        std::size_t         _current;
+        uint64_t         _current;
 };
 
 #endif /* ifndef MENUSCENE_HH_ */
