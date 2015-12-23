@@ -55,10 +55,10 @@ private:
         _get_pack.data = "";
         return (0);
       }
-      if (!(ret = s->absReadFromClient(str, _get_pack.header.packet_size - _str_ret, p)))
+      if (!(ret = s->absReadFromClient(str, _get_pack.header.packet_size - static_cast<unsigned int>(_str_ret), p)))
         clearAll();
       else {
-        _get_pack.data.insert(_get_pack.data.size(), str, ret);
+        _get_pack.data.insert(_get_pack.data.size(), str, static_cast<std::size_t>(ret));
         _str_ret += ret;
       }
       return (ret);
@@ -71,10 +71,10 @@ public:
       bool     packetEmpty() const { return (_rd_buff.empty()); }
 
       template <typename SCK>
-      uint64_t		getPacket(const SCK s, std::string * const p = NULL, bool max_read = false) {
+      uint64_t		getPacket(const SCK s, std::string * const p = 0, bool max_read = false) {
         uint64_t	ret;
-        char    *str = NULL;
-        uint64_t  max_val = sizeof(T) + Enum::MAX_BUFFER_LENGTH;
+        char    *str = 0;
+        unsigned int  max_val = sizeof(T) + Enum::MAX_BUFFER_LENGTH;
 
         if (!max_read)
           max_val = sizeof(T);

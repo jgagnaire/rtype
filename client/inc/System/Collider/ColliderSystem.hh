@@ -89,7 +89,7 @@ class ColliderSystem : public ASystem
                     a.second->manager.set<int>("respawn", time2);
                 }
             }
-            for (uint64_t i = 0; i < _untreated.size();)
+            for (std::size_t i = 0; i < _untreated.size();)
             {
                 std::cout << "ifExis= " << _untreated[i].first << " = " << _untreated[i].second << std::endl;
                 std::cout << "ifExist " << (_eList->find(_untreated[i].first) != _eList->end()) <<" = " <<

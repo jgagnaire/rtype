@@ -143,8 +143,8 @@ bool        GameManager<SCK>::updateTime(Game<SCK> *game) {
     uint64_t	game_time = entity.manager.get<int>("time");
     uint64_t	tmp_time = getTimeInSecond() + entity.manager.get<int>("time_tmp") - game_time;
 
-    entity.manager.set<int>("time_tmp", entity.manager.get<int>("time_tmp") - tmp_time);
-    entity.manager.set<int>("timeleft", entity.manager.get<int>("timeleft") + tmp_time);
+    entity.manager.set<int>("time_tmp", entity.manager.get<int>("time_tmp") - static_cast<std::size_t>(tmp_time));
+    entity.manager.set<int>("timeleft", entity.manager.get<int>("timeleft") + static_cast<std::size_t>(tmp_time));
     return (entity.manager.get<int>("time_tmp") <= 0);
 }
 
@@ -267,10 +267,10 @@ bool        GameManager<SCK>::update(Game<SCK> *game, uint64_t time) {
     updatePositions(game, time);
     updateObjSighting(game, time, "monsters");
     updateObjSighting(game, time, "bonuses");
-    game->system["shoot"]->update(time);
-    game->system["monsters"]->update(time);
-    game->system["bonuses"]->update(time);
-    game->system["boss"]->update(time);
+    game->system["shoot"]->update(static_cast<std::size_t>(time));
+    game->system["monsters"]->update(static_cast<std::size_t>(time));
+    game->system["bonuses"]->update(static_cast<std::size_t>(time));
+    game->system["boss"]->update(static_cast<std::size_t>(time));
     for (auto p = game->players.begin(); p != game->players.end(); ++p)
       if (!(*p)->isDead())
 	(*p)->updateBonus(time);
@@ -341,7 +341,7 @@ void            GameManager<SCK>::createGame(Game<SCK> *game) {
     std::cout << "C'est partie pour le niveau " << game->lvl_name << std::endl;
     tmp_entity.manager.add<int>("time_tmp", tmp_entity.manager.get<int>("time"));
     tmp_entity.manager.add<int>("timeleft", 0);
-    tmp_entity.manager.set<int>("time", getTimeInSecond() + tmp_entity.manager.get<int>("time_tmp"));
+    tmp_entity.manager.set<int>("time", static_cast<int>(getTimeInSecond()) + tmp_entity.manager.get<int>("time_tmp"));
     std::cout << "Que la partie commence pour la room: " << game->name << std::endl;
     auto end = std::chrono::steady_clock::now();
     while (is_not_finished) {

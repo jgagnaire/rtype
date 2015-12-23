@@ -304,7 +304,7 @@ class StageScene : public Scene
                 if (!has_been_del)
                     ++x;
             }
-            for (uint64_t i = 0; i < _explosions.size(); ++i)
+            for (std::size_t i = 0; i < _explosions.size(); ++i)
             {
                 _explosions[i]->update(duration);
                 if (static_cast<AnimatedSprite*>(_explosions[i])->getNbPlayed())
