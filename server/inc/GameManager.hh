@@ -14,9 +14,11 @@
 # if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
 #  include <windows.h>
 #  include "WinDLLoader.hh"
+typedef ADLLoader<HMODULE>	DLLoader;
 # else
 #  include <unistd.h>
 #  include "UnixDLLoader.hh"
+typedef ADLLoader<void *>	DLLoader;
 # endif
 
 template <typename SCK>
@@ -101,10 +103,11 @@ private:
     bool			    bossIsDead(Game<SCK> *);
     bool			    gameTransition(Game<SCK> *);
     void			    reloadJSON(Game<SCK> *);
+    void			    cleanSystem(Game<SCK> *);
 
     static  GameManager				  *game_manager;
     static  Entity				  configuration;
-    static  ADLLoader				  *dlloader;
+    static  DLLoader				  *dlloader;
     std::list<Game<SCK> *>			  _games;
     ThreadPool<void, Game<SCK> *>		  _threadpool;
     IServerSocket<SCK>				  *_udp_socket;

@@ -1,8 +1,7 @@
 "configuration": {
-    "fires": "./entities/fires.json",
-    "levels": "./entities/levels.json",
-    "monsters": "./entities/monsters.json",
-    "bonuses": "./entities/bonuses.json",
-    "hitboxes": "./entities/hitboxes.json",
-    "sym": "dl_entry_point"
+    "fires": "./shared_libs/fires/%1fires.%2",
+    "levels": "./shared_libs/levels/%1levels.%2",
+    "monsters": "./shared_libs/monsters/%1monsters.%2",
+    "bonuses": "./shared_libs/bonuses/%1bonuses.%2",
+    "hitboxes": "./shared_libs/hitboxes/%1hitboxes.%2"
 }

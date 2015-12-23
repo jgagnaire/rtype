@@ -9,20 +9,29 @@ template <typename SCK>
 Entity GameManager<SCK>::configuration;
 
 template <typename SCK>
+DLLoader *GameManager<SCK>::dlloader = 0;
+
+template <typename SCK>
 GameManager<SCK>::GameManager() {
   const std::string strs[] = { "fires", "levels", "monsters",
 			       "bonuses", "hitboxes" };
 # if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
-  dlloader = new WinDLLoader;
+  std::string	tmp[2] = {"", "dll"};
+  GameManager<SCK>::dlloader = new WinDLLoader;
 # else
-  dlloader = new UnixDLLoader;
+  std::string	tmp[2] = {"lib", "so"};
+  GameManager<SCK>::dlloader = new UnixDLLoader;
 #endif
-  for (uint64_t i = 0; i < sizeof(strs) / sizeof(strs[0]); ++i) {
-    dlloader.openLib(GameManager<SCK>::configuration.manager.get<std::string>(strs[i]),
-		     strs[i]);
-    dlloader.loadLib(strs[i],
-		     GameManager<SCK>::configuration.manager.get<std::string>("sym"));
+  try {
+    for (uint64_t i = 0; i < sizeof(strs) / sizeof(strs[0]); ++i) {
+      std::string s = GameManager<SCK>::configuration.manager.get<std::string>(strs[i]);
+      s.replace(s.find("%"), 2, tmp[0]);
+      s.replace(s.find("%"), 2, tmp[1]);
+      GameManager<SCK>::dlloader->openLib(s, strs[i]);
+      GameManager<SCK>::dlloader->loadLib(strs[i], "dl_entry_point");
+    }
   }
+  catch(const std::exception &e) {}
 }
 
 template <typename SCK>
@@ -56,20 +65,21 @@ bool        GameManager<SCK>::createRoom(const std::string &name, UserManager<SC
   Game<SCK>    *g = new Game<SCK>;
   const std::string strs[] = { "fires", "levels", "monsters",
 			       "bonuses", "hitboxes" };
-  JSONParser	*jp;
 
   g->name = name;
   g->players.push_back(s);
-  for (uint64_t i = 0; i < sizeof(strs) / sizeof(strs[0]); ++i) {
-    Entity *ent = dlloader(strs[i],
-			   GameManager<SCK>::configuration.manager.get<std::string>("sym"));
-    if (!ent)
-      return (false);
-    g->entities[strs[i]] = *ent;
-    g->content_system[strs[i]] = JSONSerializer::generate(*ent);
-    delete jp;
-    delete ent;
+  try {
+    for (uint64_t i = 0; i < sizeof(strs) / sizeof(strs[0]); ++i) {
+      Entity *ent = (*GameManager<SCK>::dlloader)(strs[i], "dl_entry_point");
+      if (!ent)
+	return (false);
+      g->entities[strs[i]] = *ent;
+      ent->manager.get<Entity>(strs[i]);
+      g->content_system[strs[i]] = JSONSerializer::generate(ent->manager.get<Entity>(strs[i]), strs[i]);
+      delete ent;
+    }
   }
+  catch (const std::exception &) { return(false); }
   _games.push_back(g);
   return (true);
 }
@@ -150,20 +160,24 @@ void        GameManager<SCK>::reloadJSON(Game<SCK> *game) {
      {"monsters", Enum::SEND_JSON_MONSTER},
      {"hitboxes", Enum::SEND_JSON_HITBOX},
      {"levels", Enum::SEND_JSON_LEVEL}};
-  JSONParser	    *jp;
 
+  cleanSystem(game);
   try {
     for (uint64_t i = 0; i < sizeof(strs) / sizeof(strs[0]); ++i) {
-      JSONParser::parseFile(GameManager<SCK>::configuration.manager.get<std::string>(strs[i].first));
-      jp = JSONParser::parse();
-      game->entities[strs[i].first] = jp->getEntity();
-      game->content_system[strs[i].first] = JSONParser::getContent();
+      Entity *ent = (*GameManager<SCK>::dlloader)(strs[i].first, "dl_entry_point");
+
+      if (!ent)
+	return ;
+      game->entities[strs[i].first] = *ent;
+      ent->manager.get<Entity>(strs[i].first);
+      game->content_system[strs[i].first] =
+	JSONSerializer::generate(ent->manager.get<Entity>(strs[i].first), strs[i].first);
       for (auto cl = game->players.begin(); cl != game->players.end(); ++cl) {
 	(*cl)->writeStruct({static_cast<uint16_t>(game->content_system[strs[i].first].size()),
 	      static_cast<uint16_t>(strs[i].second)});
 	(*cl)->writeMsg(game->content_system[strs[i].first]);
       }
-      delete jp;
+      delete ent;
     }
   }
   catch (...) {}
@@ -175,6 +189,7 @@ void        GameManager<SCK>::launchGame(const std::string &game_name) {
 
   if (game && !game->is_playing) {
     game->is_playing = true;
+    game->lvl_name = "level1";
     _threadpool.startThread(_threadpool.add(&GameManager::createGame, game));
   }
 }
@@ -367,10 +382,7 @@ void            GameManager<SCK>::synchronisation(Game<SCK> *game) {
 }
 
 template <typename SCK>
-bool            GameManager<SCK>::gameTransition(Game<SCK> *game) {
-  uint64_t	time = GameManager<SCK>::getTimeInSecond() + 10;
-  char		lvl = game->lvl_name.back();
-
+void		GameManager<SCK>::cleanSystem(Game<SCK> *game) {
   game->system["shoot"]->clear();
   game->system["monsters"]->clear();
   game->system["bonuses"]->clear();
@@ -380,6 +392,14 @@ bool            GameManager<SCK>::gameTransition(Game<SCK> *game) {
   game->bonus_ids = 3 * static_cast<uint64_t>(Enum::MAX_ID);
   game->shoot_mob_ids = 4 * static_cast<uint64_t>(Enum::MAX_ID);
   game->boss_ids = 5 * static_cast<uint64_t>(Enum::MAX_ID);
+}
+
+template <typename SCK>
+bool            GameManager<SCK>::gameTransition(Game<SCK> *game) {
+  uint64_t	time = GameManager<SCK>::getTimeInSecond() + 10;
+  char		lvl = game->lvl_name.back();
+
+  cleanSystem(game);
   if (lvl >= '5')
     return (false);
   game->lvl_name.pop_back();

@@ -16,7 +16,7 @@ extern "C"
 Entity *dl_entry_point(void)
 {
   try {
-    JSONParser::parseFile("entities/monsters.json");
+    JSONParser::parseFile("entities/levels.json");
     return (new Entity(JSONParser::parse()->getEntity()));
   }
   catch(JSONException const &) { return (0); }
