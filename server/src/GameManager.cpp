@@ -170,7 +170,7 @@ GameManager<SCK>::checkEntities(Game<SCK> *game,
 
   if (time >= entity.second.manager.get<int>("appear_at_sec")) {
     if (entity.second.manager.exist<int>("refresh")) {
-      if (entity.second.manager.get<int>("timeval") <=
+      if (ent_name != "bonuses" && entity.second.manager.get<int>("timeval") <=
 	  entity.second.manager.get<int>("refresh")) {
 	Entity	*ent =
 	  new Entity(tmp.manager.get<Entity>(ent_name).manager.get<Entity>(entity.first));
