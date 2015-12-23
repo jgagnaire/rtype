@@ -129,6 +129,7 @@ class	MobSystem : public ASystem
                 if (boss + 1 == (*_eList)[-1]->manager.get<std::size_t>("lastBoss") &&
                         _eList->find(boss) == _eList->end())
                 {
+                    std::cout << "FINISH" << std::endl;
                     for (auto x = _eList->begin(); x != _eList->end();)
                     {
                         if (x->first >= 1000000000 && x->first != static_cast<std::size_t>(-1))
