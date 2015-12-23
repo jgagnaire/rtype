@@ -333,7 +333,7 @@ class StageScene : public Scene
                     if (tmp.empty() == false)
                         tmp += "    ";
                     tmp += x.second->manager.get<std::string>("pseudo") + " " + std::to_string(x.second->manager.get<int>("lifes"));
-                    if (_players[x.second->manager.get<std::string>("pseudo")] == &(_pSprites[0]))
+                    if (x.second->manager.get<std::string>("name") == "player1")
                         tmp2 = "Score : " + std::to_string(x.second->manager.get<uint64_t>("score"));
                 }
             _hudText.setText(tmp + " " + tmp2);
