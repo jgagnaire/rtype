@@ -183,16 +183,16 @@ class ShootSystem : public ASystem
         }
 
     protected:
-        std::unordered_map<uint64_t, Entity*>	    *_eList;
-        int					                        fireRate;
-        bool				                        isActiv;
-        UdpPacket				                    _packet;
-        int                                         _frequency;
-        EventSum			                        lastEvent;
+        std::unordered_map<uint64_t, Entity*>		*_eList;
+        int					        fireRate;
+        bool				                isActiv;
+        UdpPacket				        _packet;
+        int						_frequency;
+        EventSum			                lastEvent;
         std::function<void (Entity&, Pattern::Side, int)> patterns[2];
-        std::string                                 _tmp;
-        int                                         _durationAnimation;
-        std::unordered_map<std::string, Entity>     _jsonEntities;
+        std::string					_tmp;
+        int						_durationAnimation;
+        std::unordered_map<std::string, Entity>		_jsonEntities;
 };
 
 #endif //SHOOTSYSTEM_HH_
