@@ -71,8 +71,9 @@ bool        GameManager<SCK>::createRoom(const std::string &name, UserManager<SC
   try {
     for (uint64_t i = 0; i < sizeof(strs) / sizeof(strs[0]); ++i) {
       Entity *ent = (*GameManager<SCK>::dlloader)(strs[i], "dl_entry_point");
-      if (!ent)
+		 if (!ent)
 	return (false);
+		 std::cout << "HEEEEY" << std::endl;
       g->entities[strs[i]] = *ent;
       ent->manager.get<Entity>(strs[i]);
       g->content_system[strs[i]] = JSONSerializer::generate(ent->manager.get<Entity>(strs[i]), strs[i]);

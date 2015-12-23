@@ -59,17 +59,19 @@ bool        Collision::mob(Entity &me, Entity &e, std::pair<float, float> &pos)
              int life = me.manager.get<int>("life");
              life -= e.manager.get<int>("damage");
              me.manager.set<int>("life", life);
-             if (me.manager.get<std::string>("type") == "boss")
-                 std::cout << "LIFE " << life << std::endl;
+             pos = me.manager.get<std::pair<float, float> >("position");
              if (life <= 0)
              {
-                 pos = me.manager.get<std::pair<float, float> >("position");
                  score = e.manager.get<Entity*>("Shooter")->manager.get<uint64_t>("score");
                  if (e.manager.get<Entity*>("Shooter")->manager.get<bool>("force"))
                      score += 5;
                  score += 5;
                  e.manager.get<Entity*>("Shooter")->manager.set<uint64_t>("score", score);
              }
+             if (me.manager.get<std::string>("type") == "boss" && life > 0)
+                 pos = std::pair<float, float>(
+                         me.manager.get<std::pair<float, float> >("position").first,
+                         e.manager.get<std::pair<float, float> >("position").second);
              return life <= 0;
         }
         if (me.manager.get<std::string>("type") == "boss")

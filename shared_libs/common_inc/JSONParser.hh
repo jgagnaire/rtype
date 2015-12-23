@@ -2,7 +2,7 @@
 # include <map>
 # include <fstream>
 # include <iostream>
-# include "Entity/Entity.hh"
+# include "Entity.hh"
 # include "Enum.hh"
 # include "ServerError.hh"
 

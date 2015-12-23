@@ -23,8 +23,9 @@ class ComponentManager
   {
     if (this != &c)
       {
-	for (auto it = c.components.begin(); it != c.components.end(); ++it)
-	  components[it->first] = it->second->clone();
+		  for (auto it = c.components.begin(); it != c.components.end(); ++it) {
+			  components[it->first] = it->second->clone();
+		  }
       }
     return (*this);
   }
