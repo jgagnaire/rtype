@@ -71,9 +71,9 @@ bool        GameManager<SCK>::createRoom(const std::string &name, UserManager<SC
   try {
     for (uint64_t i = 0; i < sizeof(strs) / sizeof(strs[0]); ++i) {
       Entity *ent = (*GameManager<SCK>::dlloader)(strs[i], "dl_entry_point");
-		 if (!ent)
+      if (!ent)
 	return (false);
-		 std::cout << "HEEEEY" << std::endl;
+      std::cout << "HEEEEY" << std::endl;
       g->entities[strs[i]] = *ent;
       ent->manager.get<Entity>(strs[i]);
       g->content_system[strs[i]] = JSONSerializer::generate(ent->manager.get<Entity>(strs[i]), strs[i]);
@@ -119,11 +119,13 @@ void        GameManager<SCK>::fireBall(Game<SCK> *game, UserManager<SCK> *u,
   if (second_weapon) {
     ent = new Entity(tmp.manager.get<Entity>("fires").manager.get<Entity>("sinusoid"));
     ent->manager.add<uint64_t>("id", game->shoot_player_ids++);
+    ent->manager.set<int>("damage", ent->manager.get<int>("damage") * u->getForce());
     game->system["shoot"]->handle("sinusoid", ent, false, u->getPosition());
   }
   else {
     ent = new Entity(tmp.manager.get<Entity>("fires").manager.get<Entity>("line"));
     ent->manager.add<uint64_t>("id", game->shoot_player_ids++);
+    ent->manager.set<int>("damage", ent->manager.get<int>("damage") * u->getForce());
     game->system["shoot"]->handle("line", ent, false, u->getPosition());
   }
 }
