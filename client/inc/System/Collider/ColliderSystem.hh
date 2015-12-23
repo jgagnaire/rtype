@@ -14,6 +14,7 @@ class ColliderSystem : public ASystem
         ColliderSystem(std::unordered_map<uint64_t, Entity*> *list) :
             _isActiv(false), _eList(list) {
                 _eventList.push_back(E_Stage);
+                _eventList.push_back(NewStage);
                 _event = noEvent;
             }
         virtual ~ColliderSystem() {}
@@ -157,6 +158,8 @@ class ColliderSystem : public ASystem
         }
 
         virtual bool                    handle(EventSum e) {
+            if (e == NewStage)
+                _untreated.clear();
             if (e == E_Stage)
                 _isActiv = !_isActiv;
             return false;
