@@ -71,9 +71,15 @@ class ColliderSystem : public ASystem
                 (*_eList)[-1]->manager.set<uint64_t>("lastExplosion", (*_eList)[-1]->manager.get<uint64_t>("lastExplosion") + 1);
             }
             if (delA)
+            {
+                delete (*_eList)[id1];
                 _eList->erase(id1);
+            }
             if (delB)
+            {
+                delete (*_eList)[id2];
                 _eList->erase(id2);
+            }
             std::cout << "COLLIDE "<< id1 << " -- " << id2 << std::endl;
         }
 
