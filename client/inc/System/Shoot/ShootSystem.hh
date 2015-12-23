@@ -72,7 +72,10 @@ class ShootSystem : public ASystem
                                     get<Pattern::Side>("direction"), duration);
                     std::pair<float, float> tmp = (*x).second->manager.
                         get<std::pair<float, float> >("position");
-                    if (tmp.first > 1920 * 100 || tmp.first < 0)
+                    if (((*x).second->manager.get<std::string>("type") == "shoot"
+                                && (tmp.first > 1920 * 20 || tmp.first < 0))
+                            || ((*x).second->manager.get<std::string>("type") == "mobshoot"
+                                && (tmp.first > 1920 || tmp.first < -1920 * 20)))
                     {
                         x = _eList->erase(x);
                         has_been_del = true;
@@ -87,18 +90,18 @@ class ShootSystem : public ASystem
         virtual IPacket                 *out(EventSum &e) {
             if (isActiv == false)
                 return (0);
-			if (lastEvent && _frequency > 30)
+            if (lastEvent && _frequency > 30)
             {
                 e |= lastEvent;
                 _frequency = 0;
-				return (&_packet);
+                return (&_packet);
             }
             return 0;
         }
         virtual void                    in(IPacket *p) {
             UdpPacket   *packet;
 
-           if ((packet = dynamic_cast<UdpPacket*>(p)) &&
+            if ((packet = dynamic_cast<UdpPacket*>(p)) &&
                     packet->getQuery() == static_cast<uint16_t>(UdpCodes::ServeKeyPressed))
             {
                 std::string tmp = std::string(
