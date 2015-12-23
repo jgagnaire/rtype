@@ -285,7 +285,7 @@ class StageScene : public Scene
                     if ((*x).second->manager.get<bool>("force"))
                     {
                         _pSprites[8].setPosition(
-                                sf::Vector2f((*x).second->manager.get<std::pair<float, float> >("position").first + 111,
+                                sf::Vector2f((*x).second->manager.get<std::pair<float, float> >("position").first + 141,
                                     (*x).second->manager.get<std::pair<float, float> >("position").second - 5));
                         _pSprites[8].update(duration);
                         _guiPlayers.manager.set<ADrawable*>("player", &(_pSprites[8]));
@@ -294,8 +294,8 @@ class StageScene : public Scene
                     if ((*x).second->manager.get<int>("shield") > 0)
                     {
                         _pSprites[9].setPosition(
-                                sf::Vector2f((*x).second->manager.get<std::pair<float, float> >("position").first - 10,
-                                    (*x).second->manager.get<std::pair<float, float> >("position").second - 35));
+                                sf::Vector2f((*x).second->manager.get<std::pair<float, float> >("position").first - 25,
+                                    (*x).second->manager.get<std::pair<float, float> >("position").second - 30));
                         _pSprites[9].update(duration);
                         _guiPlayers.manager.set<ADrawable*>("player", &(_pSprites[9]));
                         _win.draw(_guiPlayers);
