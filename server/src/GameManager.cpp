@@ -170,7 +170,7 @@ GameManager<SCK>::checkEntities(Game<SCK> *game,
 
   if (time >= entity.second.manager.get<int>("appear_at_sec")) {
     if (entity.second.manager.exist<int>("refresh")) {
-      if (entity.second.manager.get<int>("timeval") <=
+      if (ent_name != "bonuses" && entity.second.manager.get<int>("timeval") <=
 	  entity.second.manager.get<int>("refresh")) {
 	Entity	*ent =
 	  new Entity(tmp.manager.get<Entity>(ent_name).manager.get<Entity>(entity.first));
@@ -336,7 +336,7 @@ bool            GameManager<SCK>::gameTransition(Game<SCK> *game) {
 
 template <typename SCK>
 void            GameManager<SCK>::createGame(Game<SCK> *game) {
-  try {
+  //try {
     GameManager<SCK>	&g = GameManager<SCK>::instance();
     //	g.synchronisation(game);
     bool		is_not_finished = true;
@@ -368,7 +368,7 @@ void            GameManager<SCK>::createGame(Game<SCK> *game) {
     for (auto p = game->players.begin(); p != game->players.end(); ++p)
       (*p)->onGameRoom();
     std::cout << "c'est fini" << std::endl;
-  }
+  /*}
   catch (...) {
     std::cout << "AWWW... erreur critique !" << std::endl;
     for (auto p = game->players.begin(); p != game->players.end(); ++p) {
@@ -376,7 +376,7 @@ void            GameManager<SCK>::createGame(Game<SCK> *game) {
       (*p)->onLobby();
     }
     game->players.clear();
-  }
+  }*/
 }
 
 template <typename SCK>

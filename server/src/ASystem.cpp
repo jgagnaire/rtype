@@ -223,13 +223,15 @@ bool	ASystem::touchMonster(Entity *fire, System &system, AllEntity &entities, Pl
   int		fire_hitbox_y = fire_hitbox.manager.get<int>("y");
   std::pair<float, float> fire_pos = fire->manager.get<std::pair<float, float> >("position");
 
+  bool has_been_del = false;
   for (auto m = system["monsters"]->_entities.begin();
-       m != system["monsters"]->_entities.end(); ++m) {
+       m != system["monsters"]->_entities.end();) {
     Entity	&monster_hitbox = hitboxes.manager.get<Entity>((*m)->manager.get<std::string>("name"));
     int       monster_hitbox_x = monster_hitbox.manager.get<int>("x");
     int       monster_hitbox_y = monster_hitbox.manager.get<int>("y");
     std::pair<float, float> monster_pos = (*m)->manager.get<std::pair<float, float> >("position");
 
+	has_been_del = false;
     if (monster_pos.first < fire_pos.first + fire_hitbox_x &&
 	monster_pos.first + monster_hitbox_x > fire_pos.first &&
 	monster_pos.second < fire_pos.second + fire_hitbox_y &&
@@ -241,12 +243,15 @@ bool	ASystem::touchMonster(Entity *fire, System &system, AllEntity &entities, Pl
 			     (*m)->manager.get<int>("life") - 
 			     fire->manager.get<int>("damage"));
       if ((*m)->manager.get<int>("life") <=  0) {
-	system["monsters"]->_entities.erase(m);
-	delete *m;
+		  delete *m;
+		  m = system["monsters"]->_entities.erase(m);
+		  has_been_del = true;
       }
       delete fire;
       return (true);
     }
+	if (!has_been_del)
+		++m;
   }    
   return (false);
 }
