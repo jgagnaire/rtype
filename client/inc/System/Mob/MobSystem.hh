@@ -108,7 +108,7 @@ class	MobSystem : public ASystem
 			    Entity *bullet = new Entity(_mobFires[shoot]);
 			    uint64_t tmp = (*_eList)[-1]->manager.get<uint64_t>("lastMobShoot");
 			    (*x).second->manager.set<int>("canIShoot", 0);
-			    (*_eList)[-1] = bullet;
+			    (*_eList)[tmp] = bullet;
 			    ++tmp;
 			    (*_eList)[-1]->manager.set<uint64_t>("lastMobShoot", tmp);
 			  }
