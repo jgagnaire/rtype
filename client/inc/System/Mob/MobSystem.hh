@@ -101,7 +101,7 @@ class	MobSystem : public ASystem
                     if ((*x).second->manager.get<std::string>("type") == "mob"
                             || (*x).second->manager.get<std::string>("type") == "boss")
                     {
-                        (*x).second->manager.set<int>("canIShoot", (*x).second->manager.get<int>("fire_rate") + duration);
+                        (*x).second->manager.set<int>("canIShoot", (*x).second->manager.get<int>("canIShoot") + duration);
                         if ((*x).second->manager.get<int>("canIShoot") >= (*x).second->manager.get<int>("fire_rate"))
                             for (auto shoot : (*x).second->manager.get<std::vector<std::string> >("fire"))
                             {
