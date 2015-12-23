@@ -11,6 +11,43 @@ ASystem::ASystem() {}
 ASystem::~ASystem() {}
 std::string ASystem::_port;
 
+void    ASystem::boss1(Entity &e, int duration)
+{
+  std::pair<float, float> pos = e.manager.get<std::pair<float, float> >("position");
+  float vel = duration * e.manager.get<float>("velocity");
+  if (e.manager.get<bool>("is_a_monster"))
+    vel *= -1;
+  if (pos.first > 1200)
+    line(e, duration);
+  else if (pos.first <= 1200)
+    e.manager.set("position", pos);
+}
+
+void    ASystem::boss2(Entity &e, int duration)
+{
+  std::pair<float, float> pos = e.manager.get<std::pair<float, float> >("position");
+  float vel = duration * e.manager.get<float>("velocity");
+  if (e.manager.get<bool>("is_a_monster"))
+    vel *= -1;
+  if (pos.first > 1200 && pos.second < 700)
+    {
+      pos.first += vel;
+      pos.second += (vel / 0.2f) ;
+    }
+  else if (pos.first <= 1200 && pos.second < 700)
+    {
+      pos.first += vel;
+      pos.second -= (vel);
+    }
+  else if (pos.second > 700)
+    {
+      if (pos.first > 1700)
+	pos.second += vel;
+      else
+	pos.first -= vel;
+    }
+  e.manager.set("position", pos);
+}
 
 void	ASystem::collision(System &system, Players &p, AllEntity &entities) {
   ASystem::checkFireCollision(system, p, entities);

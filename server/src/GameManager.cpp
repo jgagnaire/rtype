@@ -76,6 +76,7 @@ bool        GameManager<SCK>::createRoom(const std::string &name, UserManager<SC
       g->entities[strs[i]] = *ent;
       ent->manager.get<Entity>(strs[i]);
       g->content_system[strs[i]] = JSONSerializer::generate(ent->manager.get<Entity>(strs[i]), strs[i]);
+      std::cout << g->content_system[strs[i]] << std::endl;
       delete ent;
     }
   }
@@ -83,7 +84,7 @@ bool        GameManager<SCK>::createRoom(const std::string &name, UserManager<SC
   _games.push_back(g);
   return (true);
 }
-    
+
 template <typename SCK>
 void        GameManager<SCK>::deleteUser(UserManager<SCK> *u) {
     Game<SCK> *g = getGameByName(u->getGameroomName());
@@ -113,13 +114,17 @@ void        GameManager<SCK>::fireBall(Game<SCK> *game, UserManager<SCK> *u,
   Entity	*ent;
   Entity	&tmp = game->entities["fires"];
 
-  if (second_weapon)
-    ent = new Entity(tmp.manager.get<Entity>("fires").manager.get<Entity>("rotate"));
-  else
-    ent = new Entity(tmp.manager.get<Entity>("fires").manager.get<Entity>("normal"));
   std::cout << "les shoots: " << game->shoot_player_ids<< std::endl;
-  ent->manager.add<uint64_t>("id", game->shoot_player_ids++);
-  game->system["shoot"]->handle(u->getName(), ent, false, u->getPosition());
+  if (second_weapon) {
+    ent = new Entity(tmp.manager.get<Entity>("fires").manager.get<Entity>("sinusoid"));
+    ent->manager.add<uint64_t>("id", game->shoot_player_ids++);
+    game->system["shoot"]->handle("sinusoid", ent, false, u->getPosition());
+  }
+  else {
+    ent = new Entity(tmp.manager.get<Entity>("fires").manager.get<Entity>("line"));
+    ent->manager.add<uint64_t>("id", game->shoot_player_ids++);
+    game->system["shoot"]->handle("line", ent, false, u->getPosition());
+  }
 }
 
 template <typename SCK>
@@ -302,7 +307,7 @@ bool        GameManager<SCK>::updateObjSighting(Game<SCK> *game, uint64_t time,
     if (m.empty())
       return (true);
     std::pair<std::string, Entity&> tmp_obj = {m[0].first,
-						   obj->manager.get<Entity>(m[0].first)}; 
+						   obj->manager.get<Entity>(m[0].first)};
     if (!m.empty() && checkEntities(game, tmp_obj,
 				    entity.manager.get<int>("timeleft"), time, ent_name))
       obj = objs.erase(obj);
