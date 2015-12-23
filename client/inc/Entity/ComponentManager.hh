@@ -65,79 +65,79 @@ class ComponentManager
   template<typename Type>
   Type &get(const std::string& name)
   {
-    if (components.find(name) != components.end())
+      if (components.find(name) != components.end())
       {
-	if (components[name]->getType() == typeid(Type).name())
-	  return (static_cast<Component<Type>*>(components[name])->getValue());
-	else
-	  throw ComponentManagerException("No such component to get : [invalid type] \
-type for compenents \"" + name + "\" is : " + components[name]->getType());
+          //if (components[name]->getType() == typeid(Type).name())
+              return (static_cast<Component<Type>*>(components[name])->getValue());
+          //else
+              //throw ComponentManagerException("No such component to get : [invalid type]"
+                      //"type for compenents \"" + name + "\" is : " + components[name]->getType());
       }
-    throw ComponentManagerException("No such component to get : [invalid name]");
+      throw ComponentManagerException("No such component to get : [invalid name]");
   }
 
   template<typename Type>
-  bool exist(const std::string& name)
-  {
-    if (components.find(name) != components.end())
+      bool exist(const std::string& name)
       {
-	if (components[name]->getType() == typeid(Type).name())
-	  return (true);
-	else
-	  return (false);
+          if (components.find(name) != components.end())
+          {
+              if (components[name]->getType() == typeid(Type).name())
+                  return (true);
+              else
+                  return (false);
+          }
+          return (false);
       }
-    return (false);
+
+  template<typename Type>
+      bool	remove(const std::string& name = "")
+      {
+          if (!name.empty() && components.find(name) != components.end())
+          {
+              if (components[name]->getType() == typeid(Type).name())
+              {
+                  components.erase(name);
+                  return true;
+              }
+              return false;
+          }
+          else if (name.empty()) {
+              for (std::unordered_map<std::string, IComponent*>::iterator it
+                      = components.begin();
+                      it != components.end();++it)
+              {
+                  if (it->second->getType() == typeid(Type).name())
+                  {
+                      components.erase(it->first);
+                      return true;
+                  }
+              }
+              return false;
+          }
+          return false;
+      }
+
+  //Remove all compenents, destructor are called
+  inline void	removeAll(void)
+  {
+      components.clear();
   }
 
   template<typename Type>
-  bool	remove(const std::string& name = "")
-  {
-    if (!name.empty() && components.find(name) != components.end())
+      std::vector<std::pair<std::string, Type> >	getAll(void)
       {
-	if (components[name]->getType() == typeid(Type).name())
-	  {
-	    components.erase(name);
-	    return true;
-	  }
-	return false;
+          std::vector<std::pair<std::string, Type> >	v;
+
+          for (std::unordered_map<std::string, IComponent*>::iterator it
+                  = components.begin();
+                  it != components.end();++it)
+          {
+              if (it->second->getType() == typeid(Type).name())
+                  v.push_back(std::make_pair(it->first,
+                              (static_cast<Component<Type>* >(it->second))->getValue()));
+          }
+          return (v);
       }
-    else if (name.empty()) {
-      for (std::unordered_map<std::string, IComponent*>::iterator it
-	     = components.begin();
-	   it != components.end();++it)
-	{
-	  if (it->second->getType() == typeid(Type).name())
-	    {
-	      components.erase(it->first);
-	      return true;
-	    }
-	}
-      return false;
-    }
-    return false;
-  }
-
-	//Remove all compenents, destructor are called
-	inline void	removeAll(void)
-		{
-			components.clear();
-		}
-
-  template<typename Type>
-  std::vector<std::pair<std::string, Type> >	getAll(void)
-  {
-    std::vector<std::pair<std::string, Type> >	v;
-
-    for (std::unordered_map<std::string, IComponent*>::iterator it
-	   = components.begin();
-	 it != components.end();++it)
-      {
-	if (it->second->getType() == typeid(Type).name())
-	  v.push_back(std::make_pair(it->first,
-				     (static_cast<Component<Type>* >(it->second))->getValue()));
-      }
-    return (v);
-  }
 };
 
 #endif //COMPENENTMANAGER_H_
