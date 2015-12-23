@@ -424,7 +424,7 @@ bool            GameManager<SCK>::gameTransition(Game<SCK> *game) {
 
 template <typename SCK>
 void            GameManager<SCK>::createGame(Game<SCK> *game) {
-  //  try {
+  try {
     GameManager<SCK>	&g = GameManager<SCK>::instance();
     //	g.synchronisation(game);
     bool		is_not_finished = true;
@@ -460,15 +460,15 @@ void            GameManager<SCK>::createGame(Game<SCK> *game) {
     g.reloadJSON(game);
     std::cout << "c'est fini" << std::endl;
     game->is_playing = false;
-  // }
-  // catch (...) {
-  //   std::cout << "AWWW... erreur critique !" << std::endl;
-  //   for (auto p = game->players.begin(); p != game->players.end(); ++p) {
-  //     (*p)->writeStruct({0, static_cast<uint16_t>(Enum::GAME_ERROR)});
-  //     (*p)->onLobby();
-  //   }
-  //   game->players.clear();
-  // }
+  }
+  catch (...) {
+    std::cout << "AWWW... erreur critique !" << std::endl;
+    for (auto p = game->players.begin(); p != game->players.end(); ++p) {
+      (*p)->writeStruct({0, static_cast<uint16_t>(Enum::GAME_ERROR)});
+      (*p)->onLobby();
+    }
+    game->players.clear();
+  }
 }
 
 template <typename SCK>
