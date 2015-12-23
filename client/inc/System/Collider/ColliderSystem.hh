@@ -71,8 +71,8 @@ class ColliderSystem : public ASystem
 
         virtual void                    update(int duration)
         {
-            int time;
-            int time2;
+            int time = 0;
+            int time2 = 0;
 
             for (auto a : *_eList)
             {
