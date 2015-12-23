@@ -3,7 +3,6 @@ cmake_minimum_required(VERSION 3.1.0)
 
 set(CMAKE_CXX_STANDARD 11)
 
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/shared_libs/)
 set(CMAKE_BUILD_TYPE Debug)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../common_inc/)
@@ -13,10 +12,12 @@ set(fires_HEADERS ${fires_HEADERS} ${CMAKE_CURRENT_SOURCE_DIR}/../common_inc/Ent
 add_library(fires SHARED ${fires_SOURCES} ${fires_HEADERS})
 
 if (CMAKE_SYSTEM_NAME STREQUAL Windows)
+	set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/shared_libs/)
 	set_target_properties(fires PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/shared_libs/)
 	set_target_properties(fires PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}/shared_libs/)
 	set_target_properties(fires PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/shared_libs/)
 elseif(CMAKE_SYSTEM_NAME STREQUAL Linux)
+	set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wall -Wextra")
 endif()
