@@ -14,6 +14,7 @@ class ColliderSystem : public ASystem
         ColliderSystem(std::unordered_map<uint64_t, Entity*> *list) :
             _isActiv(false), _eList(list) {
                 _eventList.push_back(E_Stage);
+                _eventList.push_back(E_Ready);
                 _eventList.push_back(NewStage);
                 _event = noEvent;
             }
@@ -71,9 +72,15 @@ class ColliderSystem : public ASystem
                 (*_eList)[-1]->manager.set<uint64_t>("lastExplosion", (*_eList)[-1]->manager.get<uint64_t>("lastExplosion") + 1);
             }
             if (delA)
+            {
+                delete (*_eList)[id1];
                 _eList->erase(id1);
+            }
             if (delB)
+            {
+                delete (*_eList)[id2];
                 _eList->erase(id2);
+            }
             std::cout << "COLLIDE "<< id1 << " -- " << id2 << std::endl;
         }
 
@@ -100,9 +107,6 @@ class ColliderSystem : public ASystem
             }
             for (std::size_t i = 0; i < _untreated.size();)
             {
-                std::cout << "ifExis= " << _untreated[i].first << " = " << _untreated[i].second << std::endl;
-                std::cout << "ifExist " << (_eList->find(_untreated[i].first) != _eList->end()) <<" = " <<
-                    (_eList->find(_untreated[i].second) != _eList->end()) << std::endl;
                 if (_eList->find(_untreated[i].first) != _eList->end()
                         && _eList->find(_untreated[i].second) != _eList->end())
                 {
@@ -122,6 +126,22 @@ class ColliderSystem : public ASystem
             TcpPacket                   *packet;
             UdpPacket                   *up;
 
+            if (dynamic_cast<TcpPacket*>(p) &&
+                    p->getQuery() == static_cast<uint16_t>(Codes::GameEnded))
+            {
+                _event = E_Ready;
+                for (auto x = _eList->begin(); x != _eList->end();)
+                {
+                    if (x->first >= 1000000000 && x->first != static_cast<uint64_t>(-1))
+                    {
+                        delete x->second;
+                        x = _eList->erase(x);
+                    }
+                    else
+                        ++x;
+                }
+                return ;
+            }
             if ((packet = dynamic_cast<TcpPacket*>(p))
                     && p->getQuery() == static_cast<uint16_t>(Codes::JsonHitboxes))
             {
@@ -161,7 +181,9 @@ class ColliderSystem : public ASystem
             if (e == NewStage)
                 _untreated.clear();
             if (e == E_Stage)
-                _isActiv = !_isActiv;
+                _isActiv = true;
+            if (e == E_Ready)
+                _isActiv = false;
             return false;
         }
 

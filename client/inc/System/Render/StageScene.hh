@@ -6,6 +6,7 @@
 # include "System/Render/AnimatedSprite.hh"
 # include "System/Render/View.hh"
 # include "Network/UdpSocket.hh"
+# include "Network/TcpSocket.hh"
 # include "Network/NetworkManager.hh"
 # include "System/Shoot/Pattern.hh"
 # include "System/Render/Text.hh"
@@ -35,7 +36,7 @@ class StageScene : public Scene
         _pSprites[9].load("client/res/bonuses/classic-shield_160.png");
         _pSprites[10].load("client/res/bonuses/perfect-shield_87.png");
         _pSprites[11].load("client/res/boss/boss-1_327.png");
-        _pSprites[12].load("client/res/boss/boss-2_643.png");
+        _pSprites[12].load("client/res/boss/boss-2_800.png");
         _pSprites[13].load("client/res/boss/boss-3_300.png");
         _pSprites[14].load("client/res/boss/boss-4_400.png");
         _pSprites[14].load("client/res/boss/boss-5_535.png");
@@ -63,7 +64,6 @@ class StageScene : public Scene
             _s5.push_back(s5);
         }
         _b1.manager.add<AView*>("view", &_view);
-        _guiPlayers.manager.add<ADrawable*>("player", &(_pSprites[0]));
         _guiShoots.manager.add<ADrawable*>("shoot", &_shoot);
         _guiShootsEnnemy.manager.add<ADrawable*>("shoot", &_shootEnnemy);
         _lastId = 0;
@@ -118,6 +118,9 @@ class StageScene : public Scene
             std::string     me;
 
             int i = -1;
+            _guiPlayers.manager.removeAll();
+            _players.clear();
+            _guiPlayers.manager.add<ADrawable*>("player", &(_pSprites[0]));
             for (auto x : *_entities)
             {
                 if (x.second->manager.get<std::string>("type") == "player")
@@ -127,6 +130,8 @@ class StageScene : public Scene
                     _guiPlayers.manager.add<ADrawable*>(name, &(_pSprites[i]));
                 }
             }
+            _stageNb = 1;
+            setStage();
         }
 
         virtual ~StageScene()
@@ -138,12 +143,17 @@ class StageScene : public Scene
             _s5.erase(_s5.begin(), _s5.end());
         }
 
-        virtual void    handle(EventSum e, EventSum&)
+        virtual void    handle(EventSum e, EventSum &ev)
         {
             if (e == NewStage)
                 switchStage();
             if (e & Key_Up || e & Key_Down || e & Key_Left || e & Key_Right)
                 _direction = e;
+            if (_event != noEvent)
+            {
+                ev = _event;
+                _event = 0;
+            }
         }
 
         virtual void    update(int duration)
@@ -266,7 +276,8 @@ class StageScene : public Scene
                     x = _entities->erase(x);
                     has_been_del = true;
                 }
-                else if ((*x).second->manager.get<std::string>("type") == "player" && (*x).second->manager.get<int>("lifes") > 0)
+                else if ((*x).second->manager.get<std::string>("type") == "player" &&
+                        (*x).second->manager.get<int>("lifes") > 0 && _players.empty() == false)
                 {
                     _players[(*x).second->manager.get<std::string>("pseudo")]->setPosition(
                             sf::Vector2f((*x).second->manager.get<std::pair<float, float> >("position").first,
@@ -285,7 +296,7 @@ class StageScene : public Scene
                     if ((*x).second->manager.get<bool>("force"))
                     {
                         _pSprites[8].setPosition(
-                                sf::Vector2f((*x).second->manager.get<std::pair<float, float> >("position").first + 111,
+                                sf::Vector2f((*x).second->manager.get<std::pair<float, float> >("position").first + 141,
                                     (*x).second->manager.get<std::pair<float, float> >("position").second - 5));
                         _pSprites[8].update(duration);
                         _guiPlayers.manager.set<ADrawable*>("player", &(_pSprites[8]));
@@ -294,8 +305,8 @@ class StageScene : public Scene
                     if ((*x).second->manager.get<int>("shield") > 0)
                     {
                         _pSprites[9].setPosition(
-                                sf::Vector2f((*x).second->manager.get<std::pair<float, float> >("position").first - 10,
-                                    (*x).second->manager.get<std::pair<float, float> >("position").second - 35));
+                                sf::Vector2f((*x).second->manager.get<std::pair<float, float> >("position").first - 25,
+                                    (*x).second->manager.get<std::pair<float, float> >("position").second - 30));
                         _pSprites[9].update(duration);
                         _guiPlayers.manager.set<ADrawable*>("player", &(_pSprites[9]));
                         _win.draw(_guiPlayers);
@@ -397,6 +408,7 @@ class StageScene : public Scene
         std::vector<AnimatedSprite*>                        _explosions;
 
         EventSum                                            _direction;
+        EventSum                                            _event;
         uint64_t                                            _lastId;
         std::unordered_map<std::string, AnimatedSprite*>    _players;
 

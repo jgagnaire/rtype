@@ -45,6 +45,7 @@ class	MobSystem : public ASystem
         MobSystem() {}
         MobSystem(std::unordered_map<uint64_t, Entity*> *list) : isActiv(false), _eList(list), _lvl(1) {
             _eventList.push_back(E_Stage);
+            _eventList.push_back(E_Ready);
             _durationAnimation = 0;
             _event = noEvent;
         }
@@ -139,7 +140,17 @@ class	MobSystem : public ASystem
                             x = _eList->erase(x);
                         }
                         else
+                        {
+                            std::pair<float, float> pos(0, 1080 / 2);
+                            x->second->manager.set<bool>("force", false);
+                            x->second->manager.set<int>("shield", 0);
+                            x->second->manager.set<int>("perfect_shield", 0);
+                            x->second->manager.set<int>("respawn", 0);
+                            x->second->manager.set<uint64_t>("score", 0);
+                            x->second->manager.set<std::pair<float, float> >("position", pos);
+                            x->second->manager.add<int>("lifes", 3);
                             ++x;
+                        }
                     }
                     ++_lvl;
                     _event = NewStage;
@@ -223,8 +234,21 @@ class	MobSystem : public ASystem
         }
         virtual bool                    handle(EventSum ev)
         {
+            if (ev == E_Ready)
+            {
+                _jsonEntities.clear();
+                for (auto &x : _waitingmobs)
+                {
+                    for (auto y : x.second)
+                    {
+                        delete y;
+                    }
+                }
+                _waitingmobs.clear();
+                isActiv = false;
+            }
             if (ev == E_Stage)
-                isActiv = !isActiv;
+                isActiv = true;
             return true;
         }
         virtual std::vector<REvent>     &broadcast(void) { return _eventList; }
