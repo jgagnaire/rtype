@@ -153,6 +153,12 @@ bool        GameManager<SCK>::roomIsFull(const std::string &name) {
 }
 
 template <typename SCK>
+void		GameManager<SCK>::setPort(const std::string &p) {
+  port = p;
+  ASystem::setPort(port);
+}
+
+template <typename SCK>
 void        GameManager<SCK>::reloadJSON(Game<SCK> *game) {
   const std::pair<std::string, Enum::ServerNotification> strs[] =
     {{"bonuses", Enum::SEND_JSON_BONUS},
@@ -485,7 +491,7 @@ void		GameManager<SCK>::sendPosition(Game<SCK> *game, UserManager<SCK> *user) {
       packet.stockOnBuff(pack);
       packet.stockOnBuff(s);
       packet.serialize();
-      packet.sendPacket<IServerSocket<SCK> *>(this->_udp_socket, (*it)->getIP(), "1726"); // TODO, no magic string
+      packet.sendPacket<IServerSocket<SCK> *>(this->_udp_socket, (*it)->getIP(), port);
 
       pack = {static_cast<uint16_t>(key.size()),
 	      static_cast<uint16_t>(Enum::USER_KEYPRESS),
@@ -494,7 +500,7 @@ void		GameManager<SCK>::sendPosition(Game<SCK> *game, UserManager<SCK> *user) {
       packet.stockOnBuff(pack);
       packet.stockOnBuff(key);
       packet.serialize();
-      packet.sendPacket<IServerSocket<SCK> *>(this->_udp_socket, (*it)->getIP(), "1726"); // TODO, no magic string
+      packet.sendPacket<IServerSocket<SCK> *>(this->_udp_socket, (*it)->getIP(), port);
   }
 }
 
