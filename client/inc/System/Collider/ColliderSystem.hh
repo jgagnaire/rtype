@@ -137,6 +137,18 @@ class ColliderSystem : public ASystem
                         delete x->second;
                         x = _eList->erase(x);
                     }
+                    else if (x->first < 1000000000)
+                    {
+                        std::pair<float, float> pos(0, 1080 / 2);
+                        x->second->manager.set<bool>("force", false);
+                        x->second->manager.set<int>("shield", 0);
+                        x->second->manager.set<int>("perfect_shield", 0);
+                        x->second->manager.set<int>("respawn", 0);
+                        x->second->manager.set<uint64_t>("score", 0);
+                        x->second->manager.set<int>("lifes", 3);
+                        x->second->manager.set<std::pair<float, float> >("position", pos);
+                        ++x;
+                    }
                     else
                         ++x;
                 }

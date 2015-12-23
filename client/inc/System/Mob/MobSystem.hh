@@ -139,18 +139,16 @@ class	MobSystem : public ASystem
                             delete x->second;
                             x = _eList->erase(x);
                         }
-                        else
+                        else if (x->first < 1000000000)
                         {
                             std::pair<float, float> pos(0, 1080 / 2);
-                            x->second->manager.set<bool>("force", false);
-                            x->second->manager.set<int>("shield", 0);
                             x->second->manager.set<int>("perfect_shield", 0);
                             x->second->manager.set<int>("respawn", 0);
-                            x->second->manager.set<uint64_t>("score", 0);
                             x->second->manager.set<std::pair<float, float> >("position", pos);
-                            x->second->manager.add<int>("lifes", 3);
                             ++x;
                         }
+                        else
+                            ++x;
                     }
                     ++_lvl;
                     _event = NewStage;
@@ -246,6 +244,7 @@ class	MobSystem : public ASystem
                 }
                 _waitingmobs.clear();
                 isActiv = false;
+                _lvl = 1;
             }
             if (ev == E_Stage)
                 isActiv = true;
