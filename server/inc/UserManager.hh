@@ -80,12 +80,11 @@ public:
     const Position	    &getPosition() const;
     const uint64_t	    &getKeypressed() const;
     void		    setId(uint64_t);
-    uint64_t		    getId();
+    uint64_t		    getId() const;
     void	            getBonus(Entity *);
     bool		    updateBonus(uint64_t);
     bool		    isRespawning() const;
     void                    clearLevel();
-    const uint64_t       *getLatency();
     void		    onGameRoom();
     void		    onLobby();
     int			    getForce() const;
@@ -101,7 +100,6 @@ public:
     Enum::ServerAnswers     quitGame();
     Enum::ServerAnswers     currentPosition();
     Enum::ServerAnswers     keyPressed();
-    Enum::ServerAnswers	    setLatency();
     std::mutex              destroy_client_mutex;
 
 private:
@@ -133,12 +131,10 @@ private:
   int64_t				  protection = 0;
   int64_t				  perfect_shield = 0;
   int64_t				  respawn = 0;
-  uint64_t				  latency[4];
 
   bool					hasBadFormat(std::string *) const;
   bool					alreadyExist(std::string *);
-  std::string				generateRoomName();
-
+  std::string				generateRoomName() const;
 };
 
 

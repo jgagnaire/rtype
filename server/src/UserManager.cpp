@@ -13,10 +13,6 @@ template<typename T>
 UserManager<T>::UserManager(IServerSocket<T> *sck) :
   sock(sck) , status(Enum::LOBBY) , ping(true) {
     clearData();
-    latency[0] = 0;
-    latency[1] = 0;
-    latency[2] = 0;
-    latency[3] = 0;
     life = 0;
 }
 
@@ -54,30 +50,6 @@ void	UserManager<T>::readFromMe() { packet.getPacket<IServerSocket<T> *>(sock); 
 
 template<typename T>
 void	UserManager<T>::writeMsg(const std::string &s) { packet.stockOnBuff(s); }
-
-template<typename T>
-Enum::ServerAnswers	UserManager<T>::setLatency() {
-  if (!latency[1]) {
-    latency[1] = GameManager<T>::getTime();
-    return (Enum::GET_LAT);
-  }
-  if (!latency[1]) {
-    latency[1] = GameManager<T>::getTime();
-    return (Enum::GET_LAT);
-  }
-  if (!latency[2]) {
-    latency[2] = GameManager<T>::getTime();
-    return (Enum::GET_LAT);
-  }
-  if (!latency[3]) {
-    latency[3] = GameManager<T>::getTime();
-    return (Enum::GET_LAT);
-  }
-  return (Enum::OK);
-}
-
-template<typename T>
-const uint64_t    *UserManager<T>::getLatency() { return (latency); }
 
 template<typename T>
 bool	UserManager<T>::writeOnMe()
@@ -275,12 +247,11 @@ Enum::ServerAnswers      UserManager<T>::joinNamedRoom() {
     gameroom = game_name;
     status = Enum::GAME_ROOM;
     is_ready = false;
-    latency[0] = GameManager<T>::getTime();
     return (Enum::OK);
 }
 
 template <typename T>
-std::string     UserManager<T>::generateRoomName() {
+std::string     UserManager<T>::generateRoomName() const {
     static const char alphanum[] =
             "0123456789"
                     "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -318,7 +289,6 @@ Enum::ServerAnswers      UserManager<T>::createGameRoom() {
     if (g)
       id = g->getId();
     status = Enum::GAME_ROOM;
-    latency[0] = GameManager<T>::getTime();
     return (Enum::OK);
 }
 
@@ -368,7 +338,7 @@ bool                    UserManager<T>::isFiring() const { return (fire); }
 template <typename T>
 void                    UserManager<T>::setId(uint64_t i) { id = i; }
 template <typename T>
-uint64_t		UserManager<T>::getId() { return (id); }
+uint64_t		UserManager<T>::getId() const { return (id); }
 
 template <typename T>
 bool                    UserManager<T>::isDead() const { return (life <= 0); }

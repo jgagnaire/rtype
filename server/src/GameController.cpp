@@ -20,17 +20,9 @@ int	            GameController<T>::newData(UserManager<T> *cl) {
             return (static_cast<int>(notReady(cl)));
         case (Enum::GET_ROOM):
             return (static_cast<int>(getRoomList(cl)));
-        case (Enum::LATENCY):
-	  return (static_cast<int>(latency(cl)));
     default:
             return (-1);
     }
-}
-
-template <typename T>
-bool            GameController<T>::latency(UserManager<T> *cl) const {
-  cl->writeStruct({0, static_cast<uint16_t>(cl->setLatency())});
-  return (true);
 }
 
 template <typename T>
@@ -58,7 +50,6 @@ bool            GameController<T>::joinNamedRoom(UserManager<T> *cl) const {
 
     cl->writeStruct({0, static_cast<uint16_t>(sa)});
     if (sa == Enum::OK) {
-      cl->writeStruct({0, Enum::GET_LATENCY});
 	game = g.getGameByName(cl->getGameroomName());
 	cl->setId(game->getId());
 	std::string tmp = cl->getName() + ":" + std::to_string(cl->getId());
@@ -81,14 +72,12 @@ bool            GameController<T>::joinNamedRoom(UserManager<T> *cl) const {
 }
 
 template <typename T>
-inline
 bool            GameController<T>::createGameRoom(UserManager<T> *cl) const {
     Enum::ServerAnswers		sa = cl->createGameRoom();
     GameManager<T>		&g = GameManager<T>::instance();
 
     cl->writeStruct({0, static_cast<uint16_t>(sa)});
     if (sa == Enum::OK) {
-      cl->writeStruct({0, Enum::GET_LATENCY});
       std::string tmp = cl->getName() + ":" + std::to_string(cl->getId());
       std::cout << "l'id et le name: " << tmp << std::endl;
       std::cout << cl->getName() << " veut creer "  << cl->getPacketData() << std::endl;
@@ -151,7 +140,6 @@ bool            GameController<T>::ready(UserManager<T> *cl) const {
 }
 
 template <typename T>
-inline
 bool            GameController<T>::notReady(UserManager<T> *cl) const {
     cl->writeStruct({0, static_cast<uint16_t>(cl->notReady())});
     return (true);

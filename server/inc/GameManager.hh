@@ -95,7 +95,7 @@ private:
     bool		            updateObjSighting(Game<SCK> *game,
 						      uint64_t time,
 						      const std::string &);
-    bool				updateBoss(Game<SCK> *);
+    bool			    updateBoss(Game<SCK> *);
     bool			    checkEntities(Game<SCK> *, 
 						  std::pair<std::string, Entity&>,
 						  int,

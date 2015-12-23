@@ -150,12 +150,10 @@ bool   WinServerMonitor::isObserved(IServerSocket<SOCKET> *sock, Enum::Flag sock
   return (false);
 }
 
-inline
 void   WinServerMonitor::setTimeval(unsigned sec, unsigned milli) {
   _timeout = sec * 1000 + milli;
 }
 
-inline
 void   WinServerMonitor::deleteTimeval() {
   _timeout = WSA_INFINITE;
 }

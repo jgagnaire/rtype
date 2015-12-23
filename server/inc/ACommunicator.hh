@@ -40,22 +40,22 @@ public:
       ac->launch(netmng->getClientList());
     }
 
-    virtual inline void	addController(CONTROLLER *c) { controllers.push_back(c); }
-    virtual inline void	triggerConnection(trigger connection) { newConnection = connection; }
-    virtual inline void	triggerClose(trigger close) { closeConnection = close; }
-    virtual inline void	triggerNewData(triggerNew data) { newData = data; }
-    virtual inline void	triggerTimeout(Timeout t) { timeout = t; }
-    virtual inline void	triggerAObserve(AfterObserve ao) { aobs = ao; }
+    virtual void	addController(CONTROLLER *c) { controllers.push_back(c); }
+    virtual void	triggerConnection(trigger connection) { newConnection = connection; }
+    virtual  void	triggerClose(trigger close) { closeConnection = close; }
+    virtual  void	triggerNewData(triggerNew data) { newData = data; }
+    virtual  void	triggerTimeout(Timeout t) { timeout = t; }
+    virtual  void	triggerAObserve(AfterObserve ao) { aobs = ao; }
     virtual void	    launch(std::list<USER*> *) = 0;
 
 protected:
 
-    virtual inline void	timeoutAction() { ((controllers.front())->*timeout)(*cl_list, this->network_monitor); }
-    virtual inline void	afterObserveAction() { ((controllers.front())->*aobs)(*cl_list, this->network_monitor); }
-    virtual inline bool	acceptAction(USER *) { return (true); }
-    virtual inline bool	connectAction(USER *) { return (true); }
-    virtual inline bool	writeAction(USER *) { return (true); }
-    virtual inline bool	readAction(USER *) { return (true); }
+    virtual  void	timeoutAction() { ((controllers.front())->*timeout)(*cl_list, this->network_monitor); }
+    virtual  void	afterObserveAction() { ((controllers.front())->*aobs)(*cl_list, this->network_monitor); }
+    virtual  bool	acceptAction(USER *) { return (true); }
+    virtual  bool	connectAction(USER *) { return (true); }
+    virtual  bool	writeAction(USER *) { return (true); }
+    virtual  bool	readAction(USER *) { return (true); }
     virtual bool	    closeAction(USER *cli) {
         if (closeConnection != NULL) {
             for (auto it = controllers.begin(); it != controllers.end(); ++it) {

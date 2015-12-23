@@ -25,21 +25,18 @@ int	AccountController<T>::newData(UserManager<T> *cli) {
 }
 
 template<typename T>
-inline
 bool    AccountController<T>::pong(UserManager<T> *cl) const {
     cl->setPing(true);
     return (true);
 }
 
 template<typename T>
-inline
 int    AccountController<T>::newConnection(UserManager<T> *cl) const {
     cl->sendPing();
     return (1);
 }
 
 template<typename T>
-inline
 bool    AccountController<T>::accountLoginFct(UserManager<T> *cl) const {
   std::istringstream	is(cl->getPacketData());
   std::string		s;
@@ -54,14 +51,12 @@ bool    AccountController<T>::accountLoginFct(UserManager<T> *cl) const {
 }
 
 template<typename T>
-inline
 bool    AccountController<T>::accountRegisterFct(UserManager<T> *cl) const {
     cl->writeStruct({0, static_cast<uint16_t>(cl->newUser())});
     return (true);
 }
 
 template<typename T>
-inline
 bool	AccountController<T>::disconnectionFct(UserManager<T> *cl) const {
     GameManager<T>              &g = GameManager<T>::instance();
     Game<T>                     *game;
@@ -83,7 +78,6 @@ bool	AccountController<T>::disconnectionFct(UserManager<T> *cl) const {
 }
 
 template<typename T>
-inline
 int    AccountController<T>::closeConnection(UserManager<T> *cl) const {
     disconnectionFct(cl);
     return (0);

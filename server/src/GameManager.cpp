@@ -73,11 +73,9 @@ bool        GameManager<SCK>::createRoom(const std::string &name, UserManager<SC
       Entity *ent = (*GameManager<SCK>::dlloader)(strs[i], "dl_entry_point");
       if (!ent)
 	return (false);
-      std::cout << "HEEEEY" << std::endl;
       g->entities[strs[i]] = *ent;
       ent->manager.get<Entity>(strs[i]);
       g->content_system[strs[i]] = JSONSerializer::generate(ent->manager.get<Entity>(strs[i]), strs[i]);
-      std::cout << g->content_system[strs[i]] << std::endl;
       delete ent;
     }
   }
@@ -386,16 +384,6 @@ uint64_t   GameManager<SCK>::getTime() {
 }
 
 template <typename SCK>
-void            GameManager<SCK>::synchronisation(Game<SCK> *game) {
-  const uint64_t   *latency = (*game->players.begin())->getLatency();
-  uint64_t	duration = ((latency[1] - latency[0]) + (latency[3] - latency[2])) / 2;
-
-  duration = duration + GameManager<SCK>::getTime();
-  (*game->players.begin())->writeStruct({0, Enum::GAME_START});
-  while (duration > GameManager<SCK>::getTime());
-}
-
-template <typename SCK>
 void		GameManager<SCK>::cleanSystem(Game<SCK> *game) {
   game->system["shoot"]->clear();
   game->system["monsters"]->clear();
@@ -429,7 +417,6 @@ template <typename SCK>
 void            GameManager<SCK>::createGame(Game<SCK> *game) {
   try {
     GameManager<SCK>	&g = GameManager<SCK>::instance();
-    //	g.synchronisation(game);
     bool		is_not_finished = true;
     uint64_t		duration;
     auto		start = std::chrono::steady_clock::now();
