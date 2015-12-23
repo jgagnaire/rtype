@@ -109,6 +109,7 @@ class ShootSystem : public ASystem
                             Entity *sht = this->createShoot(x.second->manager.get<std::pair<float, float> >("position"),
                                     x.second->manager.get<Pattern::MovePattern>("pattern"),
                                     Pattern::Side::RIGHT);
+                            sht->manager.add<Entity*>("Shooter", x.second);
                             std::cout << "SHOOT " << (*_eList)[-1]->manager.get<uint64_t>("lastShoot") << std::endl;
                             (*_eList)[(*_eList)[-1]->manager.get<uint64_t>("lastShoot")] = sht;
                             (*_eList)[-1]->manager.set<uint64_t>("lastShoot", (*_eList)[-1]->manager.get<uint64_t>("lastShoot") + 1);

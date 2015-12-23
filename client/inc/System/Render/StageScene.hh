@@ -326,15 +326,17 @@ class StageScene : public Scene
                 _guiExplosion.manager.set<ADrawable*>("explosion", _explosions[i]);
                 _win.draw(_guiExplosion);
             }
-            std::string tmp;
+            std::string tmp, tmp2;
             for (auto x : *_entities)
                 if (x.first < 1000000000)
                 {
                     if (tmp.empty() == false)
                         tmp += "    ";
                     tmp += x.second->manager.get<std::string>("pseudo") + " " + std::to_string(x.second->manager.get<int>("lifes"));
+                    if (_players[x.second->manager.get<std::string>("pseudo")] == &(_pSprites[0]))
+                        tmp2 = "Score : " + std::to_string(x.second->manager.get<uint64_t>("score"));
                 }
-            _hudText.setText(tmp);
+            _hudText.setText(tmp + " " + tmp2);
             _win.draw(_b5);
             _win.draw(_b6);
             _win.draw(_b7);
