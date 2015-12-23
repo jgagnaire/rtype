@@ -46,6 +46,7 @@ class	MobSystem : public ASystem
         MobSystem(std::unordered_map<uint64_t, Entity*> *list) : isActiv(false), _eList(list), _lvl(1) {
             _eventList.push_back(E_Stage);
             _durationAnimation = 0;
+            _event = noEvent;
         }
         virtual ~MobSystem() {}
 
