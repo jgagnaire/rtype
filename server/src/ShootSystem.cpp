@@ -41,7 +41,7 @@ bool                    ShootSystem::handle(const std::string &name,
   float			x = 105.0f;
   float			y = 9.0f;
 
-  e->manager.add("fired_by", name);
+  e->manager.add("name", name);
   e->manager.add("is_a_monster", monster);
   if (monster) {
     x = -x;

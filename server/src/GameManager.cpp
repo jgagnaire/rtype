@@ -114,13 +114,17 @@ void        GameManager<SCK>::fireBall(Game<SCK> *game, UserManager<SCK> *u,
   Entity	*ent;
   Entity	&tmp = game->entities["fires"];
 
-  if (second_weapon)
-    ent = new Entity(tmp.manager.get<Entity>("fires").manager.get<Entity>("sinusoid"));
-  else
-    ent = new Entity(tmp.manager.get<Entity>("fires").manager.get<Entity>("line"));
   std::cout << "les shoots: " << game->shoot_player_ids<< std::endl;
-  ent->manager.add<uint64_t>("id", game->shoot_player_ids++);
-  game->system["shoot"]->handle(u->getName(), ent, false, u->getPosition());
+  if (second_weapon) {
+    ent = new Entity(tmp.manager.get<Entity>("fires").manager.get<Entity>("sinusoid"));
+    ent->manager.add<uint64_t>("id", game->shoot_player_ids++);
+    game->system["shoot"]->handle("sinusoid", ent, false, u->getPosition());
+  }
+  else {
+    ent = new Entity(tmp.manager.get<Entity>("fires").manager.get<Entity>("line"));
+    ent->manager.add<uint64_t>("id", game->shoot_player_ids++);
+    game->system["shoot"]->handle("line", ent, false, u->getPosition());
+  }
 }
 
 template <typename SCK>
@@ -420,7 +424,7 @@ bool            GameManager<SCK>::gameTransition(Game<SCK> *game) {
 
 template <typename SCK>
 void            GameManager<SCK>::createGame(Game<SCK> *game) {
-  try {
+  //  try {
     GameManager<SCK>	&g = GameManager<SCK>::instance();
     //	g.synchronisation(game);
     bool		is_not_finished = true;
@@ -456,15 +460,15 @@ void            GameManager<SCK>::createGame(Game<SCK> *game) {
     g.reloadJSON(game);
     std::cout << "c'est fini" << std::endl;
     game->is_playing = false;
-  }
-  catch (...) {
-    std::cout << "AWWW... erreur critique !" << std::endl;
-    for (auto p = game->players.begin(); p != game->players.end(); ++p) {
-      (*p)->writeStruct({0, static_cast<uint16_t>(Enum::GAME_ERROR)});
-      (*p)->onLobby();
-    }
-    game->players.clear();
-  }
+  // }
+  // catch (...) {
+  //   std::cout << "AWWW... erreur critique !" << std::endl;
+  //   for (auto p = game->players.begin(); p != game->players.end(); ++p) {
+  //     (*p)->writeStruct({0, static_cast<uint16_t>(Enum::GAME_ERROR)});
+  //     (*p)->onLobby();
+  //   }
+  //   game->players.clear();
+  // }
 }
 
 template <typename SCK>
