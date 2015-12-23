@@ -1,8 +1,13 @@
 #ifndef SHOOTSYSTEM_HH_
 # define SHOOTSYSTEM_HH_
 
+# include "System/ASystem.hh"
 # include "Pattern.hh"
 # include "System/Collider/FCollision.hh"
+# include "Network/UdpSocket.hh"
+# include "Network/TcpSocket.hh"
+# include "Network/NetworkManager.hh"
+# include "Utility/JSONParser.hh"
 
 class ShootSystem : public ASystem
 {
@@ -92,6 +97,13 @@ class ShootSystem : public ASystem
         virtual void                    in(IPacket *p) {
             UdpPacket   *packet;
 
+            if (p->getQuery() == static_cast<uint16_t>(Codes::JsonShoots))
+            {
+                std::string tmp = std::string(static_cast<const char *>(p->getData()), p->getSize());
+                Entity &e = JSONParser::parse(tmp)->getEntity().manager.get<Entity>("monsters");
+                for (auto &x : e.manager.getAll<Entity>())
+                    _jsonEntities[x.first] = x.second;
+            }
             if ((packet = dynamic_cast<UdpPacket*>(p)) &&
                     packet->getQuery() == static_cast<uint16_t>(UdpCodes::ServeKeyPressed))
             {
@@ -104,18 +116,17 @@ class ShootSystem : public ASystem
                 {
                     for (auto x : *_eList)
                     {
-						if (x.second->manager.get<std::string>("type") == "player")
-                        if (x.second->manager.get<std::string>("pseudo") == name)
-                        {
-                            Entity *sht = this->createShoot(x.second->manager.get<std::pair<float, float> >("position"),
-                                    x.second->manager.get<Pattern::MovePattern>("pattern"),
-                                    Pattern::Side::RIGHT);
-                            sht->manager.add<Entity*>("Shooter", x.second);
-                            std::cout << "SHOOT " << (*_eList)[-1]->manager.get<uint64_t>("lastShoot") << std::endl;
-                            (*_eList)[(*_eList)[-1]->manager.get<uint64_t>("lastShoot")] = sht;
-                            (*_eList)[-1]->manager.set<uint64_t>("lastShoot", (*_eList)[-1]->manager.get<uint64_t>("lastShoot") + 1);
-                            return ;
-                        }
+                        if (x.second->manager.get<std::string>("type") == "player")
+                            if (x.second->manager.get<std::string>("pseudo") == name)
+                            {
+                                Entity *sht = this->createShoot(x.second->manager.get<std::pair<float, float> >("position"),
+                                        x.second->manager.get<Pattern::MovePattern>("pattern"),
+                                        Pattern::Side::RIGHT);
+                                sht->manager.add<Entity*>("Shooter", x.second);
+                                (*_eList)[(*_eList)[-1]->manager.get<uint64_t>("lastShoot")] = sht;
+                                (*_eList)[-1]->manager.set<uint64_t>("lastShoot", (*_eList)[-1]->manager.get<uint64_t>("lastShoot") + 1);
+                                return ;
+                            }
                     }
                 }
                 else if (e & Key_Change)
@@ -143,9 +154,9 @@ class ShootSystem : public ASystem
                 isActiv = false;
             if (ev & Key_Fire && this->fireRate >= 250 && isActiv)
             {
-				lastEvent = ev;
-				fireRate = 0;
-			}
+                lastEvent = ev;
+                fireRate = 0;
+            }
             else if (ev & Key_Change && isActiv)
             {
                 lastEvent = ev;
@@ -171,15 +182,16 @@ class ShootSystem : public ASystem
         }
 
     protected:
-        std::unordered_map<uint64_t, Entity*>	*_eList;
+        std::unordered_map<uint64_t, Entity*>	    *_eList;
         int					                        fireRate;
         bool				                        isActiv;
         UdpPacket				                    _packet;
         int                                         _frequency;
         EventSum			                        lastEvent;
         std::function<void (Entity&, Pattern::Side, int)> patterns[2];
-        std::string         _tmp;
+        std::string                                 _tmp;
         int                                         _durationAnimation;
+        std::unordered_map<std::string, Entity>     _jsonEntities;
 };
 
 #endif //SHOOTSYSTEM_HH_
