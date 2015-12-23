@@ -11,13 +11,12 @@ class SettingsScene : public Scene
 {
     public:
         SettingsScene(IWindow &win, std::unordered_map<std::size_t, Entity*> *e):
-            Scene(win, e), _current(0)
+	  Scene(win, e), _current(0), musicVol(50), sfxVol(70)
         {
             _b1.manager.add<AView*>("view", &_v1);
 
-            _textVec.push_back(new Text("Option1"));
-            _textVec.push_back(new Text("Option2"));
-            _textVec.push_back(new Text("Option3"));
+            _textVec.push_back(new Text("Music : " + std::to_string(musicVol)));
+            _textVec.push_back(new Text("SFX : "+ std::to_string(sfxVol)));
             for (std::size_t i = 0; i < _textVec.size(); ++i)
             {
                 _textVec[i]->setCenter();
@@ -45,11 +44,37 @@ class SettingsScene : public Scene
                         ++_current;
                     break;
                 case Key_Left:
-                    std::cout << "LOL LEFT" << std::endl;
-                    break;
+		  if (_current == 0)
+		    {
+		      if (musicVol > 0)
+			{
+			  send = E_MusicDown;
+			  _textVec[_current]->setText("Music : " + std::to_string(--musicVol));
+			}
+		    }
+		  else
+		    if (sfxVol > 0)
+		      {
+			_textVec[_current]->setText("SFX : " + std::to_string(--sfxVol));
+			send = E_SfxDown;
+		      }
+		  break;
                 case Key_Right:
-                    std::cout << "LOL RIGTH" << std::endl;
-                    break;
+		  if (_current == 0)
+		    {
+		      if (musicVol < 100)
+			{
+			  send = E_MusicUp;
+			  _textVec[_current]->setText("Music : " + std::to_string(++musicVol));
+			}
+		    }
+		  else
+		    if (sfxVol < 100)
+		      {
+			_textVec[_current]->setText("SFX : " + std::to_string(++sfxVol));
+			send = E_SfxUp;
+		      }
+		  break;
                 default:
                     ;
             }
@@ -81,6 +106,8 @@ class SettingsScene : public Scene
 
         std::vector<Text*>  _textVec;
         std::size_t         _current;
+  int	musicVol;
+  int	sfxVol;
 };
 
 
