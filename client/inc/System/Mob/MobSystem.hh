@@ -105,6 +105,8 @@ class	MobSystem : public ASystem
                         if ((*x).second->manager.get<int>("canIShoot") >= (*x).second->manager.get<int>("fire_rate"))
                             for (auto shoot : (*x).second->manager.get<std::vector<std::string> >("fire"))
                             {
+                                if (shoot.empty())
+                                    continue ;
                                 Entity *bullet = new Entity(_mobFires[shoot]);
                                 uint64_t tmp = (*_eList)[-1]->manager.get<uint64_t>("lastMobShoot");
                                 (*x).second->manager.set<int>("canIShoot", 0);
