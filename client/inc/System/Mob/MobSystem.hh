@@ -71,7 +71,7 @@ class	MobSystem : public ASystem
                     if ((*x)->manager.get<std::string>("type") == "mob")
                     {
                         (*_eList)[(*_eList)[-1]->manager.get<uint64_t>("lastMob")] = *x;
-			(*_eList)[-1]->manager.add<int>("canIShoot", (*_eList)[-1]->manager.get<int>("fire_rate"));
+			(*x)->manager.add<int>("canIShoot", (*x)->manager.get<int>("fire_rate"));
                         (*_eList)[-1]->manager.set<uint64_t>("lastMob", (*_eList)[-1]->manager.get<uint64_t>("lastMob") + 1);
                     }
                     else if ((*x)->manager.get<std::string>("type") == "bonus")
@@ -82,7 +82,7 @@ class	MobSystem : public ASystem
                     else if ((*x)->manager.get<std::string>("type") == "boss")
                     {
                         (*_eList)[(*_eList)[-1]->manager.get<uint64_t>("lastBoss")] = *x;
-			(*_eList)[-1]->manager.add<int>("canIShoot", (*_eList)[-1]->manager.get<int>("fire_rate"));
+			(*x)->manager.add<int>("canIShoot", (*x)->manager.get<int>("fire_rate"));
                         (*_eList)[-1]->manager.set<uint64_t>("lastBoss", (*_eList)[-1]->manager.get<uint64_t>("lastBoss") + 1);
                     }
                     x = _waitingmobs[_lvl].erase(x);
