@@ -258,7 +258,6 @@ class StageScene : public Scene
                     AnimatedSprite *ex = new AnimatedSprite;
                     static int count = 0;
 
-                    std::cout <<"POPO " << x->second->manager.get<bool>("little") << std::endl;
                     if (x->second->manager.get<bool>("little") &&
                             ex->load("client/res/explosion3_30.png", false, 24))
                         ;
