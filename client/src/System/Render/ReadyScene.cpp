@@ -133,11 +133,12 @@ void    ReadyScene::in(IPacket *p, std::string &pseudo)
             case Codes::PlayerLeft:
                 _players.erase(data);
                 for (auto x : *_entities)
-                    if (x.second->manager.get<std::string>("pseudo") == data)
-                    {
-                        delete x.second;
-                        _entities->erase(x.first);
-                    }
+                    if (x.second->manager.get<std::string>("type") == "player")
+                        if (x.second->manager.get<std::string>("pseudo") == data)
+                        {
+                            delete x.second;
+                            _entities->erase(x.first);
+                        }
                 for (auto x : _players)
                     tmp += x.first + "\n";
                 _playersText.setText(tmp);
@@ -155,8 +156,8 @@ IPacket *ReadyScene::out(EventSum&)
 {
     if (_sendPongLatency)
     {
-         _sendPongLatency = false;
-         return (&_packet);
+        _sendPongLatency = false;
+        return (&_packet);
     }
     if (_new)
     {
