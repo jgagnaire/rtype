@@ -37,35 +37,40 @@ public:
 
     virtual ~TCPCommunicator() {}
 
-    virtual void	launch(std::list<USER*> *clients) {
-        this->cl_list = clients;
-        for (;;) {
-            for (auto cli = this->cl_list->begin(); cli != this->cl_list->end();) {
+	virtual void	launch(std::list<USER*> *clients) {
+		this->cl_list = clients;
+		for (;;) {
+			for (auto cli = this->cl_list->begin(); cli != this->cl_list->end();) {
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
-                while (!(*cli)->sendStructEmpty()) {
-	    if (!(*cli)->writeOnMe()) {
-	      deleteClient(cli);
-	      break;
-	    }
-	  }
+				bool has_been_del = false;
+				while (!(*cli)->sendStructEmpty()) {
+					if (!(*cli)->writeOnMe()) {
+						deleteClient(cli);
+						has_been_del = true;
+						break;
+					}
+				}
 #else
-                if (!(*cli)->sendStructEmpty()) {
-                    this->network_monitor->setObserver((*cli)->getServerSocket(),
-                                                       static_cast<Enum::Flag>(Enum::READ |
-                                                                               Enum::WRITE |
-                                                                               Enum::CLOSE));
-                }
+				if (!(*cli)->sendStructEmpty()) {
+					this->network_monitor->setObserver((*cli)->getServerSocket(),
+						static_cast<Enum::Flag>(Enum::READ |
+							Enum::WRITE |
+							Enum::CLOSE));
+				}
 #endif
-                ++cli;
-            }
-            this->network_monitor->setTimeval(1, 0);
-            if ((this->network_monitor->observerFds() == 0) &&
-                (this->timeout))
-                this->timeoutAction();
-            else
-                this->checkObserver();
-        }
-    }
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+				if (!has_been_del)
+#endif
+					++cli;
+			}
+			this->network_monitor->setTimeval(1, 0);
+			if ((this->network_monitor->observerFds() == 0) &&
+				(this->timeout))
+				this->timeoutAction();
+			else
+				this->checkObserver();
+		}
+	}
 
     void	deleteClient(typename std::list<USER *>::iterator &cli) {
         UserManager<SCK>::user_mutex.lock();
