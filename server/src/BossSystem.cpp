@@ -39,7 +39,7 @@ void                    BossSystem::update(int duration, ASystem::GameRoom g) {
 	  gManager::instance().fireMob(g, *x,
 				       (*x)->manager.get<std::string>("name"), p);
 	}
-        if (tmp.first > 1920 || tmp.first < -100) {
+        if (tmp.first > 1921 || tmp.first < 0) {
 	  (*x)->manager.add<bool>("is_dead", true);
 	  return ;
 	}
