@@ -22,6 +22,13 @@
 	"fire_rate": 1100,
 	"life": 20
     },
+    "mob4": {
+	"movement": "line",
+	"fire": [""],
+	"velocity": 0.2,
+	"fire_rate": 2400,
+	"life": 15
+    },
     "mob5": {
 	"movement": "line",
 	"fire": ["line"],
@@ -29,13 +36,20 @@
 	"fire_rate": 2400,
 	"life": 5
     },
+    "mob6": {
+	"movement": "mob1",
+	"fire": ["sinusoid", "line"],
+	"velocity": 0.2,
+	"fire_rate": 2400,
+	"life": 15
+    },
 
     "boss1": {
         "movement": "boss1",
         "fire": ["line", "sinusoid"],
         "velocity": 0.1,
 	"fire_rate": 2200,
-        "life": 100
+        "life": 250
     },
 
     "boss2": {
@@ -43,7 +57,7 @@
         "fire": ["line", "sinusoid", "sinusoid"],
         "velocity": 0.1,
 	"fire_rate": 5500,
-        "life": 550
+        "life": 750
     },
 
     "boss3": {
@@ -51,7 +65,7 @@
         "fire": ["line", "line", "sinusoid", "sinusoid"],
         "velocity": 0.1,
 	"fire_rate": 2500,
-        "life": 250
+        "life": 350
     },
 
     "boss4": {
@@ -59,12 +73,12 @@
         "fire": ["line", "sinusoid", "line", "sinusoid", "line", "sinusoid"],
         "velocity": 0.1,
 	"fire_rate": 3000,
-        "life": 400
+        "life": 450
     },
 
     "boss5": {
         "movement": "boss1",
-        "fire": ["line", "line", "line", "line", "line", "sinusoid"],
+        "fire": ["line", "line", "line", "line", "line", "sinusoid", "sinusoid"],
         "velocity": 0.1,
 	"fire_rate": 2000,
         "life": 800
