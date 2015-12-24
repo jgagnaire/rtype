@@ -153,7 +153,7 @@ class ColliderSystem : public ASystem
                 }
                 return ;
             }
-            if ((packet = dynamic_cast<TcpPacket*>(p))
+            else if ((packet = dynamic_cast<TcpPacket*>(p))
                     && p->getQuery() == static_cast<uint16_t>(Codes::JsonHitboxes))
             {
                 std::string tmp =std::string(static_cast<const char *>(p->getData()), p->getSize());
@@ -165,7 +165,7 @@ class ColliderSystem : public ASystem
                             x.second.manager.get<int>("y"));
                 }
             }
-            if ((up = dynamic_cast<UdpPacket*>(p))
+            else if ((up = dynamic_cast<UdpPacket*>(p))
                     && p->getQuery() == static_cast<uint16_t>(UdpCodes::Collided))
             {
                 std::string data = std::string(
@@ -182,6 +182,20 @@ class ColliderSystem : public ASystem
                     return ;
                 }
                 collide(id1, id2);
+            }
+            else if ((up = dynamic_cast<UdpPacket*>(p))
+                    && p->getQuery() == static_cast<uint16_t>(UdpCodes::BossDeath))
+            {
+                for (auto x = _eList->begin(); x != _eList->end();)
+                {
+                    if (x->first == 5000000000)
+                    {
+                        delete x->second;
+                        x = _eList->erase(x);
+                    }
+                    else
+                        ++x;
+                }
             }
         }
 
