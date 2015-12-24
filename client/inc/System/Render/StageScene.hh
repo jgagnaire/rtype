@@ -297,7 +297,7 @@ class StageScene : public Scene
                     }
                     else
                         _win.draw(_guiPlayers);
-                    if ((*x).second->manager.get<bool>("force"))
+                    if ((*x).second->manager.get<int>("force") != 1)
                     {
                         _pSprites[8].setPosition(
                                 sf::Vector2f((*x).second->manager.get<std::pair<float, float> >("position").first + 141,

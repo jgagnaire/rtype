@@ -34,7 +34,7 @@ bool        Collision::player(Entity &me, Entity &e, std::pair<float, float> &po
         --lifes;
         me.manager.set<int>("lifes", lifes);
         me.manager.set<int>("respawn", 3000);
-        me.manager.set<bool>("force", false);
+        me.manager.set<int>("force", 1);
     }
     return false;
 }
@@ -57,15 +57,13 @@ bool        Collision::mob(Entity &me, Entity &e, std::pair<float, float> &pos)
         if (e.manager.get<std::string>("type") == "shoot")
         {
              int life = me.manager.get<int>("life");
-             life -= e.manager.get<int>("damage");
+             life -= e.manager.get<int>("damage") * e.manager.get<Entity*>("Shooter")->manager.get<int>("force");
              me.manager.set<int>("life", life);
              pos = me.manager.get<std::pair<float, float> >("position");
              if (life <= 0)
              {
                  score = e.manager.get<Entity*>("Shooter")->manager.get<uint64_t>("score");
-                 if (e.manager.get<Entity*>("Shooter")->manager.get<bool>("force"))
-                     score += 5;
-                 score += 5;
+                 score += 5 * e.manager.get<Entity*>("Shooter")->manager.get<int>("force");
                  e.manager.get<Entity*>("Shooter")->manager.set<uint64_t>("score", score);
              }
              if (me.manager.get<std::string>("type") == "boss" && life > 0)
@@ -93,7 +91,7 @@ bool        Collision::bonus(Entity &me, Entity &e, std::pair<float, float>&)
     {
         if (me.manager.get<std::string>("name") == "force")
         {
-            e.manager.set<bool>("force", true);
+            e.manager.set<int>("force", me.manager.get<int>("power"));
         }
         else if (me.manager.get<std::string>("name") == "shield")
         {
