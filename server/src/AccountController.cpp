@@ -9,7 +9,7 @@ AccountController<T>::AccountController(std::list<UserManager<T> *> *cli)
 template<typename T>
 int	AccountController<T>::newData(UserManager<T> *cli) {
     cli->fillPacketStruct();
-    std::cout << "La query: " << cli->numQuery() << std::endl;
+	std::cout << "La query: " << cli->numQuery() << " " << cli->getIP() << std::endl;
 	switch (cli->numQuery()) {
 	case Enum::ACCOUNT_LOGIN:
 		return (static_cast<int>(accountLoginFct(cli)));
