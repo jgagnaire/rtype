@@ -267,7 +267,7 @@
     },
 
     "level2": {
-        "time": 60,
+        "time": 72,
         "background": "destroy",
         "music": "stage2",
         "monsters": [
