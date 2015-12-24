@@ -1,14 +1,14 @@
 "fires": {
     "line": {
 	"movement": "line",
-	"velocity": 4.5,
+	"velocity": 2.5,
 	"damage": 5,
 	"sprite": "normal_ball"
     },
 
     "sinusoid": {
 	"movement": "sinusoid",
-	"velocity": 4.5,
+	"velocity": 2.5,
 	"damage": 5,
 	"sprite": "normal_ball"
     },
