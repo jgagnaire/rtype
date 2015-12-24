@@ -85,6 +85,11 @@ class SystemManager
             lastEvent.setQuery(static_cast<uint16_t>(UdpCodes::KeyPressed));
             while (ea->getWin()->isOpen())
             {
+                if (_networkManager.isConnected() == false)
+                {
+                    std::cerr << "It seem that the server quit" << std::endl;
+                    return ;
+                }
                 start = std::chrono::steady_clock::now();
                 event = 0;
                 std::chrono::duration<double> diff = start - end;
