@@ -138,8 +138,6 @@ public:
 		const std::string &port = "") {
 		bool	                ret;
 
-		//std::cout << "DEBUUUUUUG: " << ((char *)_wr_buff + sizeof(T)) << "|"
-		//		<< _send_pack.front().data.size() << std::endl;
 		ret = s->absWriteOnClient(_wr_buff, sizeof(T) + _send_pack.front().data.size(),
 			ip, port);
 		delete[] _wr_buff;
