@@ -18,8 +18,8 @@
     "mob3": {
 	"movement": "sinusoid",
 	"fire": ["line"],
-	"velocity": 0.5,
-	"fire_rate": 250,
+	"velocity": 0.3,
+	"fire_rate": 1100,
 	"life": 20
     },
     "mob5": {
@@ -40,17 +40,17 @@
 
     "boss2": {
         "movement": "boss1",
-        "fire": ["line"],
+        "fire": ["line", "line", "sinusoid", "sinusoid" ],
         "velocity": 0.1,
-	"fire_rate": 250,
-        "life": 100
+	"fire_rate": 6000,
+        "life": 550
     },
 
     "boss3": {
         "movement": "boss1",
-        "fire": ["line"],
+        "fire": ["line", "line", "line", "sinusoid", "sinusoid", "line", "line", "sinusoid"],
         "velocity": 0.1,
-	"fire_rate": 250,
+	"fire_rate": 850,
         "life": 200
     },
 
