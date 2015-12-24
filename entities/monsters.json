@@ -56,17 +56,17 @@
 
     "boss4": {
         "movement": "boss1",
-        "fire": ["line"],
+        "fire": ["line", "sinusoid", "line", "sinusoid", "line", "sinusoid"],
         "velocity": 0.1,
-	"fire_rate": 1,
-        "life": 200
+	"fire_rate": 3000,
+        "life": 400
     },
 
     "boss5": {
         "movement": "boss1",
-        "fire": ["line"],
+        "fire": ["line", "line", "line", "line", "line", "sinusoid"],
         "velocity": 0.1,
-	"fire_rate": 1,
-        "life": 200
+	"fire_rate": 2000,
+        "life": 800
     }
 }
