@@ -187,79 +187,80 @@ class StageScene : public Scene
             for (auto x = _entities->begin(); x != _entities->end();)
             {
                 has_been_del = false;
-                if ((*x).second->manager.get<std::string>("type") == "shoot" ||
-                        (*x).second->manager.get<std::string>("type") == "mobshoot")
+                if (x->second->manager.get<std::string>("type") == "shoot" ||
+                        x->second->manager.get<std::string>("type") == "mobshoot")
                 {
-                    if ((*x).second->manager.get<Pattern::Side>("direction") == Pattern::Side::RIGHT)
+                    if (x->second->manager.get<Pattern::Side>("direction") == Pattern::Side::RIGHT)
                     {
-                        _shoot.setPosition(sf::Vector2f((*x).second->manager.get<std::pair<float, float> >("position").first,
-                                    (*x).second->manager.get<std::pair<float, float> >("position").second));
+                        _shoot.setPosition(sf::Vector2f(x->second->manager.get<std::pair<float, float> >("position").first,
+                                    x->second->manager.get<std::pair<float, float> >("position").second));
                         _shoot.update(duration);
                         _win.draw(_guiShoots);
                     }
                     else
                     {
-                        _shootEnnemy.setPosition(sf::Vector2f((*x).second->manager.get<std::pair<float, float> >("position").first,
-                                    (*x).second->manager.get<std::pair<float, float> >("position").second));
+                        _shootEnnemy.setPosition(sf::Vector2f(x->second->manager.get<std::pair<float, float> >("position").first,
+                                    x->second->manager.get<std::pair<float, float> >("position").second));
                         _shootEnnemy.update(duration);
                         _win.draw(_guiShootsEnnemy);
                     }
                 }
-                else if ((*x).second->manager.get<std::string>("type") == "boss")
+                else if (x->second->manager.get<std::string>("type") == "boss")
                 {
-                    if ((*x).second->manager.get<std::string>("name") == "boss1")
+                    if (x->second->manager.get<std::string>("name") == "boss1")
                         _guiMobs.manager.set<ADrawable*>("sprite", &(_pSprites[11]));
-                    else if ((*x).second->manager.get<std::string>("name") == "boss2")
+                    else if (x->second->manager.get<std::string>("name") == "boss2")
                         _guiMobs.manager.set<ADrawable*>("sprite", &(_pSprites[12]));
-                    else if ((*x).second->manager.get<std::string>("name") == "boss3")
+                    else if (x->second->manager.get<std::string>("name") == "boss3")
                         _guiMobs.manager.set<ADrawable*>("sprite", &(_pSprites[13]));
-                    else if ((*x).second->manager.get<std::string>("name") == "boss4")
+                    else if (x->second->manager.get<std::string>("name") == "boss4")
                         _guiMobs.manager.set<ADrawable*>("sprite", &(_pSprites[14]));
-                    else if ((*x).second->manager.get<std::string>("name") == "boss5")
+                    else if (x->second->manager.get<std::string>("name") == "boss5")
                         _guiMobs.manager.set<ADrawable*>("sprite", &(_pSprites[15]));
                     static_cast<AnimatedSprite*>(_guiMobs.manager.get<ADrawable*>("sprite"))->setPosition(
-                            sf::Vector2f((*x).second->manager.get<std::pair<float, float> >("position").first,
-                                (*x).second->manager.get<std::pair<float, float> >("position").second));
+                            sf::Vector2f(x->second->manager.get<std::pair<float, float> >("position").first,
+                                x->second->manager.get<std::pair<float, float> >("position").second));
                     _guiMobs.manager.get<ADrawable*>("sprite")->update(duration);
                     _win.draw(_guiMobs);
                 }
-                else if ((*x).second->manager.get<std::string>("type") == "mob")
+                else if (x->second->manager.get<std::string>("type") == "mob")
                 {
-                    if ((*x).second->manager.get<std::string>("name") == "mob1")
+                    if (x->second->manager.get<std::string>("name") == "mob1")
                         _guiMobs.manager.set<ADrawable*>("sprite", &(_pSprites[4]));
-                    else if ((*x).second->manager.get<std::string>("name") == "mob2")
+                    else if (x->second->manager.get<std::string>("name") == "mob2")
                         _guiMobs.manager.set<ADrawable*>("sprite", &(_pSprites[5]));
-                    else if ((*x).second->manager.get<std::string>("name") == "mob3")
+                    else if (x->second->manager.get<std::string>("name") == "mob3")
                         _guiMobs.manager.set<ADrawable*>("sprite", &(_pSprites[6]));
-                    else if ((*x).second->manager.get<std::string>("name") == "mob4")
+                    else if (x->second->manager.get<std::string>("name") == "mob4")
                         _guiMobs.manager.set<ADrawable*>("sprite", &(_pSprites[7]));
+                    else
+                        _guiMobs.manager.set<ADrawable*>("sprite", &(_pSprites[4]));
                     static_cast<AnimatedSprite*>(_guiMobs.manager.get<ADrawable*>("sprite"))->setPosition(
-                            sf::Vector2f((*x).second->manager.get<std::pair<float, float> >("position").first,
-                                (*x).second->manager.get<std::pair<float, float> >("position").second));
+                            sf::Vector2f(x->second->manager.get<std::pair<float, float> >("position").first,
+                                x->second->manager.get<std::pair<float, float> >("position").second));
                     _guiMobs.manager.get<ADrawable*>("sprite")->update(duration);
                     _win.draw(_guiMobs);
                 }
-                else if ((*x).second->manager.get<std::string>("type") == "bonus")
+                else if (x->second->manager.get<std::string>("type") == "bonus")
                 {
-                    if ((*x).second->manager.get<std::string>("name") == "force")
+                    if (x->second->manager.get<std::string>("name") == "force")
                         _guiMobs.manager.set<ADrawable*>("sprite", &(_pSprites[8]));
-                    else if ((*x).second->manager.get<std::string>("name") == "shield")
+                    else if (x->second->manager.get<std::string>("name") == "shield")
                         _guiMobs.manager.set<ADrawable*>("sprite", &(_pSprites[9]));
-                    else if ((*x).second->manager.get<std::string>("name") == "perfect_shield")
+                    else if (x->second->manager.get<std::string>("name") == "perfect_shield")
                         _guiMobs.manager.set<ADrawable*>("sprite", &(_pSprites[10]));
                     static_cast<AnimatedSprite*>(_guiMobs.manager.get<ADrawable*>("sprite"))->setPosition(
-                            sf::Vector2f((*x).second->manager.get<std::pair<float, float> >("position").first + 115,
-                                (*x).second->manager.get<std::pair<float, float> >("position").second));
+                            sf::Vector2f(x->second->manager.get<std::pair<float, float> >("position").first + 115,
+                                x->second->manager.get<std::pair<float, float> >("position").second));
                     _guiMobs.manager.get<ADrawable*>("sprite")->update(duration);
                     _win.draw(_guiMobs);
                 }
-                else if ((*x).second->manager.get<std::string>("type") == "explosion")
+                else if (x->second->manager.get<std::string>("type") == "explosion")
                 {
                     AnimatedSprite *ex = new AnimatedSprite;
                     static int count = 0;
 
-                    std::cout <<"POPO " << (*x).second->manager.get<bool>("little") << std::endl;
-                    if ((*x).second->manager.get<bool>("little") &&
+                    if (x->second->manager.get<bool>("little") &&
                             ex->load("client/res/explosion3_30.png", false, 24))
                         ;
                     else if (++count % 3 && ex->load("client/res/explosion_128.png", false, 24))
@@ -273,22 +274,23 @@ class StageScene : public Scene
                     }
                     if (ex)
                     {
-                        ex->setPosition(sf::Vector2f((*x).second->manager.get<std::pair<float, float> >("position").first,
-                                    (*x).second->manager.get<std::pair<float, float> >("position").second));
+                        ex->setPosition(sf::Vector2f(x->second->manager.get<std::pair<float, float> >("position").first,
+                                    x->second->manager.get<std::pair<float, float> >("position").second));
                         _explosions.push_back(ex);
                     }
+                    delete x->second;
                     x = _entities->erase(x);
                     has_been_del = true;
                 }
-                else if ((*x).second->manager.get<std::string>("type") == "player" &&
-                        (*x).second->manager.get<int>("lifes") > 0 && _players.empty() == false)
+                else if (x->second->manager.get<std::string>("type") == "player" &&
+                        x->second->manager.get<int>("lifes") > 0 && _players.empty() == false)
                 {
-                    _players[(*x).second->manager.get<std::string>("pseudo")]->setPosition(
-                            sf::Vector2f((*x).second->manager.get<std::pair<float, float> >("position").first,
-                                (*x).second->manager.get<std::pair<float, float> >("position").second));
-                    _players[(*x).second->manager.get<std::string>("pseudo")]->update(duration);
-                    _guiPlayers.manager.set<ADrawable*>("player", _players[(*x).second->manager.get<std::string>("pseudo")]);
-                    if ((*x).second->manager.get<int>("respawn") > 0)
+                    _players[x->second->manager.get<std::string>("pseudo")]->setPosition(
+                            sf::Vector2f(x->second->manager.get<std::pair<float, float> >("position").first,
+                                x->second->manager.get<std::pair<float, float> >("position").second));
+                    _players[x->second->manager.get<std::string>("pseudo")]->update(duration);
+                    _guiPlayers.manager.set<ADrawable*>("player", _players[x->second->manager.get<std::string>("pseudo")]);
+                    if (x->second->manager.get<int>("respawn") > 0)
                     {
                         static bool print = false;
                         print = !print;
@@ -297,29 +299,29 @@ class StageScene : public Scene
                     }
                     else
                         _win.draw(_guiPlayers);
-                    if ((*x).second->manager.get<int>("force") != 1)
+                    if (x->second->manager.get<int>("force") != 1)
                     {
                         _pSprites[8].setPosition(
-                                sf::Vector2f((*x).second->manager.get<std::pair<float, float> >("position").first + 141,
-                                    (*x).second->manager.get<std::pair<float, float> >("position").second - 5));
+                                sf::Vector2f(x->second->manager.get<std::pair<float, float> >("position").first + 141,
+                                    x->second->manager.get<std::pair<float, float> >("position").second - 5));
                         _pSprites[8].update(duration);
                         _guiPlayers.manager.set<ADrawable*>("player", &(_pSprites[8]));
                         _win.draw(_guiPlayers);
                     }
-                    if ((*x).second->manager.get<int>("shield") > 0)
+                    if (x->second->manager.get<int>("shield") > 0)
                     {
                         _pSprites[9].setPosition(
-                                sf::Vector2f((*x).second->manager.get<std::pair<float, float> >("position").first - 25,
-                                    (*x).second->manager.get<std::pair<float, float> >("position").second - 30));
+                                sf::Vector2f(x->second->manager.get<std::pair<float, float> >("position").first - 25,
+                                    x->second->manager.get<std::pair<float, float> >("position").second - 30));
                         _pSprites[9].update(duration);
                         _guiPlayers.manager.set<ADrawable*>("player", &(_pSprites[9]));
                         _win.draw(_guiPlayers);
                     }
-                    if ((*x).second->manager.get<int>("perfect_shield") > 0)
+                    if (x->second->manager.get<int>("perfect_shield") > 0)
                     {
                         _pSprites[10].setPosition(
-                                sf::Vector2f((*x).second->manager.get<std::pair<float, float> >("position").first + 22,
-                                    (*x).second->manager.get<std::pair<float, float> >("position").second));
+                                sf::Vector2f(x->second->manager.get<std::pair<float, float> >("position").first + 22,
+                                    x->second->manager.get<std::pair<float, float> >("position").second));
                         _pSprites[10].update(duration);
                         _guiPlayers.manager.set<ADrawable*>("player", &(_pSprites[10]));
                         _win.draw(_guiPlayers);

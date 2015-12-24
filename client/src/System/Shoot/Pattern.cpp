@@ -73,6 +73,66 @@ void	Pattern::boss2(Entity &e, Side s, int duration)
   e.manager.set("position", pos);
 }
 
+void	Pattern::mob1(Entity &e, Side s, int duration)
+  {
+    std::pair<float, float> pos = e.manager.get<std::pair<float, float> >("position");
+    float vel = duration * e.manager.get<float>("velocity");
+    if (s == Side::LEFT)
+      vel *= -1;
+    if (pos.first > 1000)
+      line(e, s, duration);
+    else if (pos.first < 1000 && pos.first > 250 && pos.second < 800)
+      {
+	pos.second -= vel;
+	e.manager.set("position", pos);
+      }
+    else if (pos.second >= 800 && pos.first > 200)
+      {
+    	line(e, s, duration);
+	return ;
+      }
+    else if (pos.first <= 200 && pos.second > 200)
+      {
+    	pos.second += vel;
+	e.manager.set("position", pos);
+      }
+    else if (pos.second <= 200 && pos.first <= 200)
+      {
+    	line(e, s, duration);
+	return ;
+      }
+  }
+
+void	Pattern::mob2(Entity &e, Side s, int duration)
+  {
+    std::pair<float, float> pos = e.manager.get<std::pair<float, float> >("position");
+    float vel = duration * e.manager.get<float>("velocity");
+    if (s == Side::LEFT)
+      vel *= -1;
+    if (pos.first > 1000)
+      line(e, s, duration);
+    else if (pos.first < 1000 && pos.first > 250 && pos.second > 500)
+      {
+	pos.second += vel;
+	e.manager.set("position", pos);
+      }
+    else if (pos.second <= 500 && pos.first > 200)
+      {
+    	line(e, s, duration);
+	return ;
+      }
+    else if (pos.first <= 200 && pos.second > 200 && pos.second < 800)
+      {
+    	pos.second -= vel;
+	e.manager.set("position", pos);
+      }
+    else if (pos.second >= 800 && pos.first <= 200)
+      {
+    	line(e, s, duration);
+	return ;
+      }
+  }
+
 std::function<void (Entity&, Pattern::Side, int)>   Pattern::getPattern(
         const std::string &name)
 {
@@ -84,6 +144,9 @@ std::function<void (Entity&, Pattern::Side, int)>   Pattern::getPattern(
         return &boss1;
     else if (name == "boss2")
       return &boss2;
+    else if (name == "mob1")
+      return &mob1;
+    else if (name == "mob2")
+      return &mob2;
     return &line;
 }
-

@@ -84,9 +84,7 @@ class SettingsScene : public Scene
             if (e != Key_Change && e & Key_Change)
             {
                 EventSum tmp = (e << 1) >> 1;
-                if (tmp == 126)
-                    std::cout << "I CLICK ON RETURN LOL "<< std::endl;
-                else if (tmp == 127)
+                if (tmp == 127)
                     send = E_Menu;
             }
         }

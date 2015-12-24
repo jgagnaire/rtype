@@ -1,17 +1,17 @@
 "monsters": {
     "mob1": {
-	"movement": "line",
-	"fire": ["line", "sinusoid", "line", "sinusoid"],
-	"velocity": 1.3,
-	"fire_rate": 250,
+	"movement": "mob1",
+	"fire": ["line"],
+	"velocity": 0.3,
+	"fire_rate": 2000,
 	"life": 5
     },
 
     "mob2": {
-	"movement": "sinusoid",
+	"movement": "mob2",
 	"fire": ["line"],
-	"velocity": 0.8,
-	"fire_rate": 250,
+	"velocity": 0.3,
+	"fire_rate": 2000,
 	"life": 10
     },
 
@@ -22,12 +22,19 @@
 	"fire_rate": 250,
 	"life": 20
     },
+    "mob5": {
+	"movement": "line",
+	"fire": ["line"],
+	"velocity": 0.3,
+	"fire_rate": 1800,
+	"life": 5
+    },
 
     "boss1": {
         "movement": "boss1",
-        "fire": ["line"],
+        "fire": ["line", "sinusoid"],
         "velocity": 0.1,
-	"fire_rate": 1,
+	"fire_rate": 1800,
         "life": 100
     },
 

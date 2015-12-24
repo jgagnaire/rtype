@@ -1,50 +1,217 @@
 "levels": {
     "level1": {
-        "time": 10,
+        "time": 55,
         "background": "city",
-        "music": "starfish",
+        "music": "stage1",
         "monsters": [
             {"mob1": {
                 "name": "mob1",
                 "appear_at_sec": 2,
-                "timeval": 4000,
+                "timeval": 900,
                 "time": 2,
                 "position": {
                     "x":  1920.0,
-                    "y": 270.0
+                    "y": 250.0
                 }
             }},
-
-            {"mob1": {
-                "name": "mob1",
-                "appear_at_sec": 3,
-                "timeval": 2000,
-                "time": 15,
-                "position": {
-                    "x": 1920.0,
-                    "y": 810.0
-                }
-            }},
-
-            {"mob1": {
-                "name": "mob1",
-                "appear_at_sec": 31,
-                "timeval": 2000,
-                "time": 15,
+	    {"mob2": {
+                "name": "mob2",
+                "appear_at_sec": 2,
+                "timeval": 900,
+                "time": 2,
                 "position": {
                     "x":  1920.0,
-                    "y": 600.0
+                    "y": 900.0
                 }
             }},
-
-            {"mob1": {
-                "name": "mob1",
-                "appear_at_sec": 30,
-                "timeval": 2000,
-                "time": 15,
+	    {"mob5": {
+                "name": "mob5",
+                "appear_at_sec": 8,
+                "timeval": 900,
+                "time": 1,
                 "position": {
-                    "x": 1920.0,
+                    "x":  1920.0,
+                    "y": 250.0
+                }
+            }},
+	    {"mob5": {
+                "name": "mob5",
+                "appear_at_sec": 8,
+                "timeval": 900,
+                "time": 1,
+                "position": {
+                    "x":  1920.0,
+                    "y": 900.0
+                }
+            }},
+	    {"mob1": {
+                "name": "mob1",
+                "appear_at_sec": 18,
+                "timeval": 900,
+                "time": 2,
+                "position": {
+                    "x":  1920.0,
+                    "y": 250.0
+                }
+            }},
+	    {"mob2": {
+                "name": "mob2",
+                "appear_at_sec": 18,
+                "timeval": 900,
+                "time": 2,
+                "position": {
+                    "x":  1920.0,
+                    "y": 900.0
+                }
+            }},
+	    {"mob5": {
+                "name": "mob5",
+                "appear_at_sec": 20,
+                "timeval": 1800,
+                "time": 3,
+                "position": {
+                    "x":  1920.0,
+                    "y": 900.0
+                }
+            }},
+	    {"mob5": {
+                "name": "mob5",
+                "appear_at_sec": 20,
+                "timeval": 1800,
+                "time": 3,
+                "position": {
+                    "x":  1920.0,
+                    "y": 500.0
+                }
+	    }},
+	    {"mob5": {
+                "name": "mob5",
+                "appear_at_sec": 20,
+                "timeval": 1800,
+                "time": 3,
+                "position": {
+                    "x":  1920.0,
+                    "y": 150.0
+                }
+            }},
+	    {"mob1": {
+                "name": "mob1",
+                "appear_at_sec": 23,
+                "timeval": 1200,
+                "time": 4,
+                "position": {
+                    "x":  1920.0,
+                    "y": 250.0
+                }
+            }},
+	    {"mob2": {
+                "name": "mob2",
+                "appear_at_sec": 23,
+                "timeval": 1200,
+                "time": 4,
+                "position": {
+                    "x":  1920.0,
+                    "y": 900.0
+                }
+            }},
+	    {"mob5": {
+                "name": "mob5",
+                "appear_at_sec": 35,
+                "timeval": 1800,
+                "time": 3,
+                "position": {
+                    "x":  1920.0,
+                    "y": 900.0
+                }
+            }},
+	    {"mob5": {
+                "name": "mob5",
+                "appear_at_sec": 35,
+                "timeval": 1800,
+                "time": 3,
+                "position": {
+                    "x":  1920.0,
+                    "y": 500.0
+                }
+	    }},
+	    {"mob5": {
+                "name": "mob5",
+                "appear_at_sec": 35,
+                "timeval": 1800,
+                "time": 3,
+                "position": {
+                    "x":  1920.0,
+                    "y": 150.0
+                }
+            }},
+	    {"mob5": {
+                "name": "mob5",
+                "appear_at_sec": 42,
+                "timeval": 1800,
+                "time": 3,
+                "position": {
+                    "x":  1920.0,
+                    "y": 1100.0
+                }
+            }},
+	    {"mob5": {
+                "name": "mob5",
+                "appear_at_sec": 42,
+                "timeval": 1800,
+                "time": 3,
+                "position": {
+                    "x":  1920.0,
+                    "y": 700.0
+                }
+	    }},
+	    {"mob5": {
+                "name": "mob5",
+                "appear_at_sec": 42,
+                "timeval": 1800,
+                "time": 3,
+                "position": {
+                    "x":  1920.0,
+                    "y": 300.0
+                }
+            }},
+	    {"mob1": {
+                "name": "mob1",
+                "appear_at_sec": 47,
+                "timeval": 2200,
+                "time": 5,
+                "position": {
+                    "x":  1920.0,
+                    "y": 200.0
+                }
+            }},
+	    {"mob2": {
+                "name": "mob2",
+                "appear_at_sec": 47,
+                "timeval": 2200,
+                "time": 5,
+                "position": {
+                    "x":  1920.0,
                     "y": 950.0
+                }
+            }},
+	    	    {"mob1": {
+                "name": "mob1",
+                "appear_at_sec": 57,
+                "timeval": 1700,
+                "time": 3,
+                "position": {
+                    "x":  1920.0,
+                    "y": 500.0
+                }
+            }},
+	    {"mob2": {
+                "name": "mob2",
+                "appear_at_sec": 57,
+                "timeval": 1700,
+                "time": 3,
+                "position": {
+                    "x":  1920.0,
+                    "y": 720.0
                 }
             }}
         ],
@@ -59,6 +226,16 @@
                     "y": 150.0
                 }
             }},
+	    {"force": {
+                "name": "bonus1",
+                "appear_at_sec": 32,
+                "for_everyone": 0,
+                "position": {
+                    "x": 1920.0,
+                    "y": 450.0
+                }
+            }},
+
 
             {"shield": {
                 "name": "bonus4",
@@ -92,7 +269,7 @@
     "level2": {
         "time": 10,
         "background": "destroy",
-        "music": "experts",
+        "music": "stage2",
         "monsters": [
             {"mob1": {
                 "name": "mob1",
@@ -204,7 +381,7 @@
     "level3": {
         "time": 60,
         "background": "nectar",
-        "music": "pumpitup",
+        "music": "stage3",
         "monsters": [
             {"mob1": {
                 "name": "mob1",
@@ -316,7 +493,7 @@
     "level4": {
         "time": 60,
         "background": "terror",
-        "music": "attack",
+        "music": "stage4",
         "monsters": [
             {"mob1": {
                 "name": "mob1",
@@ -439,7 +616,7 @@
     "level5": {
         "time": 60,
         "background": "reborn",
-        "music": "bosswave",
+        "music": "stage5",
         "monsters": [
             {"mob2": {
                 "name": "mob2",
