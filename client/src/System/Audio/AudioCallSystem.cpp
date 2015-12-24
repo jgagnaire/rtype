@@ -1,6 +1,7 @@
 #include <algorithm>
 #include "AudioCallSystem.hh"
 #include "Utility/Clock.hh"
+#include "Network/NetworkManager.hh"
 
 AudioCallSystem::AudioCallSystem() : _isActive(false)
 {
@@ -91,7 +92,7 @@ void AudioCallSystem::addPacket(SoundBuffer *buffer)
   tmp = new UdpPacket();
   tmp->setSize(static_cast<uint16_t>(buffer->getSampleCount() * sizeof(short int)));
   data = new short int [buffer->getSampleCount()];
-  tmp->setQuery(CODE_SEND_PACKET);
+  tmp->setQuery(static_cast<uint16_t>(UdpCodes::CodeSendPacket));
   tmpData = const_cast<short int *>(buffer->getSamples());
   std::copy(tmpData, tmpData + buffer->getSampleCount(), static_cast<short int *>(data));
   tmp->setData(data);
@@ -132,7 +133,7 @@ void AudioCallSystem::in(IPacket *packet)
   const void *tmpData;
 
   if (!dynamic_cast<UdpPacket *>(packet)
-      || packet->getQuery() != CODE_RECEIVE_PACKET)
+      || packet->getQuery() != static_cast<uint16_t>(UdpCodes::CodeReceivePacket))
     return ;
   tmpData = packet->getData();
   pseudo = getPseudo(tmpData, packet->getSize());
