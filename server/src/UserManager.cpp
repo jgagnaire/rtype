@@ -370,13 +370,11 @@ void                    UserManager<T>::clearLevel() {
     keypressed = 0;
     position.clear();
     fire = false;
-    switch_weapon = false;
     is_dead = false;
     position.x = 0;
     position.y = Enum::GAME_SIZE_HEIGHT / 2;
-    force = 1;
-    protection = 0;
     respawn = Enum::RESPAWN_TIME;
+    perfect_shield = 0;
     g.sendPosition(g.getGameByName(gameroom), this);
 }
 

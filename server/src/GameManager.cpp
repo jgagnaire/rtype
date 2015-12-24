@@ -244,7 +244,7 @@ void        GameManager<SCK>::fireMob(Game<SCK> *game, Entity *monster,
 template <typename SCK>
 bool
 GameManager<SCK>::checkEntities(Game<SCK> *game,
-				std::pair<std::string, Entity&> entity,
+				std::pair<std::string, Entity&> &entity,
 				int time,
 				uint64_t duration,
 				const std::string &ent_name) {
@@ -260,7 +260,7 @@ GameManager<SCK>::checkEntities(Game<SCK> *game,
 	Entity	*ent =
 	  new Entity(tmp.manager.get<Entity>(ent_name).manager.get<Entity>(entity.first));
 	ent->manager.add<uint64_t>("id", game->monster_ids++);
-	entity.second.manager.set<int>("refresh", time);
+	entity.second.manager.set<int>("refresh", 0);
 	entity.second.manager.set<int>("time", entity.second.manager.get<int>("time") - 1);
 	game->system[ent_name]->handle(entity.first, ent, true, pos);
       }
@@ -271,6 +271,7 @@ GameManager<SCK>::checkEntities(Game<SCK> *game,
       }
     }
     else {
+      std::cout << "APPARITION MOB A LA SECONDE " << time << std::endl;
       Entity	*ent =
 	new Entity(tmp.manager.get<Entity>(ent_name).manager.get<Entity>(entity.first));
       entity.second.manager.add<int>("refresh", duration);
@@ -279,15 +280,17 @@ GameManager<SCK>::checkEntities(Game<SCK> *game,
       else
 	ent->manager.add<uint64_t>("id", game->monster_ids++);
       game->system[ent_name]->handle(entity.first, ent, true, pos);
-      if (entity.second.manager.exist<int>("time"))
+      if (entity.second.manager.exist<int>("time")) {
 	entity.second.manager.set<int>("time",
 				       entity.second.manager.get<int>("time") - 1);
+      }
       else
 	return (true);
     }
   }
-  if (entity.second.manager.exist<int>("time"))
+  if (entity.second.manager.exist<int>("time")) {
     return (entity.second.manager.get<int>("time") <= 0);
+  }
   return (false);
 }
 
@@ -298,21 +301,24 @@ bool        GameManager<SCK>::updateObjSighting(Game<SCK> *game, uint64_t time,
   Entity	&entity =
     tmp.manager.get<Entity>("levels").manager.get<Entity>(game->lvl_name);
   std::vector<Entity>  &objs = entity.manager.get<std::vector<Entity> >(ent_name);
+  std::vector<Entity>  tmp_objs;
 
-  for (auto obj = objs.begin(); obj != objs.end();) {
-    if (objs.size() == 0)
-      return (true);
-    auto m = obj->manager.getAll<Entity>();
-    if (m.empty())
-      return (true);
-    std::pair<std::string, Entity&> tmp_obj = {m[0].first,
-						   obj->manager.get<Entity>(m[0].first)};
-    if (!m.empty() && checkEntities(game, tmp_obj,
-				    entity.manager.get<int>("timeleft"), time, ent_name))
-      obj = objs.erase(obj);
-    else
-      ++obj;
-  }
+  objs.erase(std::remove_if(objs.begin(), objs.end(), [&](Entity &e) {
+	auto m = e.manager.getAll<Entity>();
+	std::pair<std::string, Entity&> tmp_obj = {m[0].first,
+						   e.manager.get<Entity>(m[0].first)};
+	if (!(m.empty() || checkEntities(game, tmp_obj,
+					 entity.manager.get<int>("timeleft"), time, ent_name)))
+	  tmp_objs.push_back(e);
+	return (false);
+      }), objs.end());
+  std::cout << std::endl;
+  entity.manager.remove<std::vector<Entity> >(ent_name);
+  entity.manager.add<std::vector<Entity> >(ent_name, std::vector<Entity>());
+  std::vector<Entity>  &stock = entity.manager.get<std::vector<Entity> >(ent_name);
+  for (auto obj = tmp_objs.begin();
+       obj != tmp_objs.end(); ++obj)
+    stock.push_back(*obj);
   return (true);
 }
 
@@ -354,19 +360,19 @@ template <typename SCK>
 bool        GameManager<SCK>::update(Game<SCK> *game, uint64_t time) {
   if (updateTime(game))
     updateBoss(game);
-    updatePositions(game, time);
-    updateObjSighting(game, time, "monsters");
-    updateObjSighting(game, time, "bonuses");
-    game->system["shoot"]->update(static_cast<std::size_t>(time), game);
-    game->system["monsters"]->update(static_cast<std::size_t>(time), game);
-    game->system["bonuses"]->update(static_cast<std::size_t>(time), game);
-    game->system["boss"]->update(static_cast<std::size_t>(time), game);
-    for (auto p = game->players.begin(); p != game->players.end(); ++p)
-      if (!(*p)->isDead())
-	(*p)->updateBonus(time);
-    ASystem::collision(game->system, game->players, game->entities);
-    return (!(game->players.empty() ||
-	      isAllDead(game) || bossIsDead(game)));
+  updatePositions(game, time);
+  updateObjSighting(game, time, "monsters");
+  updateObjSighting(game, time, "bonuses");
+  game->system["shoot"]->update(static_cast<std::size_t>(time), game);
+  game->system["monsters"]->update(static_cast<std::size_t>(time), game);
+  game->system["bonuses"]->update(static_cast<std::size_t>(time), game);
+  game->system["boss"]->update(static_cast<std::size_t>(time), game);
+  for (auto p = game->players.begin(); p != game->players.end(); ++p)
+    if (!(*p)->isDead())
+      (*p)->updateBonus(time);
+  ASystem::collision(game->system, game->players, game->entities);
+  return (!(game->players.empty() ||
+	    isAllDead(game) || bossIsDead(game)));
 }
 
 template <typename SCK>
@@ -524,7 +530,17 @@ bool        GameManager<SCK>::isAllReady(const std::string &roomname) {
 }
 
 template <typename SCK>
-const std::list<Game<SCK> *>        &GameManager<SCK>::getGames() const { return (_games); }
+const std::list<Game<SCK> *>        &GameManager<SCK>::getGames() {
+  for (auto it = _games.begin(); it != _games.end();) {
+    if ((*it)->players.size() == 0) {
+      it = _games.erase(it);
+      break ;
+    }
+    else
+      ++it;
+  }
+  return (_games);
+}
 
 #if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined (_WIN64)
 template class GameManager<SOCKET>;

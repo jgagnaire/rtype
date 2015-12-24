@@ -52,7 +52,6 @@ struct Game {
     float					time;
     std::string					lvl_name;
     std::unordered_map<std::string, Entity>	entities;
-    Entity					*level;
     std::unordered_map<std::string, std::string>  content_system;
     uint64_t		ids = 0;
     uint64_t		shoot_player_ids = Enum::MAX_ID;
@@ -74,7 +73,7 @@ public:
     bool                            joinRoom(const std::string &, UserManager<SCK> *);
     bool                            roomIsFull(const std::string &);
     bool                            isAllReady(const std::string &);
-    const std::list<Game<SCK> *>    &getGames() const;
+    const std::list<Game<SCK> *>    &getGames();
     void                            launchGame(const std::string &);
     static void                     createGame(Game<SCK> *);
     bool                            isPlaying(const std::string &);
@@ -97,7 +96,7 @@ private:
 						      const std::string &);
     bool			    updateBoss(Game<SCK> *);
     bool			    checkEntities(Game<SCK> *, 
-						  std::pair<std::string, Entity&>,
+						  std::pair<std::string, Entity&> &,
 						  int,
 						  uint64_t,
 						  const std::string &);
