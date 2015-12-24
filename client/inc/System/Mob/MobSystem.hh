@@ -46,6 +46,7 @@ class	MobSystem : public ASystem
         MobSystem(std::unordered_map<uint64_t, Entity*> *list) : isActiv(false), _eList(list), _lvl(1) {
             _eventList.push_back(E_Stage);
             _eventList.push_back(E_Ready);
+            _eventList.push_back(NewStage);
             _durationAnimation = 0;
             _event = noEvent;
             _waitingmobs.reserve(10);
@@ -140,44 +141,8 @@ class	MobSystem : public ASystem
         virtual void                    in(IPacket *p)
         {
             TcpPacket       *packet;
-            UdpPacket       *up;
 
-            if ((up = dynamic_cast<UdpPacket*>(p)) &&
-                    up->getQuery() == static_cast<uint16_t>(UdpCodes::Collided))
-            {
-                std::string data = std::string(
-                        static_cast<const char*>(p->getData()),
-                        p->getSize());
-                uint64_t id1 = std::stoll(data.substr(0, data.find(":")));
-                uint64_t id2 = std::stoll(data.substr(data.find(":") + 1));
-                uint64_t boss = (id1 > id2 ? id1 : id2);
-                if (boss + 1 == (*_eList)[-1]->manager.get<uint64_t>("lastBoss") &&
-                        _eList->find(boss) == _eList->end())
-                {
-                    for (auto x = _eList->begin(); x != _eList->end();)
-                    {
-                        if (x->first >= 1000000000 && x->first != static_cast<uint64_t>(-1))
-                        {
-                            delete x->second;
-                            x = _eList->erase(x);
-                        }
-                        else if (x->first < 1000000000)
-                        {
-                            std::pair<float, float> pos(0, 1080 / 2);
-                            x->second->manager.set<int>("perfect_shield", 0);
-                            x->second->manager.set<int>("respawn", 0);
-                            x->second->manager.set<std::pair<float, float> >("position", pos);
-                            ++x;
-                        }
-                        else
-                            ++x;
-                    }
-                    ++_lvl;
-                    _event = NewStage;
-                    _durationAnimation = (*_eList)[-1]->manager.get<int>("changeDuration");
-                }
-            }
-            if ((packet = dynamic_cast<TcpPacket*>(p)))
+           if ((packet = dynamic_cast<TcpPacket*>(p)))
             {
                 std::string tmp = std::string(static_cast<const char *>(p->getData()), p->getSize());
                 if (p->getQuery() == static_cast<uint16_t>(Codes::JsonMonsters))
@@ -272,6 +237,29 @@ class	MobSystem : public ASystem
         }
         virtual bool                    handle(EventSum ev)
         {
+            if (ev == NewStage)
+            {
+                for (auto x = _eList->begin(); x != _eList->end();)
+                {
+                    if (x->first >= 1000000000 && x->first != static_cast<uint64_t>(-1))
+                    {
+                        delete x->second;
+                        x = _eList->erase(x);
+                    }
+                    else if (x->first < 1000000000)
+                    {
+                        std::pair<float, float> pos(0, 1080 / 2);
+                        x->second->manager.set<int>("perfect_shield", 0);
+                        x->second->manager.set<int>("respawn", 0);
+                        x->second->manager.set<std::pair<float, float> >("position", pos);
+                        ++x;
+                    }
+                    else
+                        ++x;
+                }
+                ++_lvl;
+                _durationAnimation = (*_eList)[-1]->manager.get<int>("changeDuration");
+            }
             if (ev == E_Ready)
             {
                 _jsonEntities.clear();

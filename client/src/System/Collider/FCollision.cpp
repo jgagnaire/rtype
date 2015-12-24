@@ -19,7 +19,7 @@ bool        Collision::player(Entity &me, Entity &e, std::pair<float, float> &po
         if (e.manager.get<std::string>("type") == "mobshoot")
             shield -= e.manager.get<int>("damage");
         else
-            shield -= 50;
+            shield = 0;
         if (shield < 0)
             shield = 0;
         me.manager.set<int>("shield", shield);
@@ -74,6 +74,8 @@ bool        Collision::mob(Entity &me, Entity &e, std::pair<float, float> &pos)
                  pos = std::pair<float, float>(
                          me.manager.get<std::pair<float, float> >("position").first,
                          e.manager.get<std::pair<float, float> >("position").second);
+             if (me.manager.get<std::string>("type") == "boss")
+                 return false;
              return life <= 0;
         }
         if (me.manager.get<std::string>("type") == "boss")

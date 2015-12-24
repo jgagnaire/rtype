@@ -188,7 +188,8 @@ class ColliderSystem : public ASystem
             {
                 for (auto x = _eList->begin(); x != _eList->end();)
                 {
-                    if (x->first == 5000000000)
+                    if (x->first >= 5000000000
+                            && x->first < 6000000000)
                     {
                         delete x->second;
                         x = _eList->erase(x);
@@ -196,6 +197,7 @@ class ColliderSystem : public ASystem
                     else
                         ++x;
                 }
+                _event = NewStage;
             }
         }
 
