@@ -412,8 +412,10 @@ bool            GameManager<SCK>::gameTransition(Game<SCK> *game) {
     return (false);
   game->lvl_name.pop_back();
   game->lvl_name.push_back(lvl + 1);
-  for (auto p = game->players.begin(); p != game->players.end(); ++p)
+  for (auto p = game->players.begin(); p != game->players.end(); ++p) {
+    (*p)->writeStruct({0, static_cast<uint16_t>(Enum::BOSS_DESTROYED)});
     (*p)->clearLevel();
+  }
   std::cout << "le " << game->lvl_name << " va bientot commencer..." << std::endl;
   for(; time > GameManager<SCK>::getTimeInSecond(););
   return (true);
