@@ -271,7 +271,6 @@ GameManager<SCK>::checkEntities(Game<SCK> *game,
       }
     }
     else {
-      std::cout << "APPARITION MOB A LA SECONDE " << time << std::endl;
       Entity	*ent =
 	new Entity(tmp.manager.get<Entity>(ent_name).manager.get<Entity>(entity.first));
       entity.second.manager.add<int>("refresh", duration);
@@ -312,7 +311,6 @@ bool        GameManager<SCK>::updateObjSighting(Game<SCK> *game, uint64_t time,
 	  tmp_objs.push_back(e);
 	return (false);
       }), objs.end());
-  std::cout << std::endl;
   entity.manager.remove<std::vector<Entity> >(ent_name);
   entity.manager.add<std::vector<Entity> >(ent_name, std::vector<Entity>());
   std::vector<Entity>  &stock = entity.manager.get<std::vector<Entity> >(ent_name);
