@@ -48,7 +48,7 @@ class	MobSystem : public ASystem
             _eventList.push_back(E_Ready);
             _durationAnimation = 0;
             _event = noEvent;
-            _waitingmobs.reserve(200);
+            _waitingmobs.reserve(10);
         }
         virtual ~MobSystem() {}
 
@@ -216,6 +216,7 @@ class	MobSystem : public ASystem
                     {
                         std::vector<Entity*>  l;
 
+                        l.reserve(200);
                         for (auto &monsters : main.second.manager.get<std::vector<Entity> >("monsters"))
                         {
                             for (auto &monster : monsters.manager.getAll<Entity>())
