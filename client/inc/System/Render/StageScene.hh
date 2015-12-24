@@ -107,6 +107,7 @@ class StageScene : public Scene
         {
             _durationAnimation = (*_entities)[-1]->manager.get<int>("changeDuration");
             _changing = true;
+            _changeScene.manager.set<ADrawable*>("2text", &(_textstage[_stageNb - 1]));
         }
 
         void            setStage()
@@ -117,7 +118,6 @@ class StageScene : public Scene
             _b4.manager.set<ADrawable*>("background", _s4[_stageNb - 1]);
             _b5.manager.set<ADrawable*>("background", _s5[_stageNb - 1]);
             _changeScene.manager.set<ADrawable*>("2numero", &(_numstage[_stageNb - 1]));
-            _changeScene.manager.set<ADrawable*>("2text", &(_textstage[_stageNb - 1]));
             (*_entities)[-1]->manager.set<uint64_t>("lastShoot", 1000000000);
             (*_entities)[-1]->manager.set<uint64_t>("lastMob", 2000000000);
             (*_entities)[-1]->manager.set<uint64_t>("lastBonus", 3000000000);
