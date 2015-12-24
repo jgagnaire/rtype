@@ -48,7 +48,7 @@ class ComponentManager
   {
     if (components.find(name) != components.end())
       {
-	if (components[name]->getType() == typeid(Type).name())
+	//	if (components[name]->getType() == typeid(Type).name())
 	  static_cast<Component<Type>*>(components[name])->setValue(value);
       }
     else
