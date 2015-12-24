@@ -118,6 +118,7 @@ void        GameManager<SCK>::fireBall(Game<SCK> *game, UserManager<SCK> *u,
     ent->manager.set<int>("damage", 5);
     ent->manager.set<float>("velocity", 4.5);
     ent->manager.set<int>("damage", ent->manager.get<int>("damage") * u->getForce());
+    std::cout << "Puissance de tir: " << ent->manager.get<int>("damage");
     game->system["shoot"]->handle("sinusoid", ent, false, u->getPosition());
   }
   else {
@@ -126,6 +127,7 @@ void        GameManager<SCK>::fireBall(Game<SCK> *game, UserManager<SCK> *u,
     ent->manager.set<int>("damage", 5);
     ent->manager.set<float>("velocity", 4.5);
     ent->manager.set<int>("damage", ent->manager.get<int>("damage") * u->getForce());
+    std::cout << "Puissance de tir: " << ent->manager.get<int>("damage");
     game->system["shoot"]->handle("line", ent, false, u->getPosition());
   }
 }

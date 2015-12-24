@@ -40,7 +40,7 @@
 
     "boss2": {
         "movement": "boss1",
-        "fire": ["line", "sinusoid", "sinusoid" ],
+        "fire": ["line", "sinusoid", "sinusoid"],
         "velocity": 0.1,
 	"fire_rate": 5500,
         "life": 550
