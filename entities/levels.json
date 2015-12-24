@@ -1,217 +1,87 @@
 "levels": {
     "level1": {
-        "time": 55,
+        "time": 65,
         "background": "city",
         "music": "stage1",
         "monsters": [
-            {"mob1": {
-                "name": "mob1",
-                "appear_at_sec": 2,
-                "timeval": 900,
+            {"mob5": {
+                "name": "mob5",
+                "appear_at_sec": 5,
+                "timeval": 1300,
                 "time": 2,
                 "position": {
                     "x":  1920.0,
                     "y": 250.0
                 }
             }},
-	    {"mob2": {
-                "name": "mob2",
-                "appear_at_sec": 2,
-                "timeval": 900,
-                "time": 2,
-                "position": {
-                    "x":  1920.0,
-                    "y": 900.0
-                }
-            }},
 	    {"mob5": {
                 "name": "mob5",
-                "appear_at_sec": 8,
-                "timeval": 900,
-                "time": 1,
-                "position": {
-                    "x":  1920.0,
-                    "y": 250.0
-                }
-            }},
-	    {"mob5": {
-                "name": "mob5",
-                "appear_at_sec": 8,
-                "timeval": 900,
-                "time": 1,
-                "position": {
-                    "x":  1920.0,
-                    "y": 900.0
-                }
-            }},
-	    {"mob1": {
-                "name": "mob1",
-                "appear_at_sec": 18,
-                "timeval": 900,
-                "time": 2,
-                "position": {
-                    "x":  1920.0,
-                    "y": 250.0
-                }
-            }},
-	    {"mob2": {
-                "name": "mob2",
-                "appear_at_sec": 18,
-                "timeval": 900,
-                "time": 2,
-                "position": {
-                    "x":  1920.0,
-                    "y": 900.0
-                }
-            }},
-	    {"mob5": {
-                "name": "mob5",
-                "appear_at_sec": 20,
-                "timeval": 1800,
-                "time": 3,
-                "position": {
-                    "x":  1920.0,
-                    "y": 900.0
-                }
-            }},
-	    {"mob5": {
-                "name": "mob5",
-                "appear_at_sec": 20,
-                "timeval": 1800,
-                "time": 3,
-                "position": {
-                    "x":  1920.0,
-                    "y": 500.0
-                }
-	    }},
-	    {"mob5": {
-                "name": "mob5",
-                "appear_at_sec": 20,
-                "timeval": 1800,
-                "time": 3,
-                "position": {
-                    "x":  1920.0,
-                    "y": 150.0
-                }
-            }},
-	    {"mob1": {
-                "name": "mob1",
-                "appear_at_sec": 23,
-                "timeval": 1200,
-                "time": 4,
-                "position": {
-                    "x":  1920.0,
-                    "y": 250.0
-                }
-            }},
-	    {"mob2": {
-                "name": "mob2",
-                "appear_at_sec": 23,
-                "timeval": 1200,
-                "time": 4,
-                "position": {
-                    "x":  1920.0,
-                    "y": 900.0
-                }
-            }},
-	    {"mob5": {
-                "name": "mob5",
-                "appear_at_sec": 35,
-                "timeval": 1800,
-                "time": 3,
-                "position": {
-                    "x":  1920.0,
-                    "y": 900.0
-                }
-            }},
-	    {"mob5": {
-                "name": "mob5",
-                "appear_at_sec": 35,
-                "timeval": 1800,
-                "time": 3,
-                "position": {
-                    "x":  1920.0,
-                    "y": 500.0
-                }
-	    }},
-	    {"mob5": {
-                "name": "mob5",
-                "appear_at_sec": 35,
-                "timeval": 1800,
-                "time": 3,
-                "position": {
-                    "x":  1920.0,
-                    "y": 150.0
-                }
-            }},
-	    {"mob5": {
-                "name": "mob5",
-                "appear_at_sec": 42,
-                "timeval": 1800,
-                "time": 3,
-                "position": {
-                    "x":  1920.0,
-                    "y": 1100.0
-                }
-            }},
-	    {"mob5": {
-                "name": "mob5",
-                "appear_at_sec": 42,
-                "timeval": 1800,
-                "time": 3,
-                "position": {
-                    "x":  1920.0,
-                    "y": 700.0
-                }
-	    }},
-	    {"mob5": {
-                "name": "mob5",
-                "appear_at_sec": 42,
-                "timeval": 1800,
-                "time": 3,
-                "position": {
-                    "x":  1920.0,
-                    "y": 300.0
-                }
-            }},
-	    {"mob1": {
-                "name": "mob1",
-                "appear_at_sec": 47,
-                "timeval": 2200,
+                "appear_at_sec": 12,
+                "timeval": 1500,
                 "time": 5,
+                "position": {
+                    "x":  1920.0,
+                    "y": 250.0
+                }
+            }},
+	    {"mob5": {
+                "name": "mob5",
+                "appear_at_sec": 22,
+                "timeval": 1300,
+                "time": 2,
+                "position": {
+                    "x":  1920.0,
+                    "y": 900.0
+                }
+            }},
+	    {"mob5": {
+                "name": "mob5",
+                "appear_at_sec": 28,
+                "timeval": 1400,
+                "time": 2,
                 "position": {
                     "x":  1920.0,
                     "y": 200.0
                 }
             }},
-	    {"mob2": {
-                "name": "mob2",
-                "appear_at_sec": 47,
-                "timeval": 2200,
-                "time": 5,
+	    {"mob1": {
+                "name": "mob1",
+                "appear_at_sec": 34,
+                "timeval": 1600,
+                "time": 3,
                 "position": {
                     "x":  1920.0,
-                    "y": 950.0
+                    "y": 250.0
                 }
             }},
-	    	    {"mob1": {
-                "name": "mob1",
-                "appear_at_sec": 57,
-                "timeval": 1700,
+	    {"mob2": {
+                "name": "mob2",
+                "appear_at_sec": 34,
+                "timeval": 1600,
+                "time": 3,
+                "position": {
+                    "x":  1920.0,
+                    "y": 900.0
+                }
+            }},
+	    {"mob5": {
+                "name": "mob5",
+                "appear_at_sec": 45,
+                "timeval": 1900,
+                "time": 3,
+                "position": {
+                    "x":  1920.0,
+                    "y": 900.0
+                }
+            }},
+	    {"mob5": {
+                "name": "mob5",
+                "appear_at_sec": 55,
+                "timeval": 1900,
                 "time": 3,
                 "position": {
                     "x":  1920.0,
                     "y": 500.0
-                }
-            }},
-	    {"mob2": {
-                "name": "mob2",
-                "appear_at_sec": 57,
-                "timeval": 1700,
-                "time": 3,
-                "position": {
-                    "x":  1920.0,
-                    "y": 720.0
                 }
             }}
         ],
@@ -246,7 +116,25 @@
                     "y": 150.0
                 }
             }},
-
+	    {"shield": {
+                "name": "bonus4",
+                "appear_at_sec": 26,
+                "for_everyone": 0,
+                "position": {
+                    "x": 1920.0,
+                    "y": 650.0
+                }
+	    }},
+	    {"shield": {
+                "name": "bonus4",
+                "appear_at_sec": 48,
+                "for_everyone": 0,
+                "position": {
+                    "x": 1920.0,
+                    "y": 500.0
+                }
+            }},
+	    
             {"perfect_shield": {
                 "name": "bonus3",
                 "appear_at_sec": 14,
@@ -273,28 +161,18 @@
         "monsters": [
 	    {"mob5": {
                 "name": "mob5",
-                "appear_at_sec": 4,
-                "timeval": 1800,
+                "appear_at_sec": 10,
+                "timeval": 2200,
                 "time": 5,
                 "position": {
                     "x":  1920.0,
                     "y": 500.0
                 }
 	    }},
-	    {"mob5": {
-                "name": "mob5",
-                "appear_at_sec": 4,
-                "timeval": 1800,
-                "time": 5,
-                "position": {
-                    "x":  1920.0,
-                    "y": 150.0
-                }
-            }},
 	    {"mob1": {
                 "name": "mob1",
-                "appear_at_sec": 7,
-                "timeval": 1200,
+                "appear_at_sec": 15,
+                "timeval": 1800,
                 "time": 5,
                 "position": {
                     "x":  1920.0,
@@ -303,47 +181,27 @@
             }},
 	    {"mob2": {
                 "name": "mob2",
-                "appear_at_sec": 7,
-                "timeval": 1200,
+                "appear_at_sec": 15,
+                "timeval": 1800,
                 "time": 5,
                 "position": {
                     "x":  1920.0,
                     "y": 900.0
                 }
             }},
-	    {"mob5": {
-                "name": "mob5",
-                "appear_at_sec": 14,
-                "timeval": 1200,
-                "time": 6,
-                "position": {
-                    "x":  1920.0,
-                    "y": 900.0
-                }
-            }},
-	    {"mob5": {
-                "name": "mob5",
-                "appear_at_sec": 14,
-                "timeval": 1200,
-                "time": 6,
-                "position": {
-                    "x":  1920.0,
-                    "y": 500.0
-                }
-	    }},
 	    {"mob5": {
                 "name": "mob5",
                 "appear_at_sec": 25,
-                "timeval": 800,
+                "timeval": 1850,
                 "time": 6,
                 "position": {
                     "x":  1920.0,
-                    "y": 500.0
+                    "y": 540.0
                 }
             }},
 	    {"mob1": {
                 "name": "mob1",
-                "appear_at_sec": 33,
+                "appear_at_sec": 37,
                 "timeval": 2500,
                 "time": 2,
                 "position": {
@@ -353,7 +211,7 @@
             }},
 	    {"mob2": {
                 "name": "mob2",
-                "appear_at_sec": 33,
+                "appear_at_sec": 37,
                 "timeval": 2500,
                 "time": 2,
                 "position": {
@@ -361,34 +219,24 @@
                     "y": 900.0
                 }
             }},
-	    {"mob3": {
-                "name": "mob3",
-                "appear_at_sec": 40,
-                "timeval": 1200,
-                "time": 5,
+	    {"mob5": {
+                "name": "mob5",
+                "appear_at_sec": 49,
+                "timeval": 1300,
+                "time": 3,
                 "position": {
                     "x":  1920.0,
-                    "y": 600.0
+                    "y": 300.0
                 }
             }},
 	    {"mob5": {
                 "name": "mob5",
                 "appear_at_sec": 49,
-                "timeval": 1000,
-                "time": 6,
+                "timeval": 1300,
+                "time": 3,
                 "position": {
                     "x":  1920.0,
-                    "y": 300.0
-                }
-	    }},
-	    {"mob5": {
-                "name": "mob5",
-                "appear_at_sec": 49,
-                "timeval": 1000,
-                "time": 6,
-                "position": {
-                    "x":  1920.0,
-                    "y": 900.0
+                    "y": 700.0
                 }
             }},
 	    {"mob1": {
@@ -410,38 +258,7 @@
                     "x":  1920.0,
                     "y": 900.0
                 }
-            }},
-	    {"mob3": {
-                "name": "mob3",
-                "appear_at_sec": 63,
-                "timeval": 1200,
-                "time": 5,
-                "position": {
-                    "x":  1920.0,
-                    "y": 600.0
-                }
-            }},
-	    {"mob5": {
-                "name": "mob5",
-                "appear_at_sec": 63,
-                "timeval": 1000,
-                "time": 6,
-                "position": {
-                    "x":  1920.0,
-                    "y": 300.0
-                }
-	    }},
-	    {"mob5": {
-                "name": "mob5",
-                "appear_at_sec": 66,
-                "timeval": 800,
-                "time": 10,
-                "position": {
-                    "x":  1920.0,
-                    "y": 500.0
-                }
-            }}
-	    
+            }}	    
         ],
 
         "bonuses": [
@@ -491,9 +308,9 @@
         "monsters": [
             {"mob1": {
                 "name": "mob1",
-                "appear_at_sec": 2,
+                "appear_at_sec": 8,
                 "timeval": 3000,
-                "time": 15,
+                "time": 8,
                 "position": {
                     "x":  1920.0,
                     "y": 40.0
@@ -502,9 +319,9 @@
 
             {"mob3": {
                 "name": "mob3",
-                "appear_at_sec": 2,
-                "timeval": 2000,
-                "time": 15,
+                "appear_at_sec": 22,
+                "timeval": 2200,
+                "time": 5,
                 "position": {
                     "x": 1920.0,
                     "y": 900.0
@@ -513,20 +330,20 @@
 
             {"mob1": {
                 "name": "mob1",
-                "appear_at_sec": 3,
+                "appear_at_sec": 30,
                 "timeval": 2000,
-                "time": 15,
+                "time": 5,
                 "position": {
                     "x": 1920.0,
                     "y": 900.0
                 }
             }},
 
-            {"mob1": {
-                "name": "mob1",
-                "appear_at_sec": 31,
+            {"mob2": {
+                "name": "mob2",
+                "appear_at_sec": 30,
                 "timeval": 2000,
-                "time": 15,
+                "time": 5,
                 "position": {
                     "x":  1920.0,
                     "y": 400.0
@@ -535,23 +352,55 @@
 
             {"mob3": {
                 "name": "mob3",
-                "appear_at_sec": 31,
+                "appear_at_sec": 48,
                 "timeval": 1700,
-                "time": 15,
+                "time": 4,
                 "position": {
                     "x": 1920.0,
-                    "y": 50.0
+                    "y": 500.0
                 }
             }},
 
-            {"mob1": {
-                "name": "mob1",
-                "appear_at_sec": 30,
-                "timeval": 1800,
-                "time": 15,
+            {"mob5": {
+                "name": "mob5",
+                "appear_at_sec": 59,
+                "timeval": 2300,
+                "time": 6,
                 "position": {
                     "x": 1920.0,
-                    "y": 750.0
+                    "y": 540.0
+                }
+            }},
+	    
+	    {"mob1": {
+                "name": "mob1",
+                "appear_at_sec": 63,
+                "timeval": 1500,
+                "time": 5,
+                "position": {
+                    "x": 1920.0,
+                    "y": 700.0
+                }
+            }},
+
+            {"mob2": {
+                "name": "mob2",
+                "appear_at_sec": 63,
+                "timeval": 1500,
+                "time": 5,
+                "position": {
+                    "x":  1920.0,
+                    "y": 300.0
+                }
+            }},
+	    {"mob5": {
+                "name": "mob5",
+                "appear_at_sec": 65,
+                "timeval": 2000,
+                "time": 4,
+                "position": {
+                    "x": 1920.0,
+                    "y": 540.0
                 }
             }}
         ],
