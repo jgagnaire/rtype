@@ -233,6 +233,8 @@ class StageScene : public Scene
                         _guiMobs.manager.set<ADrawable*>("sprite", &(_pSprites[6]));
                     else if (x->second->manager.get<std::string>("name") == "mob4")
                         _guiMobs.manager.set<ADrawable*>("sprite", &(_pSprites[7]));
+                    else
+                        _guiMobs.manager.set<ADrawable*>("sprite", &(_pSprites[4]));
                     static_cast<AnimatedSprite*>(_guiMobs.manager.get<ADrawable*>("sprite"))->setPosition(
                             sf::Vector2f(x->second->manager.get<std::pair<float, float> >("position").first,
                                 x->second->manager.get<std::pair<float, float> >("position").second));
