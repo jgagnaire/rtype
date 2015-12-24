@@ -75,14 +75,24 @@ class StageScene : public Scene
         _numstage[2].load("client/res/stages/numero-3_115.png", true);
         _numstage[3].load("client/res/stages/numero-4_230.png", true);
         _numstage[4].load("client/res/stages/numero-5_120.png", true);
-        _textstage[0].setText("The aliens decided to put an end to every human life on Earth using a nuclear bomb called \"Fanta Bomba\". But they had underestimated Humanity.");
-        _textstage[1].setText("After destroying the last few aliens on Earth, the heroic pilots decided to take down the root of evil.");
-        _textstage[2].setText("The aliens enventually destroyed, our heroes went back home. But they found Earth dominated by heinous creatures, spawned by nuclear mutations.");
-        _textstage[3].setText("After a long and perilous journey, a few pilots eventually made it to the aliens, with a deep will of filling their asses with mortuary air conditioner evacuation conduit seals.");
+        _textstage[0].setText("The aliens decided to put an end to every human\n"
+                "life on Earth using a nuclear bomb called \"Fanta Bomba\".\n"
+                "But they had underestimated Humanity.");
+        _textstage[1].setText("After destroying the last few aliens on Earth,\n"
+                "the heroic pilots decided to take down the root of evil.");
+        _textstage[2].setText("The aliens enventually destroyed, our heroes went back home.\n"
+                "But they found Earth dominated by heinous creatures,\n"
+                "spawned by nuclear mutations.");
+        _textstage[3].setText("After a long and perilous journey,\n"
+                "a few pilots eventually made it to the aliens,\n"
+                "with a deep will of filling their asses with\n"
+                "mortuary air conditioner evacuation conduit seals.");
         _stage.load("client/res/stages/stage_576.png", true);
-        _stage.setPosition(sf::Vector2f(960 - 576 / 2 - 100, 540 - 123 / 2));
+        _stage.setPosition(sf::Vector2f(50, 333 - 123 / 2));
         for (auto &x : _numstage)
-            x.setPosition(sf::Vector2f(960 - 576 / 2 + 576, 540 - 123 / 2));
+            x.setPosition(sf::Vector2f(726, 333 - 123 / 2));
+        for (auto &x : _textstage)
+            x.setPosition(100, 540 - 123 / 2);
         _changeScene.manager.add<ADrawable*>("2stage", &_stage);
         _changeScene.manager.add<ADrawable*>("2numero", &(_numstage[0]));
         _changeScene.manager.add<ADrawable*>("2text", &(_textstage[0]));
