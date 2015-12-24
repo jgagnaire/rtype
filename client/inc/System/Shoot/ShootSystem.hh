@@ -63,19 +63,20 @@ class ShootSystem : public ASystem
             for (auto x = _eList->begin(); x != _eList->end();)
             {
                 has_been_del = false;
-                if ((*x).second->manager.get<std::string>("type") == "shoot"
-                        || (*x).second->manager.get<std::string>("type") == "mobshoot")
+                if (x->second->manager.get<std::string>("type") == "shoot"
+                        || x->second->manager.get<std::string>("type") == "mobshoot")
                 {
-                    (*x).second->manager.get<std::function<void (Entity&, Pattern::Side, int)> >
-                        ("pattern")(*((*x).second), (*x).second->manager.
+                    x->second->manager.get<std::function<void (Entity&, Pattern::Side, int)> >
+                        ("pattern")(*(x->second), x->second->manager.
                                     get<Pattern::Side>("direction"), duration);
-                    std::pair<float, float> tmp = (*x).second->manager.
+                    std::pair<float, float> tmp = x->second->manager.
                         get<std::pair<float, float> >("position");
-                    if (((*x).second->manager.get<std::string>("type") == "shoot"
+                    if ((x->second->manager.get<std::string>("type") == "shoot"
                                 && (tmp.first > 1920 * 50 || tmp.first < 0))
-                            || ((*x).second->manager.get<std::string>("type") == "mobshoot"
+                            || (x->second->manager.get<std::string>("type") == "mobshoot"
                                 && (tmp.first > 1920 || tmp.first < -1920 * 50)))
                     {
+                        delete x->second;
                         x = _eList->erase(x);
                         has_been_del = true;
                     }

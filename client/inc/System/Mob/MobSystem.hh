@@ -94,37 +94,37 @@ class	MobSystem : public ASystem
             for (auto x = _eList->begin(); x != _eList->end();)
             {
                 has_been_del = false;
-                if ((*x).second->manager.get<std::string>("type") == "mob"
-                        || (*x).second->manager.get<std::string>("type") == "bonus"
-                        || (*x).second->manager.get<std::string>("type") == "boss")
+                if (x->second->manager.get<std::string>("type") == "mob"
+                        || x->second->manager.get<std::string>("type") == "bonus"
+                        || x->second->manager.get<std::string>("type") == "boss")
                 {
-                    if ((*x).second->manager.get<std::string>("type") == "mob"
-                            || (*x).second->manager.get<std::string>("type") == "boss")
+                    if (x->second->manager.get<std::string>("type") == "mob"
+                            || x->second->manager.get<std::string>("type") == "boss")
                     {
-                        (*x).second->manager.set<int>("canIShoot", (*x).second->manager.get<int>("canIShoot") + duration);
-                        if ((*x).second->manager.get<int>("canIShoot") >= (*x).second->manager.get<int>("fire_rate"))
-                            for (auto shoot : (*x).second->manager.get<std::vector<std::string> >("fire"))
+                        x->second->manager.set<int>("canIShoot", x->second->manager.get<int>("canIShoot") + duration);
+                        if (x->second->manager.get<int>("canIShoot") >= x->second->manager.get<int>("fire_rate"))
+                            for (auto shoot : x->second->manager.get<std::vector<std::string> >("fire"))
                             {
                                 if (shoot.empty())
                                     continue ;
                                 Entity *bullet = new Entity(_mobFires[shoot]);
                                 uint64_t tmp = (*_eList)[-1]->manager.get<uint64_t>("lastMobShoot");
-                                (*x).second->manager.set<int>("canIShoot", 0);
+                                x->second->manager.set<int>("canIShoot", 0);
                                 bullet->manager.add<std::pair<float, float> >("position",
-                                        (*x).second->manager.get<std::pair<float, float> >("position"));
+                                        x->second->manager.get<std::pair<float, float> >("position"));
                                 (*_eList)[tmp] = bullet;
                                 ++tmp;
                                 (*_eList)[-1]->manager.set<uint64_t>("lastMobShoot", tmp);
                             }
                     }
 
-                    (*x).second->manager.get<std::function<void (Entity&, Pattern::Side, int)> >
-                        ("pattern")(*((*x).second), (*x).second->manager.
+                    x->second->manager.get<std::function<void (Entity&, Pattern::Side, int)> >
+                        ("pattern")(*(x->second), x->second->manager.
                                     get<Pattern::Side>("direction"), duration);
-                    auto tmp = (*x).second->manager.get<std::pair<float, float> >("position");
+                    auto tmp = x->second->manager.get<std::pair<float, float> >("position");
                     if (tmp.first < -1920 * 100)
                     {
-                        delete (*x).second;
+                        delete x->second;
                         x = _eList->erase(x);
                         has_been_del = true;
                     }
