@@ -82,7 +82,6 @@ public:
     void			    fireBall(Game<SCK> *, UserManager<SCK> *, bool);
     IServerSocket<SCK>		    *getUDPSocket();
     bool			    isAllDead(Game<SCK> *) const;
-    void			    synchronisation(Game<SCK> *);
     void			    fireMob(Game<SCK> *game, Entity *monster,
 					    const std::string &monster_name, Position &p);
     void			    setPort(const std::string  &);

@@ -48,6 +48,7 @@ class	MobSystem : public ASystem
             _eventList.push_back(E_Ready);
             _durationAnimation = 0;
             _event = noEvent;
+            _waitingmobs.reserve(10);
         }
         virtual ~MobSystem() {}
 
@@ -213,8 +214,9 @@ class	MobSystem : public ASystem
                     Entity &e = JSONParser::parse(tmp)->getEntity().manager.get<Entity>("levels");
                     for (auto &main : e.manager.getAll<Entity>())
                     {
-                        std::list<Entity*>  l;
+                        std::vector<Entity*>  l;
 
+                        l.reserve(200);
                         for (auto &monsters : main.second.manager.get<std::vector<Entity> >("monsters"))
                         {
                             for (auto &monster : monsters.manager.getAll<Entity>())
@@ -303,7 +305,7 @@ class	MobSystem : public ASystem
         bool                                                    isActiv;
         std::unordered_map<uint64_t, Entity*>			*_eList;
         std::unordered_map<std::string, Entity>                 _jsonEntities;
-        std::unordered_map<int, std::list<Entity*> >            _waitingmobs;
+        std::unordered_map<int, std::vector<Entity*> >            _waitingmobs;
         std::unordered_map<std::string, Entity>			_mobFires;
 
         int                                                     _lvl;

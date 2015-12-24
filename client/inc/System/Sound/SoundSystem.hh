@@ -193,7 +193,6 @@ public:
 	      {
 		std::string music = main.second.manager.get<std::string>("music");
 		Music *level = new Music;
-		std::cout << "Labite : " << music << std::endl;
 		level->setTrack("./client/res/sound/" + music +".flac");
 		level->setVolume(30);
 		levels.push_back(level);
@@ -213,13 +212,11 @@ public:
 	playlist[idx]->pause();
 	levels[lvlIdx]->setVolume(musicLvl);
 	levels[lvlIdx]->play();
-	std::cout << "E_Stage : " <<  lvlIdx << std::endl;
 	isLogin = false;
 	isActiv = true;
       }
     else if (e == NewStage)
       {
-	std::cout << "New stage" << std::endl;
 	levels[lvlIdx]->pause();
 	++lvlIdx;
 	levels[lvlIdx]->setVolume(musicLvl);

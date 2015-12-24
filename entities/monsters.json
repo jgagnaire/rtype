@@ -1,23 +1,23 @@
 "monsters": {
     "mob1": {
 	"movement": "mob1",
-	"fire": ["line"],
-	"velocity": 0.3,
+	"fire": [""],
+	"velocity": 0.4,
 	"fire_rate": 2000,
 	"life": 5
     },
 
     "mob2": {
 	"movement": "mob2",
-	"fire": ["line"],
-	"velocity": 0.3,
+	"fire": [""],
+	"velocity": 0.4,
 	"fire_rate": 2000,
 	"life": 10
     },
 
     "mob3": {
 	"movement": "sinusoid",
-	"fire": ["line"],
+	"fire": ["line", "sinusoid"],
 	"velocity": 0.3,
 	"fire_rate": 1100,
 	"life": 20
@@ -25,8 +25,8 @@
     "mob5": {
 	"movement": "line",
 	"fire": ["line"],
-	"velocity": 0.3,
-	"fire_rate": 1800,
+	"velocity": 0.2,
+	"fire_rate": 2400,
 	"life": 5
     },
 
@@ -34,24 +34,24 @@
         "movement": "boss1",
         "fire": ["line", "sinusoid"],
         "velocity": 0.1,
-	"fire_rate": 1800,
+	"fire_rate": 2200,
         "life": 100
     },
 
     "boss2": {
         "movement": "boss1",
-        "fire": ["line", "line", "sinusoid", "sinusoid" ],
+        "fire": ["line", "sinusoid", "sinusoid" ],
         "velocity": 0.1,
-	"fire_rate": 6000,
+	"fire_rate": 5500,
         "life": 550
     },
 
     "boss3": {
         "movement": "boss1",
-        "fire": ["line", "line", "line", "sinusoid", "sinusoid", "line", "line", "sinusoid"],
+        "fire": ["line", "line", "sinusoid", "sinusoid"],
         "velocity": 0.1,
-	"fire_rate": 850,
-        "life": 200
+	"fire_rate": 2500,
+        "life": 250
     },
 
     "boss4": {
