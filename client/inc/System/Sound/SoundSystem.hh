@@ -34,6 +34,7 @@ public:
   {
     _sound->setVolume(vol);
   }
+  
 private:
   ISoundBuffer		*_buffer;
   ISound		*_sound;
