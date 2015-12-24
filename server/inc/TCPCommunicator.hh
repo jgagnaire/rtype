@@ -45,7 +45,7 @@ public:
 				bool has_been_del = false;
 				while (!(*cli)->sendStructEmpty()) {
 					if (!(*cli)->writeOnMe()) {
-						deleteClient(cli);
+						deleteClient(&cli);
 						has_been_del = true;
 						break;
 					}
@@ -72,15 +72,15 @@ public:
 		}
 	}
 
-    void	deleteClient(typename std::list<USER *>::iterator &cli) {
+    void deleteClient(typename std::list<USER *>::iterator *cli) {
         UserManager<SCK>::user_mutex.lock();
-        this->network_monitor->closeFd((*cli)->getServerSocket());
-        ((this->controllers.front())->*(this->closeConnection))(*cli);
-        delete *cli;
-        *cli = 0;
-        this->cl_list->erase(cli);
-	UserManager<SCK>::user_mutex.unlock();
-    }
+        this->network_monitor->closeFd((**cli)->getServerSocket());
+        ((this->controllers.front())->*(this->closeConnection))(**cli);
+        delete **cli;
+        **cli = 0;
+		*cli = this->cl_list->erase(*cli);
+		UserManager<SCK>::user_mutex.unlock();
+	}
 
     void	checkObserver() {
         if (this->network_monitor->isObserved(dynamic_cast<IServerSocket<SCK>*>(this->srvset),
@@ -101,8 +101,10 @@ public:
             for (int f = 0; (1 << f) <= Enum::CLOSE; ++f) {
                 if (this->network_monitor->isObserved((*cli)->getServerSocket(),
                                                       static_cast<Enum::Flag>(1 << f))) {
-                    if (!(this->*(this->monitor_action)[f])(*cli))
-                        return (this->deleteClient(cli));
+					if (!(this->*(this->monitor_action)[f])(*cli)) {
+						this->deleteClient(&cli);
+						return ;
+					}
                 }
             }
         }
