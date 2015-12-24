@@ -42,6 +42,8 @@ public:
   }
   static void	collision(System &system, Players &p, AllEntity &entities);
   static void	line(Entity &e, int duration);
+  static void   mob2(Entity &e, int duration);
+  static void   mob1(Entity &e, int duration);
   static void   boss1(Entity &e, int duration);
   static void   boss2(Entity &e, int duration);
   static void	sinusoid(Entity &e, int duration);

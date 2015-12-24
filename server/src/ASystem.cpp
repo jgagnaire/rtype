@@ -11,6 +11,66 @@ ASystem::ASystem() {}
 ASystem::~ASystem() {}
 std::string ASystem::_port;
 
+void	ASystem::mob1(Entity &e, int duration)
+  {
+    std::pair<float, float> pos = e.manager.get<std::pair<float, float> >("position");
+    float vel = duration * e.manager.get<float>("velocity");
+    if (e.manager.get<bool>("is_a_monster"))
+      vel *= -1;
+    if (pos.first > 1000)
+      line(e, duration);
+    else if (pos.first < 1000 && pos.first > 250 && pos.second < 800)
+      {
+	pos.second -= vel;
+	e.manager.set("position", pos);
+      }
+    else if (pos.second >= 800 && pos.first > 200)
+      {
+    	line(e, duration);
+	return ;
+      }
+    else if (pos.first <= 200 && pos.second > 200)
+      {
+    	pos.second += vel;
+	e.manager.set("position", pos);
+      }
+    else if (pos.second <= 200 && pos.first <= 200)
+      {
+    	line(e, duration);
+	return ;
+      }
+  }
+
+void    ASystem::mob2(Entity &e, int duration)
+  {
+    std::pair<float, float> pos = e.manager.get<std::pair<float, float> >("position");
+    float vel = duration * e.manager.get<float>("velocity");
+    if (e.manager.get<bool>("is_a_monster"))
+      vel *= -1;
+    if (pos.first > 1000)
+      line(e, duration);
+    else if (pos.first < 1000 && pos.first > 250 && pos.second > 500)
+      {
+	pos.second += vel;
+	e.manager.set("position", pos);
+      }
+    else if (pos.second <= 500 && pos.first > 200)
+      {
+    	line(e, duration);
+	return ;
+      }
+    else if (pos.first <= 200 && pos.second > 200 && pos.second < 800)
+      {
+    	pos.second -= vel;
+	e.manager.set("position", pos);
+      }
+    else if (pos.second >= 800 && pos.first <= 200)
+      {
+    	line(e, duration);
+	return ;
+      }
+  }
+
 void    ASystem::boss1(Entity &e, int duration)
 {
   std::pair<float, float> pos = e.manager.get<std::pair<float, float> >("position");

@@ -26,6 +26,10 @@ void                    MobSystem::update(int duration, ASystem::GameRoom g) {
 	  ASystem::boss2(**x, duration);
         if (movement == "boss1")
 	  ASystem::boss1(**x, duration);
+        if (movement == "mob1")
+	  ASystem::mob1(**x, duration);
+        if (movement == "mob2")
+	  ASystem::mob2(**x, duration);
         std::pair<float, float> tmp = (*x)->manager.
             get<std::pair<float, float> >("position");
 	_fire_rate += duration;
