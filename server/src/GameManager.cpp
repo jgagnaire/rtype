@@ -408,6 +408,8 @@ template <typename SCK>
 bool            GameManager<SCK>::gameTransition(Game<SCK> *game) {
   uint64_t	time = GameManager<SCK>::getTimeInSecond() + 10;
   char		lvl = game->lvl_name.back();
+  UDPDataHeader		pack;
+  Packet<UDPDataHeader> packet;
 
   cleanSystem(game);
   if (lvl >= '5')
@@ -415,7 +417,12 @@ bool            GameManager<SCK>::gameTransition(Game<SCK> *game) {
   game->lvl_name.pop_back();
   game->lvl_name.push_back(lvl + 1);
   for (auto p = game->players.begin(); p != game->players.end(); ++p) {
-    (*p)->writeStruct({0, static_cast<uint16_t>(Enum::BOSS_DESTROYED)});
+    pack = {0, static_cast<uint16_t>(Enum::BOSS_DESTROYED),
+	    (*p)->getUDPPacketId()};
+    
+    packet.stockOnBuff(pack);
+    packet.serialize();
+    packet.sendPacket<IServerSocket<SCK> *>(this->_udp_socket, (*p)->getIP(), port);
     (*p)->clearLevel();
   }
   std::cout << "le " << game->lvl_name << " va bientot commencer..." << std::endl;
