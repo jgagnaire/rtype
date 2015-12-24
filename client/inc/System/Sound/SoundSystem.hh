@@ -194,6 +194,7 @@ public:
 		std::string music = main.second.manager.get<std::string>("music");
 		Music *level = new Music;
 		level->setTrack("./client/res/sound/" + music +".flac");
+		level->repeat(true);
 		level->setVolume(30);
 		levels.push_back(level);
 		++idx;
@@ -206,7 +207,16 @@ public:
     if (e == E_Login)
       isLogin = true;
     if (e == E_Ready)
-        isActiv = false;
+      {
+	if (isActiv)
+	  {
+	    isActiv = false;
+	    idx = 0;
+	    playlist[idx]->play();
+	    levels[lvlIdx]->pause();
+	    lvlIdx = 0;
+	  }
+      }
     if (e == E_Stage)
       {
 	playlist[idx]->pause();
