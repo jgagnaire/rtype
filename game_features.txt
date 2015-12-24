@@ -1,6 +1,0 @@
-
--> bonus:
-	- couleur et forme des projectiles
-	- bouclier d'invincibilité temporaire (= timer qui se décrémente)
-	- bouclier d'invincibilité qui protège d'un nombre de dégats fixes
-	- force, qui s'attache devant le vaisseau, qui ajoute deux tirs en plus au vaisseau, et qui améliore les scores du joueur
