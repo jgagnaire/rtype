@@ -11,5 +11,17 @@
 	"velocity": 4.5,
 	"damage": 5,
 	"sprite": "normal_ball"
+    },
+    "mob2": {
+	"movement": "mob2",
+	"velocity": 5.0,
+	"damage": 5,
+	"sprite": "normal_ball"
+    },
+    "mob1": {
+	"movement": "mob1",
+	"velocity": 5.0,
+	"damage": 5,
+	"sprite": "normal_ball"
     }
 }
