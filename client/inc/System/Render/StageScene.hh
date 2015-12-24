@@ -16,7 +16,7 @@ class StageScene : public Scene
     public:
         StageScene(IWindow &win, std::unordered_map<uint64_t, Entity*> *e):
             Scene(win, e), _stageNb(1), _pSprites(16), _direction(noEvent),
-            _numstage(5)
+            _numstage(5), _textstage(5)
     {
         std::vector<std::string>    stages;
         stages.push_back("city");
@@ -75,16 +75,22 @@ class StageScene : public Scene
         _numstage[2].load("client/res/stages/numero-3_115.png", true);
         _numstage[3].load("client/res/stages/numero-4_230.png", true);
         _numstage[4].load("client/res/stages/numero-5_120.png", true);
+        _textstage[0].setText("The aliens decided to put an end to every human life on Earth using a nuclear bomb called \"Fanta Bomba\". But they had underestimated Humanity.");
+        _textstage[1].setText("After destroying the last few aliens on Earth, the heroic pilots decided to take down the root of evil.");
+        _textstage[2].setText("The aliens enventually destroyed, our heroes went back home. But they found Earth dominated by heinous creatures, spawned by nuclear mutations.");
+        _textstage[3].setText("After a long and perilous journey, a few pilots eventually made it to the aliens, with a deep will of filling their asses with mortuary air conditioner evacuation conduit seals.");
         _stage.load("client/res/stages/stage_576.png", true);
         _stage.setPosition(sf::Vector2f(960 - 576 / 2 - 100, 540 - 123 / 2));
         for (auto &x : _numstage)
             x.setPosition(sf::Vector2f(960 - 576 / 2 + 576, 540 - 123 / 2));
         _changeScene.manager.add<ADrawable*>("2stage", &_stage);
         _changeScene.manager.add<ADrawable*>("2numero", &(_numstage[0]));
+        _changeScene.manager.add<ADrawable*>("2text", &(_textstage[0]));
         _guiMobs.manager.add<ADrawable*>("sprite", &(_pSprites[4]));
         _guiExplosion.manager.add<ADrawable*>("explosion", 0);
         _b6.manager.add<ADrawable*>("hud", &_hud);
         _b7.manager.add<ADrawable*>("hudText", &_hudText);
+        _durationAnimation = 0;
     }
 
         void            switchStage()
@@ -101,6 +107,7 @@ class StageScene : public Scene
             _b4.manager.set<ADrawable*>("background", _s4[_stageNb - 1]);
             _b5.manager.set<ADrawable*>("background", _s5[_stageNb - 1]);
             _changeScene.manager.set<ADrawable*>("2numero", &(_numstage[_stageNb - 1]));
+            _changeScene.manager.set<ADrawable*>("2text", &(_textstage[_stageNb - 1]));
             (*_entities)[-1]->manager.set<uint64_t>("lastShoot", 1000000000);
             (*_entities)[-1]->manager.set<uint64_t>("lastMob", 2000000000);
             (*_entities)[-1]->manager.set<uint64_t>("lastBonus", 3000000000);
@@ -419,6 +426,7 @@ class StageScene : public Scene
 
         AnimatedSprite                                      _stage;
         std::vector<AnimatedSprite>                         _numstage;
+        std::vector<Text>                                   _textstage;
         int                                                 _durationAnimation;
         bool                                                _changing;
 };
