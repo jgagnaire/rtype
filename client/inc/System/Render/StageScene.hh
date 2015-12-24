@@ -248,7 +248,8 @@ class StageScene : public Scene
                         _guiMobs.manager.set<ADrawable*>("sprite", &(_pSprites[5]));
                     else if (x->second->manager.get<std::string>("name") == "mob3")
                         _guiMobs.manager.set<ADrawable*>("sprite", &(_pSprites[6]));
-                    else if (x->second->manager.get<std::string>("name") == "mob4")
+                    else if (x->second->manager.get<std::string>("name") == "mob4"
+                            || x->second->manager.get<std::string>("name") == "mob6")
                         _guiMobs.manager.set<ADrawable*>("sprite", &(_pSprites[7]));
                     else
                         _guiMobs.manager.set<ADrawable*>("sprite", &(_pSprites[4]));
