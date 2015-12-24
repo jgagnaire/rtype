@@ -153,7 +153,7 @@ bool            GameController<T>::getRoomList(UserManager<T> *cl) const {
     cl->writeStruct({0, static_cast<uint16_t>(sa)});
     if (sa == Enum::OK) {
       for (auto it = game.begin(); it != game.end(); ++it) {
-	if ((*it)->players.size() != 4) {
+	if ((*it)->players.size() != 4 && !(*it)->is_playing) {
 	  tmp.clear();
 	  os.clear();
 	  os.str("");
