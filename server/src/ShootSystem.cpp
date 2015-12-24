@@ -48,8 +48,8 @@ bool                    ShootSystem::handle(const std::string &name,
   e->manager.add("name", name);
   e->manager.add("is_a_monster", monster);
   if (monster) {
-    x = -x;
-    y = -y;
+    x = 0;
+    y = 0;
   }
   e->manager.add("position", std::pair<float, float>(p.x + x, p.y + y));
   _entities.push_back(e);

@@ -115,12 +115,16 @@ void        GameManager<SCK>::fireBall(Game<SCK> *game, UserManager<SCK> *u,
   if (second_weapon) {
     ent = new Entity(tmp.manager.get<Entity>("fires").manager.get<Entity>("sinusoid"));
     ent->manager.add<uint64_t>("id", game->shoot_player_ids++);
+    ent->manager.set<int>("damage", 5);
+    ent->manager.set<float>("velocity", 4.5);
     ent->manager.set<int>("damage", ent->manager.get<int>("damage") * u->getForce());
     game->system["shoot"]->handle("sinusoid", ent, false, u->getPosition());
   }
   else {
     ent = new Entity(tmp.manager.get<Entity>("fires").manager.get<Entity>("line"));
     ent->manager.add<uint64_t>("id", game->shoot_player_ids++);
+    ent->manager.set<int>("damage", 5);
+    ent->manager.set<float>("velocity", 4.5);
     ent->manager.set<int>("damage", ent->manager.get<int>("damage") * u->getForce());
     game->system["shoot"]->handle("line", ent, false, u->getPosition());
   }
