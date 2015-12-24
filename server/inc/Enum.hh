@@ -118,7 +118,11 @@ namespace Enum
         REGISTER_MAX = 12,
         REGISTER_MIN = 4,
         MAX_TIME = 10,
-        MAX_BUFFER_LENGTH = 61440,
+# if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        MAX_BUFFER_LENGTH = 512,
+# else
+		MAX_BUFFER_LENGTH = 61440,
+#endif
     };
 
     enum Key {
