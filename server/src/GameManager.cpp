@@ -418,6 +418,10 @@ bool            GameManager<SCK>::gameTransition(Game<SCK> *game) {
 template <typename SCK>
 void            GameManager<SCK>::createGame(Game<SCK> *game) {
   try {
+    if (game->lvl_name == "level1") {
+      uint64_t	time = GameManager<SCK>::getTime() + 500;
+      for(; time > GameManager<SCK>::getTime(););
+    }
     GameManager<SCK>	&g = GameManager<SCK>::instance();
     bool		is_not_finished = true;
     uint64_t		duration;
