@@ -60,6 +60,10 @@ bool        Collision::mob(Entity &me, Entity &e, std::pair<float, float> &pos)
              life -= e.manager.get<int>("damage") * e.manager.get<Entity*>("Shooter")->manager.get<int>("force");
              me.manager.set<int>("life", life);
              pos = me.manager.get<std::pair<float, float> >("position");
+             if (me.manager.get<std::string>("type") == "boss")
+             {
+                std::cout << "life " << life << std::endl;
+             }
              if (life <= 0)
              {
                  score = e.manager.get<Entity*>("Shooter")->manager.get<uint64_t>("score");
