@@ -101,7 +101,6 @@ public:
 		char	*com = reinterpret_cast<char *>(&_send_pack.front().header);
 
 		_wr_buff = new char[sizeof(T) + _send_pack.front().data.size() + 1];
-		std::copy(com, com + sizeof(T), _wr_buff);
 		for (uint64_t i = 0; i < sizeof(T); ++i)
 			_wr_buff[i] = com[i];
 		for (uint64_t i = 0; i < _send_pack.front().data.size(); ++i)
@@ -139,6 +138,8 @@ public:
 		const std::string &port = "") {
 		bool	                ret;
 
+		//std::cout << "DEBUUUUUUG: " << ((char *)_wr_buff + sizeof(T)) << "|"
+		//		<< _send_pack.front().data.size() << std::endl;
 		ret = s->absWriteOnClient(_wr_buff, sizeof(T) + _send_pack.front().data.size(),
 			ip, port);
 		delete[] _wr_buff;

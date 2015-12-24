@@ -56,8 +56,9 @@ bool	UserManager<T>::writeOnMe()
 {
   game_mutex.lock();
   packet.serialize();
+  bool ret = packet.sendPacket<IServerSocket<T> *>(sock);
   game_mutex.unlock();
-  return (packet.sendPacket<IServerSocket<T> *>(sock));
+  return (ret);
 }
 
 template<typename T>

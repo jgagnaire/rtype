@@ -82,7 +82,7 @@ bool WinServerSocket::absWriteOnClient(char *to_write, uint64_t size,
 	{
 		if ((::WSASendTo(this->sock, &wsabuf, 1, &written,
 			0, reinterpret_cast<struct sockaddr *>(to), sizeof(*to), 0, 0) == SOCKET_ERROR)
-			&& (WSAGetLastError() != WSAEINTR)) {
+			&& (WSAGetLastError() != WSAEINTR && WSAGetLastError() != WSAEWOULDBLOCK)) {
 			return false;
 		}
 		wsabuf.len -= written;

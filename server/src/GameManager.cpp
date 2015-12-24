@@ -212,8 +212,10 @@ void        GameManager<SCK>::launchGame(const std::string &game_name) {
 
 template <typename SCK>
 void        GameManager<SCK>::updatePositions(Game<SCK> *game, uint64_t time) {
+	UserManager<SCK>::user_mutex.lock();
     for (auto it = game->players.begin(); it != game->players.end(); ++it)
         (*it)->changePosition(time);
+	UserManager<SCK>::user_mutex.unlock();
 }
 
 template <typename SCK>

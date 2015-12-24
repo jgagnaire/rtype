@@ -56,17 +56,17 @@ bool            GameController<T>::joinNamedRoom(UserManager<T> *cl) const {
         sendJSON(cl, game);
         if (!game)
             return (true);
-        for (auto it = game->players.begin(); it != game->players.end(); ++it) {
-	  if (cl->getName() != (*it)->getName()) {
-	    std::string tmp2 = (*it)->getName() + ":" + std::to_string((*it)->getId());
-            cl->writeStruct({static_cast<uint16_t>(tmp2.size()),
-		  Enum::PLAYER_JOIN});
-            cl->writeMsg(tmp2);
-	  }
-            (*it)->writeStruct({static_cast<uint16_t>(tmp.size()),
-                                Enum::PLAYER_JOIN});
-            (*it)->writeMsg(tmp);
-        }
+		for (auto it = game->players.begin(); it != game->players.end(); ++it) {
+			if (cl->getName() != (*it)->getName()) {
+				std::string tmp2 = (*it)->getName() + ":" + std::to_string((*it)->getId());
+				cl->writeStruct({ static_cast<uint16_t>(tmp2.size()),
+					Enum::PLAYER_JOIN });
+				cl->writeMsg(tmp2);
+			}
+			(*it)->writeStruct({ static_cast<uint16_t>(tmp.size()),
+								Enum::PLAYER_JOIN });
+			(*it)->writeMsg(tmp);
+		}
     }
     return (true);
 }
