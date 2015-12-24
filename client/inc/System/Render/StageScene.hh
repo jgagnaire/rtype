@@ -15,7 +15,7 @@ class StageScene : public Scene
 {
     public:
         StageScene(IWindow &win, std::unordered_map<uint64_t, Entity*> *e):
-            Scene(win, e), _stageNb(1), _pSprites(15), _direction(noEvent),
+            Scene(win, e), _stageNb(1), _pSprites(16), _direction(noEvent),
             _numstage(5)
     {
         std::vector<std::string>    stages;
@@ -39,7 +39,7 @@ class StageScene : public Scene
         _pSprites[12].load("client/res/boss/boss-2_800.png");
         _pSprites[13].load("client/res/boss/boss-3_300.png");
         _pSprites[14].load("client/res/boss/boss-4_400.png");
-        _pSprites[14].load("client/res/boss/boss-5_535.png");
+        _pSprites[15].load("client/res/boss/boss-5_535.png");
         _shoot.load("client/res/bullet.png");
         _shootEnnemy.load("client/res/bullet2.png");
         _hud.load("client/res/HUD.png");
