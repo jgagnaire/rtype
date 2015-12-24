@@ -38,9 +38,6 @@ public:
   virtual IPacket *out(EventSum &);
 
 private:
-  static const uint16_t CODE_SEND_PACKET = 302;
-  static const uint16_t CODE_RECEIVE_PACKET = 404;
-
   void addBuffer(ISoundBuffer *buffer, const std::string &name);
   std::string getPseudo(const void *data, uint16_t packetSize) const;
 
