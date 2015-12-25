@@ -66,6 +66,7 @@ bool	AccountController<T>::disconnectionFct(UserManager<T> *cl) const {
         return (false);
     if (!game)
       return (true);
+    g.deleteUser(cl);
     for (auto it = game->players.begin(); it != game->players.end(); ++it) {
       if ((*it)->getName() != cl->getName()) {
 	(*it)->writeStruct({static_cast<uint16_t>(cl->getName().size()),
