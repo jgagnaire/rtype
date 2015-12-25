@@ -22,23 +22,23 @@
 
 int main(int ac, char **av)
 {
-	//try {
-		std::srand(static_cast<unsigned int>(std::time(0)));
-		if (ac == 1)
-		{
-			std::cout << "Usage : ./client_rtype <serverIp>" << std::endl;
-			return 0;
-		}
-		else
-		{
-			SystemManager   sm(av[1]);
+    try {
+        std::srand(static_cast<unsigned int>(std::time(0)));
+        if (ac == 1)
+        {
+            std::cout << "Usage : ./client_rtype <serverIp>" << std::endl;
+            return 0;
+        }
+        else
+        {
+            SystemManager   sm(av[1]);
 
-			sm.gameLoop();
-		}
-   /* }*/
-	//catch (std::exception const &e) {
-		//std::cerr << e.what() << std::endl;
-		//return -1;
-	/*}*/
+            sm.gameLoop();
+        }
+    }
+    catch (std::exception const &e) {
+        std::cerr << e.what() << std::endl;
+        return -1;
+    }
     return 0;
 }
