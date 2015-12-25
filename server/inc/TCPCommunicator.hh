@@ -71,9 +71,9 @@ public:
         ((this->controllers.front())->*(this->closeConnection))(**cli);
         delete **cli;
         **cli = 0;
-		*cli = this->cl_list->erase(*cli);
-		UserManager<SCK>::user_mutex.unlock();
-	}
+	*cli = this->cl_list->erase(*cli);
+	UserManager<SCK>::user_mutex.unlock();
+    }
 
     void	checkObserver() {
         if (this->network_monitor->isObserved(dynamic_cast<IServerSocket<SCK>*>(this->srvset),

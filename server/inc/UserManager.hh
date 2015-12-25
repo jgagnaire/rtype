@@ -88,6 +88,7 @@ public:
     void		    onGameRoom();
     void		    onLobby();
     int			    getForce() const;
+  void			unlockMutex();
 
     Enum::ServerAnswers	    verifyUser();
     Enum::ServerAnswers	    newUser();

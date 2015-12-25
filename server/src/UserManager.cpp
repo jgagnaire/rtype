@@ -516,6 +516,9 @@ void                    UserManager<T>::changePosition(uint64_t time) {
 }
 
 template <typename T>
+void		UserManager<T>::unlockMutex() { game_mutex.unlock(); }
+
+template <typename T>
 const Position	    &UserManager<T>::getPosition() const { return (position); }
 
 #if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined (_WIN64)

@@ -472,7 +472,9 @@ void            GameManager<SCK>::createGame(Game<SCK> *game) {
   }
   catch (...) {
     std::cerr << "AWWW... erreur critique pour la room: " << game->name << std::endl;
+    UserManager<SCK>::user_mutex.unlock();
     for (auto p = game->players.begin(); p != game->players.end(); ++p) {
+      (*p)->unlockMutex();
       (*p)->writeStruct({0, static_cast<uint16_t>(Enum::GAME_ERROR)});
       (*p)->onLobby();
     }
