@@ -117,7 +117,7 @@ namespace Enum
         PATH_LENGTH = 20,
         REGISTER_MAX = 12,
         REGISTER_MIN = 4,
-        MAX_TIME = 10,
+        MAX_TIME = 30,
 # if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
         MAX_BUFFER_LENGTH = 512,
 # else
